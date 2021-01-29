@@ -1,12 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View , Button} from 'react-native';
 
-export function HomeScreen() {
+export function HomeScreen({navigation}) {
     return (
         <View style={styles.container}>
-            {/* TODO Logo */}
-            <Text>Login</Text>
-            <Text>Create an Account</Text>
+            <Button
+                title="Login"
+                onPress={() => navigation.navigate('Login')}
+            ></Button>
+            <Button
+                title="Create an Account"
+                onPress={() => navigation.navigate('CreateAccount')}
+            ></Button>
         </View>
     );
 }
