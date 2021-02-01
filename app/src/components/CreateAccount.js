@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput, View, StyleSheet, Button } from 'react-native';
+import mainStyles from '../styles/mainStyles';
 
 const grayRGB = 'rgb(211, 211, 211)';
 class UsernameInput extends React.Component {
@@ -64,7 +65,7 @@ export class CreateAccount extends React.Component {
     
     render() {
         return (
-            <View style={styles.container}>
+            <View style={mainStyles.container}>
                 <UsernameInput ref={this.UsernameInput}/>
                 <PasswordInput ref={this.PasswordInput}/>
                 <Button
@@ -77,11 +78,6 @@ export class CreateAccount extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-    },
     input: {
         margin: 15,
         height: 40,
