@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from './src/components/HomeScreen';
 import { Login } from './src/components/Login';
 import { CreateAccount } from './src/components/CreateAccount';
+import { Settings } from './src/components/Settings';
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+        name="Settings"
+        component={Settings}
+        />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
