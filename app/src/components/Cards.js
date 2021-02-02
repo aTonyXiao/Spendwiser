@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, Text, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Button, Image } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 
 // can find a better way of loading in assets
