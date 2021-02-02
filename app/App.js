@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from './src/components/HomeScreen';
 import { Login } from './src/components/Login';
 import { CreateAccount } from './src/components/CreateAccount';
+import { Cards } from './src/components/Cards';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,10 @@ export default function App() {
         <Stack.Screen
           name="CreateAccount"
           component={CreateAccount}
+        />
+        <Stack.Screen
+          name="Cards"
+          component={Cards}
         />
       </Stack.Navigator>
     </NavigationContainer>
