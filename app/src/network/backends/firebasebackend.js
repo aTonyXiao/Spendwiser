@@ -28,25 +28,42 @@ function getDatabaseLocation(database, location) {
     return databaseLocation;
 }
 
+/**
+ * Firebase Backend designed around the Firebase Web SDK
+ * Database functions are designed around the Firestore Collection/Document style
+ * - Collections contain Documents
+ * - Documents contain data and sometimes Collections
+ */
 export default class FirebaseBackend extends BaseBackend {
 
+    /**
+     * This function initializes the Backend
+     */
     initializeApp () {
         firebase.initializeApp(firebaseConfig);
         this.database = firebase.firestore();
     }
 
+    /**
+     * This function returns whether this Backend supports databases or not
+     */
     doesSupportDatabase () {
         return true;
     }
 
-    // This function requests data from a Firestore document
-    // calls the callback w/ the document's data
-    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
-    // ref: https://firebase.google.com/docs/firestore/quickstart
-    // example:
-    // appBackend.dbGet("collection.document", (data) => {
-    //   console.log(data);
-    // });
+    /**
+     * This function gets the data of a Firestore document in JSON format
+     * reference: https://firebase.google.com/docs/firestore/quickstart
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {function} callback - Function that will be invoked to give the caller the data
+     *
+     * @example
+     *   appBackend.dbGet("experimental.exp2", (data) => {
+     *      console.log(data);
+     *   });
+     *
+     */
     dbGet (location, callback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.get().then((query) => {
@@ -56,13 +73,19 @@ export default class FirebaseBackend extends BaseBackend {
         });
     }
 
-    // This function sets the data of a Firestore document
-    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
-    // ref: https://firebase.google.com/docs/firestore/quickstart
-    // example:
-    // appBackend.dbSet("experimental.exp2", {
-    //   hello: "what"
-    // });
+    /**
+     * This function sets the data of a Firestore document
+     * reference: https://firebase.google.com/docs/firestore/quickstart
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {JSON} data - The data for the new document
+     *
+     * @example
+     *   appBackend.dbSet("experimental.exp2", {
+     *      hello: "what"
+     *   });
+     *
+     */
     dbSet (location, data) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.set(data).catch((err) => {
@@ -70,16 +93,22 @@ export default class FirebaseBackend extends BaseBackend {
         });
     }
 
-    // This function adds a new Firestore document, calls callback
-    // with the new document id
-    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
-    // ref: https://firebase.google.com/docs/firestore/quickstart
-    // example:
-    // appBackend.dbAdd("experimental.exp2.experimental2", {
-    //   hello: "what"
-    // }, (id) => {
-    //   console.log(id);
-    // });
+    /**
+     * This function adds a new Firestore document to a collection
+     * reference: https://firebase.google.com/docs/firestore/quickstart
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {JSON} data - The data for the new document
+     * @param {function} callback - Function that will be invoked to give the caller the new collection ID
+     *
+     * @example
+     *   appBackend.dbAdd("experimental.exp2.experimental2", {
+     *      hello: "what"
+     *   }, (id) => {
+     *      console.log(id);
+     *   });
+     *
+     */
     dbAdd (location, data, callback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.add(data).then((query) => {
