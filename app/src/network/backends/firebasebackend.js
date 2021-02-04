@@ -15,7 +15,7 @@ const firebaseConfig = {
     // measurementId: process.env.MEASUREMENT_ID,
 };
 
-export class FirebaseBackend extends BaseBackend {
+export default class FirebaseBackend extends BaseBackend {
 
     initializeApp () {
         firebase.initializeApp(firebaseConfig);

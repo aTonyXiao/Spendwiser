@@ -1,5 +1,5 @@
 // base backend class
-export class BaseBackend {
+export default class BaseBackend {
     initializeApp () {}
     doesSupportDatabase () {}
 }
