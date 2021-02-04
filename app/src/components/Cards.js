@@ -24,9 +24,14 @@ const Card = (props) => {
 }
 
 export class Cards extends React.Component {
+    constructor(props) {
+        super(props);
 
-    state = {
-        cards: []
+        this.state = {
+            cards: []
+        }
+
+        this.navigation = props.navigation;
     }
 
     addCard = (card) => {
@@ -35,18 +40,18 @@ export class Cards extends React.Component {
     }
 
     buttonPress = () => {
-        this.addCard(CardImage);
+        // this.addCard(CardImage);
+        this.navigation.navigate('AddCard');
     }
 
-    // NOTE: temporary button for card creation
     render () {
         return (
             <SafeAreaView style={mainStyles.container}>
                 <ScrollView style={styles.scrollView}>
                     <Button title="Add Card" onPress={this.buttonPress} />
-                    {this.state.cards.map((card) => {
+                    {/* {this.state.cards.map((card) => {
                         return <Card src={card} />
-                    })}
+                    })} */} 
                 </ScrollView>
             </SafeAreaView>
         );
