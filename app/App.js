@@ -14,6 +14,10 @@ const Stack = createStackNavigator();
 
 export default function App() {
   initializeAppBackend("firebase");
+
+  // appBackend.dbGet("experimental.exp2", (data) => {
+  //   console.log(data);
+  // });
   
   return (
     <NavigationContainer>

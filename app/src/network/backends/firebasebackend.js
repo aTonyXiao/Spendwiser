@@ -33,6 +33,7 @@ function getDatabaseLocation(database, location) {
  * Database functions are designed around the Firestore Collection/Document style
  * - Collections contain Documents
  * - Documents contain data and sometimes Collections
+ * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 export default class FirebaseBackend extends BaseBackend {
 
@@ -52,11 +53,11 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * This function gets the data of a Firestore document in JSON format
+     * This function gets the data of a Firestore document in JSON
      * reference: https://firebase.google.com/docs/firestore/quickstart
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
-     * @param {function} callback - Function that will be invoked to give the caller the data
+     * @param {function} callback - Function that will be invoked to give the caller the data in JSON
      *
      * @example
      *   appBackend.dbGet("experimental.exp2", (data) => {
