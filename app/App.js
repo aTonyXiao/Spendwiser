@@ -12,6 +12,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
+  // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
   const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
