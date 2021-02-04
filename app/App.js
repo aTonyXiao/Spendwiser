@@ -14,6 +14,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   backend.initializeAppBackend("firebase");
+  backend.appBackend().queryDatabase("experimental.exp2", null);
   return (
     <NavigationContainer>
       <Stack.Navigator>

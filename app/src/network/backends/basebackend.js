@@ -2,4 +2,5 @@
 export default class BaseBackend {
     initializeApp () {}
     doesSupportDatabase () {}
+    queryDatabase (location, callback) {}
 }

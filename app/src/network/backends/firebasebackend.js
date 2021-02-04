@@ -25,4 +25,19 @@ export default class FirebaseBackend extends BaseBackend {
     doesSupportDatabase () {
         return true;
     }
+
+    queryDatabase (location, callback) {
+        let locationList = location.split(".");
+        let databaseLocation = this.database;
+        for (let i = 0; i < locationList.length; i++) {
+            if (i % 2 == 0) { // collection
+                databaseLocation = databaseLocation.collection(locationList[i]);
+            } else { // document
+                databaseLocation = databaseLocation.doc(locationList[i]);
+            }
+        }
+        databaseLocation.get().then((query) => {
+            console.log(query);
+        });
+    }
 }
