@@ -1,5 +1,5 @@
 import React from 'react';
-import * as backend from './network/backend';
+import * as backend from './src/network/backend';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';

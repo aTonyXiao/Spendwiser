@@ -1,12 +1,7 @@
-import FirebaseBackend from './backends/firebase';
+import BaseBackend from './backends/basebackend'
+import FirebaseBackend from './backends/firebasebackend';
 
 var currentBackend;
-
-// base backend class
-export class Backend {
-    initializeApp () {}
-    doesSupportDatabase () {}
-}
 
 function setCurrentBackend (type) {
     switch (type) {
@@ -14,7 +9,7 @@ function setCurrentBackend (type) {
             currentBackend = new FirebaseBackend();
             break;
         default:
-            currentBackend = new Backend();
+            currentBackend = new BaseBackend();
     }
 }
 

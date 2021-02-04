@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-import Backend from '../backend';
+import BaseBackend from './basebackend';
 
 // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
 const firebaseConfig = {
@@ -15,7 +15,7 @@ const firebaseConfig = {
     // measurementId: process.env.MEASUREMENT_ID,
 };
 
-export class FirebaseBackend extends Backend {
+export class FirebaseBackend extends BaseBackend {
 
     initializeApp () {
         firebase.initializeApp(firebaseConfig);
