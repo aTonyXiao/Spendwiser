@@ -14,6 +14,19 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENT_ID,
 };
 
+function getDatabaseLocation(database, location) {
+    let locationList = location.split(".");
+    let databaseLocation = database;
+    for (let i = 0; i < locationList.length; i++) {
+        if (i % 2 == 0) { // collection
+            databaseLocation = databaseLocation.collection(locationList[i]);
+        } else { // document
+            databaseLocation = databaseLocation.doc(locationList[i]);
+        }
+    }
+    return databaseLocation;
+}
+
 export default class FirebaseBackend extends BaseBackend {
 
     initializeApp () {
@@ -25,19 +38,50 @@ export default class FirebaseBackend extends BaseBackend {
         return true;
     }
 
-    // https://firebase.google.com/docs/firestore/security/get-started#auth-required
-    queryDatabase (location, callback) {
-        let locationList = location.split(".");
-        let databaseLocation = this.database;
-        for (let i = 0; i < locationList.length; i++) {
-            if (i % 2 == 0) { // collection
-                databaseLocation = databaseLocation.collection(locationList[i]);
-            } else { // document
-                databaseLocation = databaseLocation.doc(locationList[i]);
-            }
-        }
+    // This function requests data from a Firestore document
+    // calls the callback w/ the document's data
+    // ref: https://firebase.google.com/docs/firestore/quickstart
+    // example:
+    // appBackend().dbGet("collection.document", (data) => {
+    //   console.log(data);
+    // });
+    dbGet (location, callback) {
+        let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.get().then((query) => {
-            console.log(query);
+            callback(query.data());
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    // This function sets the data of a Firestore document
+    // ref: https://firebase.google.com/docs/firestore/quickstart
+    // example:
+    // appBackend().dbSet("experimental.exp2", {
+    //   hello: "what"
+    // });
+    dbSet (location, data) {
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.set(data).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    // This function adds a new Firestore document, calls callback
+    // with the new document id
+    // ref: https://firebase.google.com/docs/firestore/quickstart
+    // example:
+    // appBackend().dbAdd("experimental.exp2.experimental2", {
+    //   hello: "what"
+    // }, (id) => {
+    //   console.log(id);
+    // });
+    dbAdd (location, data, callback) {
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.set(data).then((query) => {
+            callback(query.id);
+        }).catch((err) => {
+            console.log(err);
         });
     }
 }
