@@ -14,13 +14,13 @@ const Stack = createStackNavigator();
 
 export default function App() {
   initializeAppBackend("firebase");
-  appBackend().dbGet("experimental.exp2", (data) => {
+  appBackend.dbGet("experimental.exp2", (data) => {
     console.log(data);
   });
-  appBackend().dbSet("experimental.exp2", {
+  appBackend.dbSet("experimental.exp2", {
     hello: "what"
   });
-  appBackend().dbAdd("experimental.exp2.experimental2", {
+  appBackend.dbAdd("experimental.exp2.experimental2", {
     hello: "what"
   }, (id) => {
     console.log(id);

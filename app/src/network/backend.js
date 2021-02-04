@@ -1,24 +1,19 @@
 import BaseBackend from './backends/basebackend'
 import FirebaseBackend from './backends/firebasebackend';
 
-var currentBackend;
+export var appBackend;
 
-function setCurrentBackend (type) {
+function setAppBackend (type) {
     switch (type) {
         case "firebase":
-            currentBackend = new FirebaseBackend();
+            appBackend = new FirebaseBackend();
             break;
         default:
-            currentBackend = new BaseBackend();
+            appBackend = new BaseBackend();
     }
 }
 
-export function appBackend () {
-    return currentBackend;
-}
-
 export function initializeAppBackend (type) {
-    setCurrentBackend(type);
-    currentBackend.initializeApp();
-    return currentBackend;
+    setAppBackend(type);
+    appBackend.initializeApp();
 }

@@ -14,6 +14,7 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENT_ID,
 };
 
+// extract the database location from the string
 function getDatabaseLocation(database, location) {
     let locationList = location.split(".");
     let databaseLocation = database;
@@ -40,9 +41,10 @@ export default class FirebaseBackend extends BaseBackend {
 
     // This function requests data from a Firestore document
     // calls the callback w/ the document's data
+    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
     // ref: https://firebase.google.com/docs/firestore/quickstart
     // example:
-    // appBackend().dbGet("collection.document", (data) => {
+    // appBackend.dbGet("collection.document", (data) => {
     //   console.log(data);
     // });
     dbGet (location, callback) {
@@ -55,9 +57,10 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     // This function sets the data of a Firestore document
+    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
     // ref: https://firebase.google.com/docs/firestore/quickstart
     // example:
-    // appBackend().dbSet("experimental.exp2", {
+    // appBackend.dbSet("experimental.exp2", {
     //   hello: "what"
     // });
     dbSet (location, data) {
@@ -69,16 +72,17 @@ export default class FirebaseBackend extends BaseBackend {
 
     // This function adds a new Firestore document, calls callback
     // with the new document id
+    // NOTE: location is in pattern of 'COLLECTION.DOCUMENT.COLLECTION....'
     // ref: https://firebase.google.com/docs/firestore/quickstart
     // example:
-    // appBackend().dbAdd("experimental.exp2.experimental2", {
+    // appBackend.dbAdd("experimental.exp2.experimental2", {
     //   hello: "what"
     // }, (id) => {
     //   console.log(id);
     // });
     dbAdd (location, data, callback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.set(data).then((query) => {
+        databaseLocation.add(data).then((query) => {
             callback(query.id);
         }).catch((err) => {
             console.log(err);
