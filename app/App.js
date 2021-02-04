@@ -1,5 +1,5 @@
 import React from 'react';
-import * as backend from './src/network/backend';
+import { initializeAppBackend, appBackend } from './src/network/backend';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,8 +13,8 @@ import { AddCard } from './src/components/AddCard';
 const Stack = createStackNavigator();
 
 export default function App() {
-  backend.initializeAppBackend("firebase");
-  backend.appBackend().queryDatabase("experimental.exp2", null);
+  initializeAppBackend("firebase");
+  appBackend().queryDatabase("experimental.exp2", null);
   return (
     <NavigationContainer>
       <Stack.Navigator>
