@@ -41,8 +41,13 @@ export default class FirebaseBackend extends BaseBackend {
      * This function initializes the Backend
      */
     initializeApp () {
-        firebase.initializeApp(firebaseConfig);
-        this.database = firebase.firestore();
+        // check if there is a Firebase 'App' already initialized
+        if (firebase.apps.length == 0) {
+            firebase.initializeApp(firebaseConfig); // if not, initialize
+        } else {
+            firebase.app(); //if there is, retrieve the default app
+        }
+        this.database = firebase.firestore(); // set the database to the firestore instance
     }
 
     /**
