@@ -9,6 +9,7 @@ import { CreateAccount } from './src/components/CreateAccount';
 import { Settings } from './src/components/Settings';
 import { Cards } from './src/components/Cards';
 import { AddCard } from './src/components/AddCard';
+import { MainScreen } from './src/components/MainScreen'
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,10 @@ export default function App() {
         <Stack.Screen
           name="CreateAccount"
           component={CreateAccount}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainScreen}
         />
         <Stack.Screen
           name="Cards"
