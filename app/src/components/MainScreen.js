@@ -62,7 +62,7 @@ export function MainScreen() {
             })
             fetch(googlePlaceSearchURL + 
                 location.coords.latitude + "," + location.coords.longitude + 
-                googlePlaceSearchRadius + process.env.PLACE_SEARCH_API_KEY)
+                googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
             .then((response) => response.json())
             .then((json) => {getLocationFromAPI(json)})
             .catch((error) => console.log(error))
