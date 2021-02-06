@@ -5,11 +5,9 @@ import * as Location from 'expo-location';
 import { TextInput } from 'react-native-gesture-handler';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-const googlePlaceSearchRadius = "&radius=100&key=AIzaSyBjvCHsXdtG924_6DpetOLJPliM--FKWWQ"
+const googlePlaceSearchRadius = "&radius=100&key="
 
 export function MainScreen() {
-    const [curLoc, setCurLoc] = useState("UC Davis Memorial Union");
-    const [curAddress, setCurAddress] = useState("250 W Quad, Davis, CA 95616");
     const [errorMsg, setErrorMsg] = useState(null);
     const [region, setRegion] = useState({
         latitude: 38.542530, 
@@ -20,13 +18,39 @@ export function MainScreen() {
     const [isLoading, setLoading] = useState(true);
     const [places, setPlaces] = useState([]);
     const [amountSpent, setAmountSpent] = useState("");
+    const [locations, setLocations] = useState([]);
+    const [chosenLoc, setChosenLoc] = useState(0);
+
+    function getLocationFromAPI(json) {
+        setPlaces(json.results);
+        let fetch_result = json.results;
+        let fetch_location = [];
+
+        if (fetch_result == undefined || fetch_result.length == 0) {
+            return;
+        }
+        let add_count = 0;
+        for (let i = 0; add_count < 5; i++) {
+            if (fetch_result[i].types.includes("locality")) {
+                continue;
+            } else {
+                fetch_location.push({
+                    name: JSON.stringify(fetch_result[i].name).slice(1,-1),
+                    vicinity: JSON.stringify(fetch_result[i].vicinity).slice(1,-1),
+                    store_type: JSON.stringify(fetch_result[i].types[0]).slice(1,-1), 
+                })
+                add_count++;
+            }
+        }
+        setLocations(fetch_location);
+    };
 
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
+                setErrorMsg('Permission to access location was denied');
+                return;
             }
 
             let location = await Location.getCurrentPositionAsync({});
@@ -38,22 +62,16 @@ export function MainScreen() {
             })
             fetch(googlePlaceSearchURL + 
                 location.coords.latitude + "," + location.coords.longitude + 
-                googlePlaceSearchRadius)
+                googlePlaceSearchRadius + process.env.PLACE_SEARCH_API_KEY)
             .then((response) => response.json())
-            .then((json) => setPlaces(json.results))
+            .then((json) => {getLocationFromAPI(json)})
             .catch((error) => console.log(error))
             .finally(() => setLoading(false));
         })();
-        }, []);
-
-    // let text = 'Waiting..';
-    // if (errorMsg) {
-    //     text = errorMsg;
-    // } else if (location) {
-    //     text = JSON.stringify(location);
-    // }
+    }, []);
     
     // console.log(text);
+
     return (
         <View style={styles.screen}>
             <View style={styles.map_container}>
@@ -74,11 +92,13 @@ export function MainScreen() {
             <View style={styles.loc_container}>
                 <View style={styles.loc}>
                     <Text style={styles.loc_name}>
-                        {isLoading ? "Loading" : JSON.stringify(places[1].name).slice(1,-1)}
+                        {isLoading ? "Loading" : locations[0].name}
                     </Text>
                     <Text>
-                        {isLoading ? "" : JSON.stringify(places[1].vicinity).slice(1,-1)}
+                        {isLoading ? "" : locations[0].vicinity}
                     </Text>
+                    <Text>{"Category: " + 
+                        (isLoading ? "" : locations[0].store_type)}</Text>
                 </View>
                 <Button
                     title="Change"
