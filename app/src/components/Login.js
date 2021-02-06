@@ -4,31 +4,24 @@ import mainStyles from '../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
 import { View, StyleSheet, Button } from 'react-native';
 
-export class Login extends React.Component {
-    login = async () => {
-        const currentUsernameInput = this.UsernameInput.current;
-        const currentPasswordInput = this.PasswordInput.current;
-        console.log('User login request with ' +
-                    currentUsernameInput.state.email + ' and ' +
-                    currentPasswordInput.state.password);
-    }
+export const Login = props => {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     
-    constructor(props) {
-        super(props);
-        this.UsernameInput = React.createRef();
-        this.PasswordInput = React.createRef();
+    async function signIn() {
+        console.log('User sign-in request with ' +
+                    username + ' and ' +
+                    password);
     }
-    
-    render() {
-        return (
-            <View style={mainStyles.container}>
-                <UsernameInput ref={this.UsernameInput}/>
-                <PasswordInput ref={this.PasswordInput}/>
-                <Button
-                    title='Login'
-                    onPress={this.login}
-                />
-            </View>
-        )
-    }
+
+    return (
+        <View style={mainStyles.container}>
+            <UsernameInput onChange={setUsername} />
+            <PasswordInput onChange={setPassword} />
+            <Button
+                title='Sign In'
+                onPress={signIn}
+            />
+        </View>
+    )
 }

@@ -4,14 +4,10 @@ import mainStyles from '../styles/mainStyles';
 
 const grayRGB = 'rgb(211, 211, 211)';
 export const UsernameInput = props => {
-    async function onChangeEmail(val) {
-        props.onChange(val);
-    }
-
     return (
         <TextInput
             style={styles.input}
-            onChangeText={text => onChangeEmail(text)}
+            onChangeText={text => props.onChange(text)}
             placeholder={'Username'}
             placeholderTextColor={grayRGB}
             textContentType={'emailAddress'}
@@ -20,14 +16,10 @@ export const UsernameInput = props => {
 }
 
 export const PasswordInput = props => {
-    async function onChangePassword(val) {
-        props.onChange(val);
-    }
-
     return (
         <TextInput
             style={styles.input}
-            onChangeText={val => onChangePassword(val)}
+            onChangeText={text => props.onChange(text)}
             placeholder={'Password'}
             placeholderTextColor={grayRGB}
             textContentType={'newPassword'}
