@@ -60,4 +60,12 @@ export default class BaseBackend {
      *
      */
     dbAdd (location, data, callback) {}
+
+    /**
+     * User sign up for an account using email and password
+     * 
+     * @param {string} email - a (TODO: valid?) email of a 
+     * @param {string} password - a (TODO: relatively complex?) password
+     */
+    signUp(username, password) {}
 }

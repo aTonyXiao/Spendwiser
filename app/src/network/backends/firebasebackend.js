@@ -124,4 +124,26 @@ export default class FirebaseBackend extends BaseBackend {
             console.log(err);
         });
     }
+
+    /**
+     * User sign up for an account using email and password
+     * 
+     * @param {string} email - a (TODO: valid?) email of a 
+     * @param {string} password - a (TODO: relatively complex?) password
+     * 
+     * https://firebase.google.com/docs/auth/web/password-auth
+     */
+    signUp(email, password) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            var user = userCredential.user;
+            console.log("Sign up successful")
+            console.log(user);
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
+        })
+    }
 }
