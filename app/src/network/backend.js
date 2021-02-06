@@ -1,8 +1,15 @@
 import BaseBackend from './backends/basebackend'
 import FirebaseBackend from './backends/firebasebackend';
 
+/**
+ * The wrapped backend that the app will interface with.  Functions
+ * inherited from 'BaseBackend' can be invoked from this object to
+ * interact with the initialized backend from 'initializeAppBackend'
+ */
 export var appBackend;
 
+// set the app backend to new instances of the supported types
+// modify this to add new supported backends
 function setAppBackend (type) {
     switch (type) {
         case "firebase":
@@ -13,6 +20,14 @@ function setAppBackend (type) {
     }
 }
 
+/**
+ * Initializes the current backend to the given type denoted by a string.
+ * Currently supported backends:
+ *   - 'firebase'
+ * 
+ * @param {string} type - The backend type to initialize
+ * 
+ */
 export function initializeAppBackend (type) {
     setAppBackend(type);
     appBackend.initializeApp();
