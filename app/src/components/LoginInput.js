@@ -9,7 +9,11 @@ export class UsernameInput extends React.Component {
     };
 
     onChangeEmail = (val) => {
-        this.setState({['email']: val});
+        this.setState({
+            email: val
+        }, () => {
+            this.props.onChange(this.state.email)
+        });
     }
 
     render () {
@@ -31,7 +35,11 @@ export class PasswordInput extends React.Component {
     };
 
     onChangePassword = (val) => {
-        this.setState({['password']: val});
+        this.setState({
+            password: val
+        }, () => {
+            this.props.onChange(this.state.password)
+        });
     }
 
     render() {
