@@ -1,0 +1,10 @@
+{
+    "plugins": [],
+    "source": {
+        "include": ["App.js", "src"]
+    },
+    "opts": {
+        "recurse": true,
+        "destination": "./doc/"
+    }
+}
