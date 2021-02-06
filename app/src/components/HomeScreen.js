@@ -5,7 +5,7 @@ import mainStyles from '../styles/mainStyles';
 export function HomeScreen({navigation}) {
     return (
         <View style={styles.screen}>
-            <Image source={require('../assets/spendwiser_logo.png')} />
+            <Image source={require('../../assets/spendwiser_logo.png')} />
             <View style={{marginBottom: 10}}>
                 <Button
                     title="Login"
@@ -15,6 +15,10 @@ export function HomeScreen({navigation}) {
             <Button
                 title="Create an Account"
                 onPress={() => navigation.navigate('CreateAccount')}
+            ></Button>
+            <Button
+                title="Temp to Main"
+                onPress={() => navigation.navigate('Main')}
             ></Button>
         </View>
     );
