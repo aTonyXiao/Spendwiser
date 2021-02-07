@@ -3,16 +3,6 @@ import 'firebase/firestore';
 
 import BaseBackend from './basebackend';
 
-// eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
-const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID,
-};
 
 // extract the database location from the string
 function getDatabaseLocation(database, location) {
@@ -33,6 +23,7 @@ function getDatabaseLocation(database, location) {
  * Database functions are designed around the Firestore Collection/Document style
  * - Collections contain Documents
  * - Documents contain data and sometimes Collections
+ * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 export default class FirebaseBackend extends BaseBackend {
 
@@ -40,8 +31,24 @@ export default class FirebaseBackend extends BaseBackend {
      * This function initializes the Backend
      */
     initializeApp () {
-        !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
-        this.database = firebase.firestore();
+        // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
+        const firebaseConfig = {
+            apiKey: process.env.REACT_NATIVE_API_KEY,
+            authDomain: process.env.REACT_NATIVE_AUTH_DOMAIN,
+            projectId: process.env.REACT_NATIVE_PROJECT_ID,
+            storageBucket: process.env.REACT_NATIVE_STORAGE_BUCKET,
+            messagingSenderId: process.env.REACT_NATIVE_MESSAGING_SENDER_ID,
+            appId: process.env.REACT_NATIVE_APP_ID,
+            measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
+        };
+
+        // check if there is a Firebase 'App' already initialized
+        if (firebase.apps.length == 0) {
+            firebase.initializeApp(firebaseConfig); // if not, initialize
+        } else {
+            firebase.app(); //if there is, retrieve the default app
+        }
+        this.database = firebase.firestore(); // set the database to the firestore instance
     }
 
     /**
@@ -52,11 +59,11 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * This function gets the data of a Firestore document in JSON format
+     * This function gets the data of a Firestore document in JSON
      * reference: https://firebase.google.com/docs/firestore/quickstart
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
-     * @param {function} callback - Function that will be invoked to give the caller the data
+     * @param {function} callback - Function that will be invoked to give the caller the data in JSON
      *
      * @example
      *   appBackend.dbGet("experimental.exp2", (data) => {
