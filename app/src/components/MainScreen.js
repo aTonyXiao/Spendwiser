@@ -42,7 +42,7 @@ export function MainScreen() {
                 fetch_location.push({
                     name: JSON.stringify(fetch_result[i].name).slice(1,-1),
                     vicinity: JSON.stringify(fetch_result[i].vicinity).slice(1,-1),
-                    store_type: JSON.stringify(fetch_result[i].types[0]).slice(1,-1), 
+                    store_type: JSON.stringify(fetch_result[i].types[0]).slice(1,-1).replace(/_/g, " "), 
                 })
                 fetch_stores.push({
                     label: JSON.stringify(fetch_result[i].name).slice(1,-1),
@@ -125,10 +125,11 @@ export function MainScreen() {
                     {isLoading ? "Loading" : locations[0].name}
                 </Text> */}
                 <Text>
-                    {isLoading ? "" : locations[curStoreKey].vicinity}
+                    {"Address: " + (isLoading ? "" : locations[curStoreKey].vicinity)}
                 </Text>
-                <Text>{"Category: " + 
-                    (isLoading ? "" : locations[curStoreKey].store_type)}</Text>
+                <Text>
+                    {"Category: " + (isLoading ? "" : locations[curStoreKey].store_type)}
+                </Text>
             </View>
             <View style= {{flex:1}}/>
             <View style={styles.card_container}>
