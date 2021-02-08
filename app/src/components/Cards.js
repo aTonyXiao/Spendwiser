@@ -1,37 +1,34 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Button, View } from 'react-native';
 import mainStyles from '../styles/mainStyles';
-
-// can find a better way of loading in assets
-// this for a proof of concept for now
-const CardImage = require("../../assets/cards/blank.png");
+import { Card } from './Card';
+import { appBackend } from '../network/backend';
 
 const styles = StyleSheet.create({
     scrollView: {
         width: "95%"
     },
-    card: {
-        resizeMode: "contain",
-        width: "100%",
-        height: 300 // hard coded for now
-    }
 });
-
-const Card = (props) => {
-    return (
-        <Image source={props.src} style={styles.card} />
-    );
-}
 
 export class Cards extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            cards: []
+            cards: [],
+            displayCards: false
         }
 
         this.navigation = props.navigation;
+
+        var user = "test"; // TODO this should give some sort of user id
+        appBackend.dbGetSubCollections("users." + user + ".cards",(data) => { 
+            this.addCard(data.data());
+        })
+    }
+
+    componentDidMount() { 
+        this.setState({displayCards:true});
     }
 
     addCard = (card) => {
@@ -40,7 +37,6 @@ export class Cards extends React.Component {
     }
 
     buttonPress = () => {
-        // this.addCard(CardImage);
         this.navigation.navigate('AddCard');
     }
 
@@ -48,10 +44,15 @@ export class Cards extends React.Component {
         return (
             <SafeAreaView style={mainStyles.container}>
                 <ScrollView style={styles.scrollView}>
-                    <Button title="Add Card" onPress={this.buttonPress} />
-                    {/* {this.state.cards.map((card) => {
-                        return <Card src={card} />
-                    })} */} 
+                    {
+                        this.state.displayCards && 
+                        <View>
+                            {this.state.cards.map((card, i) => {
+                                return <Card key={i} props={card}/>
+                            })}
+                        </View>
+                    }
+                    <Button title="Add Card" onPress={this.buttonPress}/>
                 </ScrollView>
             </SafeAreaView>
         );
