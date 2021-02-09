@@ -31,6 +31,20 @@ export default class BaseBackend {
     dbGet (location, callback) {}
 
     /**
+     * This function gets data for each document in a subcollection of a 'document'. 
+     * Needed because for a subcollection there is no '.data()'
+     * 
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Function to be invoked on each document of a subcollection
+     * 
+     * @example
+     * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
+     *  console.log(data.data());
+     * })
+     */
+    dbGetSubCollections(location, callback) {}
+
+    /**
      * This function sets the data of a 'document'
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
