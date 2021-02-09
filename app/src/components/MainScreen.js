@@ -144,7 +144,6 @@ export function MainScreen() {
                                                 store_type: manualInput.store_type,
                                                 key: Object.keys(storeArr).length - 1,
                                             }
-                                            console.log(manualInputObj)
                                             setStoreArr(storeList => storeList.concat(manualInputObj));
                                             setCurStore(manualInput.store_name.length === 0 ? "Manual Input" : manualInput.store_name);
                                             setCurStoreKey(Object.keys(storeArr).length - 1);
@@ -172,7 +171,7 @@ export function MainScreen() {
                     <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
                     </MapView>
                 </View>
-                <View style={{position: 'absolute', right: 10}}>
+                <View style={{position: 'absolute', right: 0}}>
                     <Button
                         color="green"
                         title="Refresh"
