@@ -184,6 +184,22 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
+     * Sign out the currently logged in user
+     */
+    signOut() {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+            console.log('Sign out successful');
+            return;
+        }).catch((error) => {
+            // An error happened.
+            // TODO: Is there a good way to handle this kind of error?
+            console.log(error);
+            return;
+        });  
+    }
+
+    /**
      * Returns true or false depending on if the user is already logged in
      */
     userLoggedIn() {

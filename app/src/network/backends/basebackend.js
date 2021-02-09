@@ -70,6 +70,11 @@ export default class BaseBackend {
     signUp(username, password) {}
 
     /**
+     * Sign out the currently logged in user
+     */
+    signOut() {}
+    
+    /**
      * Returns true or false depending on if the user is already logged in
      */
     userLoggedIn() {}

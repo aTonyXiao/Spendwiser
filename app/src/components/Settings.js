@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import mainStyles from '../styles/mainStyles';
+import {appBackend} from '../network/backend';
 
-export function Settings() { 
+export function Settings(props) { 
     return(
         <View style={mainStyles.container}>
             <Button
@@ -28,6 +29,13 @@ export function Settings() {
             <Button
                 title="About"
                 // onPress={() => navigation.navigate('CreateAccount')}
+            ></Button>
+            <Button
+                title="Logout"
+                onPress={() => {
+                    appBackend.signOut();
+                    props.navigation.navigate('Home');
+                }}
             ></Button>
         </View>
     );
