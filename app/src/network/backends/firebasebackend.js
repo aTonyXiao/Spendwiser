@@ -3,6 +3,8 @@ import 'firebase/firestore';
 
 import BaseBackend from './basebackend';
 
+// Internal saved state of wether a user is logged in or not
+let globalUserSignedIn = false;
 
 // extract the database location from the string
 function getDatabaseLocation(database, location) {
@@ -49,6 +51,17 @@ export default class FirebaseBackend extends BaseBackend {
             firebase.app(); //if there is, retrieve the default app
         }
         this.database = firebase.firestore(); // set the database to the firestore instance
+
+        // https://firebase.google.com/docs/auth/web/manage-users
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.log("User is signed in");
+                globalUserSignedIn = true;
+            } else {
+                console.log("User is not signed in");
+                globalUserSignedIn = false;
+            }
+        });
     }
 
     /**
@@ -145,5 +158,38 @@ export default class FirebaseBackend extends BaseBackend {
             var errorMessage = error.message;
             console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
         })
+    }
+
+    /**
+     * Returns true or false depending on if the user is already logged in
+     */
+    userLoggedIn() {
+        return globalUserSignedIn;
+    }
+
+    /**
+     * Calls the supplied function if there is a change in the user's login status.
+     * I.E. if a user logs in or logs out the function will be called
+     * @param {requestCallback} callback - The function to callback when a user's
+     * state changes
+     */
+    onAuthStateChange(callback) {
+        firebase.auth().onAuthStateChanged(callback);
+    }
+
+    /**
+     * returns a user id associated with the logged in user
+     */
+    getUserID() {
+        let user = firebase.auth().currentUser;
+        if (user != null) {
+            // TODO: Some documentation states to use User.getToken() instead
+            // (https://firebase.google.com/docs/auth/web/manage-users), but
+            // there doesn't seem to be a function to do that in the User
+            // documentation:
+            // https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
+            return user.uid;
+        }
+        return null;
     }
 }
