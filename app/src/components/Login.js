@@ -21,7 +21,13 @@ export const Login = props => {
             <Button
                 title='Sign In'
                 onPress={signIn}
-            />
+            ></Button>
+            <Button
+                title="Don't have an account?"
+                onPress={() => {
+                    props.navigation.navigate('CreateAccount')
+                }}
+            ></Button>
         </View>
     )
 }

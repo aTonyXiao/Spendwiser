@@ -28,7 +28,7 @@ export function HomeScreen({navigation}) {
     // as far as navigation goes.
     // For now, you can disable redirects based on login status by
     // setting the global boolean to false
-    globalDebugRedirectBasedOnLoginStatus = true;
+    globalDebugRedirectBasedOnLoginStatus = false;
     appBackend.onAuthStateChange(() => {
         handleRedirectsBasedOnLoginStatus(navigation);
     });
