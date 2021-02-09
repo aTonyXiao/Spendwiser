@@ -60,4 +60,30 @@ export default class BaseBackend {
      *
      */
     dbAdd (location, data, callback) {}
+
+    /**
+     * User sign up for an account using email and password
+     * 
+     * @param {string} email - a (TODO: valid?) email of a 
+     * @param {string} password - a (TODO: relatively complex?) password
+     */
+    signUp(username, password) {}
+
+    /**
+     * Returns true or false depending on if the user is already logged in
+     */
+    userLoggedIn() {}
+
+    /**
+     * Calls the supplied function if there is a change in the user's login status.
+     * I.E. if a user logs in or logs out the function will be called
+     * @param {requestCallback} callback - The function to callback when a user's
+     * state changes
+     */
+    onAuthStateChange(func) {}
+
+    /**
+     * returns a user id associated with the logged in user
+     */
+    getUserID() {}
 }

@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
 
-export function MainScreen() {
+export function MainScreen({navigation}) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [region, setRegion] = useState({
         latitude: 38.542530, 
