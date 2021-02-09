@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Button, Text } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import mainStyles from '../../styles/mainStyles';
 import { AddCardRow } from './AddCardRow';
-import { TextBox } from './TextBox';
+import { TextBox } from '../TextBox';
 
-export class AddCard extends React.Component { 
+export class AddCardSearch extends React.Component { 
     constructor(props) {
         super(props);
+
         this.TextBox = React.createRef();
         this.state = {
             error: null,
@@ -14,7 +15,8 @@ export class AddCard extends React.Component {
             displayCardOptions: false,
             results: [],
           };
-        this.key = "";
+        this.navigation = props.navigation;
+        this.key = "8ed8fa90665511ebbbf3371335d2db85";
     }
 
     queryCards = async () => {
@@ -57,12 +59,14 @@ export class AddCard extends React.Component {
                 {
                     this.state.displayCardOptions && 
                     <View>
-                        {this.state.results.results.map(function (object, i) {
+                        {this.state.results.results.map((card, i) => {
+                            var props = {
+                                navigation: this.navigation,
+                                card: card
+                            }
+
                             return (
-                                <AddCardRow
-                                    key={i}
-                                    props={object}
-                                ></AddCardRow>
+                                <AddCardRow key={i} props={props}></AddCardRow>
                             )
                         })}
                     </View>

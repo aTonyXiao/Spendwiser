@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
 import BaseBackend from './basebackend';
 
 // Internal saved state of wether a user is logged in or not
@@ -91,6 +90,30 @@ export default class FirebaseBackend extends BaseBackend {
         }).catch((err) => {
             console.log(err);
         });
+    }
+
+    /**
+     * This function gets data for each document in a subcollection of a Firestore document. 
+     * Needed because for a subcollection there is no '.data()'
+     * 
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Function to be invoked on each document of a subcollection
+     * 
+     * @example
+     * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
+     *  console.log(data.data());
+     * })
+     */
+
+    dbGetSubCollections(location, callback) { 
+        let dbloc = getDatabaseLocation(this.database, location);
+        dbloc.get().then((query) => {
+            query.forEach(doc => {
+                callback(doc);
+            })
+        }).catch((err) => { 
+            console.log(err);
+        })
     }
 
     /**

@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
 
-export function MainScreen() {
+export function MainScreen({navigation}) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [region, setRegion] = useState({
         latitude: 38.542530, 
@@ -76,17 +76,17 @@ export function MainScreen() {
         <View style={styles.screen}>
             <View style={styles.map_container}>
                 <MapView style={styles.map}
-                    provider = "google"
-                    region = {region}
+                    provider="google"
+                    region={region}
                 >
-                <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
+                    <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
                 </MapView>
             </View>
-            <View style={{position: 'absolute', right: 10}}>
+            <View style={{ position: 'absolute', right: 10 }}>
                 <Button
                     color="green"
                     title="Refresh"
-                    // onPress={() => setRegion(location.latitude, location.longitude)}
+                // onPress={() => setRegion(location.latitude, location.longitude)}
                 ></Button>
             </View>
             <View style={styles.loc_container}>
@@ -97,19 +97,19 @@ export function MainScreen() {
                     <Text>
                         {isLoading ? "" : locations[0].vicinity}
                     </Text>
-                    <Text>{"Category: " + 
+                    <Text>{"Category: " +
                         (isLoading ? "" : locations[0].store_type)}</Text>
                 </View>
                 <Button
                     title="Change"
                 ></Button>
             </View>
-            <View style= {{flex:1}}/>
+            <View style={{ flex: 1 }} />
             <View style={styles.card_container}>
-                <Text style={{fontWeight: 'bold', fontSize: 24}}>Recommended Card</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Recommended Card</Text>
                 <Image style={styles.card}
                     source={require('../../assets/sapphire_reserve_card.png')} />
-            <View style={styles.card_spending}>
+                <View style={styles.card_spending}>
                     <TextInput
                         style={styles.amount_field}
                         onChangeText={text => setAmountSpent(text)}
@@ -122,9 +122,12 @@ export function MainScreen() {
                     ></Button>
                 </View>
             </View>
-            <View style= {{flex:2}}>
-
+            <View style={{ flex: 2 }}>
             </View>
+            <Button
+                title="See your cards"
+                onPress={() => navigation.navigate('Cards')}
+            ></Button>
         </View>
         );
     }
