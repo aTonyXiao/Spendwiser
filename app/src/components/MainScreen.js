@@ -31,7 +31,6 @@ export function MainScreen({navigation}) {
     function getLocationFromAPI(json) {
         setPlaces(json.results);
         let fetch_result = json.results;
-        let fetch_location = [];
         let fetch_stores = [];
 
         if (fetch_result == undefined || fetch_result.length == 0) {
@@ -227,8 +226,11 @@ export function MainScreen({navigation}) {
                         ></Button>
                     </View>
                 </View>
-                <View style= {{flex:2}}>
-                </View>
+                <View style= {{flex:2}}/>
+                <Button
+                    title="See your cards"
+                    onPress={() => navigation.navigate('Cards')}
+                ></Button>
             </ScrollView>
         </SafeAreaView>
         );
