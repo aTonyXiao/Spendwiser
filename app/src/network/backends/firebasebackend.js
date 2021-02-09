@@ -19,6 +19,18 @@ function getDatabaseLocation(database, location) {
     return databaseLocation;
 }
 
+// filter the databse collection depending on the given conditions
+// each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
+function filterDatabaseCollection(collection, conditions) {
+    let filteredCollection = collection;
+    for (let i = 0; i < conditions.length; i++) {
+        // console.log(conditions[i]);
+        let condition = conditions[i];
+        filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
+    }
+    return filteredCollection;
+}
+
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
@@ -75,16 +87,26 @@ export default class FirebaseBackend extends BaseBackend {
      * reference: https://firebase.google.com/docs/firestore/quickstart
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
+     *                             (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)
      * @param {function} callback - Function that will be invoked to give the caller the data in JSON
      *
      * @example
-     *   appBackend.dbGet("experimental.exp2", (data) => {
-     *      console.log(data);
-     *   });
-     *
+     * appBackend.dbGet("experimental.exp2", (data) => {
+     *     console.log(data);
+     * });
      */
-    dbGet (location, callback) {
+    dbGet (location, ...conditionsWithCallback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+
+        // filter if there are conditions
+        if (conditions.length > 0) {
+            filterDatabaseCollection(databaseLocation, conditions);
+        }
+
+        // get the data
         databaseLocation.get().then((query) => {
             callback(query.data());
         }).catch((err) => {
@@ -92,6 +114,8 @@ export default class FirebaseBackend extends BaseBackend {
         });
     }
 
+
+    // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**
      * This function gets data for each document in a subcollection of a Firestore document. 
      * Needed because for a subcollection there is no '.data()'
@@ -104,7 +128,6 @@ export default class FirebaseBackend extends BaseBackend {
      *  console.log(data.data());
      * })
      */
-
     dbGetSubCollections(location, callback) { 
         let dbloc = getDatabaseLocation(this.database, location);
         dbloc.get().then((query) => {
