@@ -2,34 +2,29 @@ import React from 'react';
 import { TextInput, View, StyleSheet, Button } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
+import {appBackend} from '../network/backend'
 
-export class CreateAccount extends React.Component {
-    signUp = async () => {
-        const currentUsernameInput = this.UsernameInput.current;
-        const currentPasswordInput = this.PasswordInput.current;
+export const CreateAccount = props => {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+
+    async function signUp() {
         console.log('User sign-up request with ' +
-                    currentUsernameInput.state.email + ' and ' +
-                    currentPasswordInput.state.password);
+                    username + ' and ' +
+                    password);
+        appBackend.signUp(username, password);
     }
-    
-    constructor(props) {
-        super(props);
-        this.UsernameInput = React.createRef();
-        this.PasswordInput = React.createRef();
-    }
-    
-    render() {
-        return (
-            <View style={mainStyles.container}>
-                <UsernameInput ref={this.UsernameInput}/>
-                <PasswordInput ref={this.PasswordInput}/>
-                <Button
-                    title='Sign Up'
-                    onPress={this.signUp}
-                />
-            </View>
-        )
-    }
+
+    return (
+        <View style={mainStyles.container}>
+            <UsernameInput onChange={setUsername} />
+            <PasswordInput onChange={setPassword} />
+            <Button
+                title='Sign Up'
+                onPress={signUp}
+            />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
