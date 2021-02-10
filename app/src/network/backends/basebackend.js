@@ -17,6 +17,14 @@ export default class BaseBackend {
     doesSupportDatabase () {}
 
     /**
+     * This function allows the backend to keep a local copy of the database data it actively uses
+     * 
+     * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)
+     * 
+     */
+    enableDatabaseCaching (cacheSize) {}
+
+    /**
      * This function gets the data of a database 'document' in JSON
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
