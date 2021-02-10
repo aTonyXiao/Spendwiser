@@ -25,18 +25,40 @@ export default class BaseBackend {
     enableDatabaseCaching (cacheSize) {}
 
     /**
-     * This function gets the data of a database 'document' in JSON
+     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+     * where the callback is called for each document in the collection
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
+     *                             (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)
      * @param {function} callback - Function that will be invoked to give the caller the data in JSON
      *
      * @example
-     *   appBackend.dbGet("experimental.exp2", (data) => {
-     *      console.log(data);
-     *   });
-     *
+     * appBackend.dbGet("experimental.exp2", (data) => {
+     *     console.log(data);
+     * });
+     * 
+     * @example
+     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)
+     * appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
+     *   console.log(data);
+     * });
      */
-    dbGet (location, callback) {}
+    dbGet (location, ...conditionsWithCallback) {}
+
+    /**
+     * This function gets data for each document in a subcollection of a 'document'. 
+     * Needed because for a subcollection there is no '.data()'
+     * 
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Function to be invoked on each document of a subcollection
+     * 
+     * @example
+     * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
+     *  console.log(data.data());
+     * })
+     */
+    dbGetSubCollections(location, callback) {}
 
     /**
      * This function sets the data of a 'document'
