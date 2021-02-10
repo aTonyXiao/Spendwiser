@@ -24,7 +24,6 @@ function getDatabaseLocation(database, location) {
 function filterDatabaseCollection(collection, conditions) {
     let filteredCollection = collection;
     for (let i = 0; i < conditions.length; i++) {
-        // console.log(conditions[i]);
         let condition = conditions[i];
         filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
     }
@@ -108,6 +107,12 @@ export default class FirebaseBackend extends BaseBackend {
      * appBackend.dbGet("experimental.exp2", (data) => {
      *     console.log(data);
      * });
+     * 
+     * @example
+     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)
+     * appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
+     *   console.log(data);
+     * });
      */
     dbGet (location, ...conditionsWithCallback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
@@ -116,7 +121,7 @@ export default class FirebaseBackend extends BaseBackend {
 
         // filter if there are conditions
         if (conditions.length > 0) {
-            filterDatabaseCollection(databaseLocation, conditions);
+            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
         }
 
         // get the data
