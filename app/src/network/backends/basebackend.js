@@ -44,7 +44,7 @@ export default class BaseBackend {
      *   console.log(data);
      * });
      */
-    dbGet (location, callback) {}
+    dbGet (location, ...conditionsWithCallback) {}
 
     /**
      * This function gets data for each document in a subcollection of a 'document'. 
