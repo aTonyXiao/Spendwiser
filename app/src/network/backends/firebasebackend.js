@@ -98,6 +98,19 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
+     * This function allows the backend to keep a local copy of the database data it actively uses
+     * 
+     * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)
+     * 
+     */
+    enableDatabaseCaching (cacheSize = -1) {
+        this.database.settings({
+            cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
+        });
+        this.database.enablePersistence();
+    }
+
+    /**
      * This function gets the data of a Firestore document in JSON
      * reference: https://firebase.google.com/docs/firestore/quickstart
      *
