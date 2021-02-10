@@ -1,6 +1,8 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
+import * as Facebook from 'expo-facebook';
+
 
 // Internal saved state of wether a user is logged in or not
 let globalUserSignedIn = false;
@@ -18,6 +20,31 @@ function getDatabaseLocation(database, location) {
     }
     return databaseLocation;
 }
+
+
+async function loginWithFacebook() {
+    await Facebook.initializeAsync({appId: '251267389794841', });
+
+  const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+    permissions: ['public_profile'],
+  });
+
+  if (type === 'success') {
+    // Build Firebase credential with the Facebook access token.
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+    // Sign in with credential from the Facebook user.
+    firebase
+      .auth()
+      .signInWithCredential(credential)
+      .catch(error => {
+          // Handle Errors here.
+          console.log("Facebook login error...");
+          console.log(error)
+      });
+  }
+}
+
 
 /**
  * Firebase Backend designed around the Firebase Web SDK
@@ -181,6 +208,38 @@ export default class FirebaseBackend extends BaseBackend {
             var errorMessage = error.message;
             console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
         })
+    }
+
+
+    
+    /**
+     * Use facebook account to sign in
+     */
+    signInWithFacebook() {
+        loginWithFacebook();
+    }
+    
+
+    /**
+     * Sign in to an existing user account
+     * @param {string} email - the email of the user account
+     * @param {string} password - the password of the user account
+     */
+    signIn(email, password) {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                var user = userCredential.user;
+                // ...
+                console.log("Successful sign in...");
+                return;
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+            });
     }
 
     /**

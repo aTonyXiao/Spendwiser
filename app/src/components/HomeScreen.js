@@ -28,10 +28,12 @@ export function HomeScreen({navigation}) {
     // as far as navigation goes.
     // For now, you can disable redirects based on login status by
     // setting the global boolean to false
-    globalDebugRedirectBasedOnLoginStatus = false;
+    globalDebugRedirectBasedOnLoginStatus = true;
     appBackend.onAuthStateChange(() => {
         handleRedirectsBasedOnLoginStatus(navigation);
     });
+
+    appBackend.signOut();
     return (
         <View style={styles.screen}>
             <Image source={require('../../assets/spendwiser_logo.png')} />
