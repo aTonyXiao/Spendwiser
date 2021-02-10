@@ -21,7 +21,6 @@ function getDatabaseLocation(database, location) {
     return databaseLocation;
 }
 
-<<<<<<< HEAD
 // filter the databse collection depending on the given conditions
 // each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
 function filterDatabaseCollection(collection, conditions) {
@@ -33,7 +32,6 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
-=======
 
 async function loginWithFacebook() {
     await Facebook.initializeAsync({appId: '251267389794841', });
@@ -59,7 +57,6 @@ async function loginWithFacebook() {
 }
 
 
->>>>>>> main
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
