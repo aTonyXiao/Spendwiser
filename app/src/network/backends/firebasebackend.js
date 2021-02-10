@@ -95,7 +95,8 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * This function gets the data of a Firestore document in JSON
+     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+     * where the callback is called for each document in the collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
