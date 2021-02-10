@@ -76,7 +76,27 @@ export default class BaseBackend {
      * @param {string} password - a (TODO: relatively complex?) password
      */
     signUp(username, password) {}
+    
+    /**
+      * Use facebook account to sign in
+      */
+    signInWithFacebook() {}
+    
+    /**
+     * Sign in to an existing user account
+     * @param {string} email - the email of the user account
+     * @param {string} password - the password of the user account
+     */
+    signIn(email, password) {}
 
+    
+      
+        
+    /**
+     * Sign out the currently logged in user
+     */
+    signOut() {}
+    
     /**
      * Returns true or false depending on if the user is already logged in
      */
