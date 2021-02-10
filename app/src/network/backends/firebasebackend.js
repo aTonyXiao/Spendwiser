@@ -121,7 +121,13 @@ export default class FirebaseBackend extends BaseBackend {
 
         // get the data
         databaseLocation.get().then((query) => {
-            callback(query.data());
+            if (typeof query.get === "function") { // hacky way of checking if a doc
+                callback(query.data());
+            } else {
+                query.forEach(doc => {
+                    callback(doc.data());
+                });
+            }
         }).catch((err) => {
             console.log(err);
         });
