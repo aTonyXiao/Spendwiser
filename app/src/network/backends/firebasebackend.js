@@ -1,6 +1,8 @@
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
+import * as Facebook from 'expo-facebook';
+
 
 // Internal saved state of wether a user is logged in or not
 let globalUserSignedIn = false;
@@ -18,6 +20,31 @@ function getDatabaseLocation(database, location) {
     }
     return databaseLocation;
 }
+
+
+async function loginWithFacebook() {
+    await Facebook.initializeAsync({appId: '251267389794841', });
+
+  const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+    permissions: ['public_profile'],
+  });
+
+  if (type === 'success') {
+    // Build Firebase credential with the Facebook access token.
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+
+    // Sign in with credential from the Facebook user.
+    firebase
+      .auth()
+      .signInWithCredential(credential)
+      .catch(error => {
+          // Handle Errors here.
+          console.log("Facebook login error...");
+          console.log(error)
+      });
+  }
+}
+
 
 /**
  * Firebase Backend designed around the Firebase Web SDK
@@ -68,6 +95,19 @@ export default class FirebaseBackend extends BaseBackend {
      */
     doesSupportDatabase () {
         return true;
+    }
+
+    /**
+     * This function allows the backend to keep a local copy of the database data it actively uses
+     * 
+     * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)
+     * 
+     */
+    enableDatabaseCaching (cacheSize = -1) {
+        this.database.settings({
+            cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
+        });
+        this.database.enablePersistence();
     }
 
     /**
@@ -181,6 +221,54 @@ export default class FirebaseBackend extends BaseBackend {
             var errorMessage = error.message;
             console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
         })
+    }
+
+
+    
+    /**
+     * Use facebook account to sign in
+     */
+    signInWithFacebook() {
+        loginWithFacebook();
+    }
+    
+
+    /**
+     * Sign in to an existing user account
+     * @param {string} email - the email of the user account
+     * @param {string} password - the password of the user account
+     */
+    signIn(email, password) {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                var user = userCredential.user;
+                // ...
+                console.log("Successful sign in...");
+                return;
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+            });
+    }
+
+    /**
+     * Sign out the currently logged in user
+     */
+    signOut() {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+            console.log('Sign out successful');
+            return;
+        }).catch((error) => {
+            // An error happened.
+            // TODO: Is there a good way to handle this kind of error?
+            console.log(error);
+            return;
+        });  
     }
 
     /**
