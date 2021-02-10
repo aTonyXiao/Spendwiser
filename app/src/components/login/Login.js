@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native'
-import mainStyles from '../styles/mainStyles';
+import mainStyles from '../../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
 import { View, StyleSheet, Button } from 'react-native';
 

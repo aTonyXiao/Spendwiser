@@ -25,21 +25,30 @@ export class Card extends React.Component {
 
         // can find a better way of loading in assets
         // this for a proof of concept for now
-        this.CardImage = require("../../assets/cards/blank.png")
+        this.CardImage = require("../../../assets/cards/blank.png")
 
-        var cardInformation = props.props;
+        var cardInformation = props.props.card
+        this.state = {
+            name: cardInformation.original_title,
+            rewards: cardInformation.rewards,
+            rewards_type: cardInformation.rewards_type,
+            url: cardInformation.url
+        }
+        this.navigation = props.props.navigation;
 
-        this.name = cardInformation.name;
+        // TODO need cardId here
     }
 
     onPress() { 
-        console.log('press'); // TODO navigate to card information page?
+        this.navigation.navigate('DisplayCards', {
+            cardId: this.cardId
+        })
     }
 
     render () {
         return (
             <View>
-                <Text style={styles.cardTitle}>{this.name}</Text>
+                <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
                     <Image
                         source={this.CardImage}

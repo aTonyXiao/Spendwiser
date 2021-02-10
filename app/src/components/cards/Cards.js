@@ -1,8 +1,8 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Button, View } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
-import { appBackend } from '../network/backend';
+import { appBackend } from '../../network/backend';
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -21,7 +21,18 @@ export class Cards extends React.Component {
 
         this.navigation = props.navigation;
 
-        var user = "test"; // TODO this should give some sort of user id
+        // var user = appBackend.getUserID(); // TODO on login, user should sync with firebase - check if already has a document, if not add one
+        // if (user == null) { 
+        //     // user is not using a login, store all data locally?
+        // } else {
+        //     // TODO case if user has not added cards to db?
+
+        //     appBackend.dbGetSubCollections("users." + user + ".cards",(data) => { 
+        //         this.addCard(data.data());
+        //     })
+        // }
+
+        var user = "test";
         appBackend.dbGetSubCollections("users." + user + ".cards",(data) => { 
             this.addCard(data.data());
         })
@@ -48,7 +59,12 @@ export class Cards extends React.Component {
                         this.state.displayCards && 
                         <View>
                             {this.state.cards.map((card, i) => {
-                                return <Card key={i} props={card}/>
+                                var props = {
+                                    navigation: this.navigation,
+                                    card: card
+                                }
+
+                                return <Card key={i} props={props}/>
                             })}
                         </View>
                     }

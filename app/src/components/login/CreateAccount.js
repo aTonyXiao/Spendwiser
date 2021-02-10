@@ -1,8 +1,8 @@
 import React from 'react';
 import { TextInput, View, StyleSheet, Button } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import mainStyles from '../../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
-import {appBackend} from '../network/backend'
+import {appBackend} from '../../network/backend'
 
 export const CreateAccount = props => {
     const [username, setUsername] = React.useState('');
