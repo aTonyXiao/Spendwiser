@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import { TextBox } from '../TextBox';
 import { appBackend } from '../../network/backend';
+import { user } from '../../network/backend';
 
 export class AddCardManual extends React.Component {
     constructor(props) { 
@@ -14,7 +15,8 @@ export class AddCardManual extends React.Component {
     }
 
     onPress = () => { 
-        var user = "test"; // TODO temporary until login gives user id
+        // var user = user.getUserId();
+        var user = "test";
 
         var name = this.inputName.current.state.text;
         var rewards = this.inputRewards.current.state.text;

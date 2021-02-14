@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { appBackend } from '../../network/backend';
+import { user } from '../../network/user';
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -29,18 +31,20 @@ export class Card extends React.Component {
 
         var cardInformation = props.props.card
         this.state = {
-            name: cardInformation.original_title,
+            name: cardInformation.name,
             rewards: cardInformation.rewards,
-            rewards_type: cardInformation.rewards_type,
             url: cardInformation.url
         }
         this.navigation = props.props.navigation;
 
-        // TODO need cardId here
+        var userId = user.getUserId();
+        appBackend.dbGet("users." + userId + ".cards", ["name", "==", cardInformation.name], (data) => {
+            this.cardId = data.id;
+        })
     }
 
-    onPress() { 
-        this.navigation.navigate('DisplayCards', {
+    onPress = () => { 
+        this.navigation.navigate('CardInfo', {
             cardId: this.cardId
         })
     }

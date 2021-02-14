@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native'
 import mainStyles from '../../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
-import { View, StyleSheet, Button } from 'react-native';
-import { appBackend } from '../network/backend'
+import { View, Button } from 'react-native';
+import { appBackend } from '../../network/backend'
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
@@ -15,6 +14,8 @@ export const Login = props => {
                     password);
 
         appBackend.signIn(username, password);
+
+        // props.navigation.navigate('Main');
     }
 
     return (

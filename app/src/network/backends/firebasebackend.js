@@ -191,6 +191,26 @@ export default class FirebaseBackend extends BaseBackend {
         })
     }
 
+    // TODO: - I kinda strayed from syntax here... is this okay?
+    /** 
+     *  Function returns checks if a document exists. 
+     * 
+     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
+     * 
+     * @returns {boolean} - true if document exists, false if not
+     * 
+     * @example
+     * var docExists = appBackend.dbDoesDocExist("users.test");
+    */
+    dbDoesDocExist(location) { 
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        let document = databaseLocation.get();
+        if (!document.exists) { 
+            return true;
+        }
+        return false;
+    }
+
     /**
      * This function sets the data of a Firestore document
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -234,6 +254,12 @@ export default class FirebaseBackend extends BaseBackend {
         }).catch((err) => {
             console.log(err);
         });
+    }
+
+    dbDelete(location) { 
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.delete();
+        // TODO this won't delete subcollections
     }
 
     /**

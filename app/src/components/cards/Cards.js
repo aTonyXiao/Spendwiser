@@ -2,6 +2,7 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Button, View } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
+import { user } from '../../network/user';
 import { appBackend } from '../../network/backend';
 
 const styles = StyleSheet.create({
@@ -21,21 +22,20 @@ export class Cards extends React.Component {
 
         this.navigation = props.navigation;
 
-        // var user = appBackend.getUserID(); // TODO on login, user should sync with firebase - check if already has a document, if not add one
-        // if (user == null) { 
-        //     // user is not using a login, store all data locally?
-        // } else {
-        //     // TODO case if user has not added cards to db?
-
-        //     appBackend.dbGetSubCollections("users." + user + ".cards",(data) => { 
-        //         this.addCard(data.data());
-        //     })
-        // }
-
-        var user = "test";
-        appBackend.dbGetSubCollections("users." + user + ".cards",(data) => { 
+        var userId = user.getUserId();
+        console.log('line 26');
+        console.log(userId);
+        appBackend.dbGetSubCollections("users." + userId + ".cards",(data) => { 
             this.addCard(data.data());
         })
+        // var cards = user.getCards(userId);
+        // console.log(cards);
+
+        // if (cards.length == 0) { 
+        //     // display 'No cards!'
+        // } else { 
+        //     // set cards state
+        // }
     }
 
     componentDidMount() { 
