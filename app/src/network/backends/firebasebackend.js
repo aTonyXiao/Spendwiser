@@ -1,3 +1,5 @@
+import 'expo-firestore-offline-persistence' // hacky offline persistence for expo
+
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
