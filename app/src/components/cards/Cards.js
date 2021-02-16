@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     },
 });
 
+
+//TODO rename this to YourCards
 export function Cards({navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();

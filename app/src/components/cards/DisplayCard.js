@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, Image,  Alert, useColorScheme } from 'react-native';
-import { appBackend } from '../../network/backend';
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 

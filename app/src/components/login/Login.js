@@ -33,6 +33,12 @@ export const Login = props => {
                 }}
             ></Button>
             <Button
+            title="Sign in with Google"
+                onPress={() => {
+                    appBackend.signInWithGoogle();
+                }}
+            ></Button>
+            <Button
                 title="Don't have an account?"
                 onPress={() => {
                     props.navigation.navigate('CreateAccount')

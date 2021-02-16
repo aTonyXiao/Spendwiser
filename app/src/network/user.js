@@ -59,6 +59,20 @@ class userClass {
     deleteCard(userId, cardId) { 
         appBackend.dbDelete("users." + userId + ".cards." + cardId);
     }
+
+    saveCardToUser(userId, cardId, amountSpent, diff) { 
+        appBackend.dbAdd("users." + userId + ".cards", {
+            cardId: cardId, 
+            amountSpent: amountSpent,
+            diff: diff
+        }, (id) => { 
+            console.log(id);
+        })
+    }
+
+    updateUserCard(cardId, amountSpent, diff) { 
+        // TODO
+    }
 }
 
 export var user = new userClass();

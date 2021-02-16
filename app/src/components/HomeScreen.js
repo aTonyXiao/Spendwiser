@@ -33,7 +33,6 @@ export function HomeScreen({navigation}) {
         handleRedirectsBasedOnLoginStatus(navigation);
     });
 
-    appBackend.signOut();
     return (
         <View style={styles.screen}>
             <Image source={require('../../assets/spendwiser_logo.png')} />

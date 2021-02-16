@@ -31,4 +31,5 @@ function setAppBackend (type) {
 export function initializeAppBackend (type) {
     setAppBackend(type);
     appBackend.initializeApp();
+    appBackend.enableDatabaseCaching();
 }
