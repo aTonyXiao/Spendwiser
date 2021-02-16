@@ -1,6 +1,5 @@
 import React from 'react';
-import { TextInput, View, StyleSheet, Button } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import { TextInput, StyleSheet } from 'react-native';
 
 const grayRGB = 'rgb(211, 211, 211)';
 export const UsernameInput = props => {

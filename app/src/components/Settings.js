@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import mainStyles from '../styles/mainStyles';
-import {appBackend} from '../network/backend';
+import { appBackend } from '../network/backend';
 
 export function Settings(props) { 
     return(
