@@ -306,20 +306,18 @@ export default class FirebaseBackend extends BaseBackend {
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      */
-    signIn(email, password) {
+    signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
                 var user = userCredential.user;
                 // ...
-                console.log("Successful sign in...");
-                return;
+               
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-
-                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+                error_func(errorMessage);
             });
     }
 

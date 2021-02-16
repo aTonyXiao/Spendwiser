@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native'
 import mainStyles from '../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button, Alert } from 'react-native';
 import { appBackend } from '../network/backend'
 
 export const Login = props => {
@@ -14,7 +14,16 @@ export const Login = props => {
                     username + ' and ' +
                     password);
 
-        appBackend.signIn(username, password);
+        appBackend.signIn(username, password, (err)=> {
+            Alert.alert(
+                "Unable to Login",
+                err,
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+            );
+        });
     }
 
     return (
@@ -26,6 +35,12 @@ export const Login = props => {
                 onPress={signIn}
             ></Button>
             <Button
+                title="Don't have an account?"
+                onPress={() => {
+                    props.navigation.navigate('CreateAccount')
+                }}
+            ></Button>
+            <Button
                 title="Sign in with Facebook"
                 onPress={() => {
                     appBackend.signInWithFacebook();
@@ -35,12 +50,6 @@ export const Login = props => {
             title="Sign in with Google"
                 onPress={() => {
                     appBackend.signInWithGoogle();
-                }}
-            ></Button>
-            <Button
-                title="Don't have an account?"
-                onPress={() => {
-                    props.navigation.navigate('CreateAccount')
                 }}
             ></Button>
         </View>
