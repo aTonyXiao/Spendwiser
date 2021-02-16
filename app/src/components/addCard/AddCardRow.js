@@ -1,8 +1,8 @@
 import { app } from 'firebase';
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { appBackend } from '../../network/backend';
-import { user } from '../../network/backend';
+import { appBackend } from '../../network/backend/';
+import { user } from '../../network/user';
 
 export class AddCardRow extends React.Component {
     constructor(props) { 
@@ -18,8 +18,7 @@ export class AddCardRow extends React.Component {
     }
 
     saveCard = () => { 
-        var userId = user.getUserId(); // TODO for some reason this is undefined
-        // var userId = "test";
+        var userId = user.getUserId();
         appBackend.dbAdd("users." + userId + ".cards", {
             name: this.state.name,
             rewards: this.state.rewards,

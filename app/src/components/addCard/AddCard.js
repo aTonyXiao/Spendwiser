@@ -12,6 +12,10 @@ export class AddCard extends React.Component {
     render() { 
         return(
             <View style={mainStyles.container}>
+                <Button
+                    title='Add card from our database'
+                    onPress={() => this.navigation.navigate('AddCardDB')}
+                ></Button>
                 <Button 
                     title='Add card by search'
                     onPress={() => this.navigation.navigate('AddCardSearch')}

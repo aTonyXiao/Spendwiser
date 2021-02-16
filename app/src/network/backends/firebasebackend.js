@@ -182,10 +182,13 @@ export default class FirebaseBackend extends BaseBackend {
      */
     dbGetSubCollections(location, callback) { 
         let dbloc = getDatabaseLocation(this.database, location);
+
+        let collection = [];
         dbloc.get().then((query) => {
             query.forEach(doc => {
-                callback(doc);
+                collection.push(doc.data());
             })
+            callback(collection);
         }).catch((err) => { 
             console.log(err);
         })
@@ -200,15 +203,20 @@ export default class FirebaseBackend extends BaseBackend {
      * @returns {boolean} - true if document exists, false if not
      * 
      * @example
-     * var docExists = appBackend.dbDoesDocExist("users.test");
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1");
     */
-    dbDoesDocExist(location) { 
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        let document = databaseLocation.get();
-        if (!document.exists) { 
-            return true;
-        }
-        return false;
+    async dbDoesDocExist(userId) { 
+        return new Promise((resolve, reject) => { 
+            const ref = this.database.collection('users').doc(userId); // TODO change this to be a location
+            ref.get().then((doc) => {
+                if (!doc.exists) {
+                    console.log('No such document!');
+                    resolve(false);
+                }
+
+                resolve(true);
+            })
+        })
     }
 
     /**

@@ -14,6 +14,7 @@ import { AddCard } from './src/components/addCard/AddCard';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardSearch } from './src/components/addCard/AddCardSearch';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
+import { AddCardDB } from './src/components/addCard/AddCardDB';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,10 @@ export default function App() {
         <Stack.Screen
           name="AddCardCamera"
           component={AddCardCamera}
+        />
+        <Stack.Screen
+          name="AddCardDB"
+          component={AddCardDB}
         />
       </Stack.Navigator>
     </NavigationContainer>

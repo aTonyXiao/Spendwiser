@@ -1,9 +1,9 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Alert } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
 import { user } from '../../network/user';
-import { appBackend } from '../../network/backend';
+import { useState, useEffect } from "react";
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -11,66 +11,47 @@ const styles = StyleSheet.create({
     },
 });
 
-export class Cards extends React.Component {
-    constructor(props) {
-        super(props);
+export function Cards({navigation}) { 
+    const [cards, setCards] = useState([]);
+    const userId = user.getUserId();
 
-        this.state = {
-            cards: [],
-            displayCards: false
-        }
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            loadCards(userId);
+        });
+        return unsubscribe;
+    }, [navigation]);
 
-        this.navigation = props.navigation;
 
-        var userId = user.getUserId();
-        console.log('line 26');
-        console.log(userId);
-        appBackend.dbGetSubCollections("users." + userId + ".cards",(data) => { 
-            this.addCard(data.data());
+    function loadCards(userId) {
+        user.getCards(userId).then((cards) => {
+            setCards(cards);
         })
-        // var cards = user.getCards(userId);
-        // console.log(cards);
+    };
 
-        // if (cards.length == 0) { 
-        //     // display 'No cards!'
-        // } else { 
-        //     // set cards state
-        // }
-    }
-
-    componentDidMount() { 
-        this.setState({displayCards:true});
-    }
-
-    addCard = (card) => {
-        this.state.cards.push(card);
-        this.setState({cards: this.state.cards});
-    }
-
-    buttonPress = () => {
-        this.navigation.navigate('AddCard');
-    }
-
-    render () {
+    if (cards.length == 0) { 
         return (
-            <SafeAreaView style={mainStyles.container}>
-                <ScrollView style={styles.scrollView}>
-                    {
-                        this.state.displayCards && 
-                        <View>
-                            {this.state.cards.map((card, i) => {
-                                var props = {
-                                    navigation: this.navigation,
-                                    card: card
-                                }
-
-                                return <Card key={i} props={props}/>
-                            })}
-                        </View>
-                    }
-                    <Button title="Add Card" onPress={this.buttonPress}/>
-                </ScrollView>
-            </SafeAreaView>
-        );
+            <View>
+                <Text>You currently have no stored cards!</Text>
+                <Button title="Add Card" onPress={() => navigation.navigate('AddCard')}></Button>
+            </View>
+        )
     }
+
+    return (
+        <SafeAreaView style={mainStyles.container}>
+            <ScrollView style={styles.scrollView}>
+                <View>
+                    {cards.map((card, i) => {
+                        var props = {
+                            navigation: navigation,
+                            card: card
+                        }
+                        return <Card key={i} props={props}/>
+                    })}
+                </View>
+                <Button title="Add Card" onPress={() => navigation.navigate('AddCard')}></Button>
+            </ScrollView>
+        </SafeAreaView>
+    );
 }

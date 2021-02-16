@@ -1,12 +1,11 @@
-import { app } from 'firebase';
 import { appBackend } from './backend';
 
 /**
  * A user class that peforms user database options
  */
-export class userClass { 
+class userClass { 
     /**
-     * Checks if the user is currently in the database. If not  
+     * Checks if the user is currently in the "users" database. If not  
      * in the database, registers the user. Returns the user id
      */
     getUserId() { 
@@ -15,36 +14,50 @@ export class userClass {
             // user is not using a login, store all data locally?
             userId = "test"; // TODO test is temporary
         } else {
-            var docExists = appBackend.dbDoesDocExist("users." + userId);
-
-            if (!docExists) { 
-                this.addUser(userId);
-            }
+            appBackend.dbDoesDocExist(userId).then((docExists) => {
+                if (!docExists) {
+                    this.addUser(userId);
+                }
+            });
         }
         return userId;
     }
 
+    /**
+     * Adds a user to the card database with inital date added
+     * 
+     * @param {String} userId - the user's id after logged in 
+     */
     addUser(userId) { 
-        // TODO 
-        // appBackend.dbAdd("users" + userId, { 
-        //     dateCreated: new Date()
-        // },  
-        // )
+        var date = new Date();
+
+        appBackend.dbSet("users." + userId, { 
+            dateCreated: date
+            // TODO: maybe add name and email here?
+        }, (id) => { 
+            console.log(id);
+        });
     }
 
     /**
      * Gets the cards associated with a user id
      * @param {string} userId - The User Id
      */
-    getCards(userId) { 
-        var cards = [];
-
-        // TODO possibly need to handle empty cards here?
-        appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => { 
-            cards.push(data.data());
+    async getCards(userId) { 
+        return new Promise((resolve, reject) => { 
+            appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
+                resolve(data);
+            })
         })
+    }
 
-        return cards;
+    /**
+     *  Deletes a card from the user's database 
+     * @param {*} userId - current user id
+     * @param {*} cardId - card id they want to delete
+     */
+    deleteCard(userId, cardId) { 
+        appBackend.dbDelete("users." + userId + ".cards." + cardId);
     }
 }
 

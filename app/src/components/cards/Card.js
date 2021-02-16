@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { appBackend } from '../../network/backend';
-import { user } from '../../network/user';
+import { cards } from '../../network/cards';
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -29,18 +28,17 @@ export class Card extends React.Component {
         // this for a proof of concept for now
         this.CardImage = require("../../../assets/cards/blank.png")
 
-        var cardInformation = props.props.card
         this.state = {
-            name: cardInformation.name,
-            rewards: cardInformation.rewards,
-            url: cardInformation.url
+            name: ""
         }
+
+        var cardInformation = props.props.card;
+        this.cardId = cardInformation.cardId;
         this.navigation = props.props.navigation;
 
-        var userId = user.getUserId();
-        appBackend.dbGet("users." + userId + ".cards", ["name", "==", cardInformation.name], (data) => {
-            this.cardId = data.id;
-        })
+        cards.getCardName(this.cardId).then((cardName) => {
+            this.state.name = cardName;
+        });
     }
 
     onPress = () => { 

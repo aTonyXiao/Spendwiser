@@ -1,7 +1,7 @@
-import { app } from 'firebase';
-import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Button, Image,  Alert, useColorScheme } from 'react-native';
 import { appBackend } from '../../network/backend';
+import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 
 const styles = StyleSheet.create({
@@ -16,22 +16,39 @@ const styles = StyleSheet.create({
 export function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
     const cardImage = require("../../../assets/cards/blank.png");
-    var name = "";
-    var rewards;
-    var userId = user.getUserId
-    appBackend.dbGet("users." + userId + ".cards." + cardId, (data) => {
-        console.log(name);
-        name = data.name;
-        rewards = data.rewards; 
+    const userId = user.getUserId();
+    const [cardName, setCardName] = useState("");
+
+    useEffect(() => {
+        cards.getCardName(cardId).then((name) => { 
+            setCardName(name);
+        });
+        // const cardRewards = cards.getCardRewards(cardId);
     })
 
+    const confirmDelete = () => {
+        Alert.alert(
+            'Are you sure you would like to delete this card from your profile?',
+            'nother',
+            [
+              {text: 'NO', onPress: () => console.log('NO Pressed'), style: 'cancel'},
+              {text: 'YES', onPress: () => deleteCard()},
+            ]
+          );
+    };
+
     deleteCard = () => {
-        appBackend.dbDelete("users." + userId + ".cards" + cardId);
+        console.log("deleteing card");
+
+        // TODO this doesn't delete anything because the document id of the user isn't the card id
+        console.log(cardId);
+        user.deleteCard(userId, cardId);
+        navigation.navigate('Cards');
     }
 
     return (
         <View>
-            <Text>{name}</Text>
+            <Text>{cardName}</Text>
             <Image
                 source={cardImage}
                 style={styles.card}
@@ -39,7 +56,7 @@ export function DisplayCard({route, navigation}) {
             {/* TODO want to make add two fields for each reward that can be dropdowns for reward options */}
             <Button
                 title="Delete this card"
-                onPress={deleteCard}
+                onPress={confirmDelete}
             ></Button>
         </View>
     )
