@@ -1,7 +1,6 @@
-// https://www.npmjs.com/package/cryptr
-import { Cryptr } from 'cryptr';
+// https://github.com/brix/crypto-js
+import aes from 'crypto-js/aes';
 
 export function encryptTest () {
-    const crypt = new Cryptr("key");
-    console.log(crypt.encrypt("hello"));
+    console.log(aes.encrypt("hello", "key").toString());
 }
