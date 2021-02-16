@@ -16,7 +16,7 @@ export class AddCardSearch extends React.Component {
             results: [],
           };
         this.navigation = props.navigation;
-        this.key = "8ed8fa90665511ebbbf3371335d2db85";
+        this.key = process.env.REACT_NATIVE_CCSTACK_API_KEY;
     }
 
     queryCards = async () => {
