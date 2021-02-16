@@ -81,6 +81,11 @@ export default class BaseBackend {
       * Use facebook account to sign in
       */
     signInWithFacebook() {}
+
+    /**
+      * Use google account to sign in
+      */
+    signInWithGoogle() {}
     
     /**
      * Sign in to an existing user account

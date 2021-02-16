@@ -2,6 +2,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
 import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
 
 
 // Internal saved state of wether a user is logged in or not
@@ -20,7 +21,6 @@ function getDatabaseLocation(database, location) {
     }
     return databaseLocation;
 }
-
 
 async function loginWithFacebook() {
     await Facebook.initializeAsync({appId: '251267389794841', });
@@ -45,6 +45,30 @@ async function loginWithFacebook() {
   }
 }
 
+// https://docs.expo.io/versions/latest/sdk/google/
+async function loginWithGoogle() {
+
+    // Note: Had to put the isoClientId into the Firebase Console Google Sign in Safelist
+    // https://console.firebase.google.com/project/spendwiser-88be1/authentication/providers
+    // This is because the project used to sign in with the expo-google-signin is different than
+    // our firebase project...I think.
+    const { type, accessToken, user } = await Google.logInAsync({
+        iosClientId: '989741516714-hqrk7f1k8vkab4c6g8h0qai6nl1cv41f.apps.googleusercontent.com',
+        iosStandaloneAppClientId: '989741516714-fqhdv9b748k8gt5tpclgt2ji79r9pj9r.apps.googleusercontent.com',
+    });
+
+    if (type === 'success') {
+        const credential = firebase.auth.GoogleAuthProvider.credential(null, accessToken);
+        console.log(credential);
+        firebase
+            .auth()
+            .signInWithCredential(credential)
+            .catch(error => {
+                console.log("Google login error...");
+                console.log(error);
+            });
+    }
+}
 
 /**
  * Firebase Backend designed around the Firebase Web SDK
@@ -230,6 +254,13 @@ export default class FirebaseBackend extends BaseBackend {
      */
     signInWithFacebook() {
         loginWithFacebook();
+    }
+
+    /**
+     * Use google account to sign in
+     */
+    signInWithGoogle() {
+        loginWithGoogle();
     }
     
 
