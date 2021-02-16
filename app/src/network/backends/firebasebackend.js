@@ -336,6 +336,27 @@ export default class FirebaseBackend extends BaseBackend {
     }
 
     /**
+     * Resets the user's password.
+     */
+    resetPassword(email, return_func) {
+        var auth = firebase.auth();
+        if (email === null) {
+            var user = auth.currentUser;
+            email = user.email;
+        }
+
+        // remove leading/trailing whitespace
+        email = email.trim();
+        
+        auth.sendPasswordResetEmail(email).then(function() {
+            return_func("Success! An email has been sent");
+        }).catch(function(error) {
+            return_func("Error! Invalid email address");
+        });
+        
+    }
+
+    /**
      * Returns true or false depending on if the user is already logged in
      */
     userLoggedIn() {

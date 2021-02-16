@@ -35,6 +35,12 @@ export const Login = props => {
                 onPress={signIn}
             ></Button>
             <Button
+                title='Reset Password'
+                onPress={() => {
+                    props.navigation.navigate('PasswordReset');
+                }}
+            ></Button>
+            <Button
                 title="Don't have an account?"
                 onPress={() => {
                     props.navigation.navigate('CreateAccount')
