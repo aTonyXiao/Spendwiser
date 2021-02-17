@@ -304,17 +304,15 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * https://firebase.google.com/docs/auth/web/password-auth
      */
-    signUp(email, password) {
+    signUp(email, password, error_func) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
-            console.log("Sign up successful")
-            console.log(user);
+            console.log("Sign up successful");
         })
         .catch((error) => {
-            var errorCode = error.code;
             var errorMessage = error.message;
-            console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
+            error_func(errorMessage);
         })
     }
 
@@ -340,20 +338,18 @@ export default class FirebaseBackend extends BaseBackend {
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      */
-    signIn(email, password) {
+    signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
                 var user = userCredential.user;
                 // ...
-                console.log("Successful sign in...");
-                return;
+               
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-
-                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+                error_func(errorMessage);
             });
     }
 
@@ -371,6 +367,27 @@ export default class FirebaseBackend extends BaseBackend {
             console.log(error);
             return;
         });  
+    }
+
+    /**
+     * Resets the user's password.
+     */
+    resetPassword(email, return_func) {
+        var auth = firebase.auth();
+        if (email === null) {
+            var user = auth.currentUser;
+            email = user.email;
+        }
+
+        // remove leading/trailing whitespace
+        email = email.trim();
+        
+        auth.sendPasswordResetEmail(email).then(function() {
+            return_func("Success! An email has been sent");
+        }).catch(function(error) {
+            return_func("Error! Invalid email address");
+        });
+        
     }
 
     /**
