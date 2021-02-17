@@ -31,6 +31,29 @@ export function Settings(props) {
                 // onPress={() => navigation.navigate('CreateAccount')}
             ></Button>
             <Button
+                title="Reset Password"
+                onPress={() => {
+                    appBackend.resetPassword(null, (error) => {
+                        Alert.alert(
+                            "Unable to Reset Password",
+                            error,
+                            [
+                                { text: "OK", onPress: () => console.log("OK Pressed") }
+                            ],
+                            { cancelable: false }
+                        );
+                    });
+                    Alert.alert(
+                        "Email Sent",
+                        "An email has been sent to you to reset password",
+                        [
+                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ],
+                        { cancelable: false }
+                    );
+                }}
+            ></Button>
+            <Button
                 title="Logout"
                 onPress={() => {
                     appBackend.signOut();

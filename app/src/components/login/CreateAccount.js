@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, StyleSheet, Button } from 'react-native';
+import { TextInput, View, StyleSheet, Button, Alert } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
 import {appBackend} from '../../network/backend'
@@ -12,7 +12,16 @@ export const CreateAccount = props => {
         console.log('User sign-up request with ' +
                     username + ' and ' +
                     password);
-        appBackend.signUp(username, password);
+        appBackend.signUp(username, password, (err) => {
+            Alert.alert(
+                "Unable to Create Account",
+                err,
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+            );
+        });
     }
 
     return (
