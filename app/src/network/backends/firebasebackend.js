@@ -96,10 +96,14 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      */
     enableDatabaseCaching (cacheSize = -1) {
-        this.database.settings({
-            cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
-        });
-        this.database.enablePersistence();
+        try {
+            this.database.settings({
+                cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
+            });
+            this.database.enablePersistence()
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     /**
