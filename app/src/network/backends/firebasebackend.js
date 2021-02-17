@@ -208,12 +208,40 @@ export default class FirebaseBackend extends BaseBackend {
      */
     dbGetSubCollections(location, callback) { 
         let dbloc = getDatabaseLocation(this.database, location);
+
+        let collection = [];
         dbloc.get().then((query) => {
             query.forEach(doc => {
-                callback(doc);
+                collection.push(doc.data());
             })
+            callback(collection);
         }).catch((err) => { 
             console.log(err);
+        })
+    }
+
+    // TODO: - I kinda strayed from syntax here... is this okay?
+    /** 
+     *  Function returns checks if a document exists. 
+     * 
+     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
+     * 
+     * @returns {boolean} - true if document exists, false if not
+     * 
+     * @example
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1");
+    */
+    async dbDoesDocExist(userId) { 
+        return new Promise((resolve, reject) => { 
+            const ref = this.database.collection('users').doc(userId); // TODO change this to be a location
+            ref.get().then((doc) => {
+                if (!doc.exists) {
+                    console.log('No such document!');
+                    resolve(false);
+                }
+
+                resolve(true);
+            })
         })
     }
 
@@ -262,6 +290,12 @@ export default class FirebaseBackend extends BaseBackend {
         });
     }
 
+    dbDelete(location) { 
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.delete();
+        // TODO this won't delete subcollections
+    }
+
     /**
      * User sign up for an account using email and password
      * 
@@ -270,17 +304,15 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * https://firebase.google.com/docs/auth/web/password-auth
      */
-    signUp(email, password) {
+    signUp(email, password, error_func) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
-            console.log("Sign up successful")
-            console.log(user);
+            console.log("Sign up successful");
         })
         .catch((error) => {
-            var errorCode = error.code;
             var errorMessage = error.message;
-            console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
+            error_func(errorMessage);
         })
     }
 
@@ -306,20 +338,18 @@ export default class FirebaseBackend extends BaseBackend {
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      */
-    signIn(email, password) {
+    signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
                 var user = userCredential.user;
                 // ...
-                console.log("Successful sign in...");
-                return;
+               
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-
-                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+                error_func(errorMessage);
             });
     }
 
@@ -337,6 +367,27 @@ export default class FirebaseBackend extends BaseBackend {
             console.log(error);
             return;
         });  
+    }
+
+    /**
+     * Resets the user's password.
+     */
+    resetPassword(email, return_func) {
+        var auth = firebase.auth();
+        if (email === null) {
+            var user = auth.currentUser;
+            email = user.email;
+        }
+
+        // remove leading/trailing whitespace
+        email = email.trim();
+        
+        auth.sendPasswordResetEmail(email).then(function() {
+            return_func("Success! An email has been sent");
+        }).catch(function(error) {
+            return_func("Error! Invalid email address");
+        });
+        
     }
 
     /**

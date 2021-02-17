@@ -96,8 +96,9 @@ export default class BaseBackend {
      * 
      * @param {string} email - a (TODO: valid?) email of a 
      * @param {string} password - a (TODO: relatively complex?) password
+     * @param {function} error_func - called when there is an error during sign up
      */
-    signUp(username, password) {}
+    signUp(username, password, error_func) {}
     
     /**
       * Use facebook account to sign in
@@ -113,16 +114,22 @@ export default class BaseBackend {
      * Sign in to an existing user account
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
+     * @param {function} error_func - called when there is an error during sign in
      */
-    signIn(email, password) {}
-
-    
-      
+    signIn(email, password, error_func) {}
         
     /**
      * Sign out the currently logged in user
      */
     signOut() {}
+
+
+    /**
+      * Resets the user's password.
+      * @param {string} email - the email of the account to reset password
+      * @param {function} error_func - called when there is an error duing password reset
+      */
+    resetPassword(email, return_func) {}
     
     /**
      * Returns true or false depending on if the user is already logged in

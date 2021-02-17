@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import mainStyles from '../styles/mainStyles';
-import {appBackend} from '../network/backend';
+import { appBackend } from '../network/backend';
 
 export function Settings(props) { 
     return(
@@ -29,6 +29,29 @@ export function Settings(props) {
             <Button
                 title="About"
                 // onPress={() => navigation.navigate('CreateAccount')}
+            ></Button>
+            <Button
+                title="Reset Password"
+                onPress={() => {
+                    appBackend.resetPassword(null, (error) => {
+                        Alert.alert(
+                            "Unable to Reset Password",
+                            error,
+                            [
+                                { text: "OK", onPress: () => console.log("OK Pressed") }
+                            ],
+                            { cancelable: false }
+                        );
+                    });
+                    Alert.alert(
+                        "Email Sent",
+                        "An email has been sent to you to reset password",
+                        [
+                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ],
+                        { cancelable: false }
+                    );
+                }}
             ></Button>
             <Button
                 title="Logout"
