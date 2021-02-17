@@ -15,13 +15,21 @@ function objectToString(object) {
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 export default class BaseBackend {
-    /**
-     * This function initializes the Backend
-     */
-    initializeApp () {
+
+    constructor () {
         this.privateKey = "private";
     }
 
+    /**
+     * This function initializes the Backend
+     */
+    initializeApp () {}
+
+    /**
+     * This function sets the private key for the backend
+     * 
+     * @param {string} key - The new private key
+     */
     setPrivateKey (key) {
         this.privateKey = key;
     }
