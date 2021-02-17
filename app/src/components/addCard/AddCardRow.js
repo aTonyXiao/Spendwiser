@@ -1,7 +1,8 @@
 import { app } from 'firebase';
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { appBackend } from '../../network/backend';
+import { appBackend } from '../../network/backend/';
+import { user } from '../../network/user';
 
 export class AddCardRow extends React.Component {
     constructor(props) { 
@@ -11,18 +12,16 @@ export class AddCardRow extends React.Component {
         this.state = {
             name: cardInformation.original_title,
             rewards: cardInformation.rewards,
-            rewards_type: cardInformation.rewards_type,
             url: cardInformation.url
         }
         this.navigation = props.props.navigation;
     }
 
     saveCard = () => { 
-        var user = "test"; // TODO temporary until login gives user id
-        appBackend.dbAdd("users." + user + ".cards", {
+        var userId = user.getUserId();
+        appBackend.dbAdd("users." + userId + ".cards", {
             name: this.state.name,
             rewards: this.state.rewards,
-            rewards_type: this.state.rewards_type,
             url: this.state.url
         }, (id) => { 
             console.log(id);

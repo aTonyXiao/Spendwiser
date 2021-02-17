@@ -4,16 +4,18 @@ import { initializeAppBackend } from './src/network/backend';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from './src/components/HomeScreen';
-import { Login } from './src/components/Login';
-import { CreateAccount } from './src/components/CreateAccount';
+import { Login } from './src/components/login/Login';
+import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
-import { Cards } from './src/components/Cards';
+import { Cards } from './src/components/cards/Cards';
+import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/MainScreen';
 import { AddCard } from './src/components/addCard/AddCard';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardSearch } from './src/components/addCard/AddCardSearch';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/PasswordReset';
+import { AddCardDB } from './src/components/addCard/AddCardDB';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +46,10 @@ export default function App() {
           component={Cards}
         />
         <Stack.Screen
+          name="CardInfo"
+          component={DisplayCard}
+        />
+        <Stack.Screen
         name="Settings"
         component={Settings}
         />
@@ -64,8 +70,12 @@ export default function App() {
           component={AddCardCamera}
         />
         <Stack.Screen
-            name="PasswordReset"
-            component={PasswordReset}
+          name="PasswordReset"
+          component={PasswordReset}
+        />
+        <Stack.Screen
+          name="AddCardDB"
+          component={AddCardDB}
         />
       </Stack.Navigator>
     </NavigationContainer>
