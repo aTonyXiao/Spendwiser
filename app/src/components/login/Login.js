@@ -48,13 +48,15 @@ export const Login = props => {
             <Button
                 title="Sign in with Facebook"
                 onPress={() => {
-                    appBackend.signInWithFacebook();
+                    let loginProviders = appBackend.getLoginProviders();
+                    loginProviders.facebook.login();
                 }}
             ></Button>
             <Button
             title="Sign in with Google"
                 onPress={() => {
-                    appBackend.signInWithGoogle();
+                    let loginProviders = appBackend.getLoginProviders();
+                    loginProviders.google.login();
                 }}
             ></Button>
         </View>

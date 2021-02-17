@@ -14,7 +14,7 @@ import { AddCard } from './src/components/addCard/AddCard';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardSearch } from './src/components/addCard/AddCardSearch';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
-import { PasswordReset } from './src/components/PasswordReset';
+import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
 
 const Stack = createStackNavigator();

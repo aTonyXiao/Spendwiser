@@ -123,7 +123,8 @@ export default class BaseBackend {
      */
     signOut() {}
 
-
+    getLoginProviders() {}
+    
     /**
       * Resets the user's password.
       * @param {string} email - the email of the account to reset password
