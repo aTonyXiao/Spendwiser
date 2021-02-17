@@ -96,6 +96,8 @@ export default class FirebaseBackend extends BaseBackend {
      * This function initializes the Backend
      */
     initializeApp () {
+        super.initializeApp();
+        
         // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
         const firebaseConfig = {
             apiKey: process.env.REACT_NATIVE_API_KEY,

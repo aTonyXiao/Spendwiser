@@ -1,3 +1,6 @@
+// https://github.com/brix/crypto-js
+import aes from 'crypto-js/aes';
+
 /**
  * Base backend class for different backend types
  * Database functions are designed around the Firestore Collection/Document style
@@ -9,7 +12,13 @@ export default class BaseBackend {
     /**
      * This function initializes the Backend
      */
-    initializeApp () {}
+    initializeApp () {
+        this.privateKey = "private";
+    }
+
+    setPrivateKey (key) {
+        this.privateKey = key;
+    }
 
     /**
      * This function returns whether this Backend supports databases or not
@@ -91,6 +100,26 @@ export default class BaseBackend {
      */
     dbAdd (location, data, callback) {}
 
+    dbGetEncrypted (location, ...conditionsWithCallback) {
+        let callback = conditionsWithCallback[conditionsWithCallback.length - 1];
+        conditionsWithCallback[conditionsWithCallback.length - 1] = (data) => {
+            let newData = {};
+            for (let key of Object.keys(data)) {
+                newData[key] = aes.decrypt(JSON.stringify(data[key]), this.privateKey)
+            }
+            callback(newData);
+        };
+        this.dbGet(location, conditionsWithCallback);
+    }
+
+    dbAddEncrypted (location, data, callback) {
+        let newData = {};
+        for (let key of Object.keys(data)) {
+            newData[key] = aes.encrypt(JSON.stringify(data[key]), this.privateKey)
+        }
+        console.log(newData);
+    }
+
     /**
      * User sign up for an account using email and password
      * 
@@ -99,7 +128,7 @@ export default class BaseBackend {
      * @param {function} error_func - called when there is an error during sign up
      */
     signUp(username, password, error_func) {}
-    
+
     /**
       * Use facebook account to sign in
       */
@@ -109,7 +138,7 @@ export default class BaseBackend {
       * Use google account to sign in
       */
     signInWithGoogle() {}
-    
+
     /**
      * Sign in to an existing user account
      * @param {string} email - the email of the user account
@@ -130,7 +159,7 @@ export default class BaseBackend {
       * @param {function} error_func - called when there is an error duing password reset
       */
     resetPassword(email, return_func) {}
-    
+
     /**
      * Returns true or false depending on if the user is already logged in
      */
