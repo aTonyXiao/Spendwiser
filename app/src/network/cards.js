@@ -18,7 +18,21 @@ class Cards {
         })
     }
 
-    getCardRewards() {
+    async getCardReward(cardId, category) {
+        return new Promise((resolve, reject) => { 
+            appBackend.dbGet("cards." + cardId, (data) => {
+                let convertedReward = data.rewards[category] * data.conversion;
+                if (isNaN(convertedReward)) {
+                    convertedReward = data.rewards["others"] * data.conversion;
+                }
+                resolve(convertedReward);
+            })
+        })
+    }
+
+
+    getCardRewards(cardId) { 
+        // TODO
     }
 
     addCardToDatabase(name, benefits, rewards, url) { 

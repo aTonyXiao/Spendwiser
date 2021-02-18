@@ -14,7 +14,7 @@ class userClass {
             // user is not using a login, store all data locally?
             userId = "test"; // TODO test is temporary
         } else {
-            appBackend.dbDoesDocExist(userId).then((docExists) => {
+            appBackend.dbDoesDocExist("users." + userId, (docExists) => {
                 if (!docExists) {
                     this.addUser(userId);
                 }
