@@ -26,7 +26,7 @@ export function MainScreen({navigation}) {
     const [curStore, setCurStore] = useState(null);
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-    const [manualInput, setManualInput] = useState({store_name: "", vicinity: "", store_type: ""});
+    const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCardId, setRecCardId] = useState(null);
       
     function setOfflineMode() {
@@ -34,7 +34,7 @@ export function MainScreen({navigation}) {
             label: "Offline Mode",
             value: "Offline Mode",
             vicinity: "N/A",
-            store_type: "N/A", 
+            storeType: "N/A", 
             key: 0,
         }])
         setCurStore("Offline Mode");
@@ -46,41 +46,51 @@ export function MainScreen({navigation}) {
         setRecCardId(recCardIdfromDB);
     }
 
+    function changeRecCard(value, key) {
+        if (key !== curStoreKey) {
+            let category = storeArr[key]["storeType"];
+            console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
+            RecommendedCard(category, getRecCardIdfromDB);
+            setCurStore(value);
+            setCurStoreKey(key);
+        }
+    }
+
     function getLocationFromAPI(json) {
         setPlaces(json.results);
-        let fetch_result = json.results;
-        let fetch_stores = [];
+        let fetchResult = json.results;
+        let fetchStores = [];
 
-        if (fetch_result == undefined || fetch_result.length == 0) {
+        if (fetchResult == undefined || fetchResult.length == 0) {
             return;
         }
-        let add_count = 0;
-        let fetch_result_len = Object.keys(fetch_result).length - 1;
-        for (let i = 0; i < fetch_result_len; i++) {
-            if (i === fetch_result_len) {
+        let addCount = 0;
+        let fetchResultLen = Object.keys(fetchResult).length - 1;
+        for (let i = 0; i < fetchResultLen; i++) {
+            if (i === fetchResultLen) {
                 break;
             }
-            if (fetch_result[i].types.includes("locality")) {
+            if (fetchResult[i].types.includes("locality")) {
                 continue;
             } else {
-                let storeType = JSON.stringify(fetch_result[i].types[0]).slice(1,-1).replace(/_/g, " ");
-                fetch_stores.push({
-                    label: JSON.stringify(fetch_result[i].name).slice(1,-1),
-                    value: JSON.stringify(fetch_result[i].name).slice(1,-1),
-                    vicinity: JSON.stringify(fetch_result[i].vicinity).slice(1,-1),
-                    store_type: storeType.charAt(0).toUpperCase() + storeType.slice(1), 
-                    key: add_count,
+                let storeType = JSON.stringify(fetchResult[i].types[0]).slice(1,-1).replace(/_/g, " ");
+                storeType = storeType.charAt(0).toUpperCase() + storeType.slice(1)
+                fetchStores.push({
+                    label: JSON.stringify(fetchResult[i].name).slice(1,-1),
+                    value: JSON.stringify(fetchResult[i].name).slice(1,-1),
+                    vicinity: JSON.stringify(fetchResult[i].vicinity).slice(1,-1),
+                    storeType: storeType, 
+                    key: addCount,
                 })
-                if (add_count == 0) {
-                    setCurStore(JSON.stringify(fetch_result[i].name).slice(1,-1));
+                if (addCount == 0) {
+                    setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
-                    console.log(storeType);
                     RecommendedCard(storeType, getRecCardIdfromDB);
                 }
-                add_count++;
+                addCount++;
             }
         }
-        setStoreArr(fetch_stores);
+        setStoreArr(fetchStores);
     };
 
     useEffect(() => {
@@ -132,7 +142,7 @@ export function MainScreen({navigation}) {
                     transparent={true}
                     backdropOpacity = {0.3}
                     visible={modalVisible}
-                    onShow={() => setManualInput({store_name: "", vicinity: "", store_type: ""})}
+                    onShow={() => setManualInput({storeName: "", vicinity: "", storeType: ""})}
                     onRequestClose={() => {
                     Alert.alert('Modal has been closed.');
                     }}>
@@ -142,10 +152,10 @@ export function MainScreen({navigation}) {
                                 style={styles.modalTextInput}
                                 onChangeText={text => {
                                     setManualInput((prevState) => {
-                                        return {...prevState, store_name: text};
+                                        return {...prevState, storeName: text};
                                     })
                                 }}
-                                value={manualInput.store_name}
+                                value={manualInput.storeName}
                                 placeholder={"Store Name (Optional)"}
                             />
                             <TextInput
@@ -162,28 +172,28 @@ export function MainScreen({navigation}) {
                                 style={styles.modalTextInput}
                                 onChangeText={text => {
                                     setManualInput((prevState) => {
-                                        return {...prevState, store_type: text};
+                                        return {...prevState, storeType: text};
                                     })
                                 }}
-                                value={manualInput.store_type}
+                                value={manualInput.storeType}
                                 placeholder={"Category (Required)"}
                             />
                             <View style={{flexDirection: "row", marginTop: 10, justifyContent: 'space-between', padding: 10}}>
                                 <Button
                                     onPress={() => {
                                         setModalVisible(!modalVisible);
-                                        if (manualInput.store_type.length != 0) {
+                                        if (manualInput.storeType.length != 0) {
                                             let storeArrLen = (storeArr.length).toString();
                                             console.log(storeArrLen);
                                             let manualInputObj = {
-                                                label: manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name,
-                                                value: manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name,
-                                                vicinity: manualInput.store_name.vicinity === 0 ? "N/A" : manualInput.vicinity,
-                                                store_type: manualInput.store_type,
+                                                label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
+                                                store_type: manualInput.storeType,
                                                 key: Object.keys(storeArr).length - 1,
                                             }
                                             setStoreArr(storeList => storeList.concat(manualInputObj));
-                                            setCurStore(manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name);
+                                            setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
                                             setCurStoreKey(Object.keys(storeArr).length - 1);
                                         }                                        
                                     }}
@@ -220,7 +230,7 @@ export function MainScreen({navigation}) {
                     <RNPickerSelect
                         placeholder={{}}
                         items={storeArr}
-                        onValueChange={(value, key) => {setCurStore(value), setCurStoreKey(key)}}
+                        onValueChange={(value, key) => {changeRecCard(value, key)}}
                         pickerProps={{mode:'dropdown', itemStyle:{height: 100}}}
                         style={{...pickerSelectStyles,
                             iconContainer: {
@@ -238,7 +248,7 @@ export function MainScreen({navigation}) {
                         {"Address: " + (isLoading ? "" : storeArr[curStoreKey].vicinity)}
                     </Text>
                     <Text>
-                        {"Category: " + (isLoading ? "" : storeArr[curStoreKey].store_type)}
+                        {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
                     </Text>
                     <TouchableOpacity
                         onPress={() => {setModalVisible(true)}}

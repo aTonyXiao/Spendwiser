@@ -4,17 +4,19 @@ import { cards } from '../../network/cards'
 
 function getCategory(googleCategory) {
     switch(googleCategory) {
-        case "bar":
-        case "cafe":
-        case "meal delivery":
-        case "meal takeaway":
-        case "restaurant":
+        case "Bar":
+        case "Cafe":
+        case "Meal delivery":
+        case "Meal takeaway":
+        case "Restaurant":
             return "dining";
-        case "bakery":
-        case "liqour store":
-        case "supermarket":
-        case "grocery or supermarket":
+        case "Bakery":
+        case "Liqour store":
+        case "Supermarket":
+        case "Grocery or supermarket":
             return "grocery";
+        case "Drugstore":
+            return "drugstore";
         default:
             return "others";
     }
@@ -35,6 +37,7 @@ export async function RecommendedCard(googleCategory, callback) {
         tmpCardCatReward = await cards.getCardReward(tmpCardId, category)
         myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatReward});
     }
+    console.log(myCards);
     let res = Math.max.apply(Math, myCards.map(function(o){return o.cardCatReward;}))
     let recCard = myCards.find(function(o){ return o.cardCatReward == res; })
     callback(recCard.cardId);
