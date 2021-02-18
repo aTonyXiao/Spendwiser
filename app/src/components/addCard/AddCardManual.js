@@ -22,6 +22,7 @@ export function AddCardManual({navigation}) {
     const inputReward = React.createRef();
     const [rewards, setRewards] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
+    const [displayErrorText, setDisplayErrorText] = useState(false);
 
     addReward = () => { 
         const rewardType = inputReward.current.state.reward;
@@ -40,8 +41,11 @@ export function AddCardManual({navigation}) {
     
             setDisplayRewards(true);
         } else { 
-            console.log('error text');
-            // TODO error text
+            setDisplayErrorText(true);
+
+            setTimeout(function() { 
+                setDisplayErrorText(false);
+            }, 2000);
         }
     }
 
@@ -73,6 +77,10 @@ export function AddCardManual({navigation}) {
                         rewards.map((reward, i) => {
                             return <Text key={i}>Reward: {reward.type}, {reward.value} cents</Text>
                         })
+                    }
+                    {
+                        displayErrorText && 
+                        <Text style={{color:'red'}}>Please input a number</Text>
                     }
                     <ManualRewardRow ref={inputReward}></ManualRewardRow>
                 </View>
