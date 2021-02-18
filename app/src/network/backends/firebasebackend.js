@@ -160,7 +160,7 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * @example
      * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
-     *  console.log(data.data());
+     *  console.log(data);
      * })
      */
     dbGetSubCollections(location, callback) { 
