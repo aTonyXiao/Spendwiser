@@ -9,10 +9,6 @@ const styles = StyleSheet.create({
     rewardContainer: { 
         display: 'flex',
         flexDirection: 'row'
-    }, 
-    rewardRows: {
-        // display: 'flex', 
-        // flexDirection: 'column'
     }
 });
 
@@ -23,6 +19,10 @@ export function AddCardManual({navigation}) {
     const [rewards, setRewards] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
     const [displayErrorText, setDisplayErrorText] = useState(false);
+
+    resetRewardInputs = () => { 
+        inputReward.current.state.value = "";
+    }
 
     addReward = () => { 
         const rewardType = inputReward.current.state.reward;
@@ -36,8 +36,8 @@ export function AddCardManual({navigation}) {
                     value : rewardValue,
                 }
             ])
-    
-            // TODO reset input boxes
+   
+            resetRewardInputs();
     
             setDisplayRewards(true);
         } else { 
@@ -55,11 +55,10 @@ export function AddCardManual({navigation}) {
 
         var name = inputName.current.state.text;
         var url = inputUrl.current.state.text;
-        var categoryRewards = rewards 
 
-        cards.addCard(name, rewards, url).then((cardId) => {
+        cards.addCardToDatabase(name, null, rewards, url).then((cardId) => {
             console.log("new card id: " + cardId);
-            user.saveCardToUser(userId, cardId, 0, null);
+            user.saveCardToUser(userId, cardId, null, null);
             navigation.navigate('Cards');
         });
     } 
@@ -71,19 +70,17 @@ export function AddCardManual({navigation}) {
 
             <Text>Rewards</Text>    
             <View style={styles.rewardContainer}>
-                <View style={styles.rewardRows}>
-                    {
-                        displayRewards && 
-                        rewards.map((reward, i) => {
-                            return <Text key={i}>Reward: {reward.type}, {reward.value} cents</Text>
-                        })
-                    }
-                    {
-                        displayErrorText && 
-                        <Text style={{color:'red'}}>Please input a number</Text>
-                    }
-                    <ManualRewardRow ref={inputReward}></ManualRewardRow>
-                </View>
+                {
+                    displayRewards &&
+                    rewards.map((reward, i) => {
+                        return <Text key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                    })
+                }
+                {
+                    displayErrorText &&
+                    <Text style={{ color: 'red' }}>Please input a number</Text>
+                }
+                <ManualRewardRow ref={inputReward}></ManualRewardRow>
                 <Button
                     title='+'
                     onPress={addReward}

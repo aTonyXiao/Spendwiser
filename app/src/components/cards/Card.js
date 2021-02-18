@@ -37,7 +37,7 @@ export class Card extends React.Component {
         this.navigation = props.props.navigation;
 
         cards.getCardName(this.cardId).then((cardName) => {
-            this.state.name = cardName;
+            this.setState({name: cardName});
         });
     }
 
