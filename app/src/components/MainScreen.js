@@ -229,7 +229,7 @@ export function MainScreen({navigation}) {
                 <View style= {{flex:2}}/>
                 <Button
                     title="See your cards"
-                    onPress={() => navigation.navigate('Cards')}
+                    onPress={() => navigation.navigate('YourCards')}
                 ></Button>
             </ScrollView>
         </SafeAreaView>

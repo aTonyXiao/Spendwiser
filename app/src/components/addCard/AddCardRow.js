@@ -27,7 +27,7 @@ export class AddCardRow extends React.Component {
             console.log(id);
         })
 
-        this.navigation.navigate('Cards');
+        this.navigation.navigate('YourCards');
     } 
 
     render () {

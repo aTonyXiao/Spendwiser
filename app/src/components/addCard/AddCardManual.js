@@ -59,7 +59,7 @@ export function AddCardManual({navigation}) {
         cards.addCardToDatabase(name, null, rewards, url).then((cardId) => {
             console.log("new card id: " + cardId);
             user.saveCardToUser(userId, cardId, null, null);
-            navigation.navigate('Cards');
+            navigation.navigate('YourCards');
         });
     } 
 

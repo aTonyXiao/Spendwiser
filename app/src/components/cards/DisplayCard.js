@@ -42,7 +42,7 @@ export function DisplayCard({route, navigation}) {
         // TODO this doesn't delete anything because the document id of the user isn't the card id
         console.log(cardId);
         user.deleteCard(userId, cardId);
-        navigation.navigate('Cards');
+        navigation.navigate('YourCards');
     }
 
     return (
