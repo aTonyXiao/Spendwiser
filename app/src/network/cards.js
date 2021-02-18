@@ -30,6 +30,19 @@ class Cards {
     getCardRewards(cardId) { 
         // TODO
     }
+
+    addCard(name, rewards, url) { 
+        return new Promise((resolve, reject) => { 
+            appBackend.dbAdd("cards", { 
+                name: name, 
+                rewards: rewards, 
+                url: url
+            }, (id) => {
+                console.log('added card to database with id: ' + id);
+                resolve(id);
+            })
+        })
+    }
 }
 
 export var cards = new Cards();

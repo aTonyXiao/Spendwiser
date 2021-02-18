@@ -4,8 +4,9 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
 import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth';
-
+import * as Google from 'expo-google-app-auth'
+import GoogleLogin from './firebase/google_login'
+import FacebookLogin from './firebase/facebook_login'
 
 // Internal saved state of wether a user is logged in or not
 let globalUserSignedIn = false;
@@ -33,54 +34,6 @@ function filterDatabaseCollection(collection, conditions) {
         filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
     }
     return filteredCollection;
-}
-
-async function loginWithFacebook() {
-    await Facebook.initializeAsync({appId: '251267389794841', });
-
-  const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-    permissions: ['public_profile'],
-  });
-
-  if (type === 'success') {
-    // Build Firebase credential with the Facebook access token.
-    const credential = firebase.auth.FacebookAuthProvider.credential(token);
-
-    // Sign in with credential from the Facebook user.
-    firebase
-      .auth()
-      .signInWithCredential(credential)
-      .catch(error => {
-          // Handle Errors here.
-          console.log("Facebook login error...");
-          console.log(error)
-      });
-  }
-}
-
-// https://docs.expo.io/versions/latest/sdk/google/
-async function loginWithGoogle() {
-
-    // Note: Had to put the isoClientId into the Firebase Console Google Sign in Safelist
-    // https://console.firebase.google.com/project/spendwiser-88be1/authentication/providers
-    // This is because the project used to sign in with the expo-google-signin is different than
-    // our firebase project...I think.
-    const { type, accessToken, user } = await Google.logInAsync({
-        iosClientId: '989741516714-hqrk7f1k8vkab4c6g8h0qai6nl1cv41f.apps.googleusercontent.com',
-        iosStandaloneAppClientId: '989741516714-fqhdv9b748k8gt5tpclgt2ji79r9pj9r.apps.googleusercontent.com',
-    });
-
-    if (type === 'success') {
-        const credential = firebase.auth.GoogleAuthProvider.credential(null, accessToken);
-        console.log(credential);
-        firebase
-            .auth()
-            .signInWithCredential(credential)
-            .catch(error => {
-                console.log("Google login error...");
-                console.log(error);
-            });
-    }
 }
 
 /**
@@ -141,10 +94,14 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      */
     enableDatabaseCaching (cacheSize = -1) {
-        this.database.settings({
-            cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
-        });
-        this.database.enablePersistence();
+        try {
+            this.database.settings({
+                cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
+            });
+            this.database.enablePersistence()
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     /**
@@ -220,29 +177,29 @@ export default class FirebaseBackend extends BaseBackend {
         })
     }
 
-    // TODO: - I kinda strayed from syntax here... is this okay?
     /** 
      *  Function returns checks if a document exists. 
      * 
      * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
      * 
-     * @returns {boolean} - true if document exists, false if not
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Called back when check is finished, parameter is set if exists or not
      * 
      * @example
-     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1");
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+     *     if (exists) console.log("Doc exists!");
+     * });
     */
-    async dbDoesDocExist(userId) { 
-        return new Promise((resolve, reject) => { 
-            const ref = this.database.collection('users').doc(userId); // TODO change this to be a location
-            ref.get().then((doc) => {
-                if (!doc.exists) {
-                    console.log('No such document!');
-                    resolve(false);
-                }
-
-                resolve(true);
-            })
-        })
+    dbDoesDocExist(location, callback) { 
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.get().then((query) => {
+            if (!query.exists) {
+                console.log('No such document!');
+                callback(false);
+            } else {
+                callback(true);
+            }
+        });
     }
 
     /**
@@ -304,34 +261,16 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * https://firebase.google.com/docs/auth/web/password-auth
      */
-    signUp(email, password) {
+    signUp(email, password, error_func) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
-            console.log("Sign up successful")
-            console.log(user);
+            console.log("Sign up successful");
         })
         .catch((error) => {
-            var errorCode = error.code;
             var errorMessage = error.message;
-            console.log("Unable to sign up: " + errorCode + ", " + errorMessage);
+            error_func(errorMessage);
         })
-    }
-
-
-    
-    /**
-     * Use facebook account to sign in
-     */
-    signInWithFacebook() {
-        loginWithFacebook();
-    }
-
-    /**
-     * Use google account to sign in
-     */
-    signInWithGoogle() {
-        loginWithGoogle();
     }
     
 
@@ -340,20 +279,18 @@ export default class FirebaseBackend extends BaseBackend {
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      */
-    signIn(email, password) {
+    signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
                 var user = userCredential.user;
                 // ...
-                console.log("Successful sign in...");
-                return;
+               
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-
-                console.log("Failed to sign in. Error " + errorCode + ": " + errorMessage);
+                error_func(errorMessage);
             });
     }
 
@@ -371,6 +308,34 @@ export default class FirebaseBackend extends BaseBackend {
             console.log(error);
             return;
         });  
+    }
+
+    getLoginProviders() {
+        return {
+            google: new GoogleLogin(),
+            facebook: new FacebookLogin(),
+        };
+    }
+
+    /**
+     * Resets the user's password.
+     */
+    resetPassword(email, return_func) {
+        var auth = firebase.auth();
+        if (email === null) {
+            var user = auth.currentUser;
+            email = user.email;
+        }
+
+        // remove leading/trailing whitespace
+        email = email.trim();
+        
+        auth.sendPasswordResetEmail(email).then(function() {
+            return_func("Success! An email has been sent");
+        }).catch(function(error) {
+            return_func("Error! Invalid email address");
+        });
+        
     }
 
     /**

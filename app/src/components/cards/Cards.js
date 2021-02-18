@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -11,8 +11,7 @@ const styles = StyleSheet.create({
     },
 });
 
-
-//TODO rename this to YourCards
+// TODO: bug where card names only show after going to add card and back
 export function Cards({navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
