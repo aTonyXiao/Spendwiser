@@ -169,7 +169,9 @@ export default class FirebaseBackend extends BaseBackend {
         let collection = [];
         dbloc.get().then((query) => {
             query.forEach(doc => {
-                collection.push(doc.data());
+                var currentDoc = doc.data();
+                currentDoc["docId"] = doc.id;
+                collection.push(currentDoc);
             })
             callback(collection);
         }).catch((err) => { 

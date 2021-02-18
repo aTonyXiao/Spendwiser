@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     },
 });
 
-// TODO: bug where card names only show after going to add card and back
 export function YourCards({navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
