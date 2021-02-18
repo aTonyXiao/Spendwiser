@@ -14,8 +14,7 @@ class Cards {
         })
     }
 
-    getCardRewards(cardId) { 
-        // TODO
+    getCardRewards() {
     }
 
     addCard(name, rewards, url) { 
