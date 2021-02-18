@@ -1,6 +1,11 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
+/**
+ * TextBox util component - a simple textbox 
+ * 
+ * TODO add parameters
+ */
 const grayRGB = 'rgb(211, 211, 211)';
 export class TextBox extends React.Component {
     constructor(props) { 
@@ -11,6 +16,12 @@ export class TextBox extends React.Component {
         };
 
         this.placeholder = props.placeholder;
+
+        this.useStyle = false;
+        if (props.style) { 
+            this.useStyle = true;
+            this.style = props.style;
+        }
     }
 
     onChangeText = (val) => {
@@ -20,7 +31,7 @@ export class TextBox extends React.Component {
     render () {
         return (
             <TextInput
-                style={styles.input}
+                style={this.useStyle ? this.style : styles.input}
                 onChangeText={(text) => this.onChangeText(text)}
                 placeholder={this.placeholder}
                 placeholderTextColor={grayRGB}
