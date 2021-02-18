@@ -5,6 +5,8 @@ import * as Location from 'expo-location';
 import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
+import NetInfo from '@react-native-community/netinfo';
+import { RecommendedCard } from './cards/RecommendCard';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -25,8 +27,24 @@ export function MainScreen({navigation}) {
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({store_name: "", vicinity: "", store_type: ""});
+    const [recCardId, setRecCardId] = useState(null);
       
-    const handleManualInput = (val, inputStr) => setManualInput({...manualInput, [val]: inputStr});
+    function setOfflineMode() {
+        setStoreArr([{
+            label: "Offline Mode",
+            value: "Offline Mode",
+            vicinity: "N/A",
+            store_type: "N/A", 
+            key: 0,
+        }])
+        setCurStore("Offline Mode");
+        setCurStoreKey(0);
+    }
+
+    function getRecCardIdfromDB(recCardIdfromDB) {
+        console.log("Finally " + recCardIdfromDB);
+        setRecCardId(recCardIdfromDB);
+    }
 
     function getLocationFromAPI(json) {
         setPlaces(json.results);
@@ -56,8 +74,10 @@ export function MainScreen({navigation}) {
                 if (add_count == 0) {
                     setCurStore(JSON.stringify(fetch_result[i].name).slice(1,-1));
                     setCurStoreKey(0);
-            }
-            add_count++;
+                    console.log(storeType);
+                    RecommendedCard(storeType, getRecCardIdfromDB);
+                }
+                add_count++;
             }
         }
         setStoreArr(fetch_stores);
@@ -71,20 +91,37 @@ export function MainScreen({navigation}) {
                 return;
             }
 
-            let location = await Location.getCurrentPositionAsync({});
-            setRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.0052,
-                longitudeDelta: 0.0051,
-            })
-            fetch(googlePlaceSearchURL + 
-                location.coords.latitude + "," + location.coords.longitude + 
-                googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
-            .then((response) => response.json())
-            .then((json) => {getLocationFromAPI(json)})
-            .catch((error) => console.log(error))
-            .finally(() => setLoading(false));
+            try {
+                let location = await Location.getCurrentPositionAsync({});
+                setRegion({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                    latitudeDelta: 0.0052,
+                    longitudeDelta: 0.0051,
+                })
+
+                NetInfo.fetch().then(state => {
+                    // If connected to internet, query API for nearby stores. Else: set offline mode
+                    if (state.isConnected) {
+                        fetch(googlePlaceSearchURL + 
+                            location.coords.latitude + "," + location.coords.longitude + 
+                            googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                        .then((response) => response.json())
+                        .then((json) => {getLocationFromAPI(json)})
+                        .catch((error) => console.log(error))
+                        .finally(() => setLoading(false));
+                    } else {
+                        setOfflineMode();
+                        setLoading(false);
+                        console.log(storeArr);
+                    }
+                  });
+            } catch(e) {
+                setOfflineMode();
+                setLoading(false);
+                console.log(storeArr);
+                return;
+            }
         })();
     }, []);
     
@@ -136,15 +173,17 @@ export function MainScreen({navigation}) {
                                     onPress={() => {
                                         setModalVisible(!modalVisible);
                                         if (manualInput.store_type.length != 0) {
+                                            let storeArrLen = (storeArr.length).toString();
+                                            console.log(storeArrLen);
                                             let manualInputObj = {
-                                                label: manualInput.store_name.length === 0 ? "Manual Input" : manualInput.store_name,
-                                                value: manualInput.store_name.length === 0 ? "Manual Input" : manualInput.store_name,
+                                                label: manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name,
+                                                value: manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name,
                                                 vicinity: manualInput.store_name.vicinity === 0 ? "N/A" : manualInput.vicinity,
                                                 store_type: manualInput.store_type,
                                                 key: Object.keys(storeArr).length - 1,
                                             }
                                             setStoreArr(storeList => storeList.concat(manualInputObj));
-                                            setCurStore(manualInput.store_name.length === 0 ? "Manual Input" : manualInput.store_name);
+                                            setCurStore(manualInput.store_name.length === 0 ? "Manual Input " + storeArrLen : manualInput.store_name);
                                             setCurStoreKey(Object.keys(storeArr).length - 1);
                                         }                                        
                                     }}
