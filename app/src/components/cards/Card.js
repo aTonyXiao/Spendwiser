@@ -35,15 +35,17 @@ export class Card extends React.Component {
         var cardInformation = props.props.card;
         this.cardId = cardInformation.cardId;
         this.navigation = props.props.navigation;
+        this.docId = cardInformation.docId;
 
         cards.getCardName(this.cardId).then((cardName) => {
-            this.state.name = cardName;
+            this.setState({name: cardName});
         });
     }
 
     onPress = () => { 
         this.navigation.navigate('CardInfo', {
-            cardId: this.cardId
+            cardId: this.cardId,
+            docId: this.docId
         })
     }
 

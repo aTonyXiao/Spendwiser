@@ -160,7 +160,7 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * @example
      * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
-     *  console.log(data.data());
+     *  console.log(data);
      * })
      */
     dbGetSubCollections(location, callback) { 
@@ -169,7 +169,9 @@ export default class FirebaseBackend extends BaseBackend {
         let collection = [];
         dbloc.get().then((query) => {
             query.forEach(doc => {
-                collection.push(doc.data());
+                var currentDoc = doc.data();
+                currentDoc["docId"] = doc.id;
+                collection.push(currentDoc);
             })
             callback(collection);
         }).catch((err) => { 

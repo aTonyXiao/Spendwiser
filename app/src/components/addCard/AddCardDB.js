@@ -1,55 +1,70 @@
-import React from 'react';
-import { View, Button, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
-import { AddCardRow } from './AddCardRow';
 import { user } from '../../network/user';
 import mainStyles from '../../styles/mainStyles';
 import { cards } from '../../network/cards';
+import Autocomplete from 'react-native-autocomplete-input'
+
+const styles = StyleSheet.create({
+    autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1
+    }
+})
 
 export function AddCardDB({navigation}) {
-    const [displayCardOptions, setDisplayCardOptions] = useState(false);
-    const [results, setResults] = useState([]);
     const userId = user.getUserId();
-    const [text, setText] = useState("");
+    const [query, setQuery] = useState("");
+    const [cardMap, setCardMap] = useState(null);
+    const [hasConstructed, setHasConstructed] = useState(false);
+    const [cardNames, setCardNames] = useState([]);
 
-    function queryCards() {
-        // TODO query our database and create reference/add to user
-        cards.someGetFunction(text).then((result)=> { 
-            setResults(result);
-            setDisplayCardOptions(true);
-        })
+    // hacky way of simulating constructor for functional components
+    const constructor = () => { 
+        if (hasConstructed) { 
+            return;
+        } else { 
+            console.log('running constructor')
+            cards.getCardNames((mapping) => {
+                setCardMap(mapping);
+                if (cardMap != null) { 
+                    setCardNames(Object.keys(cardMap));
+                }
+                setHasConstructed(true);
+            });
+        }
     }
+    constructor();
 
-    // TODO add some autocorrect feature here
-    onChangeText = (val) => {
-        setText(val);
+    addCard = () => { 
+        var cardId = cardMap[query];
+        user.saveCardToUser(userId, cardId, null, null);
+        navigation.navigate('YourCards');
     }
 
     return (
         <View style={mainStyles.container}>
-            <TextInput
-                onChangeText={(text) => this.onChangeText(text)}
-                placeholder={"search here"}
-            />
+            <View style={styles.autocompleteContainer}>
+                <Autocomplete
+                    data={cardNames}
+                    defaultValue={query}
+                    onChangeText={text => setQuery(text)}
+                    renderItem={({ item, i }) => (
+                        <TouchableOpacity onPress={() => setQuery(item)}>
+                            <Text>{item}</Text>
+                        </TouchableOpacity>
+                    )}
+                />
+            </View>
             <Button
-                title='Query for cards'
-                onPress={queryCards}
+                title='Add this card'
+                onPress={addCard}
             />
-            {
-                displayCardOptions &&
-                <View>
-                    {results.map((card, i) => {
-                        var props = {
-                            navigation: navigation,
-                            card: card
-                        }
-
-                        return (
-                            <AddCardRow key={i} props={props}></AddCardRow>
-                        )
-                    })}
-                </View>
-            }
         </View>
     )
 }

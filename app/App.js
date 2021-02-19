@@ -7,7 +7,7 @@ import { HomeScreen } from './src/components/HomeScreen';
 import { Login } from './src/components/login/Login';
 import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
-import { Cards } from './src/components/cards/Cards';
+import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/MainScreen';
 import { AddCard } from './src/components/addCard/AddCard';
@@ -42,8 +42,8 @@ export default function App() {
           component={MainScreen}
         />
         <Stack.Screen
-          name="Cards"
-          component={Cards}
+          name="YourCards"
+          component={YourCards}
         />
         <Stack.Screen
           name="CardInfo"
