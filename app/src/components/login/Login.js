@@ -4,40 +4,6 @@ import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
 
-const styles = StyleSheet.create({
-    title : { 
-        fontSize: 40,
-        color: '#28b573',
-        position: 'absolute',
-        top: 70
-    },
-    loginWrapper : {
-        margin: 15,
-        height: 40,
-        width: '80%',
-        borderColor: '#87CEFA',
-        borderWidth: 1,
-        backgroundColor: '#87CEFA',
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    loginButton : { 
-        color: 'white'
-    },
-    forgotPasswordButton : {
-        color: 'dodgerblue',
-        left: '10%'
-    },
-    line: {
-        width: '80%',
-        borderBottomColor: 'lightgray',
-        borderBottomWidth: 1,
-        margin: 15
-    }
-})
-
-
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -99,3 +65,36 @@ export const Login = props => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    title : { 
+        fontSize: 40,
+        color: '#28b573',
+        position: 'absolute',
+        top: 70
+    },
+    loginWrapper : {
+        margin: 15,
+        height: 40,
+        width: '80%',
+        borderColor: '#87CEFA',
+        borderWidth: 1,
+        backgroundColor: '#87CEFA',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    loginButton : { 
+        color: 'white'
+    },
+    forgotPasswordButton : {
+        color: 'dodgerblue',
+        left: '10%'
+    },
+    line: {
+        width: '80%',
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1,
+        margin: 15
+    }
+})
