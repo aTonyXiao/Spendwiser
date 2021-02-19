@@ -21,8 +21,6 @@ export const Login = props => {
                 username + ' and ' +
                 password);
 
-            appBackend.signIn(username, password, callMeBack);
-
             appBackend.signIn(username, password, (err) => {
                 Alert.alert(
                     "Unable to Login",
