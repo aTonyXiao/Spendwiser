@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../network/backend';
 
 async function redirectToMain() {
@@ -35,30 +34,37 @@ export function HomeScreen({navigation}) {
 
     return (
         <View style={styles.screen}>
-            <Image source={require('../../assets/spendwiser_logo.png')} />
-            <View style={{marginBottom: 10}}>
-                <Button
-                    title="Login"
-                    onPress={() => navigation.navigate('Login')}
-                ></Button>
+            <View style={styles.imageWrapper}>
+                <Image
+                    style={styles.image}
+                    source={require('../../assets/spendwiser_logo.png')}
+                />
             </View>
-            <Button
-                title="Create an Account"
-                onPress={() => navigation.navigate('CreateAccount')}
-            ></Button>
-            <Button
-                title="Temp to Main"
-                onPress={() => navigation.navigate('Main')}
-            ></Button>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.button}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}>
+                <Text style={styles.button}>Sign up</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: {
+    screen : {
+        backgroundColor: 'white',
         flex: 1,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
+    }, 
+    button: {
+        fontSize: 30,
+        color: '#28b573',
+        marginBottom: 25
     },
+    imageWrapper : {
+        position: 'absolute', 
+        top: 35
+    }
 })
