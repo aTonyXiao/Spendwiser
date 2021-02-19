@@ -10,7 +10,7 @@ class ImageLoader extends React.Component {
   onLoad = () => {
     Animated.timing(this.state.opacity, {
       toValue: 1,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
   }
@@ -26,7 +26,7 @@ class ImageLoader extends React.Component {
             transform: [
               {
                 scale: this.state.opacity.interpolate({
-                  inputRange: [0, 1],
+                  inputRange: [0.25, 1],
                   outputRange: [0.85, 1],
                 })
               },
@@ -66,7 +66,6 @@ export class Card extends React.Component {
 
         this.state = {
             name: "",
-            opacity: new Animated.Value(0),
             cardImage:"",
             showDefault: true,
         }
@@ -87,19 +86,11 @@ export class Card extends React.Component {
         });
     }
 
-
-    onLoad = () => {
-        Animated.timing(this.state.opacity, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-    }
-
     onPress = () => { 
         this.navigation.navigate('CardInfo', {
             cardId: this.cardId,
-            docId: this.docId
+            docId: this.docId,
+            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
         })
     }
 

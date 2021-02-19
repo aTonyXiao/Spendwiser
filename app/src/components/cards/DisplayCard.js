@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
     const docId = route.params.docId;
-    const cardImage = require("../../../assets/cards/blank.png");
+    const cardImage = route.params.img;
     const userId = user.getUserId();
     const [cardName, setCardName] = useState("");
 
