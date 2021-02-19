@@ -91,7 +91,7 @@ export class Card extends React.Component {
     onLoad = () => {
         Animated.timing(this.state.opacity, {
             toValue: 1,
-            duration: 500,
+            duration: 1000,
             useNativeDriver: true,
         }).start();
     }
@@ -99,7 +99,8 @@ export class Card extends React.Component {
     onPress = () => { 
         this.navigation.navigate('CardInfo', {
             cardId: this.cardId,
-            docId: this.docId
+            docId: this.docId,
+            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
         })
     }
 
