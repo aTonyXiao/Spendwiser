@@ -1,45 +1,101 @@
-import React from 'react';
-import { Button, View } from 'react-native';
-import { TextBox } from '../TextBox';
-import { appBackend } from '../../network/backend';
+import React, { useEffect, useState } from 'react';
+import { Button, View, Text, StyleSheet } from 'react-native';
+import { TextBox } from '../util/TextBox';
 import { user } from '../../network/user';
+import { cards } from '../../network/cards';
+import { ManualRewardRow } from './ManualRewardRow';
 
-export class AddCardManual extends React.Component {
-    constructor(props) { 
-        super(props);
+const styles = StyleSheet.create({
+    rewardContainer: { 
+        display: 'flex',
+        flexDirection: 'row'
+    }
+});
 
-        this.inputName = React.createRef();
-        this.inputRewards = React.createRef(); // TODO this should be a list
+export function AddCardManual({navigation}) { 
+    const inputName = React.createRef();
+    const inputUrl = React.createRef();
+    const inputReward = React.createRef();
+    const [rewards, setRewards] = useState([]);
+    const [displayRewards, setDisplayRewards] = useState(false);
+    const [displayErrorText, setDisplayErrorText] = useState(false);
 
-        this.navigation = props.navigation;
+    resetRewardInputs = () => { 
+        inputReward.current.state.value = "";
     }
 
-    onPress = () => { 
+    addReward = () => { 
+        const rewardType = inputReward.current.state.reward;
+        const rewardValue = inputReward.current.state.value;
+
+        if (!isNaN(parseFloat(rewardValue))) { 
+            setRewards([
+                ...rewards,
+                {
+                    type : rewardType,
+                    value : rewardValue,
+                }
+            ])
+   
+            resetRewardInputs();
+    
+            setDisplayRewards(true);
+        } else { 
+            setDisplayErrorText(true);
+
+            setTimeout(function() { 
+                setDisplayErrorText(false);
+            }, 2000);
+        }
+    }
+
+    addCard = () => { 
+        console.log("adding a manual card")
         var userId = user.getUserId();
 
-        var name = this.inputName.current.state.text;
-        var rewards = this.inputRewards.current.state.text;
+        var name = inputName.current.state.text;
+        var url = inputUrl.current.state.text;
 
-        appBackend.dbAdd("users." + userId + ".cards", {
-            name: name,
-            rewards: rewards,
-        }, (id) => { 
-            console.log(id);
-        })
-
-        this.navigation.navigate('Cards');
+        cards.addCardToDatabase(name, null, rewards, url).then((cardId) => {
+            console.log("new card id: " + cardId);
+            user.saveCardToUser(userId, cardId, null, null);
+            navigation.navigate('YourCards');
+        });
     } 
 
-    render () {
-        return (
-            <View>
-                <TextBox ref={this.inputName} placeholder={'your credit card title here '}/>
-                <TextBox ref={this.inputRewards} placeholder={'your rewards here'}/>
+    return (
+        <View>
+            <Text>Credit Card Name</Text>
+            <TextBox ref={inputName} placeholder={'your credit card title here '} />
+
+            <Text>Rewards</Text>    
+            <View style={styles.rewardContainer}>
+                {
+                    displayRewards &&
+                    rewards.map((reward, i) => {
+                        return <Text key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                    })
+                }
+                {
+                    displayErrorText &&
+                    <Text style={{ color: 'red' }}>Please input a number</Text>
+                }
+                <ManualRewardRow ref={inputReward}></ManualRewardRow>
+                <Button
+                    title='+'
+                    onPress={addReward}
+                ></Button>
+            </View>
+
+            {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
+            <View style={{zIndex: -1}}>
+                <Text>URL</Text>
+                <TextBox ref={inputUrl} placeholder={'url'} />
                 <Button
                     title='Add this card'
-                    onPress={this.onPress}
+                    onPress={addCard}
                 />
             </View>
-        );
-    }
+        </View>
+    );
 }

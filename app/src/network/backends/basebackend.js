@@ -1,3 +1,12 @@
+// https://github.com/brix/crypto-js
+import aes from 'crypto-js/aes';
+import utf8 from 'crypto-js/enc-utf8';
+
+// can change this later
+function objectToString(object) {
+    return String(object);
+}
+
 /**
  * Base backend class for different backend types
  * Database functions are designed around the Firestore Collection/Document style
@@ -6,10 +15,24 @@
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 export default class BaseBackend {
+
+    constructor () {
+        this.privateKey = "private";
+    }
+
     /**
      * This function initializes the Backend
      */
     initializeApp () {}
+
+    /**
+     * This function sets the private key for the backend
+     * 
+     * @param {string} key - The new private key
+     */
+    setPrivateKey (key) {
+        this.privateKey = key;
+    }
 
     /**
      * This function returns whether this Backend supports databases or not
@@ -64,13 +87,12 @@ export default class BaseBackend {
      * This function sets the data of a 'document'
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
-     * @param {JSON} data - The data for the new document
+     * @param {JSON} data - The data for the document
      *
      * @example
-     *   appBackend.dbSet("experimental.exp2", {
-     *      hello: "what"
-     *   });
-     *
+     * appBackend.dbSet("experimental.exp2", {
+     *     hello: "what"
+     * });
      */
     dbSet (location, data) {}
 
@@ -92,6 +114,70 @@ export default class BaseBackend {
     dbAdd (location, data, callback) {}
 
     /**
+     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+     * where the callback is called for each document in the collection (for encrypted data)
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {function} callback - Function that will be invoked to give the caller the data in JSON
+     *
+     * @example
+     * appBackend.dbGetEncrypted("experimental.exp2", (data) => {
+     *     console.log(data);
+     * });
+     */
+    dbGetEncrypted (location, callback) {
+        let newCallback = (data) => {
+            let newData = {};
+            for (let key of Object.keys(data)) {
+                newData[key] = aes.decrypt(objectToString(data[key]), this.privateKey).toString(utf8);
+            }
+            callback(newData);
+        };
+        this.dbGet(location, newCallback);
+    }
+
+    /**
+     * This function sets the data of a 'document' (for encrypted data)
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {JSON} data - The data for the document
+     *
+     * @example
+     * appBackend.dbSet("experimental.exp2", {
+     *     hello: "what"
+     * });
+     */
+    dbSetEncrypted (location, data) {
+        let newData = {};
+        for (let key of Object.keys(data)) {
+            newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
+        }
+        this.dbSet(location, newData);
+    }
+
+    /**
+     * This function adds a new 'document' to a 'collection' (for encrypted data)
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {JSON} data - The data for the new document
+     * @param {function} callback - Function that will be invoked to give the caller the new collection ID
+     *
+     * @example
+     * appBackend.dbAdd("experimental.exp2.experimental2", {
+     *     hello: "what"
+     * }, (id) => {
+     *     console.log(id);
+     * });
+     */
+    dbAddEncrypted (location, data, callback) {
+        let newData = {};
+        for (let key of Object.keys(data)) {
+            newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
+        }
+        this.dbAdd(location, newData, callback);
+    }
+
+    /**
      * User sign up for an account using email and password
      * 
      * @param {string} email - a (TODO: valid?) email of a 
@@ -99,7 +185,7 @@ export default class BaseBackend {
      * @param {function} error_func - called when there is an error during sign up
      */
     signUp(username, password, error_func) {}
-    
+
     /**
       * Use facebook account to sign in
       */
@@ -109,7 +195,7 @@ export default class BaseBackend {
       * Use google account to sign in
       */
     signInWithGoogle() {}
-    
+
     /**
      * Sign in to an existing user account
      * @param {string} email - the email of the user account
@@ -131,7 +217,7 @@ export default class BaseBackend {
       * @param {function} error_func - called when there is an error duing password reset
       */
     resetPassword(email, return_func) {}
-    
+
     /**
      * Returns true or false depending on if the user is already logged in
      */

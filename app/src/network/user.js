@@ -14,7 +14,7 @@ class userClass {
             // user is not using a login, store all data locally?
             userId = "test"; // TODO test is temporary
         } else {
-            appBackend.dbDoesDocExist(userId).then((docExists) => {
+            appBackend.dbDoesDocExist("users." + userId, (docExists) => {
                 if (!docExists) {
                     this.addUser(userId);
                 }
@@ -60,13 +60,17 @@ class userClass {
         appBackend.dbDelete("users." + userId + ".cards." + cardId);
     }
 
-    saveCardToUser(userId, cardId, amountSpent, diff) { 
+    /** 
+     * 
+     *
+     */ 
+    saveCardToUser(userId, cardId, transactions, diff) { 
         appBackend.dbAdd("users." + userId + ".cards", {
             cardId: cardId, 
-            amountSpent: amountSpent,
+            transactions: transactions,
             diff: diff
         }, (id) => { 
-            console.log(id);
+            console.log("successfully saved card to user");
         })
     }
 

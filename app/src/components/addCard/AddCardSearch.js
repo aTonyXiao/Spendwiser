@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { AddCardRow } from './AddCardRow';
-import { TextBox } from '../TextBox';
+import { TextBox } from '../util/TextBox'
 
+// TODO: delete this and unsubscribe before next renewal!
 export class AddCardSearch extends React.Component { 
     constructor(props) {
         super(props);

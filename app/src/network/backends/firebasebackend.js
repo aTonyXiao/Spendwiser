@@ -94,10 +94,14 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      */
     enableDatabaseCaching (cacheSize = -1) {
-        this.database.settings({
-            cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
-        });
-        this.database.enablePersistence();
+        try {
+            this.database.settings({
+                cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
+            });
+            this.database.enablePersistence()
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     /**
@@ -156,7 +160,7 @@ export default class FirebaseBackend extends BaseBackend {
      * 
      * @example
      * appBackend.dbGetSubCollections("users.test.cards",(data) => { 
-     *  console.log(data.data());
+     *  console.log(data);
      * })
      */
     dbGetSubCollections(location, callback) { 
@@ -165,7 +169,9 @@ export default class FirebaseBackend extends BaseBackend {
         let collection = [];
         dbloc.get().then((query) => {
             query.forEach(doc => {
-                collection.push(doc.data());
+                var currentDoc = doc.data();
+                currentDoc["docId"] = doc.id;
+                collection.push(currentDoc);
             })
             callback(collection);
         }).catch((err) => { 
@@ -173,29 +179,29 @@ export default class FirebaseBackend extends BaseBackend {
         })
     }
 
-    // TODO: - I kinda strayed from syntax here... is this okay?
     /** 
      *  Function returns checks if a document exists. 
      * 
      * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
      * 
-     * @returns {boolean} - true if document exists, false if not
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Called back when check is finished, parameter is set if exists or not
      * 
      * @example
-     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1");
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+     *     if (exists) console.log("Doc exists!");
+     * });
     */
-    async dbDoesDocExist(userId) { 
-        return new Promise((resolve, reject) => { 
-            const ref = this.database.collection('users').doc(userId); // TODO change this to be a location
-            ref.get().then((doc) => {
-                if (!doc.exists) {
-                    console.log('No such document!');
-                    resolve(false);
-                }
-
-                resolve(true);
-            })
-        })
+    dbDoesDocExist(location, callback) { 
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.get().then((query) => {
+            if (!query.exists) {
+                console.log('No such document!');
+                callback(false);
+            } else {
+                callback(true);
+            }
+        });
     }
 
     /**
