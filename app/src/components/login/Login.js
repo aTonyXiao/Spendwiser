@@ -4,6 +4,7 @@ import {UsernameInput, PasswordInput} from './LoginInput';
 import { View, StyleSheet, Button, Alert } from 'react-native';
 import { appBackend } from '../../network/backend'
 
+
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -13,7 +14,9 @@ export const Login = props => {
                     username + ' and ' +
                     password);
 
-        appBackend.signIn(username, password, (err)=> {
+        appBackend.signIn(username, password, callMeBack);
+
+        appBackend.signIn(username, password, (err) => {
             Alert.alert(
                 "Unable to Login",
                 err,

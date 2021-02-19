@@ -14,6 +14,14 @@ class Cards {
         })
     }
 
+    async getCardImageURL(cardId) {
+        return new Promise((resolve, reject) => {
+            appBackend.dbGet("cards." + cardId, (data) => {
+                resolve(data.image);
+            })
+        });
+    }
+
     getCardRewards(cardId) { 
         // TODO
     }

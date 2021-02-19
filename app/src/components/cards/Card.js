@@ -26,7 +26,7 @@ export class Card extends React.Component {
 
         // can find a better way of loading in assets
         // this for a proof of concept for now
-        this.CardImage = require("../../../assets/cards/blank.png")
+        this.CardImage = require("../../../assets/cards/blank.png");
 
         this.state = {
             name: ""
@@ -35,6 +35,13 @@ export class Card extends React.Component {
         var cardInformation = props.props.card;
         this.cardId = cardInformation.cardId;
         this.navigation = props.props.navigation;
+
+        cards.getCardImageURL(this.cardId).then((url) => {
+            this.state.CardImage = url;
+            //this.setState(, url);
+            this.forceUpdate();
+            console.log(url);
+        });
 
         cards.getCardName(this.cardId).then((cardName) => {
             this.state.name = cardName;
@@ -53,7 +60,10 @@ export class Card extends React.Component {
                 <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
                     <Image
-                        source={this.CardImage}
+                        source={{
+                            source: "../../../assets/cards/blank.png",
+                            uri: this.state.CardImage,
+                        }}
                         style={styles.card}
                     />
                 </TouchableOpacity>
