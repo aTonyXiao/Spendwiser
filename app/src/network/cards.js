@@ -34,6 +34,18 @@ class Cards {
         })
     }
 
+    async getCardImageURL(cardId) {
+        return new Promise((resolve, reject) => {
+            appBackend.dbGet("cards." + cardId, (data) => {
+                resolve(data.image);
+            })
+        });
+    }
+
+    getCardRewards(cardId) { 
+        // TODO
+
+    }
     /**
      * Adds a card to the the cards database
      * @param {string} name - card name
