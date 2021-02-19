@@ -22,7 +22,7 @@ async function handleRedirectsBasedOnLoginStatus(navigation) {
     }
 }
 
-export function HomeScreen({navigation}) {
+export function LoadingScreen({navigation}) {
     // In the future, this will be the way everything gets decided
     // as far as navigation goes.
     // For now, you can disable redirects based on login status by
@@ -34,18 +34,14 @@ export function HomeScreen({navigation}) {
 
     return (
         <View style={styles.screen}>
-            <View style={styles.imageWrapper}>
-                <Image
-                    style={styles.image}
-                    source={require('../../assets/spendwiser_logo.png')}
-                />
-            </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Image
+                style={styles.image}
+                source={require('../../assets/spendwiser_logo.png')}
+            />
+            {/* TODO delete when done with frontend styling*/}
+            {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.button}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}>
-                <Text style={styles.button}>Sign up</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 }
@@ -58,13 +54,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     }, 
-    button: {
-        fontSize: 30,
-        color: '#28b573',
-        marginBottom: 25
-    },
-    imageWrapper : {
-        position: 'absolute', 
-        top: 35
-    }
+    // button: {
+    //     fontSize: 30,
+    //     color: 'black',
+    //     marginBottom: 25
+    // },
 })

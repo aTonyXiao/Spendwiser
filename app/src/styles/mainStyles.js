@@ -6,7 +6,7 @@ const mainStyles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
 });
 
 export default mainStyles;

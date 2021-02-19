@@ -3,7 +3,7 @@ import { initializeAppBackend } from './src/network/backend';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen } from './src/components/HomeScreen';
+import { LoadingScreen } from './src/components/LoadingScreen';
 import { Login } from './src/components/login/Login';
 import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
@@ -27,7 +27,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
+          component={LoadingScreen}
         />
         <Stack.Screen
           name="Login"
