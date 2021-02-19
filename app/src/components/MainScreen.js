@@ -280,6 +280,10 @@ export function MainScreen({navigation}) {
                     title="See your cards"
                     onPress={() => navigation.navigate('YourCards')}
                 ></Button>
+                <Button
+                    title="Settings"
+                    onPress={() => navigation.navigate('Settings')}
+                ></Button>
             </ScrollView>
         </SafeAreaView>
         );
