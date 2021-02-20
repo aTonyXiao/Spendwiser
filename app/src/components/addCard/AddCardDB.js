@@ -1,21 +1,10 @@
-import React, { Component } from 'react';
-import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
-import mainStyles from '../../styles/mainStyles';
 import { cards } from '../../network/cards';
-import Autocomplete from 'react-native-autocomplete-input'
-
-const styles = StyleSheet.create({
-    autocompleteContainer: {
-        flex: 1,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 1
-    }
-})
+import Autocomplete from 'react-native-autocomplete-input';
+import { Ionicons } from '@expo/vector-icons';
 
 export function AddCardDB({navigation}) {
     const userId = user.getUserId();
@@ -23,13 +12,14 @@ export function AddCardDB({navigation}) {
     const [cardMap, setCardMap] = useState(null);
     const [hasConstructed, setHasConstructed] = useState(false);
     const [cardNames, setCardNames] = useState([]);
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
+    const [hideResults, setHideResults] = React.useState(true);
 
-    // hacky way of simulating constructor for functional components
+    // simulate constructor for functional components
     const constructor = () => { 
         if (hasConstructed) { 
             return;
         } else { 
-            console.log('running constructor')
             cards.getCardNames((mapping) => {
                 setCardMap(mapping);
                 if (cardMap != null) { 
@@ -42,29 +32,100 @@ export function AddCardDB({navigation}) {
     constructor();
 
     addCard = () => { 
-        var cardId = cardMap[query];
-        user.saveCardToUser(userId, cardId, null, null);
-        navigation.navigate('YourCards');
+        if (!query) {
+            setDisplayErrorText(true);
+
+            setTimeout(function() { 
+                setDisplayErrorText(false);
+            }, 2000);
+        } else { 
+            var cardId = cardMap[query];
+            user.saveCardToUser(userId, cardId, null, null);
+            navigation.navigate('YourCards')
+        }
     }
 
     return (
-        <View style={mainStyles.container}>
+        <View style={styles.container}>
+            <Text style={styles.title}>Search For a Card</Text>
+
+            {
+                displayErrorText &&
+                <Text style={styles.errorText}>Please input a query into the search bar</Text>
+            }
             <View style={styles.autocompleteContainer}>
                 <Autocomplete
+                    inputContainerStyle={styles.autocompleteTextInput}
+                    // listContainerStyle={styles.autocompleteList}
+                    listStyle={styles.autocompleteList}
                     data={cardNames}
+                    hideResults={hideResults}
                     defaultValue={query}
-                    onChangeText={text => setQuery(text)}
+                    onChangeText={text => { 
+                        if (text) { 
+                            setHideResults(false);
+                        } else { 
+                            setHideResults(true);
+                        }
+                        setQuery(text);
+                    }}
                     renderItem={({ item, i }) => (
                         <TouchableOpacity onPress={() => setQuery(item)}>
-                            <Text>{item}</Text>
+                            <Text style={styles.autocompleteListText}>{item}</Text>
                         </TouchableOpacity>
                     )}
                 />
+            </View> 
+            <View style={styles.enterIcon}>
+                <TouchableOpacity onPress={addCard}>
+                    <Ionicons
+                        name="enter"
+                        color="#28b573"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
             </View>
-            <Button
-                title='Add this card'
-                onPress={addCard}
-            />
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    autocompleteContainer : {
+        flex: 1,
+        left: 30,
+        position: 'absolute',
+        right: 70,
+        top: 90,
+        zIndex: 1
+    },
+    enterIcon : { 
+        position: 'absolute',
+        right: 20,
+        top: 90
+    },
+    title : { 
+        fontSize: 32,
+        color: '#28b573',
+        textAlign: 'center',
+        marginTop: 20, 
+        right: 10
+    },
+    errorText : { 
+        color:'red',
+        textAlign: 'center'
+    }, 
+    autocompleteTextInput : {
+        borderColor: 'white',
+        borderBottomColor: '#28b573'
+    }, 
+    autocompleteList : { 
+        borderColor: 'white',
+    },
+    autocompleteListText : {
+        margin: 5
+    }
+})
