@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
+import { Ionicons } from '@expo/vector-icons';
 
 export class AddCard extends React.Component { 
     constructor(props) {
