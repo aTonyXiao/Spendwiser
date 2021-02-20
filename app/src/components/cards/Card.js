@@ -61,9 +61,6 @@ export class Card extends React.Component {
     constructor(props) { 
         super(props);
 
-        // can find a better way of loading in assets
-        // this for a proof of concept for now
-
         this.state = {
             name: "",
             cardImage:"",
