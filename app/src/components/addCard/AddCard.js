@@ -17,10 +17,6 @@ export class AddCard extends React.Component {
                     onPress={() => this.navigation.navigate('AddCardDB')}
                 ></Button>
                 <Button 
-                    title='Add card by search'
-                    onPress={() => this.navigation.navigate('AddCardSearch')}
-                ></Button>
-                <Button 
                     title='Add card Manually'
                     onPress={() => this.navigation.navigate('AddCardManual')}
                 ></Button>
