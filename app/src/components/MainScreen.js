@@ -7,6 +7,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { RecommendedCard } from './cards/RecommendCard';
+import { user } from '../network/user';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -27,7 +28,9 @@ export function MainScreen({navigation}) {
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
-    const [recCardId, setRecCardId] = useState(null);
+    const [recCard, setRecCard] = useState(null);
+    var width = Dimensions.get('window').width;
+    const userId = user.getUserId();
       
     function setOfflineMode() {
         setStoreArr([{
@@ -41,16 +44,16 @@ export function MainScreen({navigation}) {
         setCurStoreKey(0);
     }
 
-    function getRecCardIdfromDB(recCardIdfromDB) {
-        console.log("Finally " + recCardIdfromDB);
-        setRecCardId(recCardIdfromDB);
+    function getRecCardFromDB(recCardIdFromDB, recCardImgFromDB) {
+        console.log("Finally " + recCardIdFromDB);
+        setRecCard({recCardId: recCardIdFromDB, recCardImg: recCardImgFromDB});
     }
 
     function changeRecCard(value, key) {
         if (key !== curStoreKey) {
             let category = storeArr[key]["storeType"];
             console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
-            RecommendedCard(category, getRecCardIdfromDB);
+            RecommendedCard(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
         }
@@ -85,7 +88,7 @@ export function MainScreen({navigation}) {
                 if (addCount == 0) {
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
-                    RecommendedCard(storeType, getRecCardIdfromDB);
+                    RecommendedCard(storeType, getRecCardFromDB);
                 }
                 addCount++;
             }
@@ -230,7 +233,7 @@ export function MainScreen({navigation}) {
                     <RNPickerSelect
                         placeholder={{}}
                         items={storeArr}
-                        onValueChange={(value, key) => {changeRecCard(value, key)}}
+                        onValueChange={(value, key) => {setRecCard(null), changeRecCard(value, key)}}
                         pickerProps={{mode:'dropdown', itemStyle:{height: 100}}}
                         style={{...pickerSelectStyles,
                             iconContainer: {
@@ -259,8 +262,13 @@ export function MainScreen({navigation}) {
                 <View style= {{flex:1}}/>
                 <View style={styles.card_container}>
                     <Text style={{fontWeight: 'bold', fontSize: 24}}>Recommended Card</Text>
-                    <Image style={styles.card}
-                        source={require('../../assets/sapphire_reserve_card.png')} />
+                    <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../assets/load.jpg")}
+                        style = {{ 
+                            width: width * .8,  //its same to '20%' of device width
+                            aspectRatio: 1.5, // <-- this
+                            resizeMode: 'contain', //optional
+                        }}
+                    />
                 <View style={styles.card_spending}>
                         <TextInput
                             style={styles.amount_field}
@@ -271,7 +279,16 @@ export function MainScreen({navigation}) {
                         />
                         <Button
                             title="Update"
-                            // onPress={() => }
+                            onPress={() => 
+                                saveTransactionToUser(
+                                    userId,
+                                    recCard.recCardId,
+                                    {storeName: storeArr[curStoreKey]["label"],
+                                        address: storeArr[curStoreKey]["vicinity"],
+                                        storeType: storeArr[curStoreKey]["storeType"]
+                                    },
+                                    amountSpent
+                                )}
                         ></Button>
                     </View>
                 </View>

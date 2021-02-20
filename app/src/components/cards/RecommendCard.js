@@ -34,11 +34,12 @@ export async function RecommendedCard(googleCategory, callback) {
     let i = 0;
     for (i = 0; i < dbCards.length; i++) {
         tmpCardId = dbCards[i].cardId;
-        tmpCardCatReward = await cards.getCardReward(tmpCardId, category)
+        tmpCardCatReward = await cards.getCardReward(tmpCardId, category);
         myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatReward});
     }
     console.log(myCards);
     let res = Math.max.apply(Math, myCards.map(function(o){return o.cardCatReward;}))
     let recCard = myCards.find(function(o){ return o.cardCatReward == res; })
-    callback(recCard.cardId);
+    let tmpCardImg = await cards.getCardImg(recCard.cardId);
+    callback(recCard.cardId, tmpCardImg);
 }

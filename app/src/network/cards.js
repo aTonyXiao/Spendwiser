@@ -27,8 +27,12 @@ class Cards {
     }
 
 
-    getCardRewards(cardId) { 
-        // TODO
+    async getCardImg(cardId) {
+        return new Promise((resolve, reject) => { 
+            appBackend.dbGet("cards." + cardId, (data) => {
+                resolve(data.image);
+            })
+        })
     }
 
     addCard(name, rewards, url) { 
