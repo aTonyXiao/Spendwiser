@@ -1,19 +1,15 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Modal, TouchableOpacity } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
-
-const styles = StyleSheet.create({
-    scrollView: {
-        width: "95%"
-    },
-});
+import { Ionicons } from '@expo/vector-icons';
 
 export function YourCards({navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -40,6 +36,59 @@ export function YourCards({navigation}) {
 
     return (
         <SafeAreaView style={mainStyles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>Add New Card</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setModalVisible(!modalVisible);
+                            navigation.navigate('AddCardDB');
+                        }}
+                    >
+                        <Text style={styles.modalText}>By Search</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => { 
+                            setModalVisible(!modalVisible);
+                            navigation.navigate('AddCardCamera');
+                        }}
+                    >
+                        <Text style={styles.modalText}>By Camera</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            setModalVisible(!modalVisible);
+                            navigation.navigate('AddCardManual');
+                        }}
+                    >
+                        <Text style={styles.modalText}>Manually</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.modalText}>TEMPORARY: Hide Modal</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+            <View style={styles.addButton}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Ionicons
+                        name="add-circle-outline"
+                        color="white"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            </View>
+
             <ScrollView style={styles.scrollView}>
                 <View>
                     {cards.map((card, i) => {
@@ -47,11 +96,49 @@ export function YourCards({navigation}) {
                             navigation: navigation,
                             card: card
                         }
-                        return <Card key={i} props={props}/>
+                        return <Card key={i} props={props} />
                     })}
                 </View>
-                <Button title="Add Card" onPress={() => navigation.navigate('AddCard')}></Button>
             </ScrollView>
         </SafeAreaView>
     );
 }
+
+
+const styles = StyleSheet.create({
+    scrollView: {
+        width: "95%"
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "#28b573",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    addButton: {
+        borderRadius: 100,
+        padding: 5,
+        backgroundColor: "#28b573",
+        alignSelf: 'flex-end',
+        margin: 8
+    },
+    modalText: {
+        color: "white",
+        textAlign: "center",
+        margin: 5
+    },
+    modalTitle: { 
+        fontSize: 24, 
+        color: 'white',
+        margin: 10
+    }
+});
