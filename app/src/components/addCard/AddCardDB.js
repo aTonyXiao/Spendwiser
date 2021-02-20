@@ -1,21 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import mainStyles from '../../styles/mainStyles';
 import { cards } from '../../network/cards';
 import Autocomplete from 'react-native-autocomplete-input'
-
-const styles = StyleSheet.create({
-    autocompleteContainer: {
-        flex: 1,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 1
-    }
-})
 
 export function AddCardDB({navigation}) {
     const userId = user.getUserId();
@@ -24,7 +13,7 @@ export function AddCardDB({navigation}) {
     const [hasConstructed, setHasConstructed] = useState(false);
     const [cardNames, setCardNames] = useState([]);
 
-    // hacky way of simulating constructor for functional components
+    // simulate constructor for functional components
     const constructor = () => { 
         if (hasConstructed) { 
             return;
@@ -68,3 +57,14 @@ export function AddCardDB({navigation}) {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1
+    }
+})

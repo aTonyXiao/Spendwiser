@@ -10,7 +10,6 @@ import { Settings } from './src/components/Settings';
 import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/MainScreen';
-import { AddCard } from './src/components/addCard/AddCard';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
@@ -51,10 +50,6 @@ export default function App() {
         <Stack.Screen
         name="Settings"
         component={Settings}
-        />
-        <Stack.Screen
-          name="AddCard"
-          component={AddCard}
         />
         <Stack.Screen
           name="AddCardManual"
