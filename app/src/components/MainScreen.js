@@ -280,7 +280,7 @@ export function MainScreen({navigation}) {
                         <Button
                             title="Update"
                             onPress={() => 
-                                saveTransactionToUser(
+                                user.saveTransactionToUser(
                                     userId,
                                     recCard.recCardId,
                                     {storeName: storeArr[curStoreKey]["label"],
