@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
-import { RecommendedCard } from './cards/RecommendCard';
+import { recommendCard } from './cards/RecommendCard';
 import { user } from '../network/user';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
@@ -53,7 +53,7 @@ export function MainScreen({navigation}) {
         if (key !== curStoreKey) {
             let category = storeArr[key]["storeType"];
             console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
-            RecommendedCard(category, getRecCardFromDB);
+            recommendCard.getRecCard(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
         }
@@ -88,7 +88,7 @@ export function MainScreen({navigation}) {
                 if (addCount == 0) {
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
-                    RecommendedCard(storeType, getRecCardFromDB);
+                    recommendCard.getRecCard(storeType, getRecCardFromDB);
                 }
                 addCount++;
             }
@@ -279,16 +279,7 @@ export function MainScreen({navigation}) {
                         />
                         <Button
                             title="Update"
-                            onPress={() => 
-                                user.saveTransactionToUser(
-                                    userId,
-                                    recCard.recCardId,
-                                    {storeName: storeArr[curStoreKey]["label"],
-                                        address: storeArr[curStoreKey]["vicinity"],
-                                        storeType: storeArr[curStoreKey]["storeType"]
-                                    },
-                                    amountSpent
-                                )}
+                            onPress={() => recommendCard.setTransaction(storeArr[curStoreKey], recCard, amountSpent)}
                         ></Button>
                     </View>
                 </View>

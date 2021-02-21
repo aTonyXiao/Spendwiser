@@ -87,6 +87,7 @@ class userClass {
      * @param {*} amountSpent - amount spent at the store
      */
     saveTransactionToUser(userId, cardId, storeInfo, amountSpent) {
+        timestamp = appBackend.getTimestamp();
         console.log("saving transactions");
         console.log("user id " + userId + "\n card id " + cardId + "\n store info " + storeInfo + "\n amountSpent " + amountSpent);
         appBackend.dbAdd("users." + userId + ".transactions", {
@@ -97,6 +98,7 @@ class userClass {
                 storeType: storeInfo["storeType"]
             },
             amountSpent: amountSpent,
+            dateAdded: timestamp
         }, (id) => { 
             console.log("successfully saved transaction to user");
         })
