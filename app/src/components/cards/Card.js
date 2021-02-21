@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import { cards } from '../../network/cards';
 
 class ImageLoader extends React.Component {
@@ -17,9 +17,7 @@ class ImageLoader extends React.Component {
 
   render() {
     return (
-      <Animated.Image
-        onLoad={this.onLoad}
-        {...this.props}
+      <Animated.View
         style={[
           {
             opacity: this.state.opacity,
@@ -34,7 +32,11 @@ class ImageLoader extends React.Component {
           },
           this.props.style,
         ]}
-      />
+      >
+        <ImageBackground onLoad={this.onLoad} style={this.props.style} source={this.props.source}>
+          <Text>Inside</Text>
+        </ImageBackground>
+      </Animated.View>
     );
   }
 }
