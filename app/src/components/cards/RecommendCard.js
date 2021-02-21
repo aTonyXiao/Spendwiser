@@ -23,7 +23,8 @@ class RecommendCard {
         }
     }
 
-    async getRecCard(googleCategory, callback) {
+    // get user's cards ranked by category given
+    async getRecCards(googleCategory, callback) {
         const userId = user.getUserId();
         let category = this.getCategory(googleCategory);
         let myCards = [];
@@ -36,16 +37,15 @@ class RecommendCard {
         console.log("google category: " + googleCategory);
         for (i = 0; i < dbCards.length; i++) {
             tmpCardId = dbCards[i].cardId;
-            tmpCardCatReward = await cards.getCardReward(tmpCardId, category);
-            myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatReward});
+            tmpCardCatRewardandImg = await cards.getCardReward(tmpCardId, category);
+            myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatRewardandImg["reward"], "cardImg": tmpCardCatRewardandImg["image"]});
         }
+        myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
         console.log(myCards);
-        let res = Math.max.apply(Math, myCards.map(function(o){return o.cardCatReward;}))
-        let recCard = myCards.find(function(o){ return o.cardCatReward == res; })
-        let tmpCardImg = await cards.getCardImg(recCard.cardId);
-        callback(recCard.cardId, tmpCardImg);
+        callback(myCards);
     }
 
+    // insert user's transaction into db
     setTransaction(storeInfo, recCard, amountSpent) {
         const userId = user.getUserId();
         user.saveTransactionToUser(

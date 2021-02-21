@@ -21,7 +21,8 @@ class Cards {
                 if (isNaN(convertedReward)) {
                     convertedReward = data.rewards["others"] * data.conversion;
                 }
-                resolve(convertedReward);
+                let cardCatRewardandImg = {"reward": convertedReward, "image": data.image}
+                resolve(cardCatRewardandImg);
             })
         })
     }

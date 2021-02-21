@@ -44,16 +44,17 @@ export function MainScreen({navigation}) {
         setCurStoreKey(0);
     }
 
-    function getRecCardFromDB(recCardIdFromDB, recCardImgFromDB) {
-        console.log("Finally " + recCardIdFromDB);
-        setRecCard({recCardId: recCardIdFromDB, recCardImg: recCardImgFromDB});
+    function getRecCardFromDB(myRankedCards) {
+        console.log("Finally ");
+        console.log(myRankedCards);
+        setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
     }
 
     function changeRecCard(value, key) {
         if (key !== curStoreKey) {
             let category = storeArr[key]["storeType"];
             console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
-            recommendCard.getRecCard(category, getRecCardFromDB);
+            recommendCard.getRecCards(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
         }
@@ -88,7 +89,7 @@ export function MainScreen({navigation}) {
                 if (addCount == 0) {
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
-                    recommendCard.getRecCard(storeType, getRecCardFromDB);
+                    recommendCard.getRecCards(storeType, getRecCardFromDB);
                 }
                 addCount++;
             }
