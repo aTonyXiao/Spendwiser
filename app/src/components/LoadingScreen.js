@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
-import mainStyles from '../styles/mainStyles';
+import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../network/backend';
 
 async function redirectToMain() {
@@ -23,7 +22,7 @@ async function handleRedirectsBasedOnLoginStatus(navigation) {
     }
 }
 
-export function HomeScreen({navigation}) {
+export function LoadingScreen({navigation}) {
     // In the future, this will be the way everything gets decided
     // as far as navigation goes.
     // For now, you can disable redirects based on login status by
@@ -35,30 +34,29 @@ export function HomeScreen({navigation}) {
 
     return (
         <View style={styles.screen}>
-            <Image source={require('../../assets/spendwiser_logo.png')} />
-            <View style={{marginBottom: 10}}>
-                <Button
-                    title="Login"
-                    onPress={() => navigation.navigate('Login')}
-                ></Button>
-            </View>
-            <Button
-                title="Create an Account"
-                onPress={() => navigation.navigate('CreateAccount')}
-            ></Button>
-            <Button
-                title="Temp to Main"
-                onPress={() => navigation.navigate('Main')}
-            ></Button>
+            <Image
+                style={styles.image}
+                source={require('../../assets/spendwiser_logo.png')}
+            />
+            {/* TODO delete when done with frontend styling*/}
+            {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.button}>Login</Text>
+            </TouchableOpacity> */}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: {
+    screen : {
+        backgroundColor: 'white',
         flex: 1,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
-    },
+    }, 
+    // button: {
+    //     fontSize: 30,
+    //     color: 'black',
+    //     marginBottom: 25
+    // },
 })

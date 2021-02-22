@@ -3,16 +3,14 @@ import { initializeAppBackend } from './src/network/backend';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen } from './src/components/HomeScreen';
+import { LoadingScreen } from './src/components/LoadingScreen';
 import { Login } from './src/components/login/Login';
 import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
-import { Cards } from './src/components/cards/Cards';
+import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/MainScreen';
-import { AddCard } from './src/components/addCard/AddCard';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
-import { AddCardSearch } from './src/components/addCard/AddCardSearch';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
@@ -27,7 +25,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
+          component={LoadingScreen}
         />
         <Stack.Screen
           name="Login"
@@ -42,8 +40,8 @@ export default function App() {
           component={MainScreen}
         />
         <Stack.Screen
-          name="Cards"
-          component={Cards}
+          name="YourCards"
+          component={YourCards}
         />
         <Stack.Screen
           name="CardInfo"
@@ -52,14 +50,6 @@ export default function App() {
         <Stack.Screen
         name="Settings"
         component={Settings}
-        />
-        <Stack.Screen
-          name="AddCard"
-          component={AddCard}
-        />
-        <Stack.Screen
-          name="AddCardSearch"
-          component={AddCardSearch}
         />
         <Stack.Screen
           name="AddCardManual"

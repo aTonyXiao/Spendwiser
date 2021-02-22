@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
 
 export function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
-    const cardImage = require("../../../assets/cards/blank.png");
+    const docId = route.params.docId;
+    const cardImage = route.params.img;
     const userId = user.getUserId();
     const [cardName, setCardName] = useState("");
 
@@ -38,11 +39,8 @@ export function DisplayCard({route, navigation}) {
 
     deleteCard = () => {
         console.log("deleteing card");
-
-        // TODO this doesn't delete anything because the document id of the user isn't the card id
-        console.log(cardId);
-        user.deleteCard(userId, cardId);
-        navigation.navigate('Cards');
+        user.deleteCard(userId, docId);
+        navigation.navigate('YourCards');
     }
 
     return (

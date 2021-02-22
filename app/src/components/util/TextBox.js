@@ -4,7 +4,7 @@ import { TextInput, StyleSheet } from 'react-native';
 /**
  * TextBox util component - a simple textbox 
  * 
- * TODO add parameters
+ * TODO add parameters for documentation
  */
 const grayRGB = 'rgb(211, 211, 211)';
 export class TextBox extends React.Component {

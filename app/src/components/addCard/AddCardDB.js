@@ -1,55 +1,131 @@
 import React from 'react';
-import { View, Button, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
-import { AddCardRow } from './AddCardRow';
 import { user } from '../../network/user';
-import mainStyles from '../../styles/mainStyles';
 import { cards } from '../../network/cards';
+import Autocomplete from 'react-native-autocomplete-input';
+import { Ionicons } from '@expo/vector-icons';
 
 export function AddCardDB({navigation}) {
-    const [displayCardOptions, setDisplayCardOptions] = useState(false);
-    const [results, setResults] = useState([]);
     const userId = user.getUserId();
-    const [text, setText] = useState("");
+    const [query, setQuery] = useState("");
+    const [cardMap, setCardMap] = useState(null);
+    const [hasConstructed, setHasConstructed] = useState(false);
+    const [cardNames, setCardNames] = useState([]);
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
+    const [hideResults, setHideResults] = React.useState(true);
 
-    function queryCards() {
-        // TODO query our database and create reference/add to user
-        cards.someGetFunction(text).then((result)=> { 
-            setResults(result);
-            setDisplayCardOptions(true);
-        })
+    // simulate constructor for functional components
+    const constructor = () => { 
+        if (hasConstructed) { 
+            return;
+        } else { 
+            cards.getCardNames((mapping) => {
+                setCardMap(mapping);
+                if (cardMap != null) { 
+                    setCardNames(Object.keys(cardMap));
+                }
+                setHasConstructed(true);
+            });
+        }
     }
+    constructor();
 
-    // TODO add some autocorrect feature here
-    onChangeText = (val) => {
-        setText(val);
+    addCard = () => { 
+        if (!query) {
+            setDisplayErrorText(true);
+
+            setTimeout(function() { 
+                setDisplayErrorText(false);
+            }, 2000);
+        } else { 
+            var cardId = cardMap[query];
+            user.saveCardToUser(userId, cardId, null, null);
+            navigation.navigate('YourCards')
+        }
     }
 
     return (
-        <View style={mainStyles.container}>
-            <TextInput
-                onChangeText={(text) => this.onChangeText(text)}
-                placeholder={"search here"}
-            />
-            <Button
-                title='Query for cards'
-                onPress={queryCards}
-            />
-            {
-                displayCardOptions &&
-                <View>
-                    {results.map((card, i) => {
-                        var props = {
-                            navigation: navigation,
-                            card: card
-                        }
+        <View style={styles.container}>
+            <Text style={styles.title}>Search For a Card</Text>
 
-                        return (
-                            <AddCardRow key={i} props={props}></AddCardRow>
-                        )
-                    })}
-                </View>
+            {
+                displayErrorText &&
+                <Text style={styles.errorText}>Please input a query into the search bar</Text>
             }
+            <View style={styles.autocompleteContainer}>
+                <Autocomplete
+                    inputContainerStyle={styles.autocompleteTextInput}
+                    // listContainerStyle={styles.autocompleteList}
+                    listStyle={styles.autocompleteList}
+                    data={cardNames}
+                    hideResults={hideResults}
+                    defaultValue={query}
+                    onChangeText={text => { 
+                        if (text) { 
+                            setHideResults(false);
+                        } else { 
+                            setHideResults(true);
+                        }
+                        setQuery(text);
+                    }}
+                    renderItem={({ item, i }) => (
+                        <TouchableOpacity onPress={() => setQuery(item)}>
+                            <Text style={styles.autocompleteListText}>{item}</Text>
+                        </TouchableOpacity>
+                    )}
+                />
+            </View> 
+            <View style={styles.enterIcon}>
+                <TouchableOpacity onPress={addCard}>
+                    <Ionicons
+                        name="enter"
+                        color="#28b573"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    autocompleteContainer : {
+        flex: 1,
+        left: 30,
+        position: 'absolute',
+        right: 70,
+        top: 90,
+        zIndex: 1
+    },
+    enterIcon : { 
+        position: 'absolute',
+        right: 20,
+        top: 90
+    },
+    title : { 
+        fontSize: 32,
+        color: '#28b573',
+        textAlign: 'center',
+        marginTop: 20, 
+        right: 10
+    },
+    errorText : { 
+        color:'red',
+        textAlign: 'center'
+    }, 
+    autocompleteTextInput : {
+        borderColor: 'white',
+        borderBottomColor: '#28b573'
+    }, 
+    autocompleteList : { 
+        borderColor: 'white',
+    },
+    autocompleteListText : {
+        margin: 5
+    }
+})

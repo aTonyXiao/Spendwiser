@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, StyleSheet, Button, Alert } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import {UsernameInput, PasswordInput} from './LoginInput';
 import {appBackend} from '../../network/backend'
@@ -26,22 +26,36 @@ export const CreateAccount = props => {
 
     return (
         <View style={mainStyles.container}>
+            <Text style={styles.title}>SpendWiser</Text>
             <UsernameInput onChange={setUsername} />
             <PasswordInput onChange={setPassword} />
-            <Button
-                title='Sign Up'
-                onPress={signUp}
-            />
+            <TouchableOpacity style={styles.signUpWrapper} onPress={signUp}>
+                <Text style={styles.signUpButton}>Sign Up</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    input: {
+    title : { 
+        fontSize: 40,
+        color: '#28b573',
+        position: 'absolute',
+        top: 130
+    },
+    signUpWrapper : {
         margin: 15,
         height: 40,
-        width: '75%',
-        borderColor: '#7a42f4',
-        borderWidth: 1
+        width: '80%',
+        borderColor: '#87CEFA',
+        borderWidth: 1,
+        backgroundColor: '#87CEFA',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 25
     },
-  });
+    signUpButton : { 
+        color: 'white'
+    }
+})
