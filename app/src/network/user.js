@@ -77,6 +77,31 @@ class userClass {
     updateUserCard(cardId, amountSpent, diff) { 
         // TODO
     }
+
+    /**
+     * Add a transaction to user's transaction collection
+     * @param {*} userId - current user id
+     * @param {*} cardId - card id they want to delete
+     * @param {*} storeInfo - store information (store name, address, category)
+     * @param {*} amountSpent - amount spent at the store
+     */
+    saveTransactionToUser(userId, cardId, storeInfo, amountSpent) {
+        timestamp = appBackend.getTimestamp();
+        console.log("saving transactions");
+        console.log("user id " + userId + "\n card id " + cardId + "\n store info " + storeInfo + "\n amountSpent " + amountSpent);
+        appBackend.dbAdd("users." + userId + ".transactions", {
+            cardId: cardId,
+            storeInfo: {
+                storeName: storeInfo["storeName"],
+                address: storeInfo["address"],
+                storeType: storeInfo["storeType"]
+            },
+            amountSpent: amountSpent,
+            dateAdded: timestamp
+        }, (id) => { 
+            console.log("successfully saved transaction to user");
+        })
+    }
 }
 
 export var user = new userClass();

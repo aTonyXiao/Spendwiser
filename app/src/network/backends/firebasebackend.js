@@ -372,4 +372,10 @@ export default class FirebaseBackend extends BaseBackend {
         }
         return null;
     }
+
+    // get timestamp from firestore function
+    getTimestamp() {
+        console.log("HIII");
+        return firebase.firestore.Timestamp.now();
+    }
 }
