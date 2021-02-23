@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
 
 class ImageLoader extends React.Component {
@@ -98,7 +99,7 @@ export class Card extends React.Component {
             <View>
                 <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <ImageLoader
+                    <CachedImage
                         style={styles.card}
                         source={image}
                     />
