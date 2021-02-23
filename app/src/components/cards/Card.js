@@ -3,43 +3,6 @@ import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native
 import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
 
-class ImageLoader extends React.Component {
-  state = {
-    opacity: new Animated.Value(0),
-  }
-
-  onLoad = () => {
-    Animated.timing(this.state.opacity, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }
-
-  render() {
-    return (
-      <Animated.Image
-        onLoad={this.onLoad}
-        {...this.props}
-        style={[
-          {
-            opacity: this.state.opacity,
-            transform: [
-              {
-                scale: this.state.opacity.interpolate({
-                  inputRange: [0.25, 1],
-                  outputRange: [0.85, 1],
-                })
-              },
-            ],
-          },
-          this.props.style,
-        ]}
-      />
-    );
-  }
-}
-
 const styles = StyleSheet.create({
     scrollView: {
         width: "95%"
@@ -66,13 +29,13 @@ export class Card extends React.Component {
             name: "",
             cardImage:"",
             showDefault: true,
+            opacity: new Animated.Value(0),
         }
 
         var cardInformation = props.props.card;
         this.cardId = cardInformation.cardId;
         this.navigation = props.props.navigation;
         this.docId = cardInformation.docId;
-        
         cards.getCardImageURL(this.cardId).then((url) => {
             this.setState({cardImage: url});
             this.setState({showDefault: false}); 
@@ -92,16 +55,26 @@ export class Card extends React.Component {
         })
     }
 
+    onLoad = () => {
+      Animated.timing(this.state.opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }
+
     render () {
         var image = this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage };
 
+        const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
         return (
             <View>
                 <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <CachedImage
-                        style={styles.card}
+                    <AnimatedCachedImage
+                        style={[ styles.card, { opacity: this.state.opacity }]}
                         source={image}
+                        onLoad={() => this.onLoad()}
                     />
                 </TouchableOpacity>
             </View>
