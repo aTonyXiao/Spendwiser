@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import { cards } from '../../network/cards';
 
+import sha1 from 'crypto-js/sha1';
+
 function contrastRGB(string) {
   let color = string.split(",");
   let colorRGB = { r: parseInt(color[0].replaceAll("rgb(", "")), 
@@ -12,6 +14,14 @@ function contrastRGB(string) {
   let brightness =(colorRGB.r * 299 + colorRGB.g * 587 + colorRGB.b * 114) / 1000;
   // return contrasting (white/black) color depending on the brightness
   return brightness > 128 ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
+}
+
+function generateColor(string) {
+  let hashColor = sha1(string).toString().substring(0, 6);
+  let colorRGB = { r: parseInt(hashColor.substring(0, 2), 16),
+                   g: parseInt(hashColor.substring(2, 4), 16),
+                   b: parseInt(hashColor.substring(4, 6), 16)};
+  return "rgb(" + colorRGB.r + ", " + colorRGB.g + ", " + colorRGB.b + ")";
 }
 
 class ImageLoader extends React.Component {
@@ -130,7 +140,7 @@ export class Card extends React.Component {
                         style={styles.card}
                         source={image}
                         overlay={overlay}
-                        color="rgb(128, 128, 128)"
+                        color={generateColor(this.state.name)}
                     />
                 </TouchableOpacity>
             </View>
