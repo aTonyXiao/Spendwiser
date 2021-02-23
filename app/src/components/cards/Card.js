@@ -1,4 +1,6 @@
 import React from 'react';
+import CachedImage from 'react-native-expo-cached-image';
+import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import { cards } from '../../network/cards';
 
@@ -102,13 +104,13 @@ export class Card extends React.Component {
             name: "",
             cardImage:"",
             showDefault: true,
+            opacity: new Animated.Value(0),
         }
 
         var cardInformation = props.props.card;
         this.cardId = cardInformation.cardId;
         this.navigation = props.props.navigation;
         this.docId = cardInformation.docId;
-        
         cards.getCardImageURL(this.cardId).then((url) => {
             this.setState({cardImage: url});
             this.setState({showDefault: false}); 
@@ -128,17 +130,27 @@ export class Card extends React.Component {
         })
     }
 
+    onLoad = () => {
+      Animated.timing(this.state.opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }
+
     render () {
         var image = this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage };
         var overlay = this.state.showDefault ? this.state.name : "";
 
+        const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
         return (
             <View>
                 <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <ImageLoader
-                        style={styles.card}
+                    <AnimatedCachedImage
+                        style={[ styles.card, { opacity: this.state.opacity }]}
                         source={image}
+                        onLoad={() => this.onLoad()}
                         overlay={overlay}
                         color={generateColor(this.state.name)}
                     />
