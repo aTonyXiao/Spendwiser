@@ -1,29 +1,6 @@
-import { useEffect, useState } from 'react';
 import React from 'react';
-import { TextBox } from '../util/TextBox';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Button, View, StyleSheet, TextInput } from 'react-native';
-
-const styles = StyleSheet.create({
-    dropdown: {
-        height: 40, 
-        width: '40%',
-        margin: 5, 
-    }, 
-    rewardInput: { 
-        height: 40, 
-        width: '40%',
-        margin: 5,
-        borderColor: 'gray',
-        borderWidth: 1
-    },
-    rewardContainer: { 
-        display: 'flex',
-        flexDirection: 'row', 
-        minHeight: 10
-    }
-});
-const grayRGB = 'rgb(211, 211, 211)';
+import { View, StyleSheet, TextInput } from 'react-native';
 
 export class ManualRewardRow extends React.Component {
     constructor(props) { 
@@ -57,10 +34,37 @@ export class ManualRewardRow extends React.Component {
                 <TextInput
                     style={styles.rewardInput}
                     onChangeText={(text) => this.setState({value: text})}
-                    placeholder={'input reward value here'}
+                    placeholder={'value in cents'}
                     placeholderTextColor={grayRGB}
                 />
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    dropdown: {
+        height: 40, 
+        width: '40%',
+        margin: 8,
+        marginLeft: 15,
+        // backgroundColor: '#F0F0F0'
+    }, 
+    rewardInput: { 
+        height: 40, 
+        width: '40%',
+        margin: 5,
+        borderWidth: 1,
+        borderColor: '#F0F0F0',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
+    rewardContainer: { 
+        display: 'flex',
+        flexDirection: 'row', 
+        minHeight: 10
+    }
+});
+const grayRGB = 'rgb(211, 211, 211)'

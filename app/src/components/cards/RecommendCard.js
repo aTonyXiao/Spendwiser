@@ -2,43 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
-function getCategory(googleCategory) {
-    switch(googleCategory) {
-        case "Bar":
-        case "Cafe":
-        case "Meal delivery":
-        case "Meal takeaway":
-        case "Restaurant":
-            return "dining";
-        case "Bakery":
-        case "Liqour store":
-        case "Supermarket":
-        case "Grocery or supermarket":
-            return "grocery";
-        case "Drugstore":
-            return "drugstore";
-        default:
-            return "others";
+class RecommendCard {
+    getCategory(googleCategory) {
+        switch(googleCategory) {
+            case "Bar":
+            case "Cafe":
+            case "Meal delivery":
+            case "Meal takeaway":
+            case "Restaurant":
+                return "dining";
+            case "Bakery":
+            case "Liquor store":
+            case "Supermarket":
+            case "Grocery or supermarket":
+                return "grocery";
+            case "Drugstore":
+                return "drugstore";
+            default:
+                return "others";
+        }
+    }
+
+    // get user's cards ranked by category given
+    async getRecCards(googleCategory, callback) {
+        const userId = user.getUserId();
+        let category = this.getCategory(googleCategory);
+        let myCards = [];
+        let tmpCardId = "";
+        let tmpCardCatReward = null;
+        // Get list of user's cards
+        let dbCards = await user.getCards(userId);
+        // For each card, get the category reward value
+        let i = 0;
+        console.log("google category: " + googleCategory);
+        for (i = 0; i < dbCards.length; i++) {
+            tmpCardId = dbCards[i].cardId;
+            tmpCardCatRewardandImg = await cards.getCardReward(tmpCardId, category);
+            myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatRewardandImg["reward"], "cardImg": tmpCardCatRewardandImg["image"]});
+        }
+        myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
+        console.log(myCards);
+        callback(myCards);
+    }
+
+    // insert user's transaction into db
+    setTransaction(storeInfo, recCard, amountSpent) {
+        const userId = user.getUserId();
+        user.saveTransactionToUser(
+            userId,
+            recCard.recCardId,
+            {storeName: storeInfo["label"],
+                address: storeInfo["vicinity"],
+                storeType: storeInfo["storeType"]
+            },
+            amountSpent
+        );
     }
 }
 
-export async function RecommendedCard(googleCategory, callback) {
-    const userId = user.getUserId();
-    let category = getCategory(googleCategory);
-    let myCards = [];
-    let tmpCardId = "";
-    let tmpCardCatReward = null;
-    // Get list of user's cards
-    let dbCards = await user.getCards(userId);
-    // For each card, get the category reward value
-    let i = 0;
-    for (i = 0; i < dbCards.length; i++) {
-        tmpCardId = dbCards[i].cardId;
-        tmpCardCatReward = await cards.getCardReward(tmpCardId, category)
-        myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatReward});
-    }
-    console.log(myCards);
-    let res = Math.max.apply(Math, myCards.map(function(o){return o.cardCatReward;}))
-    let recCard = myCards.find(function(o){ return o.cardCatReward == res; })
-    callback(recCard.cardId);
-}
+export var recommendCard = new RecommendCard();
+

@@ -29,7 +29,8 @@ class Cards {
                 if (isNaN(convertedReward)) {
                     convertedReward = data.rewards["others"] * data.conversion;
                 }
-                resolve(convertedReward);
+                let cardCatRewardandImg = {"reward": convertedReward, "image": data.image}
+                resolve(cardCatRewardandImg);
             })
         })
     }
@@ -42,6 +43,13 @@ class Cards {
         });
     }
 
+    async getCardImg(cardId) {
+        return new Promise((resolve, reject) => { 
+            appBackend.dbGet("cards." + cardId, (data) => {
+                resolve(data.image);
+            })
+        })
+    }
     getCardRewards(cardId) { 
         // TODO
 

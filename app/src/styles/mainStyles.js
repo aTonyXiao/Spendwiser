@@ -7,6 +7,13 @@ const mainStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  title: {
+    fontSize: 32,
+    color: '#28b573',
+    textAlign: 'center',
+    marginTop: 20,
+    right: 1
+  }
 });
 
 export default mainStyles;

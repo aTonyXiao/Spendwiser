@@ -5,6 +5,7 @@ import { user } from '../../network/user';
 import { cards } from '../../network/cards';
 import Autocomplete from 'react-native-autocomplete-input';
 import { Ionicons } from '@expo/vector-icons';
+import mainStyles from '../../styles/mainStyles';
 
 export function AddCardDB({navigation}) {
     const userId = user.getUserId();
@@ -39,6 +40,8 @@ export function AddCardDB({navigation}) {
                 setDisplayErrorText(false);
             }, 2000);
         } else { 
+            // TODO: this should be navigate to add card confirm
+
             var cardId = cardMap[query];
             user.saveCardToUser(userId, cardId, null, null);
             navigation.navigate('YourCards')
@@ -47,16 +50,16 @@ export function AddCardDB({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Search For a Card</Text>
+            <Text style={mainStyles.title}>Search For a Card</Text>
 
             {
                 displayErrorText &&
                 <Text style={styles.errorText}>Please input a query into the search bar</Text>
             }
             <View style={styles.autocompleteContainer}>
+                {/* TODO add filter for items to render */}
                 <Autocomplete
                     inputContainerStyle={styles.autocompleteTextInput}
-                    // listContainerStyle={styles.autocompleteList}
                     listStyle={styles.autocompleteList}
                     data={cardNames}
                     hideResults={hideResults}
@@ -106,13 +109,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         top: 90
-    },
-    title : { 
-        fontSize: 32,
-        color: '#28b573',
-        textAlign: 'center',
-        marginTop: 20, 
-        right: 10
     },
     errorText : { 
         color:'red',
