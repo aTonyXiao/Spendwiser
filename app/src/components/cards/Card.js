@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
         width: "100%",
         height: 230, // hard coded for now
-        marginBottom: 10,
-        flexDirection: 'row'
+        marginBottom: 10
     }, 
     cardTitle: {
         textAlign: 'center',

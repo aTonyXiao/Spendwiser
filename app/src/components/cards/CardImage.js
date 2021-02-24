@@ -6,7 +6,8 @@ import sha1 from 'crypto-js/sha1';
 
 const styles = StyleSheet.create({
     innerImage: {
-        width: "100%",
+        height: '100%',
+        width: 365, //hard coded for now
         flexDirection: 'row'
     },
     overlay: {
@@ -44,7 +45,7 @@ export default function CardImage (props) {
     if (props.overlay.length > 0) {
         let generatedColor = generateColor(props.overlay);
         return (
-            <Animated.View style={props.style}>
+            <Animated.View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
               <ImageBackground style={styles.innerImage}
                                onLoad={props.onLoad}
                                source={props.source}
