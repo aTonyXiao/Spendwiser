@@ -9,7 +9,7 @@ import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
 import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
-import { MainScreen } from './src/components/MainScreen';
+import { MainScreen } from './src/components/main/MainScreen';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
@@ -38,10 +38,12 @@ export default function App() {
         <Stack.Screen
           name="Main"
           component={MainScreen}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="YourCards"
           component={YourCards}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="CardInfo"

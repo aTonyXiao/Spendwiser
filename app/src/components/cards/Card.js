@@ -2,7 +2,6 @@ import React from 'react';
 import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
-import { cards } from '../../network/cards';
 
 import sha1 from 'crypto-js/sha1';
 
