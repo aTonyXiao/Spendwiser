@@ -75,23 +75,13 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
         width: "100%",
         height: 230, // hard coded for now
-        marginBottom: 10,
-        flexDirection: 'row'
+        marginBottom: 10
     }, 
     cardTitle: {
         textAlign: 'center',
         marginTop: 10,
         marginBottom: 0,
         fontSize: 20 
-    },
-    overlay: {
-      textAlign: 'right',
-      fontWeight: 'bold',
-      fontSize: 20,
-      alignSelf: 'center',
-      top: '-5%',
-      left: '53%',
-      flex: 0.6
     }
 });
 
@@ -141,17 +131,15 @@ export class Card extends React.Component {
         var image = this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage };
         var overlay = this.state.showDefault ? this.state.name : "";
 
-        const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
         return (
             <View>
                 <Text style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <AnimatedCachedImage
+                    <CardImage
                         style={[ styles.card, { opacity: this.state.opacity }]}
                         source={image}
                         onLoad={() => this.onLoad()}
                         overlay={overlay}
-                        color={generateColor(this.state.name)}
                     />
                 </TouchableOpacity>
             </View>
