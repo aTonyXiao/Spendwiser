@@ -37,8 +37,14 @@ class RecommendCard {
         console.log("google category: " + googleCategory);
         for (i = 0; i < dbCards.length; i++) {
             tmpCardId = dbCards[i].cardId;
-            tmpCardCatRewardandImg = await cards.getCardReward(tmpCardId, category);
-            myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatRewardandImg["reward"], "cardImg": tmpCardCatRewardandImg["image"]});
+            tmpCardInfo = await cards.getCardReward(tmpCardId, category);
+            myCards.push({
+                "cardId": tmpCardId,
+                "cardCatReward": tmpCardInfo["reward"],
+                "cardImg": tmpCardInfo["image"],
+                "cardType": tmpCardInfo["type"],
+                "cardCatUncoverted": tmpCardInfo["unconvertedReward"]
+            });
         }
         myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
         console.log(myCards);

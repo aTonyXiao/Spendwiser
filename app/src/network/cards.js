@@ -25,12 +25,18 @@ class Cards {
     async getCardReward(cardId, category) {
         return new Promise((resolve, reject) => { 
             appBackend.dbGet("cards." + cardId, (data) => {
-                let convertedReward = data.rewards[category] * data.conversion;
-                if (isNaN(convertedReward)) {
-                    convertedReward = data.rewards["others"] * data.conversion;
+                let unconvertedReward = data.rewards[category];
+                if (isNaN(unconvertedReward)) {
+                    unconvertedReward = data.rewards["others"];
                 }
-                let cardCatRewardandImg = {"reward": convertedReward, "image": data.image}
-                resolve(cardCatRewardandImg);
+                let convertedReward = unconvertedReward * data.conversion;
+                let cardCatInfo = {
+                    "reward": convertedReward,
+                    "image": data.image,
+                    "unconvertedReward": unconvertedReward,
+                    "type": data.rewardType
+                }
+                resolve(cardCatInfo);
             })
         })
     }

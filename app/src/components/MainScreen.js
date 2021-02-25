@@ -11,6 +11,7 @@ import { user } from '../network/user';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
+var width = Dimensions.get('window').width;
 
 export function MainScreen({navigation}) {
     const [errorMsg, setErrorMsg] = useState(null);
@@ -29,8 +30,7 @@ export function MainScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCard, setRecCard] = useState(null);
-    var width = Dimensions.get('window').width;
-    const userId = user.getUserId();
+    const [recCards, setRecCards] = useState(null);
       
     function setOfflineMode() {
         setStoreArr([{
@@ -48,6 +48,7 @@ export function MainScreen({navigation}) {
         console.log("Finally ");
         console.log(myRankedCards);
         setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
+        setRecCards(myRankedCards)
     }
 
     function changeRecCard(value, key) {
@@ -138,7 +139,7 @@ export function MainScreen({navigation}) {
             }
         })();
     }, []);
-    
+
     return (
         <SafeAreaView style={styles.screen}>
             <Modal
@@ -234,7 +235,7 @@ export function MainScreen({navigation}) {
                     <RNPickerSelect
                         placeholder={{}}
                         items={storeArr}
-                        onValueChange={(value, key) => {setRecCard(null), changeRecCard(value, key)}}
+                        onValueChange={(value, key) => {setRecCards(null), setRecCard(null), changeRecCard(value, key)}}
                         pickerProps={{mode:'dropdown', itemStyle:{height: 100}}}
                         style={{...pickerSelectStyles,
                             iconContainer: {
@@ -324,6 +325,11 @@ export function MainScreen({navigation}) {
       card_container: {
           flex: 5,
           alignItems: 'center'
+      },
+      card_image: {
+        width: width * .8,  //its same to '20%' of device width
+        aspectRatio: 1.5, // <-- this
+        resizeMode: 'contain', //optional
       },
       card_spending: {
           padding: 10,
