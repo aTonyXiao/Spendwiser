@@ -1,14 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextBox } from '../util/TextBox';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
 import { ManualRewardRow } from './ManualRewardRow';
+import mainStyles from '../../styles/mainStyles';
+import { Ionicons } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
+    container : {
+        backgroundColor: 'white',
+        height: '100%'
+    },
     rewardContainer: { 
         display: 'flex',
+        flexDirection: 'column',
+    },
+    rewardRow : {
+        display: 'flex',
         flexDirection: 'row'
+    },
+    rewardText : { 
+        margin: 15,
+        width: '90%',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8, 
+        justifyContent: 'center'
+    },
+    inputBox : {
+        margin: 15,
+        height: 40,
+        width: '90%',
+        borderColor: '#F0F0F0',
+        borderWidth: 1,
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
+    inputTitle : { 
+        margin: 15,
+        marginBottom: 5,
+        fontSize: 18
+    },
+    plusIcon : {
+        margin: 9,
+        right: 32
+    }, 
+    addCardButton : {
+        textAlign: 'center',
+        backgroundColor: '#87CEFA',
+        margin: 15,
+        height: 40, 
+        borderRadius: 5,
+        width: '40%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomContainer : {
+        zIndex: -1,
+    },
+    addCardContainer: {
+        alignItems: 'center',
+    }, 
+    addCardText : { 
+        color: 'white'
     }
 });
 
@@ -64,37 +122,50 @@ export function AddCardManual({navigation}) {
     } 
 
     return (
-        <View>
-            <Text>Credit Card Name</Text>
-            <TextBox ref={inputName} placeholder={'your credit card title here '} />
+        <View style={styles.container}>
+            <Text style={mainStyles.title}>Add a Card Manually</Text>
 
-            <Text>Rewards</Text>    
+            <Text style={styles.inputTitle}>Credit Card Name</Text>
+            <TextBox style={styles.inputBox}ref={inputName} placeholder={'your credit card title here '} />
+
+            <Text style={styles.inputTitle}>Rewards</Text>    
             <View style={styles.rewardContainer}>
                 {
                     displayRewards &&
-                    rewards.map((reward, i) => {
-                        return <Text key={i}>Reward: {reward.type}, {reward.value} cents</Text>
-                    })
+                    <View style={styles.rewardText}>
+                        {
+                        rewards.map((reward, i) => {
+                            return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                        })
+                        }
+                    </View>
                 }
                 {
                     displayErrorText &&
                     <Text style={{ color: 'red' }}>Please input a number</Text>
                 }
-                <ManualRewardRow ref={inputReward}></ManualRewardRow>
-                <Button
-                    title='+'
-                    onPress={addReward}
-                ></Button>
+                <View style={styles.rewardRow}>
+                    <ManualRewardRow ref={inputReward}></ManualRewardRow>
+                    <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
+                        <Ionicons
+                            name="add-outline"
+                            color="black"
+                            size={32}
+                        ></Ionicons>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
-            <View style={{zIndex: -1}}>
-                <Text>URL</Text>
-                <TextBox ref={inputUrl} placeholder={'url'} />
-                <Button
-                    title='Add this card'
-                    onPress={addCard}
-                />
+            <View style={styles.bottomContainer}>
+                <Text style={styles.inputTitle}>URL</Text>
+                <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
+
+                <View style={styles.addCardContainer}>
+                    <TouchableOpacity style={styles.addCardButton}>
+                        <Text style={styles.addCardText}onPress={addCard}>Add this card</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, Image,  Alert, useColorScheme } from 'react-native';
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
+import CachedImage from 'react-native-expo-cached-image';
 
 const styles = StyleSheet.create({
     card: {
@@ -46,7 +47,7 @@ export function DisplayCard({route, navigation}) {
     return (
         <View>
             <Text>{cardName}</Text>
-            <Image
+            <CachedImage
                 source={cardImage}
                 style={styles.card}
             />
