@@ -40,7 +40,7 @@ export class Card extends React.Component {
         cards.getCardImageURL(this.cardId).then((url) => {
             this.setState({cardImage: url});
             this.setState({showDefault: false}); 
-            console.log(url);
+            // console.log(url);
         });
 
         cards.getCardName(this.cardId).then((cardName) => {

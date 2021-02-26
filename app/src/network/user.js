@@ -102,6 +102,17 @@ class userClass {
             console.log("successfully saved transaction to user");
         })
     }
+
+    /**
+     * 
+     */
+    getTransactions(userId, docId, callback) { 
+        console.log("getting transactions")
+        appBackend.dbGet("users." + userId + ".cards." + docId + ".transactions", (data) => { 
+            console.log("data");
+            // callback(data);
+        })
+    }
 }
 
 export var user = new userClass();
