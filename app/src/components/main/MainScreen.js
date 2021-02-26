@@ -88,6 +88,7 @@ export function MainScreen({navigation}) {
                     key: addCount,
                 })
                 if (addCount == 0) {
+                    console.log("Attempting to set the CurStore state...");
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
                     recommendCard.getRecCards(storeType, getRecCardFromDB);
@@ -95,6 +96,7 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
+        console.log("Attempting to set the StoreArr...")
         setStoreArr(fetchStores);
     };
 
