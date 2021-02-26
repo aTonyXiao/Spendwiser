@@ -187,6 +187,7 @@ export function MainScreen({navigation}) {
                                         var storeIsSelected = (storeName == curStore);
                                         return (
                                             <TouchableOpacity 
+                                                key={store}
                                                 onPress={()=> {
                                                     setRecCard(null);
                                                     changeRecCard(storeName, i);
