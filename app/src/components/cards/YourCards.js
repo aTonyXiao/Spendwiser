@@ -38,73 +38,75 @@ export function YourCards({navigation}) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bodyContainer}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>Add New Card</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            setModalVisible(!modalVisible);
-                            navigation.navigate('AddCardDB');
-                        }}
-                    >
-                        <Text style={styles.modalText}>By Search</Text>
-                    </TouchableOpacity>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>Add New Card</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                                navigation.navigate('AddCardDB');
+                            }}
+                        >
+                            <Text style={styles.modalText}>By Search</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => { 
-                            setModalVisible(!modalVisible);
-                            navigation.navigate('AddCardCamera');
-                        }}
-                    >
-                        <Text style={styles.modalText}>By Camera</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                                navigation.navigate('AddCardCamera');
+                            }}
+                        >
+                            <Text style={styles.modalText}>By Camera</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => {
-                            setModalVisible(!modalVisible);
-                            navigation.navigate('AddCardManual');
-                        }}
-                    >
-                        <Text style={styles.modalText}>Manually</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                                navigation.navigate('AddCardManual');
+                            }}
+                        >
+                            <Text style={styles.modalText}>Manually</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.modalText}>TEMPORARY: Hide Modal</Text>
+                        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                            <Text style={styles.modalText}>TEMPORARY: Hide Modal</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+                <View style={styles.addButton}>
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <Ionicons
+                            name="add-circle-outline"
+                            color="black"
+                            size={32}
+                        ></Ionicons>
                     </TouchableOpacity>
                 </View>
-            </Modal>
-            <View style={styles.addButton}>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Ionicons
-                        name="add-circle-outline"
-                        color="black"
-                        size={32}
-                    ></Ionicons>
-                </TouchableOpacity>
+
+                <ScrollView style={styles.scrollView}>
+                    <View>
+                        {cards.map((card, i) => {
+                            var props = {
+                                navigation: navigation,
+                                card: card
+                            }
+                            return <Card key={i} props={props} />
+                        })}
+                    </View>
+                </ScrollView>
             </View>
 
-            <ScrollView style={styles.scrollView}>
-                <View>
-                    {cards.map((card, i) => {
-                        var props = {
-                            navigation: navigation,
-                            card: card
-                        }
-                        return <Card key={i} props={props} />
-                    })}
-                </View>
-            </ScrollView>
+            <View style={{marginBottom: 15}}>
+                <Footer navigation={navigation} />
             </View>
-
-            <Footer navigation={navigation} />
         </SafeAreaView>
     );
 }
@@ -116,11 +118,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: '100%',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between', 
     },
     bodyContainer: {
         justifyContent: 'center',
-        // alignContent: 'center',
         alignItems: 'center'
     },
     scrollView: {

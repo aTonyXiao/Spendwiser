@@ -4,30 +4,70 @@ import { Ionicons } from '@expo/vector-icons';
 
 export function Footer(props) { 
     const navigation = props.navigation;
+    const {index, routes} = navigation.dangerouslyGetState();
+    const page = routes[index].name;
 
     return(
         <View style={styles.footerContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+            {
+                (page == 'Main') &&
+                <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+                    <Ionicons
+                        name="home"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
+                (page != 'Main') &&
+                <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+                    <Ionicons
+                        name="home-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
+                (page == 'YourCards') &&
+                <TouchableOpacity onPress={() => navigation.navigate('YourCards')}>
+                    <Ionicons
+                        name="card"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
+                (page != 'YourCards') &&
+                <TouchableOpacity onPress={() => navigation.navigate('YourCards')}>
+                    <Ionicons
+                        name="card-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
+                (page == 'Settings') &&
+                <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                 <Ionicons
-                    name="home-outline"
+                    name="settings"
                     color="black"
                     size={32}
                 ></Ionicons>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('YourCards')}>
-                <Ionicons
-                    name="card-outline"
-                    color="black"
-                    size={32}
-                ></Ionicons>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                <Ionicons
-                    name="settings-outline"
-                    color="black"
-                    size={32}
-                ></Ionicons>
-            </TouchableOpacity>
+            }
+            {
+                <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+                    <Ionicons
+                        name="settings-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
         </View>
     )
 }
