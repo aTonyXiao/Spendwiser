@@ -14,7 +14,7 @@ function objectToString(object) {
  * - Documents contain data and sometimes Collections
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
-class BaseBackend {
+export default class BaseBackend {
 
     constructor () {
         this.privateKey = "private";
@@ -236,5 +236,3 @@ class BaseBackend {
      */
     getUserID() {}
 }
-
-export default BaseBackend;

@@ -5,8 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "docs": "node_modules/.bin/jsdoc -c jsdoc.json"
+    "eject": "expo eject"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.1.0",
@@ -14,7 +13,6 @@
     "@react-native-community/netinfo": "5.9.7",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
-    "clean-jsdoc-theme": "^3.0.8",
     "core-js-bundle": "^3.6.5",
     "crypto-js": "^3.3.0",
     "expo": "~40.0.0",
@@ -25,7 +23,6 @@
     "expo-status-bar": "~1.0.3",
     "firebase": "7.9.0",
     "indexeddbshim": "^6.6.0",
-    "jsdoc": "^3.6.6",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",

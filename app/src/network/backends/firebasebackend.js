@@ -43,7 +43,7 @@ function filterDatabaseCollection(collection, conditions) {
  * - Documents contain data and sometimes Collections
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
-class FirebaseBackend extends BaseBackend {
+export default class FirebaseBackend extends BaseBackend {
 
     /**
      * This function initializes the Backend
@@ -379,5 +379,3 @@ class FirebaseBackend extends BaseBackend {
         return firebase.firestore.Timestamp.now();
     }
 }
-
-export default FirebaseBackend;

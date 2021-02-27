@@ -5,7 +5,6 @@ import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
-import { Footer } from '../main/Footer';
 
 export function YourCards({navigation}) { 
     const [cards, setCards] = useState([]);
@@ -101,20 +100,12 @@ export function YourCards({navigation}) {
                     })}
                 </View>
             </ScrollView>
-
-            <Footer navigation={navigation} />
         </SafeAreaView>
     );
 }
 
 
 const styles = StyleSheet.create({
-    container : {
-        flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     scrollView: {
         width: "95%"
     },
