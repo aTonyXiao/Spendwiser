@@ -48,6 +48,7 @@ export default function App() {
         <Stack.Screen
           name="CardInfo"
           component={DisplayCard}
+          options={{headerShown: false}}
         />
         <Stack.Screen
         name="Settings"

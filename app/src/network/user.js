@@ -102,6 +102,60 @@ class userClass {
             console.log("successfully saved transaction to user");
         })
     }
+
+    /**
+     * Gets all of a user's transactions
+     * @param {string} userId - the user whose transactions to grab
+     * 
+     * @example
+     *  user.getTransactions(userId, (data) => { 
+     *      console.log(data);
+     *      setTransactions(data);
+     *      setDisplayTransactions(true);
+     *  })
+     */
+    getAllTransactions(userId, callback) { 
+        appBackend.dbGetSubCollections("users." + userId + ".transactions", (data) => { 
+            callback(data);
+        })
+    }
+
+    /**
+     * Gets transactions for a user's card
+     * @param {string} userId - user id of transactions to get
+     * @param {string} cardId  - card id of card to get
+     * @param {string} callback  - callback function to apply to each transaction object
+     * 
+     * @example
+     *  user.getTransactionsForCard(userId, cardId, (data) => {
+     *      setTransactions((transactions) => { 
+     *      const newTransactions = [...transactions, data];
+     *      return newTransactions;
+     *  })
+     */
+    getTransactionsForCard(userId, cardId, callback) { 
+        appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], (data) => { 
+            callback(data);
+        })
+    }
+
+    /**
+     * Gets a user's rewards. In user backend because user diff is need to apply 
+     * to card rewards
+     * @param {*} userId - user id of diff to get
+     * @param {*} cardId - card id of card rewards to get
+     * @param {*} callback - callback function to apply to resultant data
+     * 
+     * @example
+     * TODO
+     */
+    getRewards(userId, cardId, callback) {
+        console.log("getting a user's rewards");
+        appBackend.dbGet("cards." + cardId, (data)=> { 
+            // TODO apply diff
+            callback(data.rewards);
+        })
+    }
 }
 
 export var user = new userClass();
