@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import CachedImage from 'react-native-expo-cached-image';
@@ -37,10 +37,10 @@ export function DisplayCard({route, navigation}) {
                 setDisplayTransactions(true);
             })
 
-            // user.getRewards(cardId).then((rewards) => {
-                // setRewards;
-            // })
-            // const cardRewards = cards.getCardRewards(cardId);
+            user.getRewards(userId, cardId, (data) => { 
+                setRewards(Object.entries(data));
+                setDisplayRewards(true);
+            })
 
             setHasConstructed(true);
         }
@@ -52,7 +52,7 @@ export function DisplayCard({route, navigation}) {
             'Are you sure you would like to delete this card from your profile?',
             'please select one',
             [
-              {text: 'NO', onPress: () => console.log('NO Pressed'), style: 'cancel'},
+              {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
               {text: 'YES', onPress: () => deleteCard()},
             ]
           );
@@ -69,8 +69,15 @@ export function DisplayCard({route, navigation}) {
         // user.addTransaction()
     }
 
+    addReward = () => { 
+
+    }
+
     return (
-        <View style={styles.container}>
+        <ScrollView 
+            style={styles.container} 
+            contentContainerStyle={styles.scrollviewContainer}
+        >
             <View style={{justifyContent: 'flex-start'}}>
                 <Text style={styles.cardTitle}>{cardName}</Text>
                 <CachedImage
@@ -82,7 +89,7 @@ export function DisplayCard({route, navigation}) {
                 <Text style={styles.sectionTitle}>Transactions</Text> 
                 {
                     displayTransactions &&
-                    <View style={styles.sectionBody}>
+                    <View>
                         {
                             transactions.map((transaction, i) => {
                                 var date = transaction.dateAdded.toDate().toDateString();
@@ -104,19 +111,29 @@ export function DisplayCard({route, navigation}) {
                 </TouchableOpacity>
 
                 <Text style={styles.sectionTitle}>Rewards</Text>
-                {/* {
-                displayRewards && 
-                rewards.map((reward, i) => { 
-                    <Text></Text>
-                })
-                } */}
-                {/* TODO want to make add two fields for each reward that can be dropdowns for reward options */}
+                {
+                    displayRewards && 
+                    rewards.map((reward, i) => {
+                        console.log(reward);
+                        var category = reward[0];
+                        var amountCents = reward[1]; 
+                        return (
+                            <View style={styles.sectionText} key={i}>
+                                <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                            </View>
+                        )
+                    })
+                }
+                <TouchableOpacity style={styles.addTransactionButton} onPress={addTransaction}>
+                    <Text style={{}}>Add a reward</Text>
+                </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
                 <Text style={styles.deleteText}>Delete this card</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -124,7 +141,12 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         height: '100%', 
-        justifyContent: 'space-between'
+        // justifyContent: 'space-between',
+        flex: 1
+    },
+    scrollviewContainer: { 
+        justifyContent: 'space-between',
+        flexGrow: 1
     },
     cardTitle: { 
         textAlign: 'center',
@@ -144,8 +166,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor: '#28b573',
         color: 'white'
-    },
-    sectionBody: { 
     },
     sectionText: {
         display: 'flex',
@@ -170,7 +190,8 @@ const styles = StyleSheet.create({
     },
     deleteContainer: { 
         alignItems: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 10
     },
     deleteText: {
         fontSize: 16,

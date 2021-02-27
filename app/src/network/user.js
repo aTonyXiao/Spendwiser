@@ -139,10 +139,22 @@ class userClass {
         })
     }
 
+    /**
+     * Gets a user's rewards. In user backend because user diff is need to apply 
+     * to card rewards
+     * @param {*} userId - user id of diff to get
+     * @param {*} cardId - card id of card rewards to get
+     * @param {*} callback - callback function to apply to resultant data
+     * 
+     * @example
+     * TODO
+     */
     getRewards(userId, cardId, callback) {
         console.log("getting a user's rewards");
-        // TODO get rewards for a card
-        // TODO apply diff
+        appBackend.dbGet("cards." + cardId, (data)=> { 
+            // TODO apply diff
+            callback(data.rewards);
+        })
     }
 }
 
