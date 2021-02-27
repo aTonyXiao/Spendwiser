@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Text, StyleSheet, Animated, ImageBackground } from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
 
 import sha1 from 'crypto-js/sha1';
+import { set } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
     innerImage: {
@@ -42,9 +43,18 @@ function generateColor(string) {
 }
 
 export default function CardImage (props) {
+    const cardOpacity = useRef(new Animated.Value(0)).current;
+    let onCardLoad = () => {
+        Animated.timing(cardOpacity, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
+    }
+    const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
+
     if (props.default) {
         let generatedColor = generateColor(props.overlay);
-        console.log(props);
         return (
             <Animated.View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
               <ImageBackground style={styles.innerImage}
@@ -55,11 +65,11 @@ export default function CardImage (props) {
             </Animated.View>
           );
     } else {
-        console.log("Creating the actual card image");
-        console.log(props);
+
         return (
-        <CachedImage 
-            style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}
+        <AnimatedCachedImage
+            style={[{justifyContent: 'center', alignItems: 'center'}, props.style, { opacity: cardOpacity} ]}
+            onLoad={() => {onCardLoad()}}
             source={{uri: props.source}}
         />);
     }
