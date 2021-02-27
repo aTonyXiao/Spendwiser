@@ -42,20 +42,25 @@ function generateColor(string) {
 }
 
 export default function CardImage (props) {
-    if (props.overlay.length > 0) {
+    if (props.default) {
         let generatedColor = generateColor(props.overlay);
+        console.log(props);
         return (
             <Animated.View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
               <ImageBackground style={styles.innerImage}
-                               onLoad={props.onLoad}
-                               source={props.source}
+                               source={require('../../../assets/cards/blank.png')}
                                imageStyle={props.overlay.length == 0 ? {} : {tintColor: generatedColor, resizeMode: "contain"}}>
                 <Text style={[{color: contrastRGB(generatedColor)}, styles.overlay]}>{props.overlay}</Text>
               </ImageBackground>
             </Animated.View>
           );
     } else {
-        const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
-        return (<AnimatedCachedImage {...props} />);
+        console.log("Creating the actual card image");
+        console.log(props);
+        return (
+        <CachedImage 
+            style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}
+            source={{uri: props.source}}
+        />);
     }
 }

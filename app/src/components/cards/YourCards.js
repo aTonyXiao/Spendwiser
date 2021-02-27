@@ -97,6 +97,7 @@ export function YourCards({navigation}) {
                             navigation: navigation,
                             card: card
                         }
+                        console.log("Creating card...");
                         return <Card key={i} props={props} />
                     })}
                 </View>
