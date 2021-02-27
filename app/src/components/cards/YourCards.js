@@ -84,7 +84,7 @@ export function YourCards({navigation}) {
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Ionicons
                         name="add-circle-outline"
-                        color="white"
+                        color="black"
                         size={32}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -136,9 +136,9 @@ const styles = StyleSheet.create({
     addButton: {
         borderRadius: 100,
         padding: 5,
-        backgroundColor: "#28b573",
         alignSelf: 'flex-end',
-        margin: 8
+        margin: 8,
+        marginBottom: 0
     },
     modalText: {
         color: "white",
