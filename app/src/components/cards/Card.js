@@ -64,6 +64,7 @@ export class Card extends React.Component {
                         style={[ styles.card ]}
                         source={this.state.cardImage}
                         overlay={this.state.name}
+                        default={this.showDefault}
                     />
                 </TouchableOpacity>
             </View>

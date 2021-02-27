@@ -1,9 +1,7 @@
 import React, { useRef } from 'react';
 import { Text, StyleSheet, Animated, ImageBackground } from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
-
 import sha1 from 'crypto-js/sha1';
-import { set } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
     innerImage: {
@@ -22,6 +20,11 @@ const styles = StyleSheet.create({
     }
 });
 
+/**
+ * Generates a contrasting rgb value based on the supplied parameter
+ * @param {string} string - rgb string
+ * @returns {string} rgb string value
+ */
 function contrastRGB(string) {
   let color = string.split(",");
   let colorRGB = { r: parseInt(color[0].replaceAll("rgb(", "")), 
@@ -34,6 +37,11 @@ function contrastRGB(string) {
   return brightness > 128 ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
 }
 
+/**
+ * Generates an rgb value based on the named passed in
+ * @param {string} string - The name of a credit card
+ * @returns {string} rgb string value
+ */
 function generateColor(string) {
   let hashColor = sha1(string).toString().substring(0, 6);
   let colorRGB = { r: parseInt(hashColor.substring(0, 2), 16),
@@ -42,8 +50,24 @@ function generateColor(string) {
   return "rgb(" + colorRGB.r + ", " + colorRGB.g + ", " + colorRGB.b + ")";
 }
 
-export default function CardImage (props) {
+/**
+ * Component that displays a Credit Card Image. Either the card
+ * image supplied via url will be displayed or a colorized background with a card's
+ * name if no url is supplied.
+ * 
+ * @param {boolean} props.default - If true will return a colorized image with card's name. If false, the image supplied via source will be used
+ * @param {string} props.source - Url of the image to be displayed if @props.default is true
+ * @param {string} props.overlay - Name of the card to be overlayed on top of the image
+ * @param {*} props.style - Style properties that will be passed down to the Image component
+ * @component
+ *      
+ */
+function CardImage (props) {
     const cardOpacity = useRef(new Animated.Value(0)).current;
+
+    /**
+     * Starts any animations that are necessary after a card image has been loaded
+     */
     let onCardLoad = () => {
         Animated.timing(cardOpacity, {
             toValue: 1,
@@ -51,6 +75,7 @@ export default function CardImage (props) {
             useNativeDriver: true,
         }).start();
     }
+
     const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
 
     if (props.default) {
@@ -65,7 +90,6 @@ export default function CardImage (props) {
             </Animated.View>
           );
     } else {
-
         return (
         <AnimatedCachedImage
             style={[{justifyContent: 'center', alignItems: 'center'}, props.style, { opacity: cardOpacity} ]}
@@ -74,3 +98,5 @@ export default function CardImage (props) {
         />);
     }
 }
+
+export default CardImage;
