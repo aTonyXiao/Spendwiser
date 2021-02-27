@@ -36,7 +36,8 @@ export function YourCards({navigation}) {
     }
 
     return (
-        <SafeAreaView style={mainStyles.container}>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.bodyContainer}>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -101,6 +102,7 @@ export function YourCards({navigation}) {
                     })}
                 </View>
             </ScrollView>
+            </View>
 
             <Footer navigation={navigation} />
         </SafeAreaView>
@@ -112,8 +114,14 @@ const styles = StyleSheet.create({
     container : {
         flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center'
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
+    bodyContainer: {
+        justifyContent: 'center',
+        // alignContent: 'center',
+        alignItems: 'center'
     },
     scrollView: {
         width: "95%"
