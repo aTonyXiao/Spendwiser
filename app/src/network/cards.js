@@ -77,6 +77,30 @@ class Cards {
         })
     }
 
+
+    /**
+     * Adds JSON data with card data to the database
+     * 
+     * @param {JSON} json - the JSON data with the 'cards' element
+     */
+    addJsonToDatabase(json) {
+        Object.entries(json.cards).forEach(([index, card]) => {
+            let date = new Date();
+            console.log(date.toUTCString());
+            appBackend.dbAdd("cards", { 
+                name: card.name, 
+                image: card.image,
+                benefits: card.benefits,
+                rewardType: card.rewardType,
+                rewards: card.rewards, 
+                url: card.url,
+                dateAdded : date.toUTCString()
+            }, (id) => {
+                console.log('added card to database with id: ' + id);
+            })
+        });
+    }
+
     /**
      * Gets all the card names in the database in mapping to card id
      * @param {function} callback - function to be invoked on resulting mapping
