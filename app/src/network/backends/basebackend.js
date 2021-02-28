@@ -88,13 +88,14 @@ class BaseBackend {
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
      * @param {JSON} data - The data for the document
+     * @param {boolean} merge - Whether to merge the new data with the current document's data
      *
      * @example
      * appBackend.dbSet("experimental.exp2", {
      *     hello: "what"
      * });
      */
-    dbSet (location, data) {}
+    dbSet (location, data, merge = false) {}
 
     /**
      * This function adds a new 'document' to a 'collection'
