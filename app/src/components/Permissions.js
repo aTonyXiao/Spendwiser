@@ -15,7 +15,6 @@ export function AppPermissions() {
 
     return (
         <View>
-            <Camera />
         </View>
     );
 }

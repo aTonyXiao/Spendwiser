@@ -2,14 +2,22 @@ import React from 'react';
 import { View, Button, Alert } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
-import * as Permissions from 'expo-permissions';
 
 export function Settings(props) { 
     return(
         <View style={mainStyles.container}>
             <Button
                 title="Tell a Friend!"
-                // onPress={() => navigation.navigate('Login')}
+                onPress={() => {
+                    Alert.alert(
+                        'Tell A Friend About Us!',
+                        'Find a friend near you (use whatever transportation means are necessary) and tell them all about us. Thank you.',
+                        [
+                            { text: "OK" }
+                        ],
+                        { cancelable: false }
+                    );
+                }}
             ></Button>
             <Button
                 title="Notifications"
@@ -19,7 +27,7 @@ export function Settings(props) {
             ></Button>
             <Button
                 title="Privacy"
-                // onPress={() => navigation.navigate('CreateAccount')}
+                onPress={() => props.navigation.navigate('PrivacyPolicy')}
             ></Button>
             <Button
                 title="Account"
