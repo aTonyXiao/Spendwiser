@@ -321,6 +321,8 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Resets the user's password.
+     * @param {string} email - email of the user's account
+     * @param {function} return_func - callback function on success and failure
      */
     resetPassword(email, return_func) {
         var auth = firebase.auth();
