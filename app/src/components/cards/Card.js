@@ -3,27 +3,9 @@ import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import CardImage from './CardImage';
-const styles = StyleSheet.create({
-    scrollView: {
-        width: "95%"
-    },
-    card: {
-        resizeMode: "contain",
-        width: "100%",
-        height: 230, // hard coded for now
-        marginBottom: 10
-    }, 
-    cardTitle: {
-        textAlign: 'center',
-        marginTop: 10,
-        marginBottom: 0,
-        fontSize: 20 
-    }
-});
 
 export class Card extends React.Component {
     constructor(props) { 
-        console.log("In the Card constructor...")
         super(props);
 
         var cardInformation = props.props.card;
@@ -35,6 +17,7 @@ export class Card extends React.Component {
             cardId: cardInformation.cardId,
             navigation: props.props.navigation,
             docId: cardInformation.docId,
+            storeInformation: props.props.storeInformation
         }
 
         cards.getCardImageURL(this.state.cardId).then((url) => {
@@ -50,10 +33,10 @@ export class Card extends React.Component {
         this.state.navigation.navigate('CardInfo', {
             cardId: this.state.cardId,
             docId: this.state.docId,
+            storeInformation: this.state.storeInformation,
             img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
         })
     }
-
 
     render () {
         return (
@@ -71,3 +54,21 @@ export class Card extends React.Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    scrollView: {
+        width: "95%"
+    },
+    card: {
+        resizeMode: "contain",
+        width: "100%",
+        height: 230, // hard coded for now
+        marginBottom: 10
+    }, 
+    cardTitle: {
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 0,
+        fontSize: 20 
+    }
+});

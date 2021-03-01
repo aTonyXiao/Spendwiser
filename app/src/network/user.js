@@ -1,3 +1,4 @@
+import { app } from 'firebase';
 import { appBackend } from './backend';
 
 /**
@@ -53,11 +54,23 @@ class userClass {
 
     /**
      *  Deletes a card from the user's database 
-     * @param {*} userId - current user id
-     * @param {*} cardId - card id they want to delete
+     * @param {string} userId - current user id
+     * @param {string} cardId - card id to delete
+     * @param {string} docId - document id of card to delete
+     * 
+     * @example
+     * user.deleteCard(userId, cardId, docId);
      */
-    deleteCard(userId, cardId) { 
-        appBackend.dbDelete("users." + userId + ".cards." + cardId);
+    deleteCard(userId, cardId, docId) { 
+        appBackend.dbDelete("users." + userId + ".cards." + docId);
+
+        appBackend.dbGetSubCollections("users." + userId + ".transactions", (transactions) => { 
+            for (let i=0 ; i< transactions.length ; i++ ) { 
+                if (transactions[i].cardId == cardId) { 
+                    appBackend.dbDelete("users." + userId + ".transactions." + transactions[i].docId);
+                }
+            }
+        })
     }
 
     // TODO - needs date added?
@@ -87,8 +100,8 @@ class userClass {
      */
     saveTransactionToUser(userId, cardId, storeInfo, amountSpent) {
         timestamp = appBackend.getTimestamp();
-        console.log("saving transactions");
-        console.log("user id " + userId + "\n card id " + cardId + "\n store info " + storeInfo + "\n amountSpent " + amountSpent);
+        // console.log("saving transactions");
+        // console.log("user id " + userId + "\n card id " + cardId + "\n store info " + storeInfo + "\n amountSpent " + amountSpent);
         appBackend.dbAdd("users." + userId + ".transactions", {
             cardId: cardId,
             storeInfo: {
