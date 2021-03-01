@@ -16,6 +16,7 @@ import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
 import { AppPermissions } from './src/components/Permissions';
 import { PrivacyPolicy } from './src/components/PrivacyPolicy';
+import { Account } from './src/components/Account';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +80,10 @@ export default function App() {
         <Stack.Screen
           name="PrivacyPolicy"
           component={PrivacyPolicy}
+        />
+        <Stack.Screen
+          name="Account"
+          component={Account}
         />
       </Stack.Navigator>
     </NavigationContainer>

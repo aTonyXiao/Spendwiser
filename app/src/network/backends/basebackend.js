@@ -235,6 +235,22 @@ class BaseBackend {
      * returns a user id associated with the logged in user
      */
     getUserID() {}
+
+    /** 
+     * @typedef {Object} UserInfo
+     * @property {string} name - The name of the signed-in user
+     * @property {string} email - The email of the signed-in user
+     * @property {boolean} emailVerified - True if the email has been verified, false if not
+     * @property {string} lastLogin - Timestamp of the last time this user has logged in
+     * @property {?string} photoURL - URL of a profile photo, if there is one
+     */
+
+    /**
+     * Gets all useful information about a signed in user.
+     * 
+     * @return {UserInfo} userInfo 
+     */
+    getUserInfo() {}
 }
 
 export default BaseBackend;

@@ -32,7 +32,7 @@ export function Settings(props) {
             ></Button>
             <Button
                 title="Account"
-                // onPress={() => navigation.navigate('CreateAccount')}
+                onPress={() => props.navigation.navigate('Account')}
             ></Button>
             <Button
                 title="Help"

@@ -380,6 +380,21 @@ class FirebaseBackend extends BaseBackend {
         console.log("HIII");
         return firebase.firestore.Timestamp.now();
     }
+
+    /**
+     * 
+     */
+    getUserInfo() {
+        let userData = firebase.auth().currentUser;
+
+        return {
+            name: userData.displayName,
+            email: userData.email,
+            emailVerified: userData.emailVerified,
+            lastLogin: userData.lastLogin,
+            photoURL: userData.photoURL,
+        }
+    }
 }
 
 export default FirebaseBackend;
