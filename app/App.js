@@ -71,6 +71,7 @@ export default function App() {
         <Stack.Screen
           name="AddCardDB"
           component={AddCardDB}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Permissions"

@@ -51,7 +51,8 @@ class RecommendCard {
         user.saveTransactionToUser(
             userId,
             recCard.recCardId,
-            {storeName: storeInfo["label"],
+            {
+                storeName: storeInfo["label"],
                 address: storeInfo["vicinity"],
                 storeType: storeInfo["storeType"]
             },

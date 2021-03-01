@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
@@ -12,7 +12,8 @@ export function AddCardDB({navigation}) {
     const [query, setQuery] = useState("");
     const [cardMap, setCardMap] = useState(null);
     const [hasConstructed, setHasConstructed] = useState(false);
-    const [cardNames, setCardNames] = useState([]);
+    const [originalCardNames, setOriginalCardNames] = useState([]);
+    const [filteredCardNames, setFilteredCardNames] = useState([]);
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
     const [hideResults, setHideResults] = React.useState(true);
 
@@ -24,7 +25,8 @@ export function AddCardDB({navigation}) {
             cards.getCardNames((mapping) => {
                 setCardMap(mapping);
                 if (cardMap != null) { 
-                    setCardNames(Object.keys(cardMap));
+                    setOriginalCardNames(Object.keys(cardMap));
+                    setFilteredCardNames(Object.keys(cardMap));
                 }
                 setHasConstructed(true);
             });
@@ -48,6 +50,15 @@ export function AddCardDB({navigation}) {
         }
     }
 
+    filterData = () => { 
+        if (query == "") { 
+            setFilteredCardNames(originalCardNames);
+        }
+
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        setFilteredCardNames(originalCardNames.filter(cardName => cardName.search(regex) >= 0));
+    }
+
     return (
         <View style={styles.container}>
             <Text style={mainStyles.title}>Search For a Card</Text>
@@ -57,11 +68,10 @@ export function AddCardDB({navigation}) {
                 <Text style={styles.errorText}>Please input a query into the search bar</Text>
             }
             <View style={styles.autocompleteContainer}>
-                {/* TODO add filter for items to render */}
                 <Autocomplete
                     inputContainerStyle={styles.autocompleteTextInput}
                     listStyle={styles.autocompleteList}
-                    data={cardNames}
+                    data={filteredCardNames}
                     hideResults={hideResults}
                     defaultValue={query}
                     onChangeText={text => { 
@@ -71,6 +81,7 @@ export function AddCardDB({navigation}) {
                             setHideResults(true);
                         }
                         setQuery(text);
+                        filterData();
                     }}
                     renderItem={({ item, i }) => (
                         <TouchableOpacity onPress={() => setQuery(item)}>
