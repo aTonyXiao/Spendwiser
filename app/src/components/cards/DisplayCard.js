@@ -24,7 +24,6 @@ export function DisplayCard({route, navigation}) {
             return;
         } else { 
             cards.getCardName(cardId).then((name) => { 
-                console.log(name);
                 setCardName(name);
             });
     
@@ -59,18 +58,17 @@ export function DisplayCard({route, navigation}) {
     };
 
     deleteCard = () => {
-        console.log("deleteing card");
         user.deleteCard(userId, docId);
         navigation.navigate('YourCards');
     }
 
     addTransaction = () => {
-        // console.log("adding transaction")
+        console.log("adding transaction");
         // user.addTransaction()
     }
 
     addReward = () => { 
-
+        console.log("adding reward");
     }
 
     return (
@@ -114,7 +112,6 @@ export function DisplayCard({route, navigation}) {
                 {
                     displayRewards && 
                     rewards.map((reward, i) => {
-                        console.log(reward);
                         var category = reward[0];
                         var amountCents = reward[1]; 
                         return (

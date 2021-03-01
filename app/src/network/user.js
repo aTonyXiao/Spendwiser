@@ -60,10 +60,14 @@ class userClass {
         appBackend.dbDelete("users." + userId + ".cards." + cardId);
     }
 
-    /** 
-     * 
-     *
-     */ 
+    // TODO - needs date added?
+    /**
+     * Saves a card to a user
+     * @param {string} userId - user id to save card to
+     * @param {*} cardId - card id to save reference to
+     * @param {*} transactions - should be null when saving initial card to user
+     * @param {*} diff  - should be null when saving initial card to user
+     */
     saveCardToUser(userId, cardId, transactions, diff) { 
         appBackend.dbAdd("users." + userId + ".cards", {
             cardId: cardId, 
@@ -72,10 +76,6 @@ class userClass {
         }, (id) => { 
             console.log("successfully saved card to user");
         })
-    }
-
-    updateUserCard(cardId, amountSpent, diff) { 
-        // TODO
     }
 
     /**

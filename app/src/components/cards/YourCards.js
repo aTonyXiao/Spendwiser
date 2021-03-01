@@ -101,10 +101,13 @@ export function YourCards({navigation}) {
                             return <Card key={i} props={props} />
                         })}
                     </View>
+
+                    {/* Below is empty height at bottom of scrollview becuase absolute footer cuts it off */}
+                    <View style={{height:100}}></View>
                 </ScrollView>
             </View>
 
-            <View style={{marginBottom: 15}}>
+            <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
         </SafeAreaView>
@@ -158,5 +161,13 @@ const styles = StyleSheet.create({
         fontSize: 24, 
         color: 'white',
         margin: 10
+    },
+    footerContainer: { 
+        width: '100%',
+        backgroundColor: 'white',
+        position: 'absolute', 
+        bottom: 0, 
+        paddingBottom: 15,
+        marginTop: 0
     }
 });
