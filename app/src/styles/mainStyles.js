@@ -13,7 +13,14 @@ const mainStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     right: 1
-  }
+  },
+
+  large_title : { 
+      fontSize: 40,
+      color: '#28b573',
+      position: 'absolute',
+      top: 70
+  },
 });
 
 export default mainStyles;

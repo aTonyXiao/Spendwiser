@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Button, Alert } from 'react-native';
+import { View, Button, Alert, Text } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
 
 export function Settings(props) { 
     return(
         <View style={mainStyles.container}>
+            <Text style={mainStyles.large_title}>SpendWiser</Text>
             <Button
                 title="Tell a Friend!"
                 onPress={() => {
