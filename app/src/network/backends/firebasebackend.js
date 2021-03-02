@@ -3,15 +3,15 @@ import 'expo-firestore-offline-persistence' // hacky offline persistence for exp
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import BaseBackend from './basebackend';
-import * as Facebook from 'expo-facebook';
-import * as Google from 'expo-google-app-auth'
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 
 // Internal saved state of wether a user is logged in or not
 let globalUserSignedIn = false;
 
-// extract the database location from the string
+/**
+ * Extract the database location from the string
+ */
 function getDatabaseLocation(database, location) {
     let locationList = location.split(".");
     let databaseLocation = database;
@@ -25,8 +25,10 @@ function getDatabaseLocation(database, location) {
     return databaseLocation;
 }
 
-// filter the databse collection depending on the given conditions
-// each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
+/** 
+ * Filter the databse collection depending on the given conditions
+ * each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
+ */ 
 function filterDatabaseCollection(collection, conditions) {
     let filteredCollection = collection;
     for (let i = 0; i < conditions.length; i++) {
@@ -91,7 +93,6 @@ class FirebaseBackend extends BaseBackend {
      * This function allows the backend to keep a local copy of the database data it actively uses
      * 
      * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)
-     * 
      */
     enableDatabaseCaching (cacheSize = -1) {
         try {
@@ -180,7 +181,7 @@ class FirebaseBackend extends BaseBackend {
     }
 
     /** 
-     *  Function returns checks if a document exists. 
+     * Function returns checks if a document exists. 
      * 
      * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
      * 
@@ -210,16 +211,16 @@ class FirebaseBackend extends BaseBackend {
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
      * @param {JSON} data - The data for the new document
+     * @param {boolean} merge - Whether to merge the new data with the current document's data
      *
      * @example
-     *   appBackend.dbSet("experimental.exp2", {
-     *      hello: "what"
-     *   });
-     *
+     * appBackend.dbSet("experimental.exp2", {
+     *     hello: "what"
+     * });
      */
-    dbSet (location, data) {
+    dbSet (location, data, merge = false) {
         let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.set(data).catch((err) => {
+        databaseLocation.set(data, {merge: merge}).catch((err) => {
             console.log(err);
         });
     }
@@ -233,12 +234,11 @@ class FirebaseBackend extends BaseBackend {
      * @param {function} callback - Function that will be invoked to give the caller the new collection ID
      *
      * @example
-     *   appBackend.dbAdd("experimental.exp2.experimental2", {
-     *      hello: "what"
-     *   }, (id) => {
-     *      console.log(id);
-     *   });
-     *
+     * appBackend.dbAdd("experimental.exp2.experimental2", {
+     *     hello: "what"
+     * }, (id) => {
+     *     console.log(id);
+     * });
      */
     dbAdd (location, data, callback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
@@ -252,7 +252,8 @@ class FirebaseBackend extends BaseBackend {
     /**
      * Deletes a document at the given location
      * NOTE: this won't delete subcollections
-     * @param {string} location - the document location to delete
+     * 
+     * @param {string} location - The document location to delete
      * 
      * @example
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
@@ -264,11 +265,11 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * User sign up for an account using email and password
+     * Reference: https://firebase.google.com/docs/auth/web/password-auth
      * 
      * @param {string} email - a (TODO: valid?) email of a 
      * @param {string} password - a (TODO: relatively complex?) password
-     * 
-     * https://firebase.google.com/docs/auth/web/password-auth
+     * @param {function} error_func - called when there is an error during sign in
      */
     signUp(email, password, error_func) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -285,8 +286,10 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Sign in to an existing user account
+     * 
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
+     * @param {function} error_func - called when there is an error during sign in
      */
     signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
@@ -319,6 +322,9 @@ class FirebaseBackend extends BaseBackend {
         });  
     }
 
+    /**
+     * Get the login providers that are implemented
+     */
     getLoginProviders() {
         return {
             google: new GoogleLogin(),
@@ -328,6 +334,7 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Resets the user's password.
+     * 
      * @param {string} email - email of the user's account
      * @param {function} return_func - callback function on success and failure
      */
@@ -359,6 +366,7 @@ class FirebaseBackend extends BaseBackend {
     /**
      * Calls the supplied function if there is a change in the user's login status.
      * I.E. if a user logs in or logs out the function will be called
+     * 
      * @param {requestCallback} callback - The function to callback when a user's
      * state changes
      */
@@ -367,7 +375,7 @@ class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * returns a user id associated with the logged in user
+     * Returns a user id associated with the logged in user
      */
     getUserID() {
         let user = firebase.auth().currentUser;
@@ -382,9 +390,10 @@ class FirebaseBackend extends BaseBackend {
         return null;
     }
 
-    // get timestamp from firestore function
+    /**
+     * Get the current Timestamp
+     */
     getTimestamp() {
-        console.log("HIII");
         return firebase.firestore.Timestamp.now();
     }
 }
