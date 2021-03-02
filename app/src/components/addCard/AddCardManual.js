@@ -99,8 +99,8 @@ export function AddCardManual({navigation}) {
                 <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
 
                 <View style={styles.addCardContainer}>
-                    <TouchableOpacity style={styles.addCardButton}>
-                        <Text style={styles.addCardText}onPress={addCard}>Add this card</Text>
+                    <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
+                        <Text style={styles.addCardText}>Add this card</Text>
                     </TouchableOpacity>
                 </View>
             </View>
