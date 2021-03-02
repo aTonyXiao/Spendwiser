@@ -47,7 +47,7 @@ class RecommendCard {
             });
         }
         myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
-        console.log(myCards);
+        // console.log(myCards);
         callback(myCards);
     }
 

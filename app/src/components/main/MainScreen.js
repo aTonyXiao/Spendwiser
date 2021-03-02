@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Modal, StatusBar } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -8,9 +8,16 @@ import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
 import { Footer } from './Footer';
 import { user } from '../../network/user';
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+const itemWidth = Math.round(width * 0.7);
+const slideHeight = Math.round(height * 0.3);
+const itemHorizontalMargin = Math.round(width / 50);
+const entryBorderRadius = 8;
 
 export function MainScreen({navigation}) {
     const [errorMsg, setErrorMsg] = useState(null);
@@ -29,7 +36,9 @@ export function MainScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCard, setRecCard] = useState(null);
-    var width = Dimensions.get('window').width;
+    const [recCards, setRecCards] = useState(null);
+    const [recIdx, setRecIdx] = useState(0);
+    const ref = useRef(null);
     const userId = user.getUserId();
     const [manualModal, setManualModal] = useState(false);
       
@@ -45,12 +54,12 @@ export function MainScreen({navigation}) {
         setCurStoreKey(0);
     }
 
-
-
     function getRecCardFromDB(myRankedCards) {
         // console.log("Finally ");
         // console.log(myRankedCards);
         setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
+        setRecCards(myRankedCards)
+        console.log(myRankedCards)
     }
 
     function changeRecCard(value, key) {
@@ -144,6 +153,24 @@ export function MainScreen({navigation}) {
         })();
     }, []);
     
+    const renderItem = useCallback(({ item, index }) => (
+        <TouchableOpacity
+              activeOpacity={1}
+              style={styles.slideInnerContainer}
+              onPress={() => { console.log(`Pressed card ${item.cardId}`)}}
+              >
+            <View style={styles.imageContainer}>
+                <Image source = {{uri: item.cardImg}}
+                    style = {{ 
+                        width: width * .8,  //its same to '20%' of device width
+                        aspectRatio: 1.5, // <-- this
+                        resizeMode: 'contain', //optional
+                    }}
+                />
+            </View>
+        </TouchableOpacity>
+      ), []);
+
     return (
         <SafeAreaView style={styles.screen}>
             {/* Modal */}
@@ -311,20 +338,57 @@ export function MainScreen({navigation}) {
 
             {/* Recommended Card */}
             <View style={styles.cardContainer}>
-                <Text style={{fontSize: 17}}>Your Recommended Card</Text>
-                <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
+                <Text style={{fontSize: 17, paddingTop: 30}}>Your Recommended Card</Text>
+                {recCards == null ?
+                    <Image source = {require("../../../assets/load.jpg")}
+                        style = {{ 
+                            width: width * .8,  //its same to '20%' of device width
+                            aspectRatio: 1.5, // <-- this
+                            resizeMode: 'contain', //optional
+                        }}
+                    />
+                    :
+                    <View>
+                        <Carousel
+                            layout={"default"}
+                            ref={ref}
+                            data={recCards}
+                            sliderWidth={width}
+                            itemWidth={itemWidth}
+                            renderItem={renderItem}
+                            inactiveSlideScale={0.7}
+                            inactiveSlideOpacity={0.7}
+                            containerCustomStyle={styles.slider}
+                            contentContainerCustomStyle={styles.sliderContentContainer}
+                            onSnapToItem={(index) => setRecIdx(index)}
+                        />
+                        <Pagination
+                            dotsLength={recCards.length}
+                            activeDotIndex={recIdx}
+                            dotColor={"green"}
+                            containerStyle={{paddingVertical:0}}
+                            dotContainerStyle={{marginHorizontal:3}}
+                            dotStyle={styles.paginationDot}
+                            inactiveDotColor={"black"}
+                            inactiveDotOpacity={0.4}
+                            inactiveDotScale={0.7}
+                        />
+                    </View>
+                }
+                {/* <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
                     style = {{ 
                         width: width * .8,  //its same to '20%' of device width
                         aspectRatio: 1.5, // <-- this
                         resizeMode: 'contain', //optional
                     }}
-                />
+                /> */}
             </View>
             <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
         </SafeAreaView>
         );
     }
     
+
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
@@ -343,18 +407,35 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         flex: 5,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    card_spending: {
-        padding: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+    slider: {
+        marginTop: 5,
+        flexGrow: 0,
+        overflow: 'visible', // for custom animations
     },
-    amount_field: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        flex: 1
+    sliderContentContainer: {
+        paddingVertical: 0, // for custom animation
+    },
+    paginationDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginHorizontal: 1
+    },
+    slideInnerContainer: {
+        width: itemWidth,
+        height: slideHeight,
+        alignItems: 'center',
+        paddingHorizontal: itemHorizontalMargin,
+        // paddingBottom: 18 // needed for shadow
+    },
+    imageContainer: {
+        flex: 1,
+        backgroundColor: 'white',
+        borderTopLeftRadius: entryBorderRadius,
+        borderTopRightRadius: entryBorderRadius,
     },
 });
 
