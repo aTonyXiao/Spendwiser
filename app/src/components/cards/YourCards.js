@@ -1,16 +1,16 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Modal, TouchableOpacity } from 'react-native';
-import mainStyles from '../../styles/mainStyles';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../main/Footer';
 
-export function YourCards({navigation}) { 
+export function YourCards({route, navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
+    const storeInformation = route.params.storeInformation;
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -19,8 +19,7 @@ export function YourCards({navigation}) {
         return unsubscribe;
     }, [navigation]);
 
-
-    function loadCards(userId) {
+    loadCards = () => {
         user.getCards(userId).then((cards) => {
             setCards(cards);
         })
@@ -96,15 +95,19 @@ export function YourCards({navigation}) {
                         {cards.map((card, i) => {
                             var props = {
                                 navigation: navigation,
-                                card: card
+                                card: card,
+                                storeInformation: storeInformation
                             }
                             return <Card key={i} props={props} />
                         })}
                     </View>
+
+                    {/* Below is empty height at bottom of scrollview becuase absolute footer cuts it off */}
+                    <View style={{height:100}}></View>
                 </ScrollView>
             </View>
 
-            <View style={{marginBottom: 15}}>
+            <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
         </SafeAreaView>
@@ -158,5 +161,13 @@ const styles = StyleSheet.create({
         fontSize: 24, 
         color: 'white',
         margin: 10
+    },
+    footerContainer: { 
+        width: '100%',
+        backgroundColor: 'white',
+        position: 'absolute', 
+        bottom: 0, 
+        paddingBottom: 15,
+        marginTop: 0
     }
 });
