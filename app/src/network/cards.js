@@ -50,10 +50,7 @@ class Cards {
             })
         })
     }
-    getCardRewards(cardId) { 
-        // TODO
 
-    }
     /**
      * Adds a card to the the cards database
      * @param {string} name - card name

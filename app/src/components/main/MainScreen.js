@@ -189,7 +189,7 @@ export function MainScreen({navigation}) {
                                         var storeIsSelected = (storeName == curStore);
                                         return (
                                             <TouchableOpacity 
-                                                key={store}
+                                                key={i}
                                                 onPress={()=> {
                                                     setRecCard(null);
                                                     changeRecCard(storeName, i);
@@ -320,7 +320,7 @@ export function MainScreen({navigation}) {
                         }}
                     />
                 </View>
-                <Footer navigation={navigation}/>
+                <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
             </ScrollView>
         </SafeAreaView>
         );

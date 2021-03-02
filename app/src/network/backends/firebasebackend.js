@@ -249,10 +249,17 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Deletes a document at the given location
+     * NOTE: this won't delete subcollections
+     * @param {string} location - the document location to delete
+     * 
+     * @example
+     * appBackend.dbDelete("users." + userId + ".cards." + docId);
+     */
     dbDelete(location) { 
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
-        // TODO this won't delete subcollections
     }
 
     /**
@@ -321,6 +328,8 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Resets the user's password.
+     * @param {string} email - email of the user's account
+     * @param {function} return_func - callback function on success and failure
      */
     resetPassword(email, return_func) {
         var auth = firebase.auth();

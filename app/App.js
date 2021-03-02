@@ -14,6 +14,8 @@ import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
+import { AppPermissions } from './src/components/Permissions';
+import { PrivacyPolicy } from './src/components/PrivacyPolicy';
 
 const Stack = createStackNavigator();
 
@@ -69,6 +71,15 @@ export default function App() {
         <Stack.Screen
           name="AddCardDB"
           component={AddCardDB}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Permissions"
+          component={AppPermissions}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
         />
       </Stack.Navigator>
     </NavigationContainer>

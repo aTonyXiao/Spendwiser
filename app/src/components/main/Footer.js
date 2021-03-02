@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -6,6 +6,8 @@ export function Footer(props) {
     const navigation = props.navigation;
     const {index, routes} = navigation.dangerouslyGetState();
     const page = routes[index].name;
+
+    const storeInformation = props.storeInformation;
 
     return(
         <View style={styles.footerContainer}>
@@ -31,7 +33,11 @@ export function Footer(props) {
             }
             {
                 (page == 'YourCards') &&
-                <TouchableOpacity onPress={() => navigation.navigate('YourCards')}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('YourCards', { 
+                        storeInformation: storeInformation
+                    })}
+                >
                     <Ionicons
                         name="card"
                         color="black"
@@ -41,7 +47,11 @@ export function Footer(props) {
             }
             {
                 (page != 'YourCards') &&
-                <TouchableOpacity onPress={() => navigation.navigate('YourCards')}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('YourCards', { 
+                        storeInformation: storeInformation
+                    })}
+                >
                     <Ionicons
                         name="card-outline"
                         color="black"
@@ -77,6 +87,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        marginTop: 20
+        marginTop: 20,
     }
 })

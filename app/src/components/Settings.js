@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View, Button, Alert } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
 
@@ -8,15 +8,26 @@ export function Settings(props) {
         <View style={mainStyles.container}>
             <Button
                 title="Tell a Friend!"
-                // onPress={() => navigation.navigate('Login')}
+                onPress={() => {
+                    Alert.alert(
+                        'Tell A Friend About Us!',
+                        'Find a friend near you (use whatever transportation means are necessary) and tell them all about us. Thank you.',
+                        [
+                            { text: "OK" }
+                        ],
+                        { cancelable: false }
+                    );
+                }}
             ></Button>
             <Button
                 title="Notifications"
-                // onPress={() => navigation.navigate('CreateAccount')}
+                onPress={() => {
+                    props.navigation.navigate('Permissions');
+                }}
             ></Button>
             <Button
                 title="Privacy"
-                // onPress={() => navigation.navigate('CreateAccount')}
+                onPress={() => props.navigation.navigate('PrivacyPolicy')}
             ></Button>
             <Button
                 title="Account"
@@ -33,31 +44,23 @@ export function Settings(props) {
             <Button
                 title="Reset Password"
                 onPress={() => {
-                    appBackend.resetPassword(null, (error) => {
+                    appBackend.resetPassword(null, (message) => {
                         Alert.alert(
-                            "Unable to Reset Password",
-                            error,
+                            "",
+                            message,
                             [
                                 { text: "OK", onPress: () => console.log("OK Pressed") }
                             ],
                             { cancelable: false }
                         );
                     });
-                    Alert.alert(
-                        "Email Sent",
-                        "An email has been sent to you to reset password",
-                        [
-                            { text: "OK", onPress: () => console.log("OK Pressed") }
-                        ],
-                        { cancelable: false }
-                    );
                 }}
             ></Button>
             <Button
                 title="Logout"
                 onPress={() => {
                     appBackend.signOut();
-                    props.navigation.navigate('Home');
+                    props.navigation.navigate('Login');
                 }}
             ></Button>
         </View>
