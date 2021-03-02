@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Modal, StatusBar } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { TextInput } from 'react-native-gesture-handler';
@@ -44,6 +44,8 @@ export function MainScreen({navigation}) {
         setCurStore("Offline Mode");
         setCurStoreKey(0);
     }
+
+
 
     function getRecCardFromDB(myRankedCards) {
         // console.log("Finally ");
@@ -156,7 +158,7 @@ export function MainScreen({navigation}) {
 
                         {/* Modal header */}
                         <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity onPress={() => setModalVisible(false)}>
+                            <TouchableOpacity onPress={() => {setModalVisible(false); setManualModal(false)}}>
                                 <Ionicons
                                     name="close-circle-outline"
                                     color="black"
@@ -178,7 +180,6 @@ export function MainScreen({navigation}) {
                         </View>
 
                         {/* Modal body */}
-
                         {/* Pick from store list */}
                         {
                             !manualModal &&
@@ -270,58 +271,56 @@ export function MainScreen({navigation}) {
             </Modal>
 
             {/* Map */}
-            <ScrollView>
-                <View style={mapStyles.mapContainer}>
-                    <MapView 
-                        style={mapStyles.map}
-                        provider="google"
-                        region = {region}
-                    >
-                        <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
-                    </MapView>
-                </View>
-                {/* TODO decide if we want to keep refresh button or not */}
-                {/* <View style={{position: 'absolute', right: 5, top: 5}}>
-                    <Button
-                        color="green"
-                        title="Refresh"
-                        // onPress={() => setRegion(location.latitude, location.longitude)}
-                    ></Button>
-                </View> */}
+            <View style={mapStyles.mapContainer}>
+                <MapView 
+                    style={mapStyles.map}
+                    provider="google"
+                    region = {region}
+                >
+                    <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
+                </MapView>
+            </View>
+            {/* TODO decide if we want to keep refresh button or not */}
+            {/* <View style={{position: 'absolute', right: 5, top: 5}}>
+                <Button
+                    color="green"
+                    title="Refresh"
+                    // onPress={() => setRegion(location.latitude, location.longitude)}
+                ></Button>
+            </View> */}
 
-                {/* Location text */}
-                <View style={mapStyles.textContainer}>
-                    <View style={mapStyles.locationTextContainer}>
-                        <Text>{curStore}</Text>
-                        <Text>
-                            {isLoading ? "" : storeArr[curStoreKey].vicinity}
-                        </Text>
-                        <Text>
-                            {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
-                        </Text>
-                    </View>
-
-                    <TouchableOpacity 
-                        style={mapStyles.changeLocationButton}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <Text style={mapStyles.changeLocationButtonText}>Change Location</Text>
-                    </TouchableOpacity>
+            {/* Location text */}
+            <View style={mapStyles.textContainer}>
+                <View style={mapStyles.locationTextContainer}>
+                    <Text>{isLoading? "Loading" : curStore}</Text>
+                    <Text>
+                        {isLoading ? "" : storeArr[curStoreKey].vicinity}
+                    </Text>
+                    <Text>
+                        {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
+                    </Text>
                 </View>
 
-                {/* Recommended Card */}
-                <View style={styles.cardContainer}>
-                    <Text style={{fontSize: 17}}>Your Recommended Card</Text>
-                    <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
-                        style = {{ 
-                            width: width * .8,  //its same to '20%' of device width
-                            aspectRatio: 1.5, // <-- this
-                            resizeMode: 'contain', //optional
-                        }}
-                    />
-                </View>
-                <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
-            </ScrollView>
+                <TouchableOpacity 
+                    style={mapStyles.changeLocationButton}
+                    onPress={() => setModalVisible(true)}
+                >
+                    <Text style={mapStyles.changeLocationButtonText}>Change Location</Text>
+                </TouchableOpacity>
+            </View>
+
+            {/* Recommended Card */}
+            <View style={styles.cardContainer}>
+                <Text style={{fontSize: 17}}>Your Recommended Card</Text>
+                <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
+                    style = {{ 
+                        width: width * .8,  //its same to '20%' of device width
+                        aspectRatio: 1.5, // <-- this
+                        resizeMode: 'contain', //optional
+                    }}
+                />
+            </View>
+            <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
         </SafeAreaView>
         );
     }
@@ -330,7 +329,8 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         backgroundColor: 'white',
-        height: '100%'
+        height: '100%',
+        paddingTop: StatusBar.currentHeight
     },
     loc: {
         marginTop: 20,
@@ -361,11 +361,11 @@ const styles = StyleSheet.create({
 const mapStyles = StyleSheet.create({
     mapContainer: {
         alignItems: 'center',
-        margin: 5,
+        // margin: 5,
         marginBottom: 0
     },
     map: {
-        width: '90%',
+        width: '100%',
         height: Dimensions.get('window').height / 3,
     },
     textContainer : {
