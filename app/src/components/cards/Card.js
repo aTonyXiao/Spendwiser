@@ -1,5 +1,4 @@
 import React from 'react';
-import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import CardImage from './CardImage';
@@ -21,7 +20,7 @@ export class Card extends React.Component {
         }
 
         cards.getCardImageURL(this.state.cardId).then((url) => {
-            this.setState({cardImage: url, showDefault: false});
+            this.setState({cardImage: url, showDefault: url.length == 0});
         });
 
         cards.getCardName(this.state.cardId).then((cardName) => {
@@ -34,7 +33,7 @@ export class Card extends React.Component {
             cardId: this.state.cardId,
             docId: this.state.docId,
             storeInformation: this.state.storeInformation,
-            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
+            img: this.state.showDefault ? blankCard : { uri: this.state.cardImage },
         })
     }
 
@@ -47,7 +46,7 @@ export class Card extends React.Component {
                         style={[ styles.card ]}
                         source={this.state.cardImage}
                         overlay={this.state.name}
-                        default={this.showDefault}
+                        default={this.state.showDefault}
                     />
                 </TouchableOpacity>
             </View>
