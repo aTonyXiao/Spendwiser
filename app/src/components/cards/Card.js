@@ -1,70 +1,58 @@
 import React from 'react';
 import CachedImage from 'react-native-expo-cached-image';
 import { cards } from '../../network/cards';
-import { Text, View, StyleSheet, TouchableOpacity, Animated, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import CardImage from './CardImage';
 
-import sha1 from 'crypto-js/sha1';
+export class Card extends React.Component {
+    constructor(props) { 
+        super(props);
 
-function contrastRGB(string) {
-  let color = string.split(",");
-  let colorRGB = { r: parseInt(color[0].replaceAll("rgb(", "")), 
-                   g: parseInt(color[1]),
-                   b: parseInt(color[2])};
-  // use the color brightness algorithm: https://www.w3.org/WAI/ER/WD-AERT/#color-contrast
-  // [0, 255] range
-  let brightness =(colorRGB.r * 299 + colorRGB.g * 587 + colorRGB.b * 114) / 1000;
-  // return contrasting (white/black) color depending on the brightness
-  return brightness > 128 ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
-}
+        var cardInformation = props.props.card;
+        this.state = {
+            name: "",
+            cardImage: "Not an Empty String",
+            showDefault: true,
+            opacity: new Animated.Value(0),
+            cardId: cardInformation.cardId,
+            navigation: props.props.navigation,
+            docId: cardInformation.docId,
+            storeInformation: props.props.storeInformation
+        }
 
-function generateColor(string) {
-  let hashColor = sha1(string).toString().substring(0, 6);
-  let colorRGB = { r: parseInt(hashColor.substring(0, 2), 16),
-                   g: parseInt(hashColor.substring(2, 4), 16),
-                   b: parseInt(hashColor.substring(4, 6), 16)};
-  return "rgb(" + colorRGB.r + ", " + colorRGB.g + ", " + colorRGB.b + ")";
-}
+        cards.getCardImageURL(this.state.cardId).then((url) => {
+            this.setState({cardImage: url, showDefault: false});
+        });
 
-class ImageLoader extends React.Component {
-  state = {
-    opacity: new Animated.Value(0),
-  }
+        cards.getCardName(this.state.cardId).then((cardName) => {
+            this.setState({name: cardName});
+        });
+    }
 
-  onLoad = () => {
-    Animated.timing(this.state.opacity, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  }
+    onPress = () => { 
+        this.state.navigation.navigate('CardInfo', {
+            cardId: this.state.cardId,
+            docId: this.state.docId,
+            storeInformation: this.state.storeInformation,
+            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
+        })
+    }
 
-  render() {
-    return (
-      <Animated.View
-        style={[
-          {
-            opacity: this.state.opacity,
-            transform: [
-              {
-                scale: this.state.opacity.interpolate({
-                  inputRange: [0.25, 1],
-                  outputRange: [0.85, 1],
-                })
-              },
-            ],
-          },
-          this.props.style,
-        ]}
-      >
-        <ImageBackground onLoad={this.onLoad} 
-                         style={this.props.style} 
-                         source={this.props.source} 
-                         imageStyle={this.props.overlay.length == 0 ? {} : {tintColor: this.props.color}}>
-          <Text style={[{color: contrastRGB(this.props.color)}, styles.overlay]}>{this.props.overlay}</Text>
-        </ImageBackground>
-      </Animated.View>
-    );
-  }
+    render () {
+        return (
+            <View>
+                <Text style={styles.cardTitle}>{this.state.name}</Text>
+                <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
+                    <CardImage
+                        style={[ styles.card ]}
+                        source={this.state.cardImage}
+                        overlay={this.state.name}
+                        default={this.showDefault}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -75,86 +63,12 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
         width: "100%",
         height: 230, // hard coded for now
-        marginBottom: 10,
-        flexDirection: 'row'
+        marginBottom: 10
     }, 
     cardTitle: {
         textAlign: 'center',
         marginTop: 10,
         marginBottom: 0,
         fontSize: 20 
-    },
-    overlay: {
-      textAlign: 'right',
-      fontWeight: 'bold',
-      fontSize: 20,
-      alignSelf: 'center',
-      top: '-5%',
-      left: '53%',
-      flex: 0.6
     }
 });
-
-export class Card extends React.Component {
-    constructor(props) { 
-        super(props);
-
-        this.state = {
-            name: "",
-            cardImage:"",
-            showDefault: true,
-            opacity: new Animated.Value(0),
-        }
-
-        var cardInformation = props.props.card;
-        this.cardId = cardInformation.cardId;
-        this.navigation = props.props.navigation;
-        this.docId = cardInformation.docId;
-        cards.getCardImageURL(this.cardId).then((url) => {
-            this.setState({cardImage: url});
-            this.setState({showDefault: false}); 
-            console.log(url);
-        });
-
-        cards.getCardName(this.cardId).then((cardName) => {
-            this.setState({name: cardName});
-        });
-    }
-
-    onPress = () => { 
-        this.navigation.navigate('CardInfo', {
-            cardId: this.cardId,
-            docId: this.docId,
-            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
-        })
-    }
-
-    onLoad = () => {
-      Animated.timing(this.state.opacity, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
-    }
-
-    render () {
-        var image = this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage };
-        var overlay = this.state.showDefault ? this.state.name : "";
-
-        const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
-        return (
-            <View>
-                <Text style={styles.cardTitle}>{this.state.name}</Text>
-                <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <AnimatedCachedImage
-                        style={[ styles.card, { opacity: this.state.opacity }]}
-                        source={image}
-                        onLoad={() => this.onLoad()}
-                        overlay={overlay}
-                        color={generateColor(this.state.name)}
-                    />
-                </TouchableOpacity>
-            </View>
-        );
-    }
-}

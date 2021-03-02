@@ -9,11 +9,13 @@ import { CreateAccount } from './src/components/login/CreateAccount';
 import { Settings } from './src/components/Settings';
 import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
-import { MainScreen } from './src/components/MainScreen';
+import { MainScreen } from './src/components/main/MainScreen';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
+import { AppPermissions } from './src/components/Permissions';
+import { PrivacyPolicy } from './src/components/PrivacyPolicy';
 
 const Stack = createStackNavigator();
 
@@ -38,14 +40,17 @@ export default function App() {
         <Stack.Screen
           name="Main"
           component={MainScreen}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="YourCards"
           component={YourCards}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="CardInfo"
           component={DisplayCard}
+          options={{headerShown: false}}
         />
         <Stack.Screen
         name="Settings"
@@ -66,6 +71,15 @@ export default function App() {
         <Stack.Screen
           name="AddCardDB"
           component={AddCardDB}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Permissions"
+          component={AppPermissions}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
         />
       </Stack.Navigator>
     </NavigationContainer>

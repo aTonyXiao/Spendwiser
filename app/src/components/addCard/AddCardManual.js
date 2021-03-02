@@ -7,69 +7,6 @@ import { ManualRewardRow } from './ManualRewardRow';
 import mainStyles from '../../styles/mainStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-const styles = StyleSheet.create({
-    container : {
-        backgroundColor: 'white',
-        height: '100%'
-    },
-    rewardContainer: { 
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    rewardRow : {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    rewardText : { 
-        margin: 15,
-        width: '90%',
-        backgroundColor: '#F0F0F0',
-        borderRadius: 5,
-        marginTop: 8,
-        marginBottom: 8, 
-        justifyContent: 'center'
-    },
-    inputBox : {
-        margin: 15,
-        height: 40,
-        width: '90%',
-        borderColor: '#F0F0F0',
-        borderWidth: 1,
-        backgroundColor: '#F0F0F0',
-        borderRadius: 5,
-        marginTop: 8,
-        marginBottom: 8
-    },
-    inputTitle : { 
-        margin: 15,
-        marginBottom: 5,
-        fontSize: 18
-    },
-    plusIcon : {
-        margin: 9,
-        right: 32
-    }, 
-    addCardButton : {
-        textAlign: 'center',
-        backgroundColor: '#87CEFA',
-        margin: 15,
-        height: 40, 
-        borderRadius: 5,
-        width: '40%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    bottomContainer : {
-        zIndex: -1,
-    },
-    addCardContainer: {
-        alignItems: 'center',
-    }, 
-    addCardText : { 
-        color: 'white'
-    }
-});
-
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
     const inputUrl = React.createRef();
@@ -170,3 +107,66 @@ export function AddCardManual({navigation}) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container : {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    rewardContainer: { 
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    rewardRow : {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    rewardText : { 
+        margin: 15,
+        width: '90%',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8, 
+        justifyContent: 'center'
+    },
+    inputBox : {
+        margin: 15,
+        height: 40,
+        width: '90%',
+        borderColor: '#F0F0F0',
+        borderWidth: 1,
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
+    inputTitle : { 
+        margin: 15,
+        marginBottom: 5,
+        fontSize: 18
+    },
+    plusIcon : {
+        margin: 9,
+        right: 32
+    }, 
+    addCardButton : {
+        textAlign: 'center',
+        backgroundColor: '#87CEFA',
+        margin: 15,
+        height: 40, 
+        borderRadius: 5,
+        width: '40%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomContainer : {
+        zIndex: -1,
+    },
+    addCardContainer: {
+        alignItems: 'center',
+    }, 
+    addCardText : { 
+        color: 'white'
+    }
+});
