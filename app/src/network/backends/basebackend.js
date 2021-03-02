@@ -1,4 +1,4 @@
-// https://github.com/brix/crypto-js
+// ref: https://github.com/brix/crypto-js
 import aes from 'crypto-js/aes';
 import utf8 from 'crypto-js/enc-utf8';
 
@@ -83,6 +83,21 @@ class BaseBackend {
      */
     dbGetSubCollections(location, callback) {}
 
+    /** 
+     * Function returns checks if a document exists. 
+     * 
+     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
+     * 
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Called back when check is finished, parameter is set if exists or not
+     * 
+     * @example
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+     *     if (exists) console.log("Doc exists!");
+     * });
+    */
+   dbDoesDocExist(location, callback) {}
+
     /**
      * This function sets the data of a 'document'
      *
@@ -105,12 +120,11 @@ class BaseBackend {
      * @param {function} callback - Function that will be invoked to give the caller the new collection ID
      *
      * @example
-     *   appBackend.dbAdd("experimental.exp2.experimental2", {
-     *      hello: "what"
-     *   }, (id) => {
-     *      console.log(id);
-     *   });
-     *
+     * appBackend.dbAdd("experimental.exp2.experimental2", {
+     *     hello: "what"
+     * }, (id) => {
+     *     console.log(id);
+     * });
      */
     dbAdd (location, data, callback) {}
 
@@ -142,18 +156,19 @@ class BaseBackend {
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
      * @param {JSON} data - The data for the document
+     * @param {boolean} merge - Whether to merge the new data with the current document's data
      *
      * @example
      * appBackend.dbSet("experimental.exp2", {
      *     hello: "what"
      * });
      */
-    dbSetEncrypted (location, data) {
+    dbSetEncrypted (location, data, merge = false) {
         let newData = {};
         for (let key of Object.keys(data)) {
             newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
         }
-        this.dbSet(location, newData);
+        this.dbSet(location, newData, merge);
     }
 
     /**
@@ -188,17 +203,8 @@ class BaseBackend {
     signUp(username, password, error_func) {}
 
     /**
-      * Use facebook account to sign in
-      */
-    signInWithFacebook() {}
-
-    /**
-      * Use google account to sign in
-      */
-    signInWithGoogle() {}
-
-    /**
      * Sign in to an existing user account
+     * 
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      * @param {function} error_func - called when there is an error during sign in
@@ -210,10 +216,14 @@ class BaseBackend {
      */
     signOut() {}
 
+    /**
+     * Get the login providers that are implemented
+     */
     getLoginProviders() {}
     
     /**
       * Resets the user's password.
+      * 
       * @param {string} email - the email of the account to reset password
       * @param {function} error_func - called when there is an error duing password reset
       */
@@ -227,15 +237,23 @@ class BaseBackend {
     /**
      * Calls the supplied function if there is a change in the user's login status.
      * I.E. if a user logs in or logs out the function will be called
+     * 
      * @param {requestCallback} callback - The function to callback when a user's
      * state changes
      */
     onAuthStateChange(func) {}
 
     /**
-     * returns a user id associated with the logged in user
+     * Returns a user id associated with the logged in user
      */
     getUserID() {}
+
+    /**
+     * Get the current Timestamp
+     */
+    getTimestamp() {
+        return firebase.firestore.Timestamp.now();
+    }
 }
 
 export default BaseBackend;
