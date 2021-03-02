@@ -1,6 +1,7 @@
 import { appBackend } from './backend';
 
 class Cards { 
+
     /**
      * Gets the name of a card
      * @param {string} cardId 
@@ -62,13 +63,18 @@ class Cards {
         var date = new Date();
         return new Promise((resolve, reject) => { 
             appBackend.dbAdd("cards", { 
-                name: name, 
+                name: name,
+                image: "",
                 benefits: benefits,
+                rewardType: "Unknown",
                 rewards: rewards, 
                 url: url,
                 dateAdded : date.toUTCString()
             }, (id) => {
                 console.log('added card to database with id: ' + id);
+                appBackend.dbSet("cards." + id, { // need to set the cardId as well
+                    cardId: id
+                }, true);
                 resolve(id);
             })
         })
@@ -93,6 +99,9 @@ class Cards {
                 url: card.url,
                 dateAdded : date.toUTCString()
             }, (id) => {
+                appBackend.dbSet("cards." + id, {
+                    cardId: id
+                }, true);
                 console.log('added card to database with id: ' + id);
             })
         });

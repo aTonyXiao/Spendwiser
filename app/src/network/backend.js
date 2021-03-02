@@ -8,8 +8,10 @@ import FirebaseBackend from './backends/firebasebackend';
  */
 export var appBackend;
 
-// set the app backend to new instances of the supported types
-// modify this to add new supported backends
+/**
+ * Set the app backend to a new instance of a supported type.
+ * Modify this to add new supported backends
+ */
 function setAppBackend (type) {
     switch (type) {
         case "firebase":
@@ -22,11 +24,11 @@ function setAppBackend (type) {
 
 /**
  * Initializes the current backend to the given type denoted by a string.
+ * 
  * Currently supported backends:
  *   - 'firebase'
  * 
  * @param {string} type - The backend type to initialize
- * 
  */
 export function initializeAppBackend (type) {
     setAppBackend(type);
