@@ -51,7 +51,7 @@ export function AddCardManual({navigation}) {
         var name = inputName.current.state.text;
         var url = inputUrl.current.state.text;
 
-        cards.addCardToDatabase(name, null, rewards, url).then((cardId) => {
+        cards.addCardToDatabase(name, [], rewards, url).then((cardId) => {
             console.log("new card id: " + cardId);
             user.saveCardToUser(userId, cardId, null, null);
             navigation.navigate('YourCards');
