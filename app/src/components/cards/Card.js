@@ -33,7 +33,7 @@ export class Card extends React.Component {
             cardId: this.state.cardId,
             docId: this.state.docId,
             storeInformation: this.state.storeInformation,
-            img: this.state.showDefault ? blankCard : { uri: this.state.cardImage },
+            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
         })
     }
 
