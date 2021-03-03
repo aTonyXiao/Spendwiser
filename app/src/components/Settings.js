@@ -21,7 +21,7 @@ export function Settings(props) {
                 }}
             ></Button>
             <Button
-                title="Notifications"
+                title="Permissions"
                 onPress={() => {
                     props.navigation.navigate('Permissions');
                 }}
