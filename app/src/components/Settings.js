@@ -1,11 +1,18 @@
 import React from 'react';
-import { View, Button, Alert } from 'react-native';
+import { View, Button, Alert, Text } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
 
-export function Settings(props) { 
+/**
+ * Settings page that contains a plethora of navigations to different information and buttons
+ * like 'Permissions', 'Privacy', etc.
+ * 
+ * @param {*} props - Not currently used for anything
+ */
+let Settings = (props) => { 
     return(
         <View style={mainStyles.container}>
+            <Text style={mainStyles.large_title}>SpendWiser</Text>
             <Button
                 title="Tell a Friend!"
                 onPress={() => {
@@ -20,7 +27,7 @@ export function Settings(props) {
                 }}
             ></Button>
             <Button
-                title="Notifications"
+                title="Permissions"
                 onPress={() => {
                     props.navigation.navigate('Permissions');
                 }}
@@ -31,7 +38,7 @@ export function Settings(props) {
             ></Button>
             <Button
                 title="Account"
-                // onPress={() => navigation.navigate('CreateAccount')}
+                onPress={() => props.navigation.navigate('Account')}
             ></Button>
             <Button
                 title="Help"
@@ -66,3 +73,5 @@ export function Settings(props) {
         </View>
     );
 }
+
+export default { Settings };

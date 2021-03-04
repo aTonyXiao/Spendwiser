@@ -349,9 +349,9 @@ class FirebaseBackend extends BaseBackend {
         email = email.trim();
         
         auth.sendPasswordResetEmail(email).then(function() {
-            return_func("Success! An email has been sent");
+            return_func("Success! An email has been sent to reset your password");
         }).catch(function(error) {
-            return_func("Error! Invalid email address");
+            return_func("Error! Invalid email address, please input a valid email");
         });
         
     }
@@ -395,6 +395,21 @@ class FirebaseBackend extends BaseBackend {
      */
     getTimestamp() {
         return firebase.firestore.Timestamp.now();
+    }
+
+    /**
+     * 
+     */
+    getUserInfo() {
+        let userData = firebase.auth().currentUser;
+
+        return {
+            name: userData.displayName,
+            email: userData.email,
+            emailVerified: userData.emailVerified,
+            lastLogin: userData.lastLogin,
+            photoURL: userData.photoURL,
+        }
     }
 }
 
