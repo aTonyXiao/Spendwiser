@@ -63,7 +63,7 @@ export function AddCardManual({navigation}) {
             <Text style={mainStyles.title}>Add a Card Manually</Text>
 
             <Text style={styles.inputTitle}>Credit Card Name</Text>
-            <TextBox style={styles.inputBox}ref={inputName} placeholder={'your credit card title here '} />
+            <TextBox style={styles.inputBox} ref={inputName} placeholder={'your credit card title here '} />
 
             <Text style={styles.inputTitle}>Rewards</Text>    
             <View style={styles.rewardContainer}>
