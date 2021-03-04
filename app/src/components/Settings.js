@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Button, Alert, StyleSheet } from 'react-native';
+import { View, Alert, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
 import { Footer } from './util/Footer';
+import { Ionicons } from '@expo/vector-icons';
 
 export function Settings(props) { 
     const navigation = props.navigation;
 
     return(
         <View style={mainStyles.container}>
-            <Button
-                title="Tell a Friend!"
+            <TouchableOpacity
                 onPress={() => {
                     Alert.alert(
                         'Tell A Friend About Us!',
@@ -21,31 +21,78 @@ export function Settings(props) {
                         { cancelable: false }
                     );
                 }}
-            ></Button>
-            <Button
-                title="Notifications"
-                onPress={() => {
-                    props.navigation.navigate('Permissions');
-                }}
-            ></Button>
-            <Button
-                title="Privacy"
-                onPress={() => props.navigation.navigate('PrivacyPolicy')}
-            ></Button>
-            <Button
-                title="Account"
-                // onPress={() => navigation.navigate('CreateAccount')}
-            ></Button>
-            <Button
-                title="Help"
-                // onPress={() => navigation.navigate('CreateAccount')}
-            ></Button>
-            <Button
-                title="About"
-                // onPress={() => navigation.navigate('CreateAccount')}
-            ></Button>
-            <Button
-                title="Reset Password"
+                style={styles.rowContainerTop}
+            >
+                <Text>Tell a Friend!</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={() => { props.navigation.navigate('Permissions') }}
+                style={styles.rowContainer}
+            >
+                <Text>Notifications</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={() => { props.navigation.navigate('PrivacyPolicy') }}
+                style={styles.rowContainer}
+            >
+                <Text>Privacy</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                // TODO
+                // onPress={() => { props.navigation.navigate('Permissions') }} 
+                style={styles.rowContainer}
+            >
+                <Text>Notifications</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                // TODO 
+                // onPress={}
+                style={styles.rowContainer}
+            >
+                <Text>Account</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+            <TouchableOpacity
+                // TODO 
+                // onPress={() => { props.navigation.navigate('Permissions') }}
+                style={styles.rowContainer}
+            >
+                <Text>About</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+            <TouchableOpacity
                 onPress={() => {
                     appBackend.resetPassword(null, (message) => {
                         Alert.alert(
@@ -58,14 +105,38 @@ export function Settings(props) {
                         );
                     });
                 }}
-            ></Button>
-            <Button
-                title="Logout"
+                style={styles.rowContainer}
+            >
+                <Text>Reset password</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
+            <TouchableOpacity
                 onPress={() => {
-                    appBackend.signOut();
-                    props.navigation.navigate('Login');
+                    Alert.alert(
+                        'Are you sure you would like to log out?',
+                        '',
+                        [
+                            {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
+                            {text: 'YES', onPress: () => {
+                                appBackend.signOut();
+                                props.navigation.navigate('Login');
+                            }}
+                        ]
+                    );
                 }}
-            ></Button>
+                style={styles.rowContainer}
+            >
+                <Text>Logout</Text>
+                <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={32}
+                ></Ionicons>
+            </TouchableOpacity>
 
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation}/>
@@ -75,6 +146,28 @@ export function Settings(props) {
 }
 
 const styles = StyleSheet.create({
+    rowContainerTop: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        width: '100%', 
+        padding: 20,
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    rowContainer: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        width: '100%', 
+        padding: 20,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderTopWidth: 1,
+        borderTopColor: 'lightgray',
+    },
     footerContainer: { 
         width: '100%',
         backgroundColor: 'white',
