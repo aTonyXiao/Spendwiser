@@ -62,14 +62,15 @@ export function Footer(props) {
             {
                 (page == 'Settings') &&
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                <Ionicons
-                    name="settings"
-                    color="black"
-                    size={32}
-                ></Ionicons>
-            </TouchableOpacity>
+                    <Ionicons
+                        name="settings"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
             }
             {
+                (page != 'Settings') &&
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                     <Ionicons
                         name="settings-outline"

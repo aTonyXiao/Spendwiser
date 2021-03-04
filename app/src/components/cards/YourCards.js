@@ -1,10 +1,10 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Modal, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
-import { Footer } from '../main/Footer';
+import { Footer } from '../util/Footer';
 
 export function YourCards({route, navigation}) { 
     const [cards, setCards] = useState([]);
@@ -25,7 +25,7 @@ export function YourCards({route, navigation}) {
         })
     };
 
-    // TODO: this link needs to be fixed!
+    // TODO: make this modal a component
     if (cards.length == 0) { 
         return (
             <View style={{marginTop: 10}}>

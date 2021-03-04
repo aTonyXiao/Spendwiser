@@ -135,6 +135,7 @@ export function DisplayCard({route, navigation}) {
                 </View>
             </Modal>
 
+            {/* TODO: Add this in beta version */}
             {/* <RewardModal ref={rewardModal}></RewardModal> */}
             
             <View style={{justifyContent: 'flex-start'}}>

@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Button, Alert } from 'react-native';
+import { View, Button, Alert, StyleSheet } from 'react-native';
 import mainStyles from '../styles/mainStyles';
 import { appBackend } from '../network/backend';
+import { Footer } from './util/Footer';
 
 export function Settings(props) { 
+    const navigation = props.navigation;
+
     return(
         <View style={mainStyles.container}>
             <Button
@@ -63,6 +66,21 @@ export function Settings(props) {
                     props.navigation.navigate('Login');
                 }}
             ></Button>
+
+            <View style={styles.footerContainer}>
+                <Footer navigation={navigation}/>
+            </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    footerContainer: { 
+        width: '100%',
+        backgroundColor: 'white',
+        position: 'absolute', 
+        bottom: 0, 
+        paddingBottom: 15,
+        marginTop: 0
+    }
+})
