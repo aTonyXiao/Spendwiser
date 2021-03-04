@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +5,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> network/backends/firebase/facebook_login.js</title>
+  <title> Account</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -75,51 +73,101 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Source</p>
-                    <h1>network/backends/firebase/facebook_login.js</h1>
+                    <p>Namespace</p>
+                    <h1>Account</h1>
                 </header>
                 
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import * as Facebook from 'expo-facebook';
-import * as firebase from 'firebase';
-import LoginAuthorizer from '../login_authorizer';
+        <h2>Account</h2>
+        
+    
+</header>
 
-/**
- * Facebook login using Expo's facebook login library
- */
-class FacebookLogin extends LoginAuthorizer {
-    async login() {
-        await Facebook.initializeAsync({appId: '251267389794841', });
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Displays the account information of a currently signed in user</div>
+        
 
-        const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-            permissions: ['public_profile'],
-        });
+        
 
-        if (type === 'success') {
-            // Build Firebase credential with the Facebook access token.
-            const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
-            // Sign in with credential from the Facebook user.
-            firebase
-                .auth()
-                .signInWithCredential(credential)
-                .catch(error => {
-                    // Handle Errors here.
-                    console.log("Facebook login error...");
-                    console.log(error)
-                });
-        }
-    }
-}
+<dl class="details">
 
-export default FacebookLogin;</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="components_Account.js.html" class="button">View Source</a>
+            <span>
+                <a href="components_Account.js.html">components/Account.js</a>, <a href="components_Account.js.html#line7">line 7</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

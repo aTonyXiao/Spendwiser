@@ -6,6 +6,7 @@ import CachedImage from 'react-native-expo-cached-image';
 
 /**
  * Displays the account information of a currently signed in user 
+ * @namespace Account
  * @param {Object} props 
  */
 let Account = function(props) {
