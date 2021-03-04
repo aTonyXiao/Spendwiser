@@ -50,7 +50,8 @@
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
-    "better-docs": "^2.3.2"
+    "better-docs": "^2.3.2",
+    "loke-jsdoc-theme": "^2.1.0"
   },
   "private": true
 }

@@ -1,93 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Global</title>
+    <meta charset="utf-8">
+    <title>Global - Documentation</title>
 
-  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="./build/entry.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
-  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
-  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
-  <link type="text/css" rel="stylesheet" href="">
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+<body>
 
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
+<label for="nav-trigger" class="overlay"></label>
 
-<body class="layout small-header">
-    <div id="stickyNavbarOverlay"></div>
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-LoadingScreen.html">LoadingScreen</a></li></ul><h3>Classes</h3><ul><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransactionToUser">saveTransactionToUser</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Global</h1>
     
 
-<div class="top-nav">
-    <div class="inner">
-        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-        <div class="logo">
-            
-            
-        </div>
-        <div class="menu">
-            
-            <div class="navigation">
-                <a
-                    href="index.html"
-                    class="link"
-                >
-                    API Documentation
-                </a>
-                
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-    <div id="main">
-        <div
-            class="sidebar "
-            id="sidebarNav"
-        >
-            
-            <nav>
-                
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Classes</h3><ul><li><a href="BaseBackend.html">BaseBackend</a></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a></li><li><a href="userClass.html">userClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#appBackend">appBackend</a></li><li><a href="global.html#CardImage">CardImage</a></li><li><a href="global.html#contrastRGB">contrastRGB</a></li><li><a href="global.html#filterDatabaseCollection">filterDatabaseCollection</a></li><li><a href="global.html#generateColor">generateColor</a></li><li><a href="global.html#getDatabaseLocation">getDatabaseLocation</a></li><li><a href="global.html#grayRGB">grayRGB</a></li><li><a href="global.html#initializeAppBackend">initializeAppBackend</a></li><li><a href="global.html#setAppBackend">setAppBackend</a></li><li><a href="global.html#Settings">Settings</a></li></ul></div>
-                
-            </nav>
-        </div>
-        <div class="core" id="main-content-wrapper">
-            <div class="content">
-                <header class="page-title">
-                    <p>Title</p>
-                    <h1>Global</h1>
-                </header>
-                
+    <!--container.tmpl-->
+
 
 
 
 
 <section>
 
-<header>
+
+
+<header data-tmpl="container.tmpl">
     
-        <h2></h2>
+        <h2>
+        
+        </h2>
         
     
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Fields &amp; Properties</dt><dd><ul>
+            <li><a href="#appBackend">appBackend</a></li>
+            
+            <li><a href="#grayRGB">grayRGB</a></li>
+            </ul></dd><dt>Methods</dt><dd><ul>
+            <li><a href="#CardImage">CardImage</a></li>
+            
+            <li><a href="#contrastRGB">contrastRGB</a></li>
+            
+            <li><a href="#filterDatabaseCollection">filterDatabaseCollection</a></li>
+            
+            <li><a href="#generateColor">generateColor</a></li>
+            
+            <li><a href="#getDatabaseLocation">getDatabaseLocation</a></li>
+            
+            <li><a href="#initializeAppBackend">initializeAppBackend</a></li>
+            
+            <li><a href="#setAppBackend">setAppBackend</a></li>
+            
+            <li><a href="#Settings">Settings</a></li>
+            </ul></dd></dl></div>
 </header>
 
 <article>
@@ -95,18 +88,16 @@
     
         
 
-        
+        <!-- details.tmpl -->
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -123,6 +114,7 @@
     
 
     
+
     
 
     
@@ -133,11 +125,14 @@
 </dl>
 
 
+
+
+
+
+
         
     
     </div>
-    
-    
 
     
 
@@ -145,24 +140,34 @@
 
     
 
-    
+     
 
     
 
     
-        <div class='vertical-section'>
-            <h1>Members</h1>
-            <div class="members">
-            
-                <div class="member">
+        <h3 class="subsection-title">Members</h3>
+
+        
+            <!--members.tmpl-->
+<div class="member-details">
+
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backend.js.html">backend.js</a>:<a href="network_backend.js.html#line9">9</a>
+  </code>
+</div>
+
+
 
 <h4 class="name" id="appBackend">
-    <a class="href-link" href="#appBackend">#</a>
-    
-    <span class="code-name">
-        appBackend
-    </span>
-    
+  <span class="type-signature"></span>appBackend<span class="type-signature"></span>
 </h4>
 
 
@@ -175,20 +180,18 @@ interact with the initialized backend from 'initializeAppBackend'
 </div>
 
 
+<div>
+
+<!-- details.tmpl -->
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
+<dl class="dl-horizontal">
 
     
 
@@ -203,19 +206,15 @@ interact with the initialized backend from 'initializeAppBackend'
     
 
     
-    
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backend.js.html">network/backend.js</a>, <a href="network_backend.js.html#line9">line 9</a>
-            </span>
-        </p>
+
+    
+
     
 </dl>
 
@@ -223,21 +222,37 @@ interact with the initialized backend from 'initializeAppBackend'
 
 
 
+
+
+
+
+
+
 </div>
-            
-                <div class="member">
+
+</div>
+
+        
+            <!--members.tmpl-->
+<div class="member-details">
+
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_util_TextBox.js.html">TextBox.js</a>:<a href="components_util_TextBox.js.html#line9">9</a>
+  </code>
+</div>
+
+
 
 <h4 class="name" id="grayRGB">
-    <a class="href-link" href="#grayRGB">#</a>
-    
-        
-            <span class='tag'>constant</span>
-        
-    
-    <span class="code-name">
-        grayRGB
-    </span>
-    
+  <span class="type-signature">(constant) </span>grayRGB<span class="type-signature"></span>
 </h4>
 
 
@@ -250,20 +265,18 @@ TODO add parameters for documentation
 </div>
 
 
+<div>
+
+<!-- details.tmpl -->
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
+<dl class="dl-horizontal">
 
     
 
@@ -278,19 +291,15 @@ TODO add parameters for documentation
     
 
     
-    
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="components_util_TextBox.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_util_TextBox.js.html">components/util/TextBox.js</a>, <a href="components_util_TextBox.js.html#line9">line 9</a>
-            </span>
-        </p>
+
+    
+
     
 </dl>
 
@@ -298,263 +307,303 @@ TODO add parameters for documentation
 
 
 
+
+
+
+
+
+
 </div>
-            
-            </div>
-        </div>
-    
 
-    
-        <div class='vertical-section'>
-            <h1>Methods</h1>
-            <div class="members">
-            
-                <div class="member">
+</div>
 
-
-    
-    <h4 class="name" id="CardImage">
-        <a class="href-link" href="#CardImage">#</a>
         
-        <span class="code-name">
-            
-                CardImage<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
     
 
     
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_CardImage.js.html">CardImage.js</a>:<a href="components_cards_CardImage.js.html#line65">65</a>
+  </code>
+</div>
+
+
+
+
     
-    <div class="description">
-        Component that displays a Credit Card Image. Either the card
+
+    
+
+    <h4 class="name" id="CardImage">
+      <a href="#params-CardImage"><span class="type-signature"></span>CardImage</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Component that displays a Credit Card Image. Either the card
 image supplied via url will be displayed or a colorized background with a card's
 name if no url is supplied.
-    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-CardImage">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
 
-            <th>Type</th>
+    
 
-            
+    
 
-            
+    
 
-            <th class="last">Description</th>
-        </tr>
-        </thead>
+    
 
-        <tbody>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-CardImage" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
         
 
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>props.default</code></td>
-  
+        <th>Type</th>
 
-  <td class="type">
-  
-      
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>props.default</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">boolean</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">If true will return a colorized image with card's name. If false, the image supplied via source will be used</td>
-</tr>
-
-
-        
+            
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>props.source</code></td>
-  
 
-  <td class="type">
-  
-      
+            
+
+            <td class="description last">If true will return a colorized image with card's name. If false, the image supplied via source will be used</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>props.source</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Url of the image to be displayed if @props.default is true</td>
-</tr>
-
-
-        
+            
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>props.overlay</code></td>
-  
 
-  <td class="type">
-  
-      
+            
+
+            <td class="description last">Url of the image to be displayed if @props.default is true</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>props.overlay</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Name of the card to be overlayed on top of the image</td>
-</tr>
-
-
-        
+            
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>props.style</code></td>
-  
 
-  <td class="type">
-  
-      
+            
+
+            <td class="description last">Name of the card to be overlayed on top of the image</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>props.style</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">*</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">Style properties that will be passed down to the Image component</td>
-</tr>
+            <td class="description last">Style properties that will be passed down to the Image component</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Component that displays a Credit Card Image. Either the card\n * image supplied via url will be displayed or a colorized background with a card's\n * name if no url is supplied.\n * \n * @param {boolean} props.default - If true will return a colorized image with card's name. If false, the image supplied via source will be used\n * @param {string} props.source - Url of the image to be displayed if @props.default is true\n * @param {string} props.overlay - Name of the card to be overlayed on top of the image\n * @param {*} props.style - Style properties that will be passed down to the Image component\n * @component\n *      \n */","meta":{"range":[2395,3774],"filename":"CardImage.js","lineno":65,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/components/cards","code":{"id":"astnode100002918","name":"CardImage","type":"FunctionDeclaration","paramnames":["props"]},"vars":{"cardOpacity":"CardImage~cardOpacity","onCardLoad":"CardImage~onCardLoad","":null,"AnimatedCachedImage":"CardImage~AnimatedCachedImage","generatedColor":"CardImage~generatedColor"},"shortpath":"components/cards/CardImage.js"},"description":"Component that displays a Credit Card Image. Either the card\nimage supplied via url will be displayed or a colorized background with a card's\nname if no url is supplied.","params":[{"type":{"names":["boolean"]},"description":"If true will return a colorized image with card's name. If false, the image supplied via source will be used","name":"props.default"},{"type":{"names":["string"]},"description":"Url of the image to be displayed if @props.default is true","name":"props.source"},{"type":{"names":["string"]},"description":"Name of the card to be overlayed on top of the image","name":"props.overlay"},{"type":{"names":["*"]},"description":"Style properties that will be passed down to the Image component","name":"props.style"}],"tags":[{"originalTitle":"component","title":"component","text":""}],"name":"CardImage","longname":"CardImage","kind":"function","scope":"global","___id":"T000002R000265","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"CardImage","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_CardImage.js.html">CardImage.js</a>:<a href="components_cards_CardImage.js.html#line28">28</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_cards_CardImage.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_cards_CardImage.js.html">components/cards/CardImage.js</a>, <a href="components_cards_CardImage.js.html#line65">line 65</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="contrastRGB">
-        <a class="href-link" href="#contrastRGB">#</a>
-        
-        <span class="code-name">
-            
-                contrastRGB<span class="signature">(string)</span><span class="type-signature"> &rarr; {string}</span>
-            
-        </span>
+      <a href="#params-contrastRGB"><span class="type-signature"></span>contrastRGB</a><span class="signature">(string)</span><span class="type-signature"> &rarr; {string}</span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Generates a contrasting rgb value based on the supplied parameter
-    </div>
-    
 
 
 
@@ -564,62 +613,37 @@ name if no url is supplied.
 
 
 
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>string</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">rgb string</td>
-</tr>
 
 
-        
-        </tbody>
-    </table>
+<div class="description">
+    Generates a contrasting rgb value based on the supplied parameter
 </div>
 
 
 
 
 
-<dl class="details">
+
+
+
+<div class="collapse_" id="methodCollapse-contrastRGB">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -643,20 +667,6 @@ name if no url is supplied.
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_cards_CardImage.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_cards_CardImage.js.html">components/cards/CardImage.js</a>, <a href="components_cards_CardImage.js.html#line28">line 28</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -667,68 +677,156 @@ name if no url is supplied.
 
 
 
+  <div id="params-contrastRGB" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
 
 
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
 
+        
 
+        
 
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
+    <tbody>
+    
 
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
+        <tr>
             
-                    
+                <td class="name"><code>string</code></td>
+            
 
-<div class="columns">
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">rgb string</td>
+        </tr>
+
     
-    <div class='param-desc column is-7'>rgb string value</div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    rgb string value
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
         
 <span class="param-type">string</span>
 
 
-    </div>
-    
-</div>
-
-                
-        </div>
-    </div>
-
-
-
-
-</div>
-            
-                <div class="member">
-
+    </dd>
+</dl>
 
     
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Generates a contrasting rgb value based on the supplied parameter\n * @param {string} string - rgb string\n * @returns {string} rgb string value\n */","meta":{"range":[695,1244],"filename":"CardImage.js","lineno":28,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/components/cards","code":{"id":"astnode100002778","name":"contrastRGB","type":"FunctionDeclaration","paramnames":["string"]},"vars":{"color":"contrastRGB~color","colorRGB":"contrastRGB~colorRGB","brightness":"contrastRGB~brightness"},"shortpath":"components/cards/CardImage.js"},"description":"Generates a contrasting rgb value based on the supplied parameter","params":[{"type":{"names":["string"]},"description":"rgb string","name":"string"}],"returns":[{"type":{"names":["string"]},"description":"rgb string value"}],"name":"contrastRGB","longname":"contrastRGB","kind":"function","scope":"global","___id":"T000002R000252","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"contrastRGB","signature":"<span class=\"signature\">(string)</span><span class=\"type-signature\"> &rarr; {string}</span>","ancestors":[]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line32">32</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
     <h4 class="name" id="filterDatabaseCollection">
-        <a class="href-link" href="#filterDatabaseCollection">#</a>
-        
-        <span class="code-name">
-            
-                filterDatabaseCollection<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-filterDatabaseCollection"><span class="type-signature"></span>filterDatabaseCollection</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Filter the databse collection depending on the given conditions
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Filter the databse collection depending on the given conditions
 each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
-    </div>
-    
+</div>
 
 
 
@@ -737,24 +835,22 @@ each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
 
 
 
+<div class="collapse_" id="methodCollapse-filterDatabaseCollection">
+
+  
+
+  
+
+<!-- details.tmpl -->
 
 
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
-
-    
-
-    
-
-    
+<dl class="dl-horizontal">
 
     
 
@@ -767,19 +863,17 @@ each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
     
 
     
-    
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line32">line 32</a>
-            </span>
-        </p>
+
+    
+
+    
+
     
 </dl>
 
@@ -803,253 +897,318 @@ each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/** \n * Filter the databse collection depending on the given conditions\n * each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]\n */","meta":{"range":[1049,1374],"filename":"firebasebackend.js","lineno":32,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008643","name":"filterDatabaseCollection","type":"FunctionDeclaration","paramnames":["collection","conditions"]},"vars":{"filteredCollection":"filterDatabaseCollection~filteredCollection","i":"filterDatabaseCollection~i","condition":"filterDatabaseCollection~condition"},"shortpath":"network/backends/firebasebackend.js"},"description":"Filter the databse collection depending on the given conditions\neach condition is an array in the format of [FIELD, OPERATOR, COMPARISON]","name":"filterDatabaseCollection","longname":"filterDatabaseCollection","kind":"function","scope":"global","params":[],"___id":"T000002R000840","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"filterDatabaseCollection","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="generateColor">
-        <a class="href-link" href="#generateColor">#</a>
         
-        <span class="code-name">
-            
-                generateColor<span class="signature">(string)</span><span class="type-signature"> &rarr; {string}</span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_CardImage.js.html">CardImage.js</a>:<a href="components_cards_CardImage.js.html#line45">45</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="generateColor">
+      <a href="#params-generateColor"><span class="type-signature"></span>generateColor</a><span class="signature">(string)</span><span class="type-signature"> &rarr; {string}</span>
+
     </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Generates an rgb value based on the named passed in
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-generateColor">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
     
-    
-    <div class="description">
-        Generates an rgb value based on the named passed in
-    </div>
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-generateColor" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>string</code></td>
             
 
-            <th>Type</th>
-
+            <td class="type">
             
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>string</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">The name of a credit card</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_cards_CardImage.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_cards_CardImage.js.html">components/cards/CardImage.js</a>, <a href="components_cards_CardImage.js.html#line45">line 45</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class='columns method-parameter'>
-        <div class="column is-2"><label>Returns:</label></div>
-        <div class="column is-10">
-            
-                    
-
-<div class="columns">
-    
-    <div class='param-desc column is-7'>rgb string value</div>
-    
-    
-    <div class='column is-5 has-text-left'>
-        <label>Type: </label>
-        
-<span class="param-type">string</span>
-
-
-    </div>
-    
-</div>
-
                 
-        </div>
-    </div>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of a credit card</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    rgb string value
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
 
 
 
 
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n * Generates an rgb value based on the named passed in\n * @param {string} string - The name of a credit card\n * @returns {string} rgb string value\n */","meta":{"range":[1401,1760],"filename":"CardImage.js","lineno":45,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/components/cards","code":{"id":"astnode100002846","name":"generateColor","type":"FunctionDeclaration","paramnames":["string"]},"vars":{"hashColor":"generateColor~hashColor","colorRGB":"generateColor~colorRGB"},"shortpath":"components/cards/CardImage.js"},"description":"Generates an rgb value based on the named passed in","params":[{"type":{"names":["string"]},"description":"The name of a credit card","name":"string"}],"returns":[{"type":{"names":["string"]},"description":"rgb string value"}],"name":"generateColor","longname":"generateColor","kind":"function","scope":"global","___id":"T000002R000259","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"generateColor","signature":"<span class=\"signature\">(string)</span><span class=\"type-signature\"> &rarr; {string}</span>","ancestors":[]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="getDatabaseLocation">
-        <a class="href-link" href="#getDatabaseLocation">#</a>
         
-        <span class="code-name">
-            
-                getDatabaseLocation<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line15">15</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getDatabaseLocation">
+      <a href="#params-getDatabaseLocation"><span class="type-signature"></span>getDatabaseLocation</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Extract the database location from the string
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Extract the database location from the string
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getDatabaseLocation">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line15">line 15</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -1073,181 +1232,250 @@ each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n * Extract the database location from the string\n */","meta":{"range":[447,893],"filename":"firebasebackend.js","lineno":15,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008583","name":"getDatabaseLocation","type":"FunctionDeclaration","paramnames":["database","location"]},"vars":{"locationList":"getDatabaseLocation~locationList","databaseLocation":"getDatabaseLocation~databaseLocation","i":"getDatabaseLocation~i"},"shortpath":"network/backends/firebasebackend.js"},"description":"Extract the database location from the string","name":"getDatabaseLocation","longname":"getDatabaseLocation","kind":"function","scope":"global","params":[],"___id":"T000002R000834","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getDatabaseLocation","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="initializeAppBackend">
-        <a class="href-link" href="#initializeAppBackend">#</a>
         
-        <span class="code-name">
-            
-                initializeAppBackend<span class="signature">(type)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backend.js.html">backend.js</a>:<a href="network_backend.js.html#line33">33</a>
+  </code>
+</div>
+
+
+
+
     
 
     
+
+    <h4 class="name" id="initializeAppBackend">
+      <a href="#params-initializeAppBackend"><span class="type-signature"></span>initializeAppBackend</a><span class="signature">(type)</span><span class="type-signature"></span>
+
+    </h4>
+
     
-    <div class="description">
-        Initializes the current backend to the given type denoted by a string.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Initializes the current backend to the given type denoted by a string.
 
 Currently supported backends:
   - 'firebase'
-    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-initializeAppBackend">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
 
-            <th>Type</th>
+    
 
-            
+    
 
-            
+    
 
-            <th class="last">Description</th>
-        </tr>
-        </thead>
+    
 
-        <tbody>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-initializeAppBackend" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
         
 
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>type</code></td>
-  
+        <th>Type</th>
 
-  <td class="type">
-  
-      
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">The backend type to initialize</td>
-</tr>
+            <td class="description last">The backend type to initialize</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Initializes the current backend to the given type denoted by a string.\n * \n * Currently supported backends:\n *   - 'firebase'\n * \n * @param {string} type - The backend type to initialize\n */","meta":{"range":[871,1015],"filename":"backend.js","lineno":33,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network","code":{"id":"astnode100008035","name":"exports.initializeAppBackend","type":"FunctionDeclaration","paramnames":["type"]},"shortpath":"network/backend.js"},"description":"Initializes the current backend to the given type denoted by a string.\n\nCurrently supported backends:\n  - 'firebase'","params":[{"type":{"names":["string"]},"description":"The backend type to initialize","name":"type"}],"name":"initializeAppBackend","longname":"initializeAppBackend","kind":"function","scope":"global","___id":"T000002R000771","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"initializeAppBackend","signature":"<span class=\"signature\">(type)</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backend.js.html">backend.js</a>:<a href="network_backend.js.html#line15">15</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backend.js.html">network/backend.js</a>, <a href="network_backend.js.html#line33">line 33</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="setAppBackend">
-        <a class="href-link" href="#setAppBackend">#</a>
-        
-        <span class="code-name">
-            
-                setAppBackend<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-setAppBackend"><span class="type-signature"></span>setAppBackend</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Set the app backend to a new instance of a supported type.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Set the app backend to a new instance of a supported type.
 Modify this to add new supported backends
-    </div>
-    
+</div>
 
 
 
@@ -1256,24 +1484,22 @@ Modify this to add new supported backends
 
 
 
+<div class="collapse_" id="methodCollapse-setAppBackend">
+
+  
+
+  
+
+<!-- details.tmpl -->
 
 
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
-
-    
-
-    
-
-    
+<dl class="dl-horizontal">
 
     
 
@@ -1286,19 +1512,17 @@ Modify this to add new supported backends
     
 
     
-    
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backend.js.html">network/backend.js</a>, <a href="network_backend.js.html#line15">line 15</a>
-            </span>
-        </p>
+
+    
+
+    
+
     
 </dl>
 
@@ -1322,136 +1546,174 @@ Modify this to add new supported backends
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n * Set the app backend to a new instance of a supported type.\n * Modify this to add new supported backends\n */","meta":{"range":[459,671],"filename":"backend.js","lineno":15,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network","code":{"id":"astnode100008015","name":"setAppBackend","type":"FunctionDeclaration","paramnames":["type"]},"vars":{"appBackend":"setAppBackend~appBackend"},"shortpath":"network/backend.js"},"description":"Set the app backend to a new instance of a supported type.\nModify this to add new supported backends","name":"setAppBackend","longname":"setAppBackend","kind":"function","scope":"global","params":[],"___id":"T000002R000768","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"setAppBackend","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="Settings">
-        <a class="href-link" href="#Settings">#</a>
         
-        <span class="code-name">
-            
-                Settings<span class="signature">(props)</span><span class="type-signature"></span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_Settings.js.html">Settings.js</a>:<a href="components_Settings.js.html#line12">12</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="Settings">
+      <a href="#params-Settings"><span class="type-signature"></span>Settings</a><span class="signature">(props)</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Settings page that contains a plethora of navigations to different information and buttons
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Settings page that contains a plethora of navigations to different information and buttons
 like 'Permissions', 'Privacy', etc.
-    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-Settings">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-Settings" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>props</code></td>
             
 
-            <th>Type</th>
-
+            <td class="type">
             
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>props</code></td>
-  
-
-  <td class="type">
-  
-      
+                
 <span class="param-type">*</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">Not currently used for anything</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
-
-
-
-
-
-<dl class="details">
+            <td class="description last">Not currently used for anything</td>
+        </tr>
 
     
+    </tbody>
+</table>
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_Settings.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_Settings.js.html">components/Settings.js</a>, <a href="components_Settings.js.html#line12">line 12</a>
-            </span>
-        </p>
-    
-</dl>
-
-
+  </div>
 
 
 
@@ -1472,37 +1734,62 @@ like 'Permissions', 'Privacy', etc.
 
 
 </div>
-            
-            </div>
-        </div>
-    
 
-    
-        <div class='vertical-section'>
-            <h1>Type Definitions</h1>
-            <div class="members">
-            
-                <div class="member">
+<!--
+<pre>
+{"comment":"/**\n * Settings page that contains a plethora of navigations to different information and buttons\n * like 'Permissions', 'Privacy', etc.\n * \n * @param {*} props - Not currently used for anything\n */","meta":{"range":[385,2636],"filename":"Settings.js","lineno":12,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/components","code":{"id":"astnode100000792","name":"Settings","type":"ArrowFunctionExpression"},"vars":{"":null},"shortpath":"components/Settings.js"},"description":"Settings page that contains a plethora of navigations to different information and buttons\nlike 'Permissions', 'Privacy', etc.","params":[{"type":{"names":["*"]},"description":"Not currently used for anything","name":"props"}],"name":"Settings","longname":"Settings","kind":"function","scope":"global","___id":"T000002R000038","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Settings","signature":"<span class=\"signature\">(props)</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
 
-    <span class="method-parameter is-pulled-right">
-        <label>Type:</label>
         
-<span class="param-type">Object</span>
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                <!--members.tmpl-->
+<div class="member-details">
 
 
-    </span>
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_basebackend.js.html">basebackend.js</a>:<a href="network_backends_basebackend.js.html#line220">220</a>
+  </code>
+</div>
+
+
 
 <h4 class="name" id="LoginProviders">
-    <a class="href-link" href="#LoginProviders">#</a>
-    
-    <span class="code-name">
-        LoginProviders
-    </span>
-    
+  LoginProviders
 </h4>
 
 
 
+
+
+<div>
+
+<!-- details.tmpl -->
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_basebackend.js.html">basebackend.js</a>:<a href="network_backends_basebackend.js.html#line220">220</a>
+  </code>
+</div>
 
 
 
@@ -1511,97 +1798,99 @@ like 'Permissions', 'Privacy', etc.
     <h5 class="subsection-title">Properties:</h5>
 
     
-<div class="table-container">
-    <table class="props table">
-        <thead>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>google</code></td>
             
 
-            <th>Type</th>
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LoginAuthorizer.html">LoginAuthorizer</a></span>
+
 
             
-            <th>Attributes</th>
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
             
 
             
 
-            <th class="last">Description</th>
+            <td class="description last">google's authentication service</td>
         </tr>
-        </thead>
 
-        <tbody>
-        
+    
+
+        <tr>
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>google</code></td>
-    
+                <td class="name"><code>facebook</code></td>
+            
 
-    <td class="type">
-    
-        
+            <td class="type">
+            
+                
 <span class="param-type"><a href="LoginAuthorizer.html">LoginAuthorizer</a></span>
 
 
-    
-    </td>
-
-    
-        <td class="attributes">
-        
-
-        
-            &lt;nullable><br>
-        
-        </td>
-    
-
-    
-
-    <td class="description last">google's authentication service</td>
-</tr>
-
-        
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>facebook</code></td>
-    
+            </td>
 
-    <td class="type">
-    
-        
-<span class="param-type"><a href="LoginAuthorizer.html">LoginAuthorizer</a></span>
+            
+                <td class="attributes">
+                
 
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
 
-    
-    </td>
+            
 
-    
-        <td class="attributes">
-        
-
-        
-            &lt;nullable><br>
-        
-        </td>
-    
+            <td class="description last">facebook's authentication service</td>
+        </tr>
 
     
-
-    <td class="description last">facebook's authentication service</td>
-</tr>
-
-        
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
 
 
 
-<dl class="details">
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -1625,20 +1914,6 @@ like 'Permissions', 'Privacy', etc.
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_basebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_basebackend.js.html">network/backends/basebackend.js</a>, <a href="network_backends_basebackend.js.html#line220">line 220</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -1646,29 +1921,58 @@ like 'Permissions', 'Privacy', etc.
 
 
 
+
+
+
+
+
+
 </div>
+
+</div>
+
             
-                <div class="member">
-
-    <span class="method-parameter is-pulled-right">
-        <label>Type:</label>
-        
-<span class="param-type">Object</span>
+                <!--members.tmpl-->
+<div class="member-details">
 
 
-    </span>
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_basebackend.js.html">basebackend.js</a>:<a href="network_backends_basebackend.js.html#line264">264</a>
+  </code>
+</div>
+
+
 
 <h4 class="name" id="UserInfo">
-    <a class="href-link" href="#UserInfo">#</a>
-    
-    <span class="code-name">
-        UserInfo
-    </span>
-    
+  UserInfo
 </h4>
 
 
 
+
+
+<div>
+
+<!-- details.tmpl -->
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_basebackend.js.html">basebackend.js</a>:<a href="network_backends_basebackend.js.html#line264">264</a>
+  </code>
+</div>
 
 
 
@@ -1677,186 +1981,184 @@ like 'Permissions', 'Privacy', etc.
     <h5 class="subsection-title">Properties:</h5>
 
     
-<div class="table-container">
-    <table class="props table">
-        <thead>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>name</code></td>
             
 
-            <th>Type</th>
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
 
             
-            <th>Attributes</th>
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
 
-            <th class="last">Description</th>
+            <td class="description last">The name of the signed-in user</td>
         </tr>
-        </thead>
 
-        <tbody>
-        
+    
+
+        <tr>
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>name</code></td>
-    
+                <td class="name"><code>email</code></td>
+            
 
-    <td class="type">
-    
-        
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-    
-    </td>
-
-    
-        <td class="attributes">
-        
-
-        
-        </td>
-    
-
-    
-
-    <td class="description last">The name of the signed-in user</td>
-</tr>
-
-        
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>email</code></td>
-    
+            </td>
 
-    <td class="type">
-    
-        
-<span class="param-type">string</span>
-
-
-    
-    </td>
-
-    
-        <td class="attributes">
-        
-
-        
-        </td>
-    
-
-    
-
-    <td class="description last">The email of the signed-in user</td>
-</tr>
-
-        
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>emailVerified</code></td>
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The email of the signed-in user</td>
+        </tr>
+
     
 
-    <td class="type">
-    
-        
+        <tr>
+            
+                <td class="name"><code>emailVerified</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">boolean</span>
 
 
-    
-    </td>
-
-    
-        <td class="attributes">
-        
-
-        
-        </td>
-    
-
-    
-
-    <td class="description last">True if the email has been verified, false if not</td>
-</tr>
-
-        
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>lastLogin</code></td>
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">True if the email has been verified, false if not</td>
+        </tr>
+
     
 
-    <td class="type">
-    
-        
+        <tr>
+            
+                <td class="name"><code>lastLogin</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-    
-    </td>
-
-    
-        <td class="attributes">
-        
-
-        
-        </td>
-    
-
-    
-
-    <td class="description last">Timestamp of the last time this user has logged in</td>
-</tr>
-
-        
             
-<tr class="deep-level-0">
-    
-        <td class="name"><code>photoURL</code></td>
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Timestamp of the last time this user has logged in</td>
+        </tr>
+
     
 
-    <td class="type">
-    
-        
+        <tr>
+            
+                <td class="name"><code>photoURL</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-    
-    </td>
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL of a profile photo, if there is one</td>
+        </tr>
 
     
-        <td class="attributes">
-        
-
-        
-            &lt;nullable><br>
-        
-        </td>
-    
-
-    
-
-    <td class="description last">URL of a profile photo, if there is one</td>
-</tr>
-
-        
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
 
 
 
-<dl class="details">
 
-    
 
-    
+
+<dl class="dl-horizontal">
 
     
 
@@ -1877,19 +2179,9 @@ like 'Permissions', 'Privacy', etc.
     
 
     
-    
 
     
 
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_basebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_basebackend.js.html">network/backends/basebackend.js</a>, <a href="network_backends_basebackend.js.html#line264">line 264</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -1897,10 +2189,17 @@ like 'Permissions', 'Privacy', etc.
 
 
 
+
+
+
+
+
+
 </div>
+
+</div>
+
             
-            </div>
-        </div>
     
 
     
@@ -1911,25 +2210,15 @@ like 'Permissions', 'Privacy', etc.
 
 
 
-            </div>
-            
-            <footer class="footer">
-                <div class="content has-text-centered">
-                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
-                    <p class="sidebar-created-by">
-                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
-                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
-                    </p>
-                </div>
-            </footer>
-            
-        </div>
-        <div id="side-nav" class="side-nav">
-        </div>
-    </div>
-<script src="scripts/app.min.js"></script>
-<script>PR.prettyPrint();</script>
-<script src="scripts/linenumber.js"> </script>
+</div>
 
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Mar 03 2021 18:51:51 GMT-0800 (Pacific Standard Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

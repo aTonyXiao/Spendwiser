@@ -6,6 +6,6 @@
     "opts": {
         "recurse": true,
         "destination": "../docs/",
-        "template": "node_modules/better-docs"
+        "template": "node_modules/loke-jsdoc-theme"
     }
 }

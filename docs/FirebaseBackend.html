@@ -1,179 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> FirebaseBackend</title>
+    <meta charset="utf-8">
+    <title>FirebaseBackend - Documentation</title>
 
-  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="./build/entry.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
-  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
-  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
-  <link type="text/css" rel="stylesheet" href="">
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+<body>
 
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
+<label for="nav-trigger" class="overlay"></label>
 
-<body class="layout small-header">
-    <div id="stickyNavbarOverlay"></div>
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-LoadingScreen.html">LoadingScreen</a></li></ul><h3>Classes</h3><ul><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransactionToUser">saveTransactionToUser</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">FirebaseBackend</h1>
     
 
-<div class="top-nav">
-    <div class="inner">
-        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-        <div class="logo">
-            
-            
-        </div>
-        <div class="menu">
-            
-            <div class="navigation">
-                <a
-                    href="index.html"
-                    class="link"
-                >
-                    API Documentation
-                </a>
-                
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-    <div id="main">
-        <div
-            class="sidebar "
-            id="sidebarNav"
-        >
-            
-            <nav>
-                
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Classes</h3><ul><li><a href="BaseBackend.html">BaseBackend</a></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a></li><li><a href="userClass.html">userClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#appBackend">appBackend</a></li><li><a href="global.html#CardImage">CardImage</a></li><li><a href="global.html#contrastRGB">contrastRGB</a></li><li><a href="global.html#filterDatabaseCollection">filterDatabaseCollection</a></li><li><a href="global.html#generateColor">generateColor</a></li><li><a href="global.html#getDatabaseLocation">getDatabaseLocation</a></li><li><a href="global.html#grayRGB">grayRGB</a></li><li><a href="global.html#initializeAppBackend">initializeAppBackend</a></li><li><a href="global.html#setAppBackend">setAppBackend</a></li><li><a href="global.html#Settings">Settings</a></li></ul></div>
-                
-            </nav>
-        </div>
-        <div class="core" id="main-content-wrapper">
-            <div class="content">
-                <header class="page-title">
-                    <p>Class</p>
-                    <h1>FirebaseBackend</h1>
-                </header>
-                
+    <!--container.tmpl-->
+
 
 
 
 
 <section>
 
-<header>
+
+
+<header data-tmpl="container.tmpl">
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>FirebaseBackend<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2>
+        FirebaseBackend
+        </h2>
         
-            <div class="class-description">Firebase Backend designed around the Firebase Web SDK
+            <div class="lead">Firebase Backend designed around the Firebase Web SDK
 Database functions are designed around the Firestore Collection/Document style
 - Collections contain Documents
 - Documents contain data and sometimes Collections
 For more reference: https://firebase.google.com/docs/firestore/data-model</div>
         
     
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Methods</dt><dd><ul>
+            <li><a href="#dbAdd">dbAdd</a></li>
+            
+            <li><a href="#dbDelete">dbDelete</a></li>
+            
+            <li><a href="#dbDoesDocExist">dbDoesDocExist</a></li>
+            
+            <li><a href="#dbGet">dbGet</a></li>
+            
+            <li><a href="#dbGetSubCollections">dbGetSubCollections</a></li>
+            
+            <li><a href="#dbSet">dbSet</a></li>
+            
+            <li><a href="#doesSupportDatabase">doesSupportDatabase</a></li>
+            
+            <li><a href="#enableDatabaseCaching">enableDatabaseCaching</a></li>
+            
+            <li><a href="#getLoginProviders">getLoginProviders</a></li>
+            
+            <li><a href="#getTimestamp">getTimestamp</a></li>
+            
+            <li><a href="#getUserID">getUserID</a></li>
+            
+            <li><a href="#getUserInfo">getUserInfo</a></li>
+            
+            <li><a href="#initializeApp">initializeApp</a></li>
+            
+            <li><a href="#onAuthStateChange">onAuthStateChange</a></li>
+            
+            <li><a href="#resetPassword">resetPassword</a></li>
+            
+            <li><a href="#signIn">signIn</a></li>
+            
+            <li><a href="#signOut">signOut</a></li>
+            
+            <li><a href="#signUp">signUp</a></li>
+            
+            <li><a href="#userLoggedIn">userLoggedIn</a></li>
+            </ul></dd></dl></div>
 </header>
 
 <article>
     <div class="container-overview">
     
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
+        <!--method.tmpl-->
+<div class="method-details">
+
+
+
 
 
     
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line48">48</a>
+  </code>
+</div>
+
+    
+
     <h4 class="name" id="FirebaseBackend">
-        <a class="href-link" href="#FirebaseBackend">#</a>
-        
-        <span class="code-name">
-            
-                new FirebaseBackend<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-FirebaseBackend"><span class="type-signature"></span>new FirebaseBackend</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-FirebaseBackend">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line48">line 48</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -198,14 +223,21 @@ For more reference: https://firebase.google.com/docs/firestore/data-model</div>
 
 
 
-                    </div>
-                </div>
-            </div>
-        
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Firebase Backend designed around the Firebase Web SDK\n * Database functions are designed around the Firestore Collection/Document style\n * - Collections contain Documents\n * - Documents contain data and sometimes Collections\n * For more reference: https://firebase.google.com/docs/firestore/data-model\n */","meta":{"range":[1689,14396],"filename":"firebasebackend.js","lineno":48,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008689","name":"FirebaseBackend","type":"ClassDeclaration","paramnames":[]},"shortpath":"network/backends/firebasebackend.js"},"classdesc":"Firebase Backend designed around the Firebase Web SDK\nDatabase functions are designed around the Firestore Collection/Document style\n- Collections contain Documents\n- Documents contain data and sometimes Collections\nFor more reference: https://firebase.google.com/docs/firestore/data-model","name":"FirebaseBackend","longname":"FirebaseBackend","kind":"class","scope":"global","___id":"T000003R000004","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"FirebaseBackend","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
+
     
     </div>
-    
-    
 
     
 
@@ -213,193 +245,45 @@ For more reference: https://firebase.google.com/docs/firestore/data-model</div>
 
     
 
-    
+     
 
     
 
     
 
     
-        <div class='vertical-section'>
-            <h1>Methods</h1>
-            <div class="members">
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="dbAdd">
-        <a class="href-link" href="#dbAdd">#</a>
-        
-        <span class="code-name">
-            
-                dbAdd<span class="signature">(location, data, callback)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        This function adds a new Firestore document to a collection
-reference: https://firebase.google.com/docs/firestore/quickstart
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
-</tr>
-
+        <h3 class="subsection-title">Methods</h3>
 
         
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>data</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">JSON</span>
+            <!--method.tmpl-->
+<div class="method-details">
 
 
-  
-  </td>
 
-  
-
-  
-
-  <td class="description last">The data for the new document</td>
-</tr>
+  <!--source-link.tmpl-->
 
 
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>callback</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">function</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Function that will be invoked to give the caller the new collection ID</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line243">243</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
+    <h4 class="name" id="dbAdd">
+      <a href="#params-dbAdd"><span class="type-signature"></span>dbAdd</a><span class="signature">(location, data, callback)</span><span class="type-signature"></span>
+
+    </h4>
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line243">line 243</a>
-            </span>
-        </p>
-    
-</dl>
 
 
 
@@ -412,115 +296,43 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
-
-
-
-
-
+<div class="description">
+    This function adds a new Firestore document to a collection
+reference: https://firebase.google.com/docs/firestore/quickstart
+</div>
 
 
 
 
     <h5>Example</h5>
     
-    
-        <pre class="prettyprint"><code>appBackend.dbAdd("experimental.exp2.experimental2", {
+    <pre class="prettyprint"><code>appBackend.dbAdd("experimental.exp2.experimental2", {
     hello: "what"
 }, (id) => {
     console.log(id);
 });</code></pre>
-    
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="dbDelete">
-        <a class="href-link" href="#dbDelete">#</a>
-        
-        <span class="code-name">
-            
-                dbDelete<span class="signature">(location)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        Deletes a document at the given location
-NOTE: this won't delete subcollections
-    </div>
-    
 
 
 
 
 
 
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
+<div class="collapse_" id="methodCollapse-dbAdd">
 
   
 
   
 
-  <td class="description last">The document location to delete</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
+<!-- details.tmpl -->
 
 
 
 
 
-<dl class="details">
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -544,20 +356,6 @@ NOTE: this won't delete subcollections
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line261">line 261</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -568,164 +366,206 @@ NOTE: this won't delete subcollections
 
 
 
+  <div id="params-dbAdd" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
 
 
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    
-        <pre class="prettyprint"><code>appBackend.dbDelete("users." + userId + ".cards." + docId);</code></pre>
-    
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="dbDoesDocExist">
-        <a class="href-link" href="#dbDoesDocExist">#</a>
+<table class="table table-bordered">
+    <thead>
+    <tr>
         
-        <span class="code-name">
-            
-                dbDoesDocExist<span class="signature">(location, location, callback)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
-    
-    
-    <div class="description">
-        Function returns checks if a document exists.
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>location</code></td>
             
 
-            <th>Type</th>
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
 
             
 
             
 
-            <th class="last">Description</th>
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
         </tr>
-        </thead>
 
-        <tbody>
-        
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Location in the form of 'COLLECTION.DOCUMENT'</td>
-</tr>
-
-
-        
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
-</tr>
-
-
-        
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>callback</code></td>
-  
 
-  <td class="type">
-  
-      
+            <td class="description last">The data for the new document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">function</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">Called back when check is finished, parameter is set if exists or not</td>
-</tr>
+            <td class="description last">Function that will be invoked to give the caller the new collection ID</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function adds a new Firestore document to a collection\n     * reference: https://firebase.google.com/docs/firestore/quickstart\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the new document\n     * @param {function} callback - Function that will be invoked to give the caller the new collection ID\n     *\n     * @example\n     * appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n     *     hello: \"what\"\n     * }, (id) => {\n     *     console.log(id);\n     * });\n     */","meta":{"range":[9198,9470],"filename":"firebasebackend.js","lineno":243,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009113","name":"FirebaseBackend#dbAdd","type":"MethodDefinition","paramnames":["location","data","callback"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function adds a new Firestore document to a collection\nreference: https://firebase.google.com/docs/firestore/quickstart","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the new document","name":"data"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the new collection ID","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n    hello: \"what\"\n}, (id) => {\n    console.log(id);\n});"}],"name":"dbAdd","longname":"FirebaseBackend#dbAdd","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000876","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbAdd","signature":"<span class=\"signature\">(location, data, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line261">261</a>
+  </code>
 </div>
 
 
 
 
+    
 
-<dl class="details">
+    
+
+    <h4 class="name" id="dbDelete">
+      <a href="#params-dbDelete"><span class="type-signature"></span>dbDelete</a><span class="signature">(location)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Deletes a document at the given location
+NOTE: this won't delete subcollections
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbDelete("users." + userId + ".cards." + docId);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbDelete">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -749,20 +589,6 @@ NOTE: this won't delete subcollections
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line196">line 196</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -773,6 +599,57 @@ NOTE: this won't delete subcollections
 
 
 
+  <div id="params-dbDelete" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The document location to delete</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
 
 
 
@@ -782,160 +659,101 @@ NOTE: this won't delete subcollections
 
 
 
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Deletes a document at the given location\n     * NOTE: this won't delete subcollections\n     * \n     * @param {string} location - The document location to delete\n     * \n     * @example\n     * appBackend.dbDelete(\"users.\" + userId + \".cards.\" + docId);\n     */","meta":{"range":[9751,9890],"filename":"firebasebackend.js","lineno":261,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009159","name":"FirebaseBackend#dbDelete","type":"MethodDefinition","paramnames":["location"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Deletes a document at the given location\nNOTE: this won't delete subcollections","params":[{"type":{"names":["string"]},"description":"The document location to delete","name":"location"}],"examples":[{"caption":"","code":"appBackend.dbDelete(\"users.\" + userId + \".cards.\" + docId);"}],"name":"dbDelete","longname":"FirebaseBackend#dbDelete","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000878","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbDelete","signature":"<span class=\"signature\">(location)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line196">196</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbDoesDocExist">
+      <a href="#params-dbDoesDocExist"><span class="type-signature"></span>dbDoesDocExist</a><span class="signature">(location, location, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Function returns checks if a document exists.
+</div>
 
 
 
 
     <h5>Example</h5>
     
-    
-        <pre class="prettyprint"><code>var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+    <pre class="prettyprint"><code>var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
     if (exists) console.log("Doc exists!");
 });</code></pre>
-    
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="dbGet">
-        <a class="href-link" href="#dbGet">#</a>
-        
-        <span class="code-name">
-            
-                dbGet<span class="signature">(location, conditions, callback)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
-where the callback is called for each document in the collection
-reference: https://firebase.google.com/docs/firestore/quickstart
-    </div>
-    
 
 
 
 
 
 
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
+<div class="collapse_" id="methodCollapse-dbDoesDocExist">
 
   
 
   
 
-  <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>conditions</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">Array</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
-                            (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>callback</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">function</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Function that will be invoked to give the caller the data in JSON</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
+<!-- details.tmpl -->
 
 
 
 
 
-<dl class="details">
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -959,20 +777,6 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line129">line 129</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -983,6 +787,103 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+  <div id="params-dbDoesDocExist" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form of 'COLLECTION.DOCUMENT'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Called back when check is finished, parameter is set if exists or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
 
 
 
@@ -992,140 +893,108 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/** \n     * Function returns checks if a document exists. \n     * \n     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'\n     * \n     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'\n     * @param {function} callback - Called back when check is finished, parameter is set if exists or not\n     * \n     * @example\n     * var docExists = appBackend.dbDoesDocExist(\"kTNvGsDcTefsM4w88bdMQoUFsEg1\", (exists) => {\n     *     if (exists) console.log(\"Doc exists!\");\n     * });\n    */","meta":{"range":[7466,7830],"filename":"firebasebackend.js","lineno":196,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009027","name":"FirebaseBackend#dbDoesDocExist","type":"MethodDefinition","paramnames":["location","callback"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Function returns checks if a document exists.","params":[{"type":{"names":["string"]},"description":"Location in the form of 'COLLECTION.DOCUMENT'","name":"location"},{"type":{"names":["string"]},"description":"Location in the form 'COLLECTION.DOCUMENT.COLLECTION'","name":"location"},{"type":{"names":["function"]},"description":"Called back when check is finished, parameter is set if exists or not","name":"callback"}],"examples":[{"caption":"","code":"var docExists = appBackend.dbDoesDocExist(\"kTNvGsDcTefsM4w88bdMQoUFsEg1\", (exists) => {\n    if (exists) console.log(\"Doc exists!\");\n});"}],"name":"dbDoesDocExist","longname":"FirebaseBackend#dbDoesDocExist","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000871","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbDoesDocExist","signature":"<span class=\"signature\">(location, location, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line129">129</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbGet">
+      <a href="#params-dbGet"><span class="type-signature"></span>dbGet</a><span class="signature">(location, conditions, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+where the callback is called for each document in the collection
+reference: https://firebase.google.com/docs/firestore/quickstart
+</div>
 
 
 
 
     <h5>Examples</h5>
     
-    
-        <pre class="prettyprint"><code>appBackend.dbGet("experimental.exp2", (data) => {
+    <pre class="prettyprint"><code>appBackend.dbGet("experimental.exp2", (data) => {
     console.log(data);
 });</code></pre>
-    
 
-    
-        <pre class="prettyprint"><code>// conditions/queries can be stacked by adding more parameters after each other (before the callback)
+    <pre class="prettyprint"><code>// conditions/queries can be stacked by adding more parameters after each other (before the callback)
 appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
   console.log(data);
 });</code></pre>
-    
-
-
-</div>
-            
-                <div class="member">
-
-
-    
-    <h4 class="name" id="dbGetSubCollections">
-        <a class="href-link" href="#dbGetSubCollections">#</a>
-        
-        <span class="code-name">
-            
-                dbGetSubCollections<span class="signature">(location, callback)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        This function gets data for each document in a subcollection of a Firestore document. 
-Needed because for a subcollection there is no '.data()'
-    </div>
-    
 
 
 
 
 
 
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
+<div class="collapse_" id="methodCollapse-dbGet">
 
   
 
   
 
-  <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>callback</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">function</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">Function to be invoked on each document of a subcollection</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
-</div>
+<!-- details.tmpl -->
 
 
 
 
 
-<dl class="details">
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -1149,20 +1018,6 @@ Needed because for a subcollection there is no '.data()'
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line167">line 167</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -1173,6 +1028,104 @@ Needed because for a subcollection there is no '.data()'
 
 
 
+  <div id="params-dbGet" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>conditions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
+                            (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function that will be invoked to give the caller the data in JSON</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
 
 
 
@@ -1182,317 +1135,580 @@ Needed because for a subcollection there is no '.data()'
 
 
 
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\n     * where the callback is called for each document in the collection\n     * reference: https://firebase.google.com/docs/firestore/quickstart\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]\n     *                             (e.g. [\"name\", \"==\", \"Something\"] **see https://firebase.google.com/docs/firestore/query-data/queries)\n     * @param {function} callback - Function that will be invoked to give the caller the data in JSON\n     *\n     * @example\n     * appBackend.dbGet(\"experimental.exp2\", (data) => {\n     *     console.log(data);\n     * });\n     * \n     * @example\n     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)\n     * appBackend.dbGet(\"experimental\", [\"hello\", \"==\", \"what2\"], (data) => {\n     *   console.log(data);\n     * });\n     */","meta":{"range":[5022,5834],"filename":"firebasebackend.js","lineno":129,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008857","name":"FirebaseBackend#dbGet","type":"MethodDefinition","paramnames":["location","conditionsWithCallback"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\nwhere the callback is called for each document in the collection\nreference: https://firebase.google.com/docs/firestore/quickstart","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["Array"]},"description":"Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]\n                            (e.g. [\"name\", \"==\", \"Something\"] **see https://firebase.google.com/docs/firestore/query-data/queries)","name":"conditions"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the data in JSON","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbGet(\"experimental.exp2\", (data) => {\n    console.log(data);\n});"},{"caption":"","code":"// conditions/queries can be stacked by adding more parameters after each other (before the callback)\nappBackend.dbGet(\"experimental\", [\"hello\", \"==\", \"what2\"], (data) => {\n  console.log(data);\n});"}],"name":"dbGet","longname":"FirebaseBackend#dbGet","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000861","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbGet","signature":"<span class=\"signature\">(location, conditions, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line167">167</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbGetSubCollections">
+      <a href="#params-dbGetSubCollections"><span class="type-signature"></span>dbGetSubCollections</a><span class="signature">(location, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function gets data for each document in a subcollection of a Firestore document. 
+Needed because for a subcollection there is no '.data()'
+</div>
 
 
 
 
     <h5>Example</h5>
     
-    
-        <pre class="prettyprint"><code>appBackend.dbGetSubCollections("users.test.cards",(data) => { 
+    <pre class="prettyprint"><code>appBackend.dbGetSubCollections("users.test.cards",(data) => { 
  console.log(data);
 })</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbGetSubCollections">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-</div>
-            
-                <div class="member">
-
+    
 
     
-    <h4 class="name" id="dbSet">
-        <a class="href-link" href="#dbSet">#</a>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbGetSubCollections" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
         
-        <span class="code-name">
-            
-                dbSet<span class="signature">(location, data, merge)</span><span class="type-signature"></span>
-            
-        </span>
-    </h4>
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
-    
-    
-    <div class="description">
-        This function sets the data of a Firestore document
-reference: https://firebase.google.com/docs/firestore/quickstart
-    </div>
-    
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>location</code></td>
             
 
-            <th>Type</th>
-
+            <td class="type">
             
-
-            
-            <th>Default</th>
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>location</code></td>
-  
-
-  <td class="type">
-  
-      
+                
 <span class="param-type">string</span>
 
 
-  
-  </td>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function to be invoked on each document of a subcollection</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function gets data for each document in a subcollection of a Firestore document. \n     * Needed because for a subcollection there is no '.data()'\n     * \n     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'\n     * @param {function} callback - Function to be invoked on each document of a subcollection\n     * \n     * @example\n     * appBackend.dbGetSubCollections(\"users.test.cards\",(data) => { \n     *  console.log(data);\n     * })\n     */","meta":{"range":[6447,6919],"filename":"firebasebackend.js","lineno":167,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008952","name":"FirebaseBackend#dbGetSubCollections","type":"MethodDefinition","paramnames":["location","callback"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function gets data for each document in a subcollection of a Firestore document. \nNeeded because for a subcollection there is no '.data()'","params":[{"type":{"names":["string"]},"description":"Location in the form 'COLLECTION.DOCUMENT.COLLECTION'","name":"location"},{"type":{"names":["function"]},"description":"Function to be invoked on each document of a subcollection","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbGetSubCollections(\"users.test.cards\",(data) => { \n console.log(data);\n})"}],"name":"dbGetSubCollections","longname":"FirebaseBackend#dbGetSubCollections","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000866","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbGetSubCollections","signature":"<span class=\"signature\">(location, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line221">221</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbSet">
+      <a href="#params-dbSet"><span class="type-signature"></span>dbSet</a><span class="signature">(location, data, merge)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function sets the data of a Firestore document
+reference: https://firebase.google.com/docs/firestore/quickstart
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbSet("experimental.exp2", {
+    hello: "what"
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbSet">
 
   
 
   
-      <td class="default">
-      
-      </td>
-  
 
-  <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
-</tr>
+<!-- details.tmpl -->
 
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbSet" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
 
         
 
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>data</code></td>
-  
+        
+        <th>Default</th>
+        
 
-  <td class="type">
-  
-      
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">JSON</span>
 
 
-  
-  </td>
-
-  
-
-  
-      <td class="default">
-      
-      </td>
-  
-
-  <td class="description last">The data for the new document</td>
-</tr>
-
-
-        
+            
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>merge</code></td>
-  
 
-  <td class="type">
-  
-      
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The data for the new document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merge</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">boolean</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
-      <td class="default">
-      
-          false
-      
-      </td>
-  
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
-  <td class="description last">Whether to merge the new data with the current document's data</td>
-</tr>
+            <td class="description last">Whether to merge the new data with the current document's data</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function sets the data of a Firestore document\n     * reference: https://firebase.google.com/docs/firestore/quickstart\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the new document\n     * @param {boolean} merge - Whether to merge the new data with the current document's data\n     *\n     * @example\n     * appBackend.dbSet(\"experimental.exp2\", {\n     *     hello: \"what\"\n     * });\n     */","meta":{"range":[8357,8589],"filename":"firebasebackend.js","lineno":221,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009074","name":"FirebaseBackend#dbSet","type":"MethodDefinition","paramnames":["location","data","merge"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function sets the data of a Firestore document\nreference: https://firebase.google.com/docs/firestore/quickstart","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the new document","name":"data"},{"type":{"names":["boolean"]},"description":"Whether to merge the new data with the current document's data","name":"merge","defaultvalue":false}],"examples":[{"caption":"","code":"appBackend.dbSet(\"experimental.exp2\", {\n    hello: \"what\"\n});"}],"name":"dbSet","longname":"FirebaseBackend#dbSet","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000873","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbSet","signature":"<span class=\"signature\">(location, data, merge)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line88">88</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line221">line 221</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    
-        <pre class="prettyprint"><code>appBackend.dbSet("experimental.exp2", {
-    hello: "what"
-});</code></pre>
-    
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="doesSupportDatabase">
-        <a class="href-link" href="#doesSupportDatabase">#</a>
-        
-        <span class="code-name">
-            
-                doesSupportDatabase<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-doesSupportDatabase"><span class="type-signature"></span>doesSupportDatabase</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        This function returns whether this Backend supports databases or not
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    This function returns whether this Backend supports databases or not
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-doesSupportDatabase">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line88">line 88</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -1516,228 +1732,293 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n     * This function returns whether this Backend supports databases or not\n     */","meta":{"range":[3245,3296],"filename":"firebasebackend.js","lineno":88,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008808","name":"FirebaseBackend#doesSupportDatabase","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function returns whether this Backend supports databases or not","name":"doesSupportDatabase","longname":"FirebaseBackend#doesSupportDatabase","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000858","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"doesSupportDatabase","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="enableDatabaseCaching">
-        <a class="href-link" href="#enableDatabaseCaching">#</a>
         
-        <span class="code-name">
-            
-                enableDatabaseCaching<span class="signature">(cacheSize)</span><span class="type-signature"></span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line97">97</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="enableDatabaseCaching">
+      <a href="#params-enableDatabaseCaching"><span class="type-signature"></span>enableDatabaseCaching</a><span class="signature">(cacheSize)</span><span class="type-signature"></span>
+
     </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function allows the backend to keep a local copy of the database data it actively uses
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-enableDatabaseCaching">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
     
-    
-    <div class="description">
-        This function allows the backend to keep a local copy of the database data it actively uses
-    </div>
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-enableDatabaseCaching" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>cacheSize</code></td>
             
 
-            <th>Type</th>
-
+            <td class="type">
             
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>cacheSize</code></td>
-  
-
-  <td class="type">
-  
-      
+                
 <span class="param-type">int</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">The size of the local copy of the cache in MB (leave blank for unlimited)</td>
-</tr>
+            <td class="description last">The size of the local copy of the cache in MB (leave blank for unlimited)</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function allows the backend to keep a local copy of the database data it actively uses\n     * \n     * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)\n     */","meta":{"range":[3531,3854],"filename":"firebasebackend.js","lineno":97,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008814","name":"FirebaseBackend#enableDatabaseCaching","type":"MethodDefinition","paramnames":["cacheSize"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function allows the backend to keep a local copy of the database data it actively uses","params":[{"type":{"names":["int"]},"description":"The size of the local copy of the cache in MB (leave blank for unlimited)","name":"cacheSize"}],"name":"enableDatabaseCaching","longname":"FirebaseBackend#enableDatabaseCaching","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000859","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"enableDatabaseCaching","signature":"<span class=\"signature\">(cacheSize)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line328">328</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line97">line 97</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="getLoginProviders">
-        <a class="href-link" href="#getLoginProviders">#</a>
-        
-        <span class="code-name">
-            
-                getLoginProviders<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-getLoginProviders"><span class="type-signature"></span>getLoginProviders</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Get the login providers that are implemented
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Get the login providers that are implemented
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getLoginProviders">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line328">line 328</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -1761,80 +2042,112 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the login providers that are implemented\n     */","meta":{"range":[11911,12048],"filename":"firebasebackend.js","lineno":328,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009317","name":"FirebaseBackend#getLoginProviders","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Get the login providers that are implemented","name":"getLoginProviders","longname":"FirebaseBackend#getLoginProviders","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000888","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getLoginProviders","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line396">396</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="getTimestamp">
-        <a class="href-link" href="#getTimestamp">#</a>
-        
-        <span class="code-name">
-            
-                getTimestamp<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-getTimestamp"><span class="type-signature"></span>getTimestamp</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Get the current Timestamp
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Get the current Timestamp
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getTimestamp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line396">line 396</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -1858,80 +2171,112 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the current Timestamp\n     */","meta":{"range":[13980,14053],"filename":"firebasebackend.js","lineno":396,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009435","name":"FirebaseBackend#getTimestamp","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Get the current Timestamp","name":"getTimestamp","longname":"FirebaseBackend#getTimestamp","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000900","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getTimestamp","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line380">380</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="getUserID">
-        <a class="href-link" href="#getUserID">#</a>
-        
-        <span class="code-name">
-            
-                getUserID<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-getUserID"><span class="type-signature"></span>getUserID</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Returns a user id associated with the logged in user
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Returns a user id associated with the logged in user
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getUserID">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line380">line 380</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -1955,76 +2300,108 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * Returns a user id associated with the logged in user\n     */","meta":{"range":[13425,13925],"filename":"firebasebackend.js","lineno":380,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009411","name":"FirebaseBackend#getUserID","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Returns a user id associated with the logged in user","name":"getUserID","longname":"FirebaseBackend#getUserID","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000898","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getUserID","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line403">403</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="getUserInfo">
-        <a class="href-link" href="#getUserInfo">#</a>
-        
-        <span class="code-name">
-            
-                getUserInfo<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-getUserInfo"><span class="type-signature"></span>getUserInfo</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getUserInfo">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line403">line 403</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -2048,80 +2425,112 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * \n     */","meta":{"range":[14083,14394],"filename":"firebasebackend.js","lineno":403,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009448","name":"FirebaseBackend#getUserInfo","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"name":"getUserInfo","longname":"FirebaseBackend#getUserInfo","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000901","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getUserInfo","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line53">53</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="initializeApp">
-        <a class="href-link" href="#initializeApp">#</a>
-        
-        <span class="code-name">
-            
-                initializeApp<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-initializeApp"><span class="type-signature"></span>initializeApp</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        This function initializes the Backend
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    This function initializes the Backend
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-initializeApp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line53">line 53</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -2145,179 +2554,232 @@ reference: https://firebase.google.com/docs/firestore/quickstart
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n     * This function initializes the Backend\n     */","meta":{"range":[1799,3147],"filename":"firebasebackend.js","lineno":53,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100008693","name":"FirebaseBackend#initializeApp","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"This function initializes the Backend","name":"initializeApp","longname":"FirebaseBackend#initializeApp","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000846","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"initializeApp","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="onAuthStateChange">
-        <a class="href-link" href="#onAuthStateChange">#</a>
         
-        <span class="code-name">
-            
-                onAuthStateChange<span class="signature">(callback)</span><span class="type-signature"></span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line373">373</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="onAuthStateChange">
+      <a href="#params-onAuthStateChange"><span class="type-signature"></span>onAuthStateChange</a><span class="signature">(callback)</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Calls the supplied function if there is a change in the user's login status.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Calls the supplied function if there is a change in the user's login status.
 I.E. if a user logs in or logs out the function will be called
-    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-onAuthStateChange">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-onAuthStateChange" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>callback</code></td>
             
 
-            <th>Type</th>
-
+            <td class="type">
             
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>callback</code></td>
-  
-
-  <td class="type">
-  
-      
+                
 <span class="param-type">requestCallback</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">The function to callback when a user's
+            <td class="description last">The function to callback when a user's
 state changes</td>
-</tr>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Calls the supplied function if there is a change in the user's login status.\n     * I.E. if a user logs in or logs out the function will be called\n     * \n     * @param {requestCallback} callback - The function to callback when a user's\n     * state changes\n     */","meta":{"range":[13254,13343],"filename":"firebasebackend.js","lineno":373,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009397","name":"FirebaseBackend#onAuthStateChange","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Calls the supplied function if there is a change in the user's login status.\nI.E. if a user logs in or logs out the function will be called","params":[{"type":{"names":["requestCallback"]},"description":"The function to callback when a user's\nstate changes","name":"callback"}],"name":"onAuthStateChange","longname":"FirebaseBackend#onAuthStateChange","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000897","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"onAuthStateChange","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line341">341</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line373">line 373</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="resetPassword">
-        <a class="href-link" href="#resetPassword">#</a>
-        
-        <span class="code-name">
-            
-                resetPassword<span class="signature">(email, return_func)</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-resetPassword"><span class="type-signature"></span>resetPassword</a><span class="signature">(email, return_func)</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Resets the user's password.
-    </div>
-    
 
 
 
@@ -2327,87 +2789,37 @@ state changes</td>
 
 
 
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>email</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">email of the user's account</td>
-</tr>
 
 
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>return_func</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">function</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">callback function on success and failure</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
+<div class="description">
+    Resets the user's password.
 </div>
 
 
 
 
 
-<dl class="details">
+
+
+
+<div class="collapse_" id="methodCollapse-resetPassword">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -2431,20 +2843,6 @@ state changes</td>
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line341">line 341</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -2455,6 +2853,86 @@ state changes</td>
 
 
 
+  <div id="params-resetPassword" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">email of the user's account</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>return_func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback function on success and failure</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
 
 
 
@@ -2469,28 +2947,43 @@ state changes</td>
 
 
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * Resets the user's password.\n     * \n     * @param {string} email - email of the user's account\n     * @param {function} return_func - callback function on success and failure\n     */","meta":{"range":[12252,12813],"filename":"firebasebackend.js","lineno":341,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009329","name":"FirebaseBackend#resetPassword","type":"MethodDefinition","paramnames":["email","return_func"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Resets the user's password.","params":[{"type":{"names":["string"]},"description":"email of the user's account","name":"email"},{"type":{"names":["function"]},"description":"callback function on success and failure","name":"return_func"}],"name":"resetPassword","longname":"FirebaseBackend#resetPassword","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000891","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resetPassword","signature":"<span class=\"signature\">(email, return_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line294">294</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="signIn">
-        <a class="href-link" href="#signIn">#</a>
-        
-        <span class="code-name">
-            
-                signIn<span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-signIn"><span class="type-signature"></span>signIn</a><span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        Sign in to an existing user account
-    </div>
-    
 
 
 
@@ -2500,112 +2993,37 @@ state changes</td>
 
 
 
-    <h5>Parameters:</h5>
-    
-<div class="table-container">
-    <table class="params table">
-        <thead>
-        <tr>
-            
-            <th>Name</th>
-            
-
-            <th>Type</th>
-
-            
-
-            
-
-            <th class="last">Description</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>email</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">the email of the user account</td>
-</tr>
 
 
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>password</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">the password of the user account</td>
-</tr>
-
-
-        
-
-            
-<tr class="deep-level-0">
-  
-      <td class="name"><code>error_func</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">function</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">called when there is an error during sign in</td>
-</tr>
-
-
-        
-        </tbody>
-    </table>
+<div class="description">
+    Sign in to an existing user account
 </div>
 
 
 
 
 
-<dl class="details">
+
+
+
+<div class="collapse_" id="methodCollapse-signIn">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
@@ -2629,20 +3047,6 @@ state changes</td>
 
     
 
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line294">line 294</a>
-            </span>
-        </p>
     
 </dl>
 
@@ -2653,6 +3057,109 @@ state changes</td>
 
 
 
+  <div id="params-signIn" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the email of the user account</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the password of the user account</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">called when there is an error during sign in</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
 
 
 
@@ -2667,79 +3174,106 @@ state changes</td>
 
 
 </div>
-            
-                <div class="member">
+
+<!--
+<pre>
+{"comment":"/**\n     * Sign in to an existing user account\n     * \n     * @param {string} email - the email of the user account\n     * @param {string} password - the password of the user account\n     * @param {function} error_func - called when there is an error during sign in\n     */","meta":{"range":[10935,11401],"filename":"firebasebackend.js","lineno":294,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009229","name":"FirebaseBackend#signIn","type":"MethodDefinition","paramnames":["email","password","error_func"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Sign in to an existing user account","params":[{"type":{"names":["string"]},"description":"the email of the user account","name":"email"},{"type":{"names":["string"]},"description":"the password of the user account","name":"password"},{"type":{"names":["function"]},"description":"called when there is an error during sign in","name":"error_func"}],"name":"signIn","longname":"FirebaseBackend#signIn","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000883","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signIn","signature":"<span class=\"signature\">(email, password, error_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line312">312</a>
+  </code>
+</div>
+
+
 
 
     
+
+    
+
     <h4 class="name" id="signOut">
-        <a class="href-link" href="#signOut">#</a>
-        
-        <span class="code-name">
-            
-                signOut<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-signOut"><span class="type-signature"></span>signOut</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Sign out the currently logged in user
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Sign out the currently logged in user
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signOut">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line312">line 312</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -2763,279 +3297,340 @@ state changes</td>
 
 
 
+
+
+
+
+
 </div>
-            
-                <div class="member">
 
+<!--
+<pre>
+{"comment":"/**\n     * Sign out the currently logged in user\n     */","meta":{"range":[11468,11837],"filename":"firebasebackend.js","lineno":312,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009280","name":"FirebaseBackend#signOut","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Sign out the currently logged in user","name":"signOut","longname":"FirebaseBackend#signOut","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000887","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signOut","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
-    
-    <h4 class="name" id="signUp">
-        <a class="href-link" href="#signUp">#</a>
         
-        <span class="code-name">
-            
-                signUp<span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
-            
-        </span>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line274">274</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="signUp">
+      <a href="#params-signUp"><span class="type-signature"></span>signUp</a><span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
+
     </h4>
-    
 
     
-    
-    <div class="description">
-        User sign up for an account using email and password
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    User sign up for an account using email and password
 Reference: https://firebase.google.com/docs/auth/web/password-auth
-    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signUp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
     
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
-<div class="table-container">
-    <table class="params table">
-        <thead>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-signUp" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
-            <th>Name</th>
+                <td class="name"><code>email</code></td>
             
 
-            <th>Type</th>
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
 
             
 
             
 
-            <th class="last">Description</th>
+            <td class="description last">a (TODO: valid?) email of a</td>
         </tr>
-        </thead>
 
-        <tbody>
-        
+    
 
+        <tr>
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>email</code></td>
-  
+                <td class="name"><code>password</code></td>
+            
 
-  <td class="type">
-  
-      
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">a (TODO: valid?) email of a</td>
-</tr>
-
-
-        
+            
+            </td>
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>password</code></td>
-  
-
-  <td class="type">
-  
-      
-<span class="param-type">string</span>
-
-
-  
-  </td>
-
-  
-
-  
-
-  <td class="description last">a (TODO: relatively complex?) password</td>
-</tr>
-
-
-        
 
             
-<tr class="deep-level-0">
-  
-      <td class="name"><code>error_func</code></td>
-  
 
-  <td class="type">
-  
-      
+            <td class="description last">a (TODO: relatively complex?) password</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_func</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">function</span>
 
 
-  
-  </td>
+            
+            </td>
 
-  
+            
 
-  
+            
 
-  <td class="description last">called when there is an error during sign in</td>
-</tr>
+            <td class="description last">called when there is an error during sign in</td>
+        </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * User sign up for an account using email and password\n     * Reference: https://firebase.google.com/docs/auth/web/password-auth\n     * \n     * @param {string} email - a (TODO: valid?) email of a \n     * @param {string} password - a (TODO: relatively complex?) password\n     * @param {function} error_func - called when there is an error during sign in\n     */","meta":{"range":[10270,10646],"filename":"firebasebackend.js","lineno":274,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009178","name":"FirebaseBackend#signUp","type":"MethodDefinition","paramnames":["email","password","error_func"]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"User sign up for an account using email and password\nReference: https://firebase.google.com/docs/auth/web/password-auth","params":[{"type":{"names":["string"]},"description":"a (TODO: valid?) email of a","name":"email"},{"type":{"names":["string"]},"description":"a (TODO: relatively complex?) password","name":"password"},{"type":{"names":["function"]},"description":"called when there is an error during sign in","name":"error_func"}],"name":"signUp","longname":"FirebaseBackend#signUp","kind":"function","memberof":"FirebaseBackend","scope":"instance","___id":"T000002R000880","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signUp","signature":"<span class=\"signature\">(email, password, error_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
 
         
-        </tbody>
-    </table>
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="network_backends_firebasebackend.js.html">firebasebackend.js</a>:<a href="network_backends_firebasebackend.js.html#line362">362</a>
+  </code>
 </div>
 
 
 
 
-
-<dl class="details">
-
     
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line274">line 274</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-            
-                <div class="member">
-
-
-    
     <h4 class="name" id="userLoggedIn">
-        <a class="href-link" href="#userLoggedIn">#</a>
-        
-        <span class="code-name">
-            
-                userLoggedIn<span class="signature">()</span><span class="type-signature"></span>
-            
-        </span>
+      <a href="#params-userLoggedIn"><span class="type-signature"></span>userLoggedIn</a><span class="signature">()</span><span class="type-signature"></span>
+
     </h4>
-    
-
-    
-    
-    <div class="description">
-        Returns true or false depending on if the user is already logged in
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
-    
+
+
+<div class="description">
+    Returns true or false depending on if the user is already logged in
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-userLoggedIn">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
 
     
 
     
 
     
-        <p class="tag-source">
-            <a href="network_backends_firebasebackend.js.html" class="button">View Source</a>
-            <span>
-                <a href="network_backends_firebasebackend.js.html">network/backends/firebasebackend.js</a>, <a href="network_backends_firebasebackend.js.html#line362">line 362</a>
-            </span>
-        </p>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 </dl>
 
@@ -3059,10 +3654,21 @@ Reference: https://firebase.google.com/docs/auth/web/password-auth
 
 
 
+
+
+
+
+
 </div>
-            
-            </div>
-        </div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Returns true or false depending on if the user is already logged in\n     */","meta":{"range":[12910,12967],"filename":"firebasebackend.js","lineno":362,"columnno":4,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100009391","name":"FirebaseBackend#userLoggedIn","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"network/backends/firebasebackend.js"},"description":"Returns true or false depending on if the user is already logged in","name":"userLoggedIn","longname":"FirebaseBackend#userLoggedIn","kind":"function","memberof":"FirebaseBackend","scope":"instance","params":[],"___id":"T000002R000896","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"userLoggedIn","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"FirebaseBackend.html\">FirebaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
     
 
     
@@ -3075,25 +3681,15 @@ Reference: https://firebase.google.com/docs/auth/web/password-auth
 
 
 
-            </div>
-            
-            <footer class="footer">
-                <div class="content has-text-centered">
-                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
-                    <p class="sidebar-created-by">
-                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
-                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
-                    </p>
-                </div>
-            </footer>
-            
-        </div>
-        <div id="side-nav" class="side-nav">
-        </div>
-    </div>
-<script src="scripts/app.min.js"></script>
-<script>PR.prettyPrint();</script>
-<script src="scripts/linenumber.js"> </script>
+</div>
 
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Wed Mar 03 2021 18:51:51 GMT-0800 (Pacific Standard Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>
