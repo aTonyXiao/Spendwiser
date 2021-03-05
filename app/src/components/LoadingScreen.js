@@ -22,7 +22,13 @@ async function handleRedirectsBasedOnLoginStatus(navigation) {
     }
 }
 
-export function LoadingScreen({navigation}) {
+/**
+ * This is a loading screen
+ * 
+ * @module LoadingScreen
+ * @param {Object} props - Cool props for this module
+ */
+function LoadingScreen({navigation}) {
     // In the future, this will be the way everything gets decided
     // as far as navigation goes.
     // For now, you can disable redirects based on login status by
@@ -45,6 +51,8 @@ export function LoadingScreen({navigation}) {
         </View>
     );
 }
+
+export {LoadingScreen};
 
 const styles = StyleSheet.create({
     screen : {

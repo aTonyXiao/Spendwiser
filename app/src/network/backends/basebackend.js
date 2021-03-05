@@ -1,4 +1,4 @@
-// https://github.com/brix/crypto-js
+// ref: https://github.com/brix/crypto-js
 import aes from 'crypto-js/aes';
 import utf8 from 'crypto-js/enc-utf8';
 
@@ -83,18 +83,34 @@ class BaseBackend {
      */
     dbGetSubCollections(location, callback) {}
 
+    /** 
+     * Function returns checks if a document exists. 
+     * 
+     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'
+     * 
+     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'
+     * @param {function} callback - Called back when check is finished, parameter is set if exists or not
+     * 
+     * @example
+     * var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+     *     if (exists) console.log("Doc exists!");
+     * });
+    */
+   dbDoesDocExist(location, callback) {}
+
     /**
      * This function sets the data of a 'document'
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
      * @param {JSON} data - The data for the document
+     * @param {boolean} merge - Whether to merge the new data with the current document's data
      *
      * @example
      * appBackend.dbSet("experimental.exp2", {
      *     hello: "what"
      * });
      */
-    dbSet (location, data) {}
+    dbSet (location, data, merge = false) {}
 
     /**
      * This function adds a new 'document' to a 'collection'
@@ -104,12 +120,11 @@ class BaseBackend {
      * @param {function} callback - Function that will be invoked to give the caller the new collection ID
      *
      * @example
-     *   appBackend.dbAdd("experimental.exp2.experimental2", {
-     *      hello: "what"
-     *   }, (id) => {
-     *      console.log(id);
-     *   });
-     *
+     * appBackend.dbAdd("experimental.exp2.experimental2", {
+     *     hello: "what"
+     * }, (id) => {
+     *     console.log(id);
+     * });
      */
     dbAdd (location, data, callback) {}
 
@@ -141,18 +156,19 @@ class BaseBackend {
      *
      * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
      * @param {JSON} data - The data for the document
+     * @param {boolean} merge - Whether to merge the new data with the current document's data
      *
      * @example
      * appBackend.dbSet("experimental.exp2", {
      *     hello: "what"
      * });
      */
-    dbSetEncrypted (location, data) {
+    dbSetEncrypted (location, data, merge = false) {
         let newData = {};
         for (let key of Object.keys(data)) {
             newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
         }
-        this.dbSet(location, newData);
+        this.dbSet(location, newData, merge);
     }
 
     /**
@@ -180,24 +196,16 @@ class BaseBackend {
     /**
      * User sign up for an account using email and password
      * 
-     * @param {string} email - a (TODO: valid?) email of a 
-     * @param {string} password - a (TODO: relatively complex?) password
-     * @param {function} error_func - called when there is an error during sign up
+     * @param {string} email - email of a propsective user
+     * @param {string} password - a password 
+     * @param {function} error_func - called when there is an error during sign up 
+     * (e.g. email is incorrect or password is not complicated enough)
      */
     signUp(username, password, error_func) {}
 
     /**
-      * Use facebook account to sign in
-      */
-    signInWithFacebook() {}
-
-    /**
-      * Use google account to sign in
-      */
-    signInWithGoogle() {}
-
-    /**
      * Sign in to an existing user account
+     * 
      * @param {string} email - the email of the user account
      * @param {string} password - the password of the user account
      * @param {function} error_func - called when there is an error during sign in
@@ -209,32 +217,71 @@ class BaseBackend {
      */
     signOut() {}
 
+    /**
+     * @typedef {Object} LoginProviders
+     * @property {?LoginAuthorizer} google - google's authentication service
+     * @property {?LoginAuthorizer} facebook - facebook's authentication service
+     */
+
+    /**
+     * Get the login providers that are implemented
+     * 
+     * @returns {LoginProviders} - object containing the backend's supported login providers
+     */
     getLoginProviders() {}
     
     /**
       * Resets the user's password.
+      * 
       * @param {string} email - the email of the account to reset password
       * @param {function} error_func - called when there is an error duing password reset
       */
     resetPassword(email, return_func) {}
 
     /**
-     * Returns true or false depending on if the user is already logged in
+     * Get the user's log in status
+     * 
+     * @returns {boolean} - true or false depending on if a user is logged in or not
      */
     userLoggedIn() {}
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
      * I.E. if a user logs in or logs out the function will be called
+     * 
      * @param {requestCallback} callback - The function to callback when a user's
      * state changes
      */
-    onAuthStateChange(func) {}
+    onAuthStateChange(callback) {}
 
     /**
-     * returns a user id associated with the logged in user
+     * Gets a user id associated with the logged in user
+     * 
+     * @returns {string} - string containing the user id of the logged in user
      */
     getUserID() {}
+
+    /** 
+     * @typedef {Object} UserInfo
+     * @property {string} name - The name of the signed-in user
+     * @property {string} email - The email of the signed-in user
+     * @property {boolean} emailVerified - True if the email has been verified, false if not
+     * @property {string} lastLogin - Timestamp of the last time this user has logged in
+     * @property {?string} photoURL - URL of a profile photo, if there is one
+     */
+
+    /**
+     * Gets all useful information about a signed in user.
+     * 
+     * @return {UserInfo} userInfo 
+     */
+    getUserInfo() {}
+    /**
+     * Get the current Timestamp
+     */
+    getTimestamp() {
+        return firebase.firestore.Timestamp.now();
+    }
 }
 
 export default BaseBackend;

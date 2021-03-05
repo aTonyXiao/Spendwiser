@@ -2,7 +2,10 @@ import * as Facebook from 'expo-facebook';
 import * as firebase from 'firebase';
 import LoginAuthorizer from '../login_authorizer';
 
-export default class FacebookLogin extends LoginAuthorizer {
+/**
+ * Facebook login using Expo's facebook login library
+ */
+class FacebookLogin extends LoginAuthorizer {
     async login() {
         await Facebook.initializeAsync({appId: '251267389794841', });
 
@@ -26,3 +29,5 @@ export default class FacebookLogin extends LoginAuthorizer {
         }
     }
 }
+
+export default FacebookLogin;

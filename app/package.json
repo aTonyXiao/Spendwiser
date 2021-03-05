@@ -14,7 +14,6 @@
     "@react-native-community/netinfo": "5.9.7",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.2",
-    "clean-jsdoc-theme": "^3.0.8",
     "core-js-bundle": "^3.6.5",
     "crypto-js": "^3.3.0",
     "expo": "~40.0.0",
@@ -22,6 +21,7 @@
     "expo-firestore-offline-persistence": "^0.1.0",
     "expo-font": "~8.4.0",
     "expo-google-app-auth": "^8.1.4",
+    "expo-permissions": "~10.0.0",
     "expo-sqlite": "~8.5.0",
     "expo-status-bar": "~1.0.3",
     "firebase": "7.9.0",
@@ -45,12 +45,13 @@
     "react-native-swiper": "^1.6.0",
     "react-native-unimodules": "^0.12.0",
     "react-native-vector-icons": "^8.0.0",
-    "react-native-web": "~0.13.12",
-    "expo-permissions": "~10.0.0"
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
-    "babel-plugin-inline-dotenv": "^1.6.0"
+    "babel-plugin-inline-dotenv": "^1.6.0",
+    "better-docs": "^2.3.2",
+    "loke-jsdoc-theme": "^2.1.0"
   },
   "private": true
 }

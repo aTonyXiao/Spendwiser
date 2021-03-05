@@ -5,12 +5,19 @@ import { appBackend } from '../network/backend';
 import { Footer } from './util/Footer';
 import { Ionicons } from '@expo/vector-icons';
 
-export function Settings(props) { 
+/**
+ * Settings page that contains a plethora of navigations to different information and buttons
+ * like 'Permissions', 'Privacy', etc.
+ * 
+ * @param {*} props - Not currently used for anything
+ */
+let Settings = (props) => {
     const navigation = props.navigation;
 
     return(
         <View style={mainStyles.container}>
-            <TouchableOpacity
+            <Text style={mainStyles.large_title}>SpendWiser</Text>
+            <TouchableOpacity    
                 onPress={() => {
                     Alert.alert(
                         'Tell A Friend About Us!',
@@ -56,21 +63,7 @@ export function Settings(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-                // TODO
-                // onPress={() => { props.navigation.navigate('Permissions') }} 
-                style={styles.rowContainer}
-            >
-                <Text>Notifications</Text>
-                <Ionicons
-                        name="chevron-forward-outline"
-                        color="gray"
-                        size={32}
-                ></Ionicons>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                // TODO 
-                // onPress={}
+                onPress={() => props.navigation.navigate('Account')}
                 style={styles.rowContainer}
             >
                 <Text>Account</Text>
@@ -177,3 +170,5 @@ const styles = StyleSheet.create({
         marginTop: 0
     }
 })
+
+export { Settings };

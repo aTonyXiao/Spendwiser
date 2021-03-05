@@ -51,7 +51,7 @@ export function AddCardManual({navigation}) {
         var name = inputName.current.state.text;
         var url = inputUrl.current.state.text;
 
-        cards.addCardToDatabase(name, null, rewards, url).then((cardId) => {
+        cards.addCardToDatabase(name, [], rewards, url).then((cardId) => {
             console.log("new card id: " + cardId);
             user.saveCardToUser(userId, cardId, null, null);
             navigation.navigate('YourCards');
@@ -99,8 +99,8 @@ export function AddCardManual({navigation}) {
                 <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
 
                 <View style={styles.addCardContainer}>
-                    <TouchableOpacity style={styles.addCardButton}>
-                        <Text style={styles.addCardText}onPress={addCard}>Add this card</Text>
+                    <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
+                        <Text style={styles.addCardText}>Add this card</Text>
                     </TouchableOpacity>
                 </View>
             </View>
