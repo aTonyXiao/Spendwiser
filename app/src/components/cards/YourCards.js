@@ -1,10 +1,10 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Button, View, Text, Modal, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
-import { Footer } from '../main/Footer';
+import { Footer } from '../util/Footer';
 
 export function YourCards({route, navigation}) { 
     const [cards, setCards] = useState([]);
@@ -25,11 +25,66 @@ export function YourCards({route, navigation}) {
         })
     };
 
+    // TODO: make this modal a component
     if (cards.length == 0) { 
         return (
-            <View>
-                <Text>You currently have no stored cards!</Text>
-                <Button title="Add Card" onPress={() => navigation.navigate('AddCard')}></Button>
+            <View style={{marginTop: 10}}>
+                <View style={styles.bodyContainer}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}
+                    >
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>Add New Card</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    navigation.navigate('AddCardDB');
+                                }}
+                            >
+                                <Text style={styles.modalText}>By Search</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    navigation.navigate('AddCardCamera');
+                                }}
+                            >
+                                <Text style={styles.modalText}>By Camera</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    navigation.navigate('AddCardManual');
+                                }}
+                            >
+                                <Text style={styles.modalText}>Manually</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.modalText}>TEMPORARY: Hide Modal</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
+                    <View style={styles.addButton}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <Ionicons
+                                name="add-circle-outline"
+                                color="black"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
+                </View>
             </View>
         )
     }

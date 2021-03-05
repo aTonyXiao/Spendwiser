@@ -4,6 +4,7 @@ import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import CachedImage from 'react-native-expo-cached-image';
 import { Ionicons } from '@expo/vector-icons';
+import { RewardModal } from './RewardModal';
 
 export function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
@@ -19,6 +20,8 @@ export function DisplayCard({route, navigation}) {
     const [hasConstructed, setHasConstructed] = useState(false);
     const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [transactionInput, setTransactionInput] = useState("");
+    const rewardModal = React.createRef();
+    console.log(rewardModal);
 
     // simulate constructor for functional components
     const constructor = () => { 
@@ -91,6 +94,12 @@ export function DisplayCard({route, navigation}) {
         console.log("adding reward");
     }
 
+    showRewardModal = () => { 
+        if (rewardModal) { 
+            rewardModal.showModal();
+        }
+    }
+
     return (
         <ScrollView 
             style={styles.container} 
@@ -126,6 +135,8 @@ export function DisplayCard({route, navigation}) {
                 </View>
             </Modal>
 
+            {/* TODO: Add this in beta version */}
+            {/* <RewardModal ref={rewardModal}></RewardModal> */}
             
             <View style={{justifyContent: 'flex-start'}}>
                 <Text style={styles.cardTitle}>{cardName}</Text>
@@ -173,7 +184,7 @@ export function DisplayCard({route, navigation}) {
                         )
                     })
                 }
-                <TouchableOpacity style={styles.addTransactionButton} onPress={() => setModalVisible(true)}>
+                <TouchableOpacity style={styles.addTransactionButton} onPress={showRewardModal}>
                     <Text style={{}}>Add a reward</Text>
                 </TouchableOpacity>
             </View>

@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
-import { Footer } from './Footer';
+import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
