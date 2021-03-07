@@ -220,6 +220,7 @@ export function MainScreen({navigation}) {
                                                 key={i}
                                                 onPress={()=> {
                                                     setRecCard(null);
+                                                    setRecCards(null);
                                                     changeRecCard(storeName, i);
                                                     setModalVisible(false);
                                                 }}
@@ -375,13 +376,6 @@ export function MainScreen({navigation}) {
                         />
                     </View>
                 }
-                {/* <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
-                    style = {{ 
-                        width: width * .8,  //its same to '20%' of device width
-                        aspectRatio: 1.5, // <-- this
-                        resizeMode: 'contain', //optional
-                    }}
-                /> */}
             </View>
             <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
         </SafeAreaView>
