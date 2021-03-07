@@ -50,6 +50,8 @@ export function DisplayCard({route, navigation}) {
         }
     }
     constructor();
+    console.log("Testing")
+    console.log(storeInformation);
 
     const confirmDelete = () => {
         Alert.alert(
@@ -122,7 +124,7 @@ export function DisplayCard({route, navigation}) {
                             </TouchableOpacity>
                         </View>
                         <Text style={modalStyles.modalText}>Adding a transaction at</Text>
-                        <Text style={modalStyles.storeText}>{storeInformation.value}</Text>
+                        <Text style={modalStyles.storeText}>{storeInformation ? storeInformation.value : "" }</Text>
                         <Text style={modalStyles.modalText}>How much did you spend?</Text>
                         <TextInput
                             style={modalStyles.manualTextInput}

@@ -181,7 +181,7 @@ export function YourCards({route, navigation}) {
                                 card: card,
                                 storeInformation: storeInformation
                             }
-                            return <Card key={i} props={props} />
+                            return <Card key={i.toString()} props={props} />
                         })}
                     </View>
 

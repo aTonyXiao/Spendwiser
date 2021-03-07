@@ -6,7 +6,7 @@ import CardImage from './CardImage';
 export class Card extends React.Component {
     constructor(props) { 
         super(props);
-
+        
         var cardInformation = props.props.card;
         this.state = {
             name: "",
@@ -16,7 +16,7 @@ export class Card extends React.Component {
             cardId: cardInformation.cardId,
             navigation: props.props.navigation,
             docId: cardInformation.docId,
-            storeInformation: props.props.storeInformation
+            storeInformation: props.storeInformation
         }
 
         cards.getCardImageURL(this.state.cardId).then((url) => {
