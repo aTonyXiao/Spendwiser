@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FacebookLogin - Documentation</title>
+    <title>DisplayCard - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">FacebookLogin</h1>
+    <h1 class="page-title">DisplayCard</h1>
     
 
     <!--container.tmpl-->
@@ -49,11 +49,9 @@
 
 <header data-tmpl="container.tmpl">
     
-        <h2>
-        FacebookLogin
-        </h2>
+      <h2>Module: DisplayCard</h2>
         
-            <div class="lead">Facebook login using Expo's facebook login library</div>
+            
         
     
 
@@ -63,36 +61,27 @@
 <article>
     <div class="container-overview">
     
-        <!--method.tmpl-->
+        
+            <div class="description">Display for a single credit card. Shows information about a card's rewards as well
+as giving options to add a transaction to be associated with a its particular card.</div>
+        
+
+        
+            <!--method.tmpl-->
 <div class="method-details">
 
 
 
-
-
-    
-    <h3 class="constructor">Constructor</h3>
-    
-
-    
-      <!--source-link.tmpl-->
+  <!--source-link.tmpl-->
 
 
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="network_backends_firebase_facebook_login.js.html">facebook_login.js</a>:<a href="network_backends_firebase_facebook_login.js.html#line8">8</a>
+    <a href="components_cards_DisplayCard.js.html">DisplayCard.js</a>:<a href="components_cards_DisplayCard.js.html#line9">9</a>
   </code>
 </div>
 
-    
-
-    <h4 class="name" id="FacebookLogin">
-      <a href="#params-FacebookLogin"><span class="type-signature"></span>new FacebookLogin</a><span class="signature">()</span><span class="type-signature"></span>
-
-    </h4>
-
-    
 
 
 
@@ -113,7 +102,9 @@
 
 
 
-<div class="collapse_" id="methodCollapse-FacebookLogin">
+
+
+<div class="collapse_" id="methodCollapse-DisplayCard">
 
   
 
@@ -121,6 +112,17 @@
 
 <!-- details.tmpl -->
 
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_DisplayCard.js.html">DisplayCard.js</a>:<a href="components_cards_DisplayCard.js.html#line9">9</a>
+  </code>
+</div>
 
 
 
@@ -162,6 +164,131 @@
 
 
 
+  <div id="params-DisplayCard" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The route and navigation passed directly to display card
+                <h6>Properties</h6>
+                <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>route</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">routing object containing information about a specific credit card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>navigation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">navigation object used to move between different pages</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
 
 
 
@@ -184,11 +311,12 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Facebook login using Expo's facebook login library\n */","meta":{"range":[195,1033],"filename":"facebook_login.js","lineno":8,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/network/backends/firebase","code":{"id":"astnode100009198","name":"FacebookLogin","type":"ClassDeclaration","paramnames":[]},"shortpath":"network/backends/firebase/facebook_login.js"},"classdesc":"Facebook login using Expo's facebook login library","name":"FacebookLogin","longname":"FacebookLogin","kind":"class","scope":"global","___id":"T000003R000003","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"FacebookLogin","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Display for a single credit card. Shows information about a card's rewards as well\n * as giving options to add a transaction to be associated with a its particular card.\n * \n * @param {{Object, Object}} obj - The route and navigation passed directly to display card\n * @param {Object} obj.route - routing object containing information about a specific credit card\n * @param {Object} obj.navigation - navigation object used to move between different pages\n * @module DisplayCard\n */","meta":{"filename":"DisplayCard.js","lineno":9,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/components/cards","code":{},"shortpath":"components/cards/DisplayCard.js"},"description":"Display for a single credit card. Shows information about a card's rewards as well\nas giving options to add a transaction to be associated with a its particular card.","params":[{"type":{"names":["Object"]},"description":"The route and navigation passed directly to display card","name":"obj","subparams":[{"type":{"names":["Object"]},"description":"routing object containing information about a specific credit card","name":"route"},{"type":{"names":["Object"]},"description":"navigation object used to move between different pages","name":"navigation"}]},null,null],"kind":"module","name":"DisplayCard","longname":"module:DisplayCard","___id":"T000002R000325","___s":true,"attribs":"","id":"DisplayCard","ancestors":[]}
 </pre>
 -->
 </div>
 
+        
     
     </div>
 

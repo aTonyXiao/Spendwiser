@@ -6,7 +6,16 @@ import CachedImage from 'react-native-expo-cached-image';
 import { Ionicons } from '@expo/vector-icons';
 import { RewardModal } from './RewardModal';
 
-export function DisplayCard({route, navigation}) {
+/**
+ * Display for a single credit card. Shows information about a card's rewards as well
+ * as giving options to add a transaction to be associated with a its particular card.
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific credit card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module DisplayCard
+ */
+function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
     const docId = route.params.docId;
     const cardImage = route.params.img;
@@ -304,3 +313,5 @@ const modalStyles = StyleSheet.create({
         borderRadius: 5,
     },
 });
+
+export {DisplayCard};
