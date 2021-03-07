@@ -6,7 +6,17 @@ import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 
-export function YourCards({route, navigation}) { 
+/**
+ * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
+ * Shows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized
+ * image will be displayed instead.
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific store
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module YourCards
+ */
+function YourCards({route, navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
@@ -283,3 +293,5 @@ const modalStyles = StyleSheet.create({
         marginTop: -26
     },
 });
+
+export {YourCards};

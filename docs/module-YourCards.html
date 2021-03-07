@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>network/backend.js - Documentation</title>
+    <title>YourCards - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">network/backend.js</h1>
+    <h1 class="page-title">YourCards</h1>
     
 
     <!--container.tmpl-->
@@ -42,50 +42,305 @@
 
 
 
-    <!--source.tmpl-->
 
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import BaseBackend from './backends/basebackend'
-import FirebaseBackend from './backends/firebasebackend';
+<section>
 
-/**
- * The wrapped backend that the app will interface with.  Functions
- * inherited from 'BaseBackend' can be invoked from this object to
- * interact with the initialized backend from 'initializeAppBackend'
- */
-export var appBackend;
 
-/**
- * Set the app backend to a new instance of a supported type.
- * Modify this to add new supported backends
- */
-function setAppBackend (type) {
-    switch (type) {
-        case "firebase":
-            appBackend = new FirebaseBackend();
-            break;
-        default:
-            appBackend = new BaseBackend();
-    }
-}
 
-/**
- * Initializes the current backend to the given type denoted by a string.
- * 
- * Currently supported backends:
- *   - 'firebase'
- * 
- * @param {string} type - The backend type to initialize
- */
-export function initializeAppBackend (type) {
-    setAppBackend(type);
-    appBackend.initializeApp();
-    appBackend.enableDatabaseCaching();
-}</code></pre>
-        </article>
-    </section>
+<header data-tmpl="container.tmpl">
+    
+      <h2>Module: YourCards</h2>
+        
+            
+        
+    
 
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
+Shows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized
+image will be displayed instead.</div>
+        
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_YourCards.js.html">YourCards.js</a>:<a href="components_cards_YourCards.js.html#line9">9</a>
+  </code>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-YourCards">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="components_cards_YourCards.js.html">YourCards.js</a>:<a href="components_cards_YourCards.js.html#line9">9</a>
+  </code>
+</div>
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-YourCards" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The route and navigation passed directly to display card
+                <h6>Properties</h6>
+                <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>route</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">routing object containing information about a specific store</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>navigation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">navigation object used to move between different pages</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Display all of the credit cards associated with a user's account in a scrollable and selectable view. \n * Shows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized\n * image will be displayed instead.\n * \n * @param {{Object, Object}} obj - The route and navigation passed directly to display card\n * @param {Object} obj.route - routing object containing information about a specific store\n * @param {Object} obj.navigation - navigation object used to move between different pages\n * @module YourCards\n */","meta":{"filename":"YourCards.js","lineno":9,"columnno":0,"path":"/home/njw/Projects/Spendwiser/app/src/components/cards","code":{},"shortpath":"components/cards/YourCards.js"},"description":"Display all of the credit cards associated with a user's account in a scrollable and selectable view. \nShows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized\nimage will be displayed instead.","params":[{"type":{"names":["Object"]},"description":"The route and navigation passed directly to display card","name":"obj","subparams":[{"type":{"names":["Object"]},"description":"routing object containing information about a specific store","name":"route"},{"type":{"names":["Object"]},"description":"navigation object used to move between different pages","name":"navigation"}]},null,null],"kind":"module","name":"YourCards","longname":"module:YourCards","___id":"T000002R000449","___s":true,"attribs":"","id":"YourCards","ancestors":[]}
+</pre>
+-->
+</div>
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
