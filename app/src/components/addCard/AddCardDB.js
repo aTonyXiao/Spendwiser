@@ -88,6 +88,9 @@ export function AddCardDB({navigation}) {
                             <Text style={styles.autocompleteListText}>{item}</Text>
                         </TouchableOpacity>
                     )}
+                    keyExtractor={(item, index) => {
+                        return index.toString();
+                    }}
                 />
             </View> 
             <View style={styles.enterIcon}>
