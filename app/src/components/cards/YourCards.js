@@ -5,8 +5,19 @@ import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
+import {AddCardModal} from './AddCardModal'
 
-export function YourCards({route, navigation}) { 
+/**
+ * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
+ * Shows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized
+ * image will be displayed instead.
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific store
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module YourCards
+ */
+function YourCards({route, navigation}) { 
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,12 +25,16 @@ export function YourCards({route, navigation}) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
+            /* triggered on a reload of the page */
             loadCards(userId);
         });
         return unsubscribe;
     }, [navigation]);
 
     loadCards = () => {
+        /* Make sure we aren't displaying any previous card lists */
+        setCards([]);
+
         user.getCards(userId).then((cards) => {
             setCards(cards);
         })
@@ -30,63 +45,12 @@ export function YourCards({route, navigation}) {
         return (
             <View style={{ marginTop: 10 }}>
                 <View style={styles.bodyContainer}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            Alert.alert("Modal has been closed.");
-                            setModalVisible(!modalVisible);
-                        }}
-                    >
-                        <View style={modalStyles.modalCenteredView}>
-                            <View style={modalStyles.modalView}>
-                                <View style={modalStyles.modalHeader}>
-                                    <TouchableOpacity onPress={() => setModalVisible(false)}>
-                                        <Ionicons
-                                            name="close-circle-outline"
-                                            color="black"
-                                            size={26}
-                                        ></Ionicons>
-                                    </TouchableOpacity>
-                                </View>
 
-                                <View style={modalStyles.modalBody}>
-                                    <Text style={modalStyles.modalTitle}>Add New Card</Text>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setModalVisible(!modalVisible);
-                                            navigation.navigate('AddCardDB');
-                                        }}
-                                        style={modalStyles.modalText}
-                                    >
-                                        <Text>By Search</Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setModalVisible(!modalVisible);
-                                            navigation.navigate('AddCardCamera');
-                                        }}
-                                        style={modalStyles.modalText}
-                                    >
-                                        <Text>By Camera</Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setModalVisible(!modalVisible);
-                                            navigation.navigate('AddCardManual');
-                                        }}
-                                        style={modalStyles.modalTextBottom}
-                                    >
-                                        <Text>Manually</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
-
+                    <AddCardModal 
+                        navigation={navigation}
+                        modalVisible={modalVisible} 
+                        setModalVisible={setModalVisible}
+                    />
 
                     <View style={styles.addButton}>
                         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -107,62 +71,11 @@ export function YourCards({route, navigation}) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bodyContainer}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={modalStyles.modalCenteredView}>
-                        <View style={modalStyles.modalView}>
-                            <View style={modalStyles.modalHeader}>
-                                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                                    <Ionicons
-                                        name="close-circle-outline"
-                                        color="black"
-                                        size={26}
-                                    ></Ionicons>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={modalStyles.modalBody}>
-                                <Text style={modalStyles.modalTitle}>Add New Card</Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                        navigation.navigate('AddCardDB');
-                                    }}
-                                    style={modalStyles.modalText}
-                                >
-                                    <Text>By Search</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                        navigation.navigate('AddCardCamera');
-                                    }}
-                                    style={modalStyles.modalText}
-                                >
-                                    <Text>By Camera</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                        navigation.navigate('AddCardManual');
-                                    }}
-                                    style={modalStyles.modalTextBottom}
-                                >
-                                    <Text>Manually</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
+                <AddCardModal 
+                    navigation={navigation}
+                    modalVisible={modalVisible} 
+                    setModalVisible={setModalVisible}
+                />
                 <View style={styles.addButton}>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Ionicons
@@ -279,3 +192,5 @@ const modalStyles = StyleSheet.create({
         marginTop: -26
     },
 });
+
+export {YourCards};
