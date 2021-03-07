@@ -14,12 +14,16 @@ export function YourCards({route, navigation}) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
+            /* triggered on a reload of the page */
             loadCards(userId);
         });
         return unsubscribe;
     }, [navigation]);
 
     loadCards = () => {
+        /* Make sure we aren't displaying any previous card lists */
+        setCards([]);
+
         user.getCards(userId).then((cards) => {
             setCards(cards);
         })
