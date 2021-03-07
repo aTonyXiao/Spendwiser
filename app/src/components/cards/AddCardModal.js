@@ -30,7 +30,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                         <TouchableOpacity
                             onPress={() => {
                                 setModalVisible(!modalVisible);
-                                navigation.navigate('AddCardDB');
+                                navigation.navigate('AddCardDB', {
+                                    navigation: navigation
+                                });
                             }}
                             style={modalStyles.modalText}
                         >
