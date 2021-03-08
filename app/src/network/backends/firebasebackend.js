@@ -126,7 +126,7 @@ class FirebaseBackend extends BaseBackend {
      *   console.log(data);
      * });
      */
-    dbGet (location, ...conditionsWithCallback) {
+    dbGet(location, ...conditionsWithCallback) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
@@ -218,7 +218,7 @@ class FirebaseBackend extends BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet (location, data, merge = false) {
+    dbSet(location, data, merge = false) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.set(data, {merge: merge}).catch((err) => {
             console.log(err);
