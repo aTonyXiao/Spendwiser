@@ -154,7 +154,7 @@ export function MainScreen({navigation}) {
                 cardId: recCard["recCardId"],
                 docId: recCardUser["docId"],
                 storeInformation: storeArr[curStoreKey],
-                img: recCard["recCardImg"],
+                img: { uri: recCard["recCardImg"] },
             })
         }
     };
