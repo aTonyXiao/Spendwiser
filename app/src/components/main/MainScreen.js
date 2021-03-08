@@ -36,7 +36,6 @@ export function MainScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCard, setRecCard] = useState(null);
-    const [recCardUser, setRecCardUser] = useState(null);
     const [recCards, setRecCards] = useState(null);
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
@@ -60,11 +59,6 @@ export function MainScreen({navigation}) {
         // console.log(myRankedCards);
         setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
 
-        setRecCardUser(null);
-        user.getCardDocId(userId, myRankedCards[0]["cardId"]).then((docId) => {
-            setRecCardUser({docId: docId});
-        })
-        
         setRecCards(myRankedCards)
         console.log(myRankedCards)
     }
@@ -160,14 +154,13 @@ export function MainScreen({navigation}) {
         })();
     }, []);
     
-    recommendedCardPressed = () => {
-        if (recCard !== null && recCardUser !== null) {
-            console.log(recCard["recCardId"] + " " + recCardUser["docId"]);
+    recommendedCardPressed = (item) => {
+        if (item !== null) {
             navigation.navigate('CardInfo', {
-                cardId: recCard["recCardId"],
-                docId: recCardUser["docId"],
+                cardId: item.cardId,
+                docId: item.docId,
                 storeInformation: storeArr[curStoreKey],
-                img: { uri: recCard["recCardImg"] },
+                img: { uri: item.cardImg },
             })
         }
     };
@@ -176,7 +169,7 @@ export function MainScreen({navigation}) {
         <TouchableOpacity
               activeOpacity={1}
               style={styles.slideInnerContainer}
-              onPress={() => { console.log(`Pressed card ${item.cardId}`)}}
+              onPress={() => { recommendedCardPressed(item) }}
               >
             <View style={styles.imageContainer}>
                 <Image source = {{uri: item.cardImg}}

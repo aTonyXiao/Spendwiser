@@ -47,6 +47,7 @@ class RecommendCard {
             tmpCardId = dbCards[i].cardId;
             tmpCardInfo = await cards.getCardReward(tmpCardId, category);
             myCards.push({
+                "docId": dbCards[i].docId,
                 "cardId": tmpCardId,
                 "cardCatReward": tmpCardInfo["reward"],
                 "cardImg": tmpCardInfo["image"],
