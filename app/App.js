@@ -1,6 +1,5 @@
 import React from 'react';
 import { initializeAppBackend } from './src/network/backend';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoadingScreen } from './src/components/LoadingScreen';
@@ -16,6 +15,7 @@ import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
 import { AppPermissions } from './src/components/Permissions';
 import { PrivacyPolicy } from './src/components/PrivacyPolicy';
+import { Account } from './src/components/Account';
 
 const Stack = createStackNavigator();
 
@@ -28,14 +28,17 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={LoadingScreen}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="CreateAccount"
           component={CreateAccount}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Main"
@@ -55,18 +58,22 @@ export default function App() {
         <Stack.Screen
         name="Settings"
         component={Settings}
+        options={{headerShown: false}}
         />
         <Stack.Screen
           name="AddCardManual"
           component={AddCardManual}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="AddCardCamera"
           component={AddCardCamera}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="PasswordReset"
           component={PasswordReset}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="AddCardDB"
@@ -76,10 +83,16 @@ export default function App() {
         <Stack.Screen
           name="Permissions"
           component={AppPermissions}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="PrivacyPolicy"
           component={PrivacyPolicy}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Account"
+          component={Account}
         />
       </Stack.Navigator>
     </NavigationContainer>

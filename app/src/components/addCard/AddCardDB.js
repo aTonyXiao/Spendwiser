@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
@@ -7,7 +7,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import { Ionicons } from '@expo/vector-icons';
 import mainStyles from '../../styles/mainStyles';
 
-export function AddCardDB({navigation}) {
+export function AddCardDB({existingUserCards, navigation}) {
     const userId = user.getUserId();
     const [query, setQuery] = useState("");
     const [cardMap, setCardMap] = useState(null);
@@ -16,12 +16,16 @@ export function AddCardDB({navigation}) {
     const [filteredCardNames, setFilteredCardNames] = useState([]);
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
     const [hideResults, setHideResults] = React.useState(true);
+    const [currentUserCards, setCurrentUserCards] = React.useState([]);
 
     // simulate constructor for functional components
     const constructor = () => { 
         if (hasConstructed) { 
             return;
         } else { 
+            user.getCards(userId).then((cards) => {
+                setCurrentUserCards(cards);
+            })
             cards.getCardNames((mapping) => {
                 setCardMap(mapping);
                 if (cardMap != null) { 
@@ -34,6 +38,7 @@ export function AddCardDB({navigation}) {
     }
     constructor();
 
+    console.log(existingUserCards);
     addCard = () => { 
         if (!query) {
             setDisplayErrorText(true);
@@ -43,9 +48,23 @@ export function AddCardDB({navigation}) {
             }, 2000);
         } else { 
             // TODO: this should be navigate to add card confirm
-
             var cardId = cardMap[query];
-            user.saveCardToUser(userId, cardId, null, null);
+            var currentCardIds = [];
+            for (var card in currentUserCards) {
+                currentCardIds.push(currentUserCards[card].cardId);
+            }
+
+            if (!currentCardIds.includes(cardId)) {
+                user.saveCardToUser(userId, cardId, null, null);
+            } else {
+                Alert.alert("Already have this card",
+                            "You've attempted to add a card that has already been added to your account",
+                            [
+                                {text: "Ok"}
+                            ],
+                            { cancelable: false });
+            }
+
             navigation.navigate('YourCards')
         }
     }
@@ -88,6 +107,9 @@ export function AddCardDB({navigation}) {
                             <Text style={styles.autocompleteListText}>{item}</Text>
                         </TouchableOpacity>
                     )}
+                    keyExtractor={(item, index) => {
+                        return index.toString();
+                    }}
                 />
             </View> 
             <View style={styles.enterIcon}>

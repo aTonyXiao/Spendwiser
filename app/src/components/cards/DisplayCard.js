@@ -4,8 +4,18 @@ import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import CachedImage from 'react-native-expo-cached-image';
 import { Ionicons } from '@expo/vector-icons';
+import { RewardModal } from './RewardModal';
 
-export function DisplayCard({route, navigation}) {
+/**
+ * Display for a single credit card. Shows information about a card's rewards as well
+ * as giving options to add a transaction to be associated with a its particular card.
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific credit card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module DisplayCard
+ */
+function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
     const docId = route.params.docId;
     const cardImage = route.params.img;
@@ -19,6 +29,8 @@ export function DisplayCard({route, navigation}) {
     const [hasConstructed, setHasConstructed] = useState(false);
     const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [transactionInput, setTransactionInput] = useState("");
+    const rewardModal = React.createRef();
+    console.log(rewardModal);
 
     // simulate constructor for functional components
     const constructor = () => { 
@@ -47,6 +59,8 @@ export function DisplayCard({route, navigation}) {
         }
     }
     constructor();
+    console.log("Testing")
+    console.log(storeInformation);
 
     const confirmDelete = () => {
         Alert.alert(
@@ -91,6 +105,12 @@ export function DisplayCard({route, navigation}) {
         console.log("adding reward");
     }
 
+    showRewardModal = () => { 
+        if (rewardModal) { 
+            rewardModal.showModal();
+        }
+    }
+
     return (
         <ScrollView 
             style={styles.container} 
@@ -113,7 +133,7 @@ export function DisplayCard({route, navigation}) {
                             </TouchableOpacity>
                         </View>
                         <Text style={modalStyles.modalText}>Adding a transaction at</Text>
-                        <Text style={modalStyles.storeText}>{storeInformation.value}</Text>
+                        <Text style={modalStyles.storeText}>{storeInformation ? storeInformation.value : "" }</Text>
                         <Text style={modalStyles.modalText}>How much did you spend?</Text>
                         <TextInput
                             style={modalStyles.manualTextInput}
@@ -126,6 +146,8 @@ export function DisplayCard({route, navigation}) {
                 </View>
             </Modal>
 
+            {/* TODO: Add this in beta version */}
+            {/* <RewardModal ref={rewardModal}></RewardModal> */}
             
             <View style={{justifyContent: 'flex-start'}}>
                 <Text style={styles.cardTitle}>{cardName}</Text>
@@ -173,7 +195,7 @@ export function DisplayCard({route, navigation}) {
                         )
                     })
                 }
-                <TouchableOpacity style={styles.addTransactionButton} onPress={() => setModalVisible(true)}>
+                <TouchableOpacity style={styles.addTransactionButton} onPress={showRewardModal}>
                     <Text style={{}}>Add a reward</Text>
                 </TouchableOpacity>
             </View>
@@ -291,3 +313,5 @@ const modalStyles = StyleSheet.create({
         borderRadius: 5,
     },
 });
+
+export {DisplayCard};

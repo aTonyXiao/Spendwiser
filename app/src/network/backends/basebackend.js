@@ -196,9 +196,10 @@ class BaseBackend {
     /**
      * User sign up for an account using email and password
      * 
-     * @param {string} email - a (TODO: valid?) email of a 
-     * @param {string} password - a (TODO: relatively complex?) password
-     * @param {function} error_func - called when there is an error during sign up
+     * @param {string} email - email of a propsective user
+     * @param {string} password - a password 
+     * @param {function} error_func - called when there is an error during sign up 
+     * (e.g. email is incorrect or password is not complicated enough)
      */
     signUp(username, password, error_func) {}
 
@@ -217,7 +218,15 @@ class BaseBackend {
     signOut() {}
 
     /**
+     * @typedef {Object} LoginProviders
+     * @property {?LoginAuthorizer} google - google's authentication service
+     * @property {?LoginAuthorizer} facebook - facebook's authentication service
+     */
+
+    /**
      * Get the login providers that are implemented
+     * 
+     * @returns {LoginProviders} - object containing the backend's supported login providers
      */
     getLoginProviders() {}
     
@@ -230,7 +239,9 @@ class BaseBackend {
     resetPassword(email, return_func) {}
 
     /**
-     * Returns true or false depending on if the user is already logged in
+     * Get the user's log in status
+     * 
+     * @returns {boolean} - true or false depending on if a user is logged in or not
      */
     userLoggedIn() {}
 
@@ -241,13 +252,30 @@ class BaseBackend {
      * @param {requestCallback} callback - The function to callback when a user's
      * state changes
      */
-    onAuthStateChange(func) {}
+    onAuthStateChange(callback) {}
 
     /**
-     * Returns a user id associated with the logged in user
+     * Gets a user id associated with the logged in user
+     * 
+     * @returns {string} - string containing the user id of the logged in user
      */
     getUserID() {}
 
+    /** 
+     * @typedef {Object} UserInfo
+     * @property {string} name - The name of the signed-in user
+     * @property {string} email - The email of the signed-in user
+     * @property {boolean} emailVerified - True if the email has been verified, false if not
+     * @property {string} lastLogin - Timestamp of the last time this user has logged in
+     * @property {?string} photoURL - URL of a profile photo, if there is one
+     */
+
+    /**
+     * Gets all useful information about a signed in user.
+     * 
+     * @return {UserInfo} userInfo 
+     */
+    getUserInfo() {}
     /**
      * Get the current Timestamp
      */

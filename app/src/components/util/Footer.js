@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -62,14 +62,15 @@ export function Footer(props) {
             {
                 (page == 'Settings') &&
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                <Ionicons
-                    name="settings"
-                    color="black"
-                    size={32}
-                ></Ionicons>
-            </TouchableOpacity>
+                    <Ionicons
+                        name="settings"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
             }
             {
+                (page != 'Settings') &&
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                     <Ionicons
                         name="settings-outline"

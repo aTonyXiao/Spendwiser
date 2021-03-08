@@ -5,7 +5,12 @@ import LoginAuthorizer from '../login_authorizer';
 const iosClientID = '989741516714-hqrk7f1k8vkab4c6g8h0qai6nl1cv41f.apps.googleusercontent.com'
 const iosStandaloneAppClientID =
       '989741516714-fqhdv9b748k8gt5tpclgt2ji79r9pj9r.apps.googleusercontent.com'
-export default class GoogleLogin extends LoginAuthorizer {       
+
+
+/**
+ * Google login implementation using Expo's google authentication library: 'expo-google-app-auth'
+ */
+class GoogleLogin extends LoginAuthorizer {       
     async login() {
         // Note: Had to put the isoClientId into the Firebase Console Google
         // Sign in Safelist
@@ -30,3 +35,5 @@ export default class GoogleLogin extends LoginAuthorizer {
         }
     }
 }
+
+export default GoogleLogin;

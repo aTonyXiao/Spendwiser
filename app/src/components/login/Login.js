@@ -3,7 +3,6 @@ import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
-
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -36,7 +35,7 @@ export const Login = props => {
 
     return (
         <View style={mainStyles.container}>
-            <Text style={styles.title}>SpendWiser</Text>
+            <Text style={mainStyles.large_title}>SpendWiser</Text>
 
             {/* TODO needs a fade in/fade out */}
             {
@@ -87,12 +86,6 @@ export const Login = props => {
 }
 
 const styles = StyleSheet.create({
-    title : { 
-        fontSize: 40,
-        color: '#28b573',
-        position: 'absolute',
-        top: 70
-    },
     loginWrapper : {
         margin: 15,
         height: 40,
