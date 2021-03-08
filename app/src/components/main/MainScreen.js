@@ -308,14 +308,6 @@ export function MainScreen({navigation}) {
                     <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
                 </MapView>
             </View>
-            {/* TODO decide if we want to keep refresh button or not */}
-            {/* <View style={{position: 'absolute', right: 5, top: 5}}>
-                <Button
-                    color="green"
-                    title="Refresh"
-                    // onPress={() => setRegion(location.latitude, location.longitude)}
-                ></Button>
-            </View> */}
 
             {/* Location text */}
             <View style={mapStyles.textContainer}>
