@@ -2,24 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
+
+let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
+let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
+let drugstore = ['Drugstore'];
+let gas = ['Gas station'];
+let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
+    'hardware store', 'Plumber', 'Roofing contractor'];
+let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
+    'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo']
+
 class RecommendCard {
     getCategory(googleCategory) {
-        switch(googleCategory) {
-            case "Bar":
-            case "Cafe":
-            case "Meal delivery":
-            case "Meal takeaway":
-            case "Restaurant":
-                return "dining";
-            case "Bakery":
-            case "Liquor store":
-            case "Supermarket":
-            case "Grocery or supermarket":
-                return "grocery";
-            case "Drugstore":
-                return "drugstore";
-            default:
-                return "others";
+        if (dining.includes(googleCategory)) {
+            return "dining";
+        } else if (grocery.includes(googleCategory)) {
+            return 'grocery';
+        } else if (drugstore.includes(googleCategory)) {
+            return 'drugstore';
+        } else if (gas.includes(googleCategory)) {
+            return 'gas';
+        } else if (homeImprovement.includes(googleCategory)) {
+            return 'homeImprovement';
+        } else if (travel.includes(googleCategory)) {
+            return 'travel';
+        } else {
+            return 'others';
         }
     }
 
@@ -37,11 +45,17 @@ class RecommendCard {
         console.log("google category: " + googleCategory);
         for (i = 0; i < dbCards.length; i++) {
             tmpCardId = dbCards[i].cardId;
-            tmpCardCatRewardandImg = await cards.getCardReward(tmpCardId, category);
-            myCards.push({"cardId": tmpCardId, "cardCatReward": tmpCardCatRewardandImg["reward"], "cardImg": tmpCardCatRewardandImg["image"]});
+            tmpCardInfo = await cards.getCardReward(tmpCardId, category);
+            myCards.push({
+                "cardId": tmpCardId,
+                "cardCatReward": tmpCardInfo["reward"],
+                "cardImg": tmpCardInfo["image"],
+                "cardType": tmpCardInfo["type"],
+                "cardCatUncoverted": tmpCardInfo["unconvertedReward"]
+            });
         }
         myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
-        console.log(myCards);
+        // console.log(myCards);
         callback(myCards);
     }
 

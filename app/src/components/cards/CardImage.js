@@ -26,8 +26,9 @@ const styles = StyleSheet.create({
  * @returns {string} rgb string value
  */
 function contrastRGB(string) {
-  let color = string.split(",");
-  let colorRGB = { r: parseInt(color[0].replaceAll("rgb(", "")), 
+  let color = string.split(',');
+  color[0] = color[0].replace("rgb(", '');
+  let colorRGB = { r: parseInt(color[0]), 
                    g: parseInt(color[1]),
                    b: parseInt(color[2])};
   // use the color brightness algorithm: https://www.w3.org/WAI/ER/WD-AERT/#color-contrast
