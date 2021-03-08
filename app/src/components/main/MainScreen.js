@@ -29,6 +29,7 @@ export function MainScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCard, setRecCard] = useState(null);
+    const [recCardUser, setRecCardUser] = useState(null);
     var width = Dimensions.get('window').width;
     const userId = user.getUserId();
     const [manualModal, setManualModal] = useState(false);
@@ -49,6 +50,10 @@ export function MainScreen({navigation}) {
         // console.log("Finally ");
         // console.log(myRankedCards);
         setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
+        setRecCardUser(null);
+        user.getCardDocId(userId, myRankedCards[0]["cardId"]).then((docId) => {
+            setRecCardUser({docId: docId});
+        })
     }
 
     function changeRecCard(value, key) {
@@ -142,6 +147,18 @@ export function MainScreen({navigation}) {
         })();
     }, []);
     
+    recommendedCardPressed = () => {
+        if (recCard !== null && recCardUser !== null) {
+            console.log(recCard["recCardId"] + " " + recCardUser["docId"]);
+            navigation.navigate('CardInfo', {
+                cardId: recCard["recCardId"],
+                docId: recCardUser["docId"],
+                storeInformation: storeArr[curStoreKey],
+                img: recCard["recCardImg"],
+            })
+        }
+    };
+
     return (
         <SafeAreaView style={styles.screen}>
             {/* Modal */}
@@ -312,13 +329,15 @@ export function MainScreen({navigation}) {
                 {/* Recommended Card */}
                 <View style={styles.cardContainer}>
                     <Text style={{fontSize: 17}}>Your Recommended Card</Text>
-                    <Image source = {recCard !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
-                        style = {{ 
-                            width: width * .8,  //its same to '20%' of device width
-                            aspectRatio: 1.5, // <-- this
-                            resizeMode: 'contain', //optional
-                        }}
-                    />
+                    <TouchableOpacity activeOpacity={0.5} onPress={recommendedCardPressed}>
+                        <Image source = {recCard !== null && recCardUser !== null ? {uri:recCard["recCardImg"]} : require("../../../assets/load.jpg")}
+                            style = {{ 
+                                width: width * .8,  //its same to '20%' of device width
+                                aspectRatio: 1.5, // <-- this
+                                resizeMode: 'contain', //optional
+                            }}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
             </ScrollView>
