@@ -58,6 +58,7 @@ export function MainScreen({navigation}) {
         // console.log("Finally ");
         // console.log(myRankedCards);
         setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
+
         setRecCards(myRankedCards)
         console.log(myRankedCards)
     }
@@ -153,11 +154,22 @@ export function MainScreen({navigation}) {
         })();
     }, []);
     
+    recommendedCardPressed = (item) => {
+        if (item !== null) {
+            navigation.navigate('CardInfo', {
+                cardId: item.cardId,
+                docId: item.docId,
+                storeInformation: storeArr[curStoreKey],
+                img: { uri: item.cardImg },
+            })
+        }
+    };
+    
     const renderItem = useCallback(({ item, index }) => (
         <TouchableOpacity
               activeOpacity={1}
               style={styles.slideInnerContainer}
-              onPress={() => { console.log(`Pressed card ${item.cardId}`)}}
+              onPress={() => { recommendedCardPressed(item) }}
               >
             <View style={styles.imageContainer}>
                 <Image source = {{uri: item.cardImg}}

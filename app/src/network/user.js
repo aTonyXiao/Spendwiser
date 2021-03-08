@@ -53,6 +53,21 @@ class userClass {
     }
 
     /**
+     * Get the docId for the user's 'cards' collection for the given cardId
+     * 
+     * @param {*} cardId - The cardId from the global 'cards' collection
+     */
+    async getCardDocId(userId, cardId) {
+        return new Promise((resolve, reject) => {
+            appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
+                data.forEach(element => {
+                    if (element.cardId === cardId) resolve(element.docId);
+                });
+            })
+        });
+    }
+
+    /**
      *  Deletes a card from the user's database, including transactions related to that card 
      * @param {string} userId - current user id
      * @param {string} cardId - card id to delete
