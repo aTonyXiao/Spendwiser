@@ -53,7 +53,7 @@ class userClass {
     }
 
     /**
-     *  Deletes a card from the user's database 
+     *  Deletes a card from the user's database, including transactions related to that card 
      * @param {string} userId - current user id
      * @param {string} cardId - card id to delete
      * @param {string} docId - document id of card to delete
@@ -93,15 +93,13 @@ class userClass {
 
     /**
      * Add a transaction to user's transaction collection
-     * @param {*} userId - current user id
-     * @param {*} cardId - card id they want to delete
-     * @param {*} storeInfo - store information (store name, address, category)
-     * @param {*} amountSpent - amount spent at the store
+     * @param {string} userId - current user id
+     * @param {string} cardId - card id they want to delete
+     * @param {object} storeInfo - store information (store name, address, category)
+     * @param {number} amountSpent - amount spent at the store
      */
-    saveTransactionToUser(userId, cardId, storeInfo, amountSpent) {
+    saveTransaction(userId, cardId, storeInfo, amountSpent, callback) {
         timestamp = appBackend.getTimestamp();
-        // console.log("saving transactions");
-        // console.log("user id " + userId + "\n card id " + cardId + "\n store info " + storeInfo + "\n amountSpent " + amountSpent);
         appBackend.dbAdd("users." + userId + ".transactions", {
             cardId: cardId,
             storeInfo: {
@@ -112,8 +110,21 @@ class userClass {
             amountSpent: amountSpent,
             dateAdded: timestamp
         }, (id) => { 
-            console.log("successfully saved transaction to user");
+            callback(id);
         })
+    }
+
+   
+    /**
+     * Adds the document id of a transaction to it's document
+     * @param {string} userId - current user id
+     * @param {string} docId  - document id of transaction
+     */
+    addTransactionId(userId, docId) { 
+        appBackend.dbSet("users." + userId + ".transactions." + docId, {
+            docId: docId
+        }, 
+        true)
     }
 
     /**
@@ -153,6 +164,25 @@ class userClass {
     }
 
     /**
+     * Edits a user's transaction
+     * @param {string} userId - current user id
+     * @param {string} docId  - document id of transaction to alter
+     * @param {object} data - data to set transaction information to
+     */
+    editTransaction(userId, docId, data) { 
+        appBackend.dbSet("users." + userId + ".transactions." + docId, data, true);
+    }
+
+    /**
+     * Deletes a transaction from a user
+     * @param {string} userId - current user id
+     * @param {string} docId - id of transaction to delete
+     */
+    deleteTransaction(userId, docId) {
+        appBackend.dbDelete("users." + userId + ".transactions." + docId);
+    }
+
+    /**
      * Gets a user's rewards. In user backend because user diff is need to apply 
      * to card rewards
      * @param {*} userId - user id of diff to get
@@ -163,7 +193,6 @@ class userClass {
      * TODO
      */
     getRewards(userId, cardId, callback) {
-        console.log("getting a user's rewards");
         appBackend.dbGet("cards." + cardId, (data)=> { 
             // TODO apply diff
             callback(data.rewards);

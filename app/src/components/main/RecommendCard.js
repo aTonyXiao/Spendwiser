@@ -58,21 +58,6 @@ class RecommendCard {
         // console.log(myCards);
         callback(myCards);
     }
-
-    // insert user's transaction into db
-    setTransaction(storeInfo, recCard, amountSpent) {
-        const userId = user.getUserId();
-        user.saveTransactionToUser(
-            userId,
-            recCard.recCardId,
-            {
-                storeName: storeInfo["label"],
-                address: storeInfo["vicinity"],
-                storeType: storeInfo["storeType"]
-            },
-            amountSpent
-        );
-    }
 }
 
 export var recommendCard = new RecommendCard();
