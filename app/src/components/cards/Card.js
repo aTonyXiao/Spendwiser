@@ -16,7 +16,7 @@ export class Card extends React.Component {
             cardId: cardInformation.cardId,
             navigation: props.props.navigation,
             docId: cardInformation.docId,
-            storeInformation: props.storeInformation
+            storeInformation: props.props.storeInformation
         }
 
         cards.getCardImageURL(this.state.cardId).then((url) => {

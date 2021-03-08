@@ -59,8 +59,6 @@ function DisplayCard({route, navigation}) {
         }
     }
     constructor();
-    console.log("Testing")
-    console.log(storeInformation);
 
     const confirmDelete = () => {
         Alert.alert(
