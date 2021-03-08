@@ -6,6 +6,7 @@ import CachedImage from 'react-native-expo-cached-image';
 import { Ionicons } from '@expo/vector-icons';
 import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
+import { TransactionModal } from './TransactionModal';
 
 /**
  * Display for a single credit card. Shows information about a card's rewards as well
@@ -29,13 +30,11 @@ function DisplayCard({route, navigation}) {
     const [rewards, setRewards] = useState([]);
     const [hasConstructed, setHasConstructed] = useState(false);
     const [showTransactionModal, setShowTransactionModal] = useState(false);
-    const [transactionInput, setTransactionInput] = useState("");
     const [showEditTransactionOption, setShowEditTransactionOption] = useState(false);
     const [currentTransactionIndex, setCurrentTransactionIndex] = useState(-1);
     const [currentTransaction, setCurrentTransaction] = useState(null);
     const [showEditTransactionModal, setShowEditTransactionModal] = useState(false);
 
-    // simulate constructor for functional components
     const constructor = () => { 
         if (hasConstructed) { 
             return;
@@ -80,25 +79,6 @@ function DisplayCard({route, navigation}) {
         navigation.navigate('YourCards');
     }
 
-    addTransaction = () => {
-        user.saveTransaction(
-            userId, 
-            cardId, 
-            {
-                storeName: storeInformation["label"],
-                address: storeInformation["vicinity"],
-                storeType: storeInformation["storeType"]
-            },
-            transactionInput, 
-            (docId) => { 
-                user.addTransactionId(userId, docId);
-            }
-        );
-
-        setShowTransactionModal(false);
-        setHasConstructed(false);
-    }
-
     return (
         <ScrollView 
             style={styles.container} 
@@ -111,37 +91,13 @@ function DisplayCard({route, navigation}) {
                 setHasConstructed={setHasConstructed}
             ></EditTransactionModal>
 
-
-            {/* Transaction Modal */}
-            <Modal
-                transparent={true}
-                backdropOpacity={0.3}
-                visible={showTransactionModal}
-            >
-                <View style={modalStyles.modalCenteredView}>
-                    <View style={modalStyles.modalView}>
-                        <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity onPress={() => setShowTransactionModal(false)}>
-                                <Ionicons
-                                    name="close-circle-outline"
-                                    color="black"
-                                    size={26}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={modalStyles.modalText}>Adding a transaction at</Text>
-                        <Text style={modalStyles.storeText}>{storeInformation ? storeInformation.value : "" }</Text>
-                        <Text style={modalStyles.modalText}>How much did you spend?</Text>
-                        <TextInput
-                            style={modalStyles.manualTextInput}
-                            onChangeText={(text) => setTransactionInput(text)}
-                            value={transactionInput}
-                            placeholder={"amount in dollars"}
-                            onSubmitEditing={addTransaction}
-                        />
-                    </View>
-                </View>
-            </Modal>
+            <TransactionModal
+                storeInformation={storeInformation}
+                showTransactionModal={showTransactionModal}
+                setShowTransactionModal={setShowTransactionModal}
+                setHasConstructed={setHasConstructed}
+                cardId={cardId}
+            ></TransactionModal>
 
             {/* TODO: Add reward modal in beta version*/}
 
@@ -155,9 +111,7 @@ function DisplayCard({route, navigation}) {
                 {
                     showEditTransactionOption &&
                     <View>
-                        <TouchableOpacity
-                            onPress={() => setShowEditTransactionModal(true)}
-                        >
+                        <TouchableOpacity onPress={() => setShowEditTransactionModal(true)}>
                             <Text style={styles.editTransactionText}>Edit this transaction</Text>
                         </TouchableOpacity>
                     </View>
@@ -340,49 +294,4 @@ const styles = StyleSheet.create({
     }
 });
 
-const modalStyles = StyleSheet.create({
-    modalCenteredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
-    },
-    modalView: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-    },
-    modalHeader: { 
-        position: 'absolute',
-        top: 8, 
-        left: 8
-    },
-    modalText: {
-        marginTop: 10,
-        alignSelf: 'center',
-        fontSize: 16
-    },
-    storeText: {
-        alignSelf: 'center',
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginBottom: 10
-    },
-    manualTextInput: {
-        height: 40,
-        borderWidth: 1,
-        margin: 15,
-        marginTop: 7,
-        marginBottom: 7,
-        width: '90%',
-        borderColor: '#F0F0F0',
-        backgroundColor: '#F0F0F0',
-        borderRadius: 5,
-    },
-});
-
-export {DisplayCard};
+export { DisplayCard };

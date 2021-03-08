@@ -6,6 +6,7 @@ import { user } from '../../network/user';
 
 function EditTransactionModal({transaction, modalVisible, setModalVisible, setHasConstructed}) {
     const [transactionInput, setTransactionInput] = useState("");
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
     const userId = user.getUserId();
     // handle no currently selected document
     var docId;
@@ -13,16 +14,30 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
         docId = transaction.docId;
     }
 
-    editTransaction = () => { 
-        user.editTransaction(
-            userId, 
-            docId, 
-            {
-                amountSpent: transactionInput
-            }
-        )
-        setModalVisible(false);
-        setHasConstructed(false);
+    // TODO: this should also probably account for whitespace, etc.
+    validateInput = (input) => { 
+        return !isNaN(input); 
+    }
+
+    editTransaction = () => {
+        const inputIsValid = validateInput(transactionInput);
+        if (inputIsValid) {
+            user.editTransaction(
+                userId,
+                docId,
+                {
+                    amountSpent: transactionInput
+                }
+            )
+            setModalVisible(false);
+            setHasConstructed(false);
+        } else {
+            setDisplayErrorText(true);
+
+            setTimeout(function () {
+                setDisplayErrorText(false);
+            }, 2000)
+        }
     }
 
     confirmDeleteTransaction = () => {
@@ -65,7 +80,10 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
 
                     <View style={modalStyles.modalBody}>
                         <Text>Amount wrong? Input a new amount</Text>
-
+                        {
+                            displayErrorText &&
+                            <Text style={modalStyles.errorText}>Please input a valid number</Text>
+                        }
                         <TextInput
                             style={modalStyles.manualTextInput}
                             onChangeText={(text) => setTransactionInput(text)}
@@ -124,6 +142,10 @@ const modalStyles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 5,
         color: 'red'
+    },
+    errorText: { 
+        color: 'red', 
+        textAlign: 'center'
     }
 });
 
