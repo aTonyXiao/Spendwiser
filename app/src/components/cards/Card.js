@@ -56,7 +56,7 @@ export class Card extends React.Component {
 
 const styles = StyleSheet.create({
     scrollView: {
-        width: "95%"
+        width: "95%",
     },
     card: {
         resizeMode: "contain",
