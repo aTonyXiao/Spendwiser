@@ -122,7 +122,6 @@ export function MainScreen({navigation}) {
         const unsubscribe = navigation.addListener('focus', () => {
             if (user.getMainNeedsUpdate()) {
                 /* triggered on a reload of the page */
-                setRecCard(null);
                 setRecCards(null);
                 reloadRecCard();
                 user.setMainNeedsUpdate(false);
