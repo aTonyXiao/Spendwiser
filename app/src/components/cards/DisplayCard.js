@@ -160,8 +160,8 @@ function DisplayCard({route, navigation}) {
                                                 }
                                             }}
                                         >
-                                                <Text style={{fontWeight : 'bold'}}>{date}</Text>
-                                                <Text style={{marginLeft: 5}}>{name}: ${dollarAmount}</Text>
+                                            <Text style={styles.transactionTextLeft}>{date}</Text>
+                                            <Text style={styles.transactionTextRight}>{name}: ${dollarAmount}</Text>
                                         </TouchableOpacity>
                                     )
                                 })
@@ -272,6 +272,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: 'lightgray',
         borderBottomWidth: 1
+    },
+    transactionTextLeft: { 
+        fontWeight : 'bold',
+        marginLeft: 8
+    },
+    transactionTextRight: {
+        marginLeft: 5,
+        marginRight: 8,
+        flex: 1,
+        flexWrap: 'wrap',
+        textAlign: 'right'
     },
     addTransactionButton: {
         display: 'flex',
