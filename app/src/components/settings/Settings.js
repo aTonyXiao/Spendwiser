@@ -75,8 +75,7 @@ let Settings = (props) => {
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    // TODO 
-                    // onPress={() => { props.navigation.navigate('Permissions') }}
+                    onPress={() => { props.navigation.navigate('About') }}
                     style={styles.rowContainer}
                 >
                     <Text>About</Text>

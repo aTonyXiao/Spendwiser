@@ -8,8 +8,8 @@ import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
 import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
-import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { cards } from '../../network/cards';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useIsFocused } from '@react-navigation/native';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -39,8 +39,8 @@ export function MainScreen({navigation}) {
     const [recCards, setRecCards] = useState(null);
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
-    const userId = user.getUserId();
     const [manualModal, setManualModal] = useState(false);
+    const isFocused = useIsFocused();
       
     function setOfflineMode() {
         setStoreArr([{
@@ -72,10 +72,7 @@ export function MainScreen({navigation}) {
     function reloadRecCard() {
         if (storeArr[curStoreKey] !== undefined) {
             let category = storeArr[curStoreKey]["storeType"];
-            // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
             recommendCard.getRecCards(category, getRecCardFromDB);
-        } else {
-            changeRecCard(curStore, curStoreKey);
         }
     }
 
@@ -119,18 +116,23 @@ export function MainScreen({navigation}) {
     };
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            if (user.getMainNeedsUpdate()) {
-                /* triggered on a reload of the page */
-                setRecCards(null);
-                reloadRecCard();
-                user.setMainNeedsUpdate(false);
-            }
-        });
-        return unsubscribe;
-    }, [navigation]);
+        if (isLoading === false) {
+            const unsubscribe = navigation.addListener('focus', () => {
+                console.log(user.getMainNeedsUpdate());
+                if (user.getMainNeedsUpdate()) {
+                    /* triggered on a reload of the page */
+                    setRecCards(null);
+                    console.log("reset rec cards");
+                    reloadRecCard();
+                    user.setMainNeedsUpdate(false);
+                }
+            });
+            return unsubscribe;
+        }
+    }, [isFocused]);
 
     useEffect(() => {
+        console.log("got in main useeffect");
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
@@ -160,13 +162,11 @@ export function MainScreen({navigation}) {
                     } else {
                         setOfflineMode();
                         setLoading(false);
-                        // console.log(storeArr);
                     }
-                  });
+                    });
             } catch(e) {
                 setOfflineMode();
                 setLoading(false);
-                // console.log(storeArr);
                 return;
             }
         })();
