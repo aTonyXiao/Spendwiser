@@ -64,9 +64,7 @@ function YourCards({route, navigation}) {
 
                     <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
                 </View>
-                <View style={styles.footerContainer}>
-                    <Footer navigation={navigation} />
-                </View>
+                <Footer navigation={navigation} />
             </SafeAreaView>
         )
     }
@@ -106,16 +104,19 @@ function YourCards({route, navigation}) {
                     <View style={{height:100}}></View>
                 </ScrollView>
             </View>
-
-            <View style={styles.footerContainer}>
-                <Footer navigation={navigation} />
-            </View>
+            <Footer navigation={navigation} />
         </SafeAreaView>
     );
 }
 
 
 const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: 'white',
+        height: '100%',
+        paddingTop: StatusBar.currentHeight
+    },
     container : {
         flex: 1,
         backgroundColor: 'white',
