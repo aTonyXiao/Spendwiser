@@ -2,6 +2,7 @@ import React from 'react';
 import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import CardImage from './CardImage';
+import {makeCancelable} from '../util/promise-helper'
 
 export class Card extends React.Component {
     constructor(props) { 
@@ -12,21 +13,28 @@ export class Card extends React.Component {
             name: "",
             cardImage: "Not an Empty String",
             showDefault: true,
-            opacity: new Animated.Value(0),
+            // opacity: new Animated.Value(0),
             cardId: cardInformation.cardId,
             navigation: props.props.navigation,
             docId: cardInformation.docId,
-            storeInformation: props.props.storeInformation
+            storeInformation: props.props.storeInformation,
+            getCardImageURL: makeCancelable(cards.getCardImageURL(cardInformation.cardId)),
+            getCardName: makeCancelable(cards.getCardName(cardInformation.cardId))
         }
 
-        cards.getCardImageURL(this.state.cardId).then((url) => {
+        this.state.getCardImageURL.promise.then(url => {
             this.setState({cardImage: url, showDefault: url.length == 0});
-        });
-
-        cards.getCardName(this.state.cardId).then((cardName) => {
+        }).catch(({isCanceled, ...error}) => {});
+        this.state.getCardName.promise.then((cardName) => {
             this.setState({name: cardName});
-        });
+        }).catch(({isCanceled, ...error}) => {});
     }
+
+    componentWillUnmount() {
+        this.state.getCardName.cancel();
+        this.state.getCardImageURL.cancel();
+    }
+
 
     onPress = () => { 
         this.state.navigation.navigate('CardInfo', {

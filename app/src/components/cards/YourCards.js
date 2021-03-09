@@ -2,10 +2,12 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
-import {AddCardModal} from './AddCardModal'
+import { AddCardModal } from './AddCardModal'
+import { useIsFocused } from '@react-navigation/native'
+import {makeCancelable} from '../util/promise-helper'
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -17,28 +19,27 @@ import {AddCardModal} from './AddCardModal'
  * @param {Object} obj.navigation - navigation object used to move between different pages
  * @module YourCards
  */
-function YourCards({route, navigation}) { 
+function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
+    const focused = useIsFocused();
 
+    const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            /* triggered on a reload of the page */
-            loadCards(userId);
-        });
-        return unsubscribe;
-    }, [navigation]);
+        cancelableGetCards.promise.then(cards => {
+            setCards([]);
+            setCards(cards); 
+        }).catch(({isCanceled, ...error}) => {});
 
-    loadCards = () => {
-        /* Make sure we aren't displaying any previous card lists */
-        setCards([]);
 
-        user.getCards(userId).then((cards) => {
-            setCards(cards);
-        })
-    };
+        return () => {
+            cancelableGetCards.cancel();
+        }
+    }, [focused])
+
+
 
     // TODO: make this modal a component
     if (cards.length == 0) {
@@ -46,9 +47,9 @@ function YourCards({route, navigation}) {
             <View style={{ marginTop: 10 }}>
                 <View style={styles.bodyContainer}>
 
-                    <AddCardModal 
+                    <AddCardModal
                         navigation={navigation}
-                        modalVisible={modalVisible} 
+                        modalVisible={modalVisible}
                         setModalVisible={setModalVisible}
                     />
 
@@ -71,9 +72,9 @@ function YourCards({route, navigation}) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bodyContainer}>
-                <AddCardModal 
+                <AddCardModal
                     navigation={navigation}
-                    modalVisible={modalVisible} 
+                    modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                 />
                 <View style={styles.addButton}>
@@ -99,7 +100,7 @@ function YourCards({route, navigation}) {
                     </View>
 
                     {/* Below is empty height at bottom of scrollview becuase absolute footer cuts it off */}
-                    <View style={{height:100}}></View>
+                    <View style={{ height: 100 }}></View>
                 </ScrollView>
             </View>
 
@@ -112,12 +113,12 @@ function YourCards({route, navigation}) {
 
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
         display: 'flex',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
     },
     bodyContainer: {
         justifyContent: 'center',
@@ -133,11 +134,11 @@ const styles = StyleSheet.create({
         margin: 8,
         marginBottom: 0
     },
-    footerContainer: { 
+    footerContainer: {
         width: '100%',
         backgroundColor: 'white',
-        position: 'absolute', 
-        bottom: 0, 
+        position: 'absolute',
+        bottom: 0,
         paddingBottom: 15,
         marginTop: 0
     }
