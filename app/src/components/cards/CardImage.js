@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
-import { Text, StyleSheet, Animated, ImageBackground } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Image, Text, StyleSheet, Animated, ImageBackground } from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
+import { useIsFocused } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     innerImage: {
@@ -64,18 +65,32 @@ function generateColor(string) {
  *      
  */
 function CardImage (props) {
-    const cardOpacity = useRef(new Animated.Value(0)).current;
+    const cardOpacity = useRef(new Animated.Value(0));
+    var cardLoaded = useRef(false);
+    var isFocused = useIsFocused();
+
+
+    useEffect(() => {
+        return () => {
+            Animated.timing(cardOpacity.current).stop();
+        }
+    }, []);
+
 
     /**
      * Starts any animations that are necessary after a card image has been loaded
      */
     let onCardLoad = () => {
-        Animated.timing(cardOpacity, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-        }).start();
+        cardLoaded.current = true;
+        if (isFocused) {
+            Animated.timing(cardOpacity.current, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: true,
+            }).start();
+        }
     }
+
 
     const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
 
@@ -93,8 +108,8 @@ function CardImage (props) {
     } else {
         return (
         <AnimatedCachedImage
-            style={[{justifyContent: 'center', alignItems: 'center'}, props.style, { opacity: cardOpacity} ]}
-            onLoad={() => {onCardLoad()}}
+            style={[{justifyContent: 'center', alignItems: 'center'}, props.style, { opacity: cardOpacity.current}]}
+            onLoad={() => onCardLoad()}
             source={{uri: props.source}}
         />);
     }
