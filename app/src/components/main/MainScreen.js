@@ -185,6 +185,7 @@ export function MainScreen({navigation}) {
                 docId: item.docId,
                 storeInformation: storeArr[curStoreKey],
                 img: { uri: item.cardImg },
+                origin: "main"
             })
         }
     };
