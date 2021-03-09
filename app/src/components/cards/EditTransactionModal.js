@@ -13,6 +13,8 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
     if (transaction) { 
         docId = transaction.docId;
     }
+    console.log("doc id: ");
+    console.log(docId);
 
     // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
@@ -22,7 +24,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
         }
         return !isNaN(input); 
     }
-    
 
     editTransaction = () => {
         const inputIsValid = isInputValid(transactionInput);
@@ -57,6 +58,8 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
     };
 
     deleteTransaction = () => { 
+        console.log("trying to delete transaction");
+        console.log(docId);
         user.deleteTransaction(userId, docId);
         setModalVisible(false);
         setHasConstructed(false);
