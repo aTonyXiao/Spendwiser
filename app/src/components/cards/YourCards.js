@@ -95,7 +95,8 @@ function YourCards({route, navigation}) {
                             var props = {
                                 navigation: navigation,
                                 card: card,
-                                storeInformation: storeInformation
+                                storeInformation: storeInformation,
+                                origin: "yourcards"
                             }
                             return <Card key={i.toString()} props={props} />
                         })}
