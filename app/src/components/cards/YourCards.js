@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity, StatusBar } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
         height: '100%',
         display: 'flex',
         justifyContent: 'space-between', 
+        paddingTop: StatusBar.currentHeight,
     },
     bodyContainer: {
         justifyContent: 'center',

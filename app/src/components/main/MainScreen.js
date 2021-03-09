@@ -35,7 +35,6 @@ export function MainScreen({navigation}) {
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
-    const [recCard, setRecCard] = useState(null);
     const [recCards, setRecCards] = useState(null);
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
@@ -55,10 +54,6 @@ export function MainScreen({navigation}) {
     }
 
     function getRecCardFromDB(myRankedCards) {
-        // console.log("Finally ");
-        // console.log(myRankedCards);
-        setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
-
         setRecCards(myRankedCards)
         console.log(myRankedCards)
     }
@@ -231,7 +226,6 @@ export function MainScreen({navigation}) {
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    setRecCard(null);
                                                     setRecCards(null);
                                                     changeRecCard(storeName, i);
                                                     setModalVisible(false);
