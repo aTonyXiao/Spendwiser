@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Button, Alert, Text } from 'react-native';
-import mainStyles from '../styles/mainStyles';
-import { appBackend } from '../network/backend';
-import CachedImage from 'react-native-expo-cached-image';
+import { View, Text } from 'react-native';
+import mainStyles from '../../styles/mainStyles';
+import { appBackend } from '../../network/backend';
 
 /**
  * Displays the account information of a currently signed in user 
@@ -14,6 +13,7 @@ let Account = function(props) {
     let emailStatus = userInfo.emailVerified ? "Verified" : "Unverified";
     return(
         <View style={mainStyles.container}>
+            <Text style={mainStyles.large_title}>Your Account</Text>
             <Text>Name: {userInfo.name}</Text>
             <Text>Email: {userInfo.email}</Text>
             <Text>Email Verification Status: {emailStatus}</Text>

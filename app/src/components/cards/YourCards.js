@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity, StatusBar } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useRef, useState, useEffect } from "react";
@@ -44,7 +44,7 @@ function YourCards({ route, navigation }) {
     // TODO: make this modal a component
     if (cards.length == 0) {
         return (
-            <View style={{ marginTop: 10 }}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.bodyContainer}>
 
                     <AddCardModal
@@ -65,7 +65,8 @@ function YourCards({ route, navigation }) {
 
                     <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
                 </View>
-            </View>
+                <Footer navigation={navigation} />
+            </SafeAreaView>
         )
     }
 
@@ -93,7 +94,8 @@ function YourCards({ route, navigation }) {
                             var props = {
                                 navigation: navigation,
                                 card: card,
-                                storeInformation: storeInformation
+                                storeInformation: storeInformation,
+                                origin: "yourcards"
                             }
                             return <Card key={i.toString()} props={props} />
                         })}
@@ -103,7 +105,6 @@ function YourCards({ route, navigation }) {
                     <View style={{ height: 100 }}></View>
                 </ScrollView>
             </View>
-
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
@@ -113,12 +114,19 @@ function YourCards({ route, navigation }) {
 
 
 const styles = StyleSheet.create({
-    container: {
+    screen: {
+        flex: 1,
+        backgroundColor: 'white',
+        height: '100%',
+        paddingTop: StatusBar.currentHeight
+    },
+    container : {
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between', 
+        paddingTop: StatusBar.currentHeight,
     },
     bodyContainer: {
         justifyContent: 'center',
@@ -140,7 +148,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         paddingBottom: 15,
-        marginTop: 0
     }
 });
 

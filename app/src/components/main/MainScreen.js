@@ -8,7 +8,8 @@ import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
 import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
-import Carousel, { Pagination } from 'react-native-snap-carousel'
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useIsFocused } from '@react-navigation/native';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -35,12 +36,11 @@ export function MainScreen({navigation}) {
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
-    const [recCard, setRecCard] = useState(null);
     const [recCards, setRecCards] = useState(null);
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
-    const userId = user.getUserId();
     const [manualModal, setManualModal] = useState(false);
+    const isFocused = useIsFocused();
       
     function setOfflineMode() {
         setStoreArr([{
@@ -55,10 +55,6 @@ export function MainScreen({navigation}) {
     }
 
     function getRecCardFromDB(myRankedCards) {
-        // console.log("Finally ");
-        // console.log(myRankedCards);
-        setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
-
         setRecCards(myRankedCards)
         console.log(myRankedCards)
     }
@@ -70,6 +66,13 @@ export function MainScreen({navigation}) {
             recommendCard.getRecCards(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
+        }
+    }
+
+    function reloadRecCard() {
+        if (storeArr[curStoreKey] !== undefined) {
+            let category = storeArr[curStoreKey]["storeType"];
+            recommendCard.getRecCards(category, getRecCardFromDB);
         }
     }
 
@@ -113,6 +116,23 @@ export function MainScreen({navigation}) {
     };
 
     useEffect(() => {
+        if (isLoading === false) {
+            const unsubscribe = navigation.addListener('focus', () => {
+                console.log(user.getMainNeedsUpdate());
+                if (user.getMainNeedsUpdate()) {
+                    /* triggered on a reload of the page */
+                    setRecCards(null);
+                    console.log("reset rec cards");
+                    reloadRecCard();
+                    user.setMainNeedsUpdate(false);
+                }
+            });
+            return unsubscribe;
+        }
+    }, [isFocused]);
+
+    useEffect(() => {
+        console.log("got in main useeffect");
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
@@ -142,13 +162,11 @@ export function MainScreen({navigation}) {
                     } else {
                         setOfflineMode();
                         setLoading(false);
-                        // console.log(storeArr);
                     }
-                  });
+                    });
             } catch(e) {
                 setOfflineMode();
                 setLoading(false);
-                // console.log(storeArr);
                 return;
             }
         })();
@@ -161,6 +179,7 @@ export function MainScreen({navigation}) {
                 docId: item.docId,
                 storeInformation: storeArr[curStoreKey],
                 img: { uri: item.cardImg },
+                origin: "main"
             })
         }
     };
@@ -231,7 +250,6 @@ export function MainScreen({navigation}) {
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    setRecCard(null);
                                                     setRecCards(null);
                                                     changeRecCard(storeName, i);
                                                     setModalVisible(false);
@@ -283,27 +301,34 @@ export function MainScreen({navigation}) {
                                     value={manualInput.storeType}
                                     placeholder={"Category (Required)"}
                                 />
-                                <Button
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                        if (manualInput.storeType.length != 0) {
-                                            let storeArrLen = (storeArr.length).toString();
-                                            console.log(storeArrLen);
-                                            let manualInputObj = {
-                                                label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
-                                                store_type: manualInput.storeType,
-                                                key: Object.keys(storeArr).length - 1,
+                                {
+                                    (manualInput.storeType.length != 0) &&
+                                    <Button
+                                        onPress={() => {
+                                            setModalVisible(!modalVisible);
+                                            if (manualInput.storeType.length != 0) {
+                                                let storeArrLen = (storeArr.length).toString();
+                                                console.log(storeArrLen);
+                                                let manualInputObj = {
+                                                    label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                    value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                    vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
+                                                    store_type: manualInput.storeType,
+                                                    key: Object.keys(storeArr).length - 1,
+                                                }
+                                                setStoreArr(storeList => storeList.concat(manualInputObj));
+                                                setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
+                                                setCurStoreKey(Object.keys(storeArr).length - 1);
                                             }
-                                            setStoreArr(storeList => storeList.concat(manualInputObj));
-                                            setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
-                                            setCurStoreKey(Object.keys(storeArr).length - 1);
-                                        }
-                                    }}
-                                    title="Set"
-                                    style={{ margin: 10 }}
-                                ></Button>
+                                        }}
+                                        title="Set"
+                                        style={{ margin: 10 }}
+                                    ></Button>
+                                }
+                                {
+                                    (manualInput.storeType.length == 0) &&
+                                    <Text style={styles.setButtonNotAllowed}>Set</Text>
+                                }
                             </View>
                         }
                     </View>
@@ -435,6 +460,12 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
     },
+    setButtonNotAllowed: { 
+        color: 'gray',
+        fontSize: 20,
+        alignSelf: 'center',
+        margin: 10
+    }
 });
 
 const mapStyles = StyleSheet.create({
