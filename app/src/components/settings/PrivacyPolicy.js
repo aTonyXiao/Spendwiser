@@ -2,7 +2,7 @@ import React from 'react';
 import { Linking, Dimensions, Text, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import * as IntentLauncher from 'expo-intent-launcher';
 import HTML from 'react-native-render-html';
-import {privacyContent} from '../privacyContent'
+import {privacyContent} from './privacyContent';
 const width = Dimensions.get('window').width;
 
 export function PrivacyPolicy(props) {

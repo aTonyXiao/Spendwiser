@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dimensions, Text, View, Image, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
-import aboutImg from '../../assets/about_img.png';
+import aboutImg from '../../../assets/about_img.png';
 const width = Dimensions.get('window').width;
 
 export function About(props) {

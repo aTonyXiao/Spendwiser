@@ -45,6 +45,7 @@ function DisplayCard({route, navigation}) {
             });
 
             setTransactions([]);
+            setCurrentTransactionIndex(-1);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 setTransactions((transactions) => { 
                     const newTransactions = [...transactions, data];

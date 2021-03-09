@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Alert, StyleSheet, TouchableOpacity, Text, StatusBar, SafeAreaView } from 'react-native';
-import mainStyles from '../styles/mainStyles';
-import { appBackend } from '../network/backend';
-import { Footer } from './util/Footer';
+import mainStyles from '../../styles/mainStyles';
+import { appBackend } from '../../network/backend';
+import { Footer } from '../util/Footer';
 import { Ionicons } from '@expo/vector-icons';
 
 /**

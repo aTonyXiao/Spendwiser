@@ -301,27 +301,34 @@ export function MainScreen({navigation}) {
                                     value={manualInput.storeType}
                                     placeholder={"Category (Required)"}
                                 />
-                                <Button
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                        if (manualInput.storeType.length != 0) {
-                                            let storeArrLen = (storeArr.length).toString();
-                                            console.log(storeArrLen);
-                                            let manualInputObj = {
-                                                label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
-                                                store_type: manualInput.storeType,
-                                                key: Object.keys(storeArr).length - 1,
+                                {
+                                    (manualInput.storeType.length != 0) &&
+                                    <Button
+                                        onPress={() => {
+                                            setModalVisible(!modalVisible);
+                                            if (manualInput.storeType.length != 0) {
+                                                let storeArrLen = (storeArr.length).toString();
+                                                console.log(storeArrLen);
+                                                let manualInputObj = {
+                                                    label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                    value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
+                                                    vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
+                                                    store_type: manualInput.storeType,
+                                                    key: Object.keys(storeArr).length - 1,
+                                                }
+                                                setStoreArr(storeList => storeList.concat(manualInputObj));
+                                                setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
+                                                setCurStoreKey(Object.keys(storeArr).length - 1);
                                             }
-                                            setStoreArr(storeList => storeList.concat(manualInputObj));
-                                            setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
-                                            setCurStoreKey(Object.keys(storeArr).length - 1);
-                                        }
-                                    }}
-                                    title="Set"
-                                    style={{ margin: 10 }}
-                                ></Button>
+                                        }}
+                                        title="Set"
+                                        style={{ margin: 10 }}
+                                    ></Button>
+                                }
+                                {
+                                    (manualInput.storeType.length == 0) &&
+                                    <Text style={styles.setButtonNotAllowed}>Set</Text>
+                                }
                             </View>
                         }
                     </View>
@@ -453,6 +460,12 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
     },
+    setButtonNotAllowed: { 
+        color: 'gray',
+        fontSize: 20,
+        alignSelf: 'center',
+        margin: 10
+    }
 });
 
 const mapStyles = StyleSheet.create({
