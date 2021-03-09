@@ -43,7 +43,7 @@ function YourCards({route, navigation}) {
     // TODO: make this modal a component
     if (cards.length == 0) {
         return (
-            <View style={{ marginTop: 10 }}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.bodyContainer}>
 
                     <AddCardModal 
@@ -64,7 +64,10 @@ function YourCards({route, navigation}) {
 
                     <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
                 </View>
-            </View>
+                <View style={styles.footerContainer}>
+                    <Footer navigation={navigation} />
+                </View>
+            </SafeAreaView>
         )
     }
 
