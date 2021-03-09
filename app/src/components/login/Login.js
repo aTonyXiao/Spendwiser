@@ -37,7 +37,6 @@ export const Login = props => {
         <View style={mainStyles.container}>
             <Text style={mainStyles.large_title}>SpendWiser</Text>
 
-            {/* TODO needs a fade in/fade out */}
             {
                 displayErrorText &&
                 <Text style={{color:'red'}}>Please input a username and a password</Text>

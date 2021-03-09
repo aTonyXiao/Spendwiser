@@ -15,12 +15,17 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
     }
 
     // TODO: this should also probably account for whitespace, etc.
-    validateInput = (input) => { 
+    isInputValid = (input) => { 
+        if (isNaN(parseFloat(input))) { 
+            console.log('hello?')
+            return false;
+        }
         return !isNaN(input); 
     }
+    
 
     editTransaction = () => {
-        const inputIsValid = validateInput(transactionInput);
+        const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) {
             user.editTransaction(
                 userId,

@@ -13,7 +13,12 @@ export function AddCardManual({navigation}) {
     const inputReward = React.createRef();
     const [rewards, setRewards] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
-    const [displayErrorText, setDisplayErrorText] = useState(false);
+
+    const [rewardError, setRewardError] = useState(false);
+    const [invalidInputError, setInvalidInputError] = useState(false);
+    const [nameError, setNameError] = useState(false);
+    const [urlError, setUrlError] = useState(false);
+
 
     resetRewardInputs = () => { 
         inputReward.current.state.value = "";
@@ -36,26 +41,59 @@ export function AddCardManual({navigation}) {
     
             setDisplayRewards(true);
         } else { 
-            setDisplayErrorText(true);
+            setRewardError(true);
 
             setTimeout(function() { 
-                setDisplayErrorText(false);
+                setRewardError(false);
             }, 2000);
         }
     }
 
+    validateInputs = (name, url) => { 
+        var inputsAreValid = true;
+
+        if (name == "") { 
+            inputsAreValid = false;
+            setInvalidInputError(true);
+            setNameError(true);
+            setTimeout(function() { 
+                setInvalidInputError(false);
+                setNameError(false);
+            }, 2500);
+        } 
+
+        // TODO: add some regex for beta version?
+        if (url == "") {
+            setUrlError(true);
+            setTimeout(function() { 
+                setUrlError(false);
+            }, 2500);
+        }
+
+        if (rewards.length == 0) {
+            inputsAreValid = false;
+            setInvalidInputError(true);
+            setTimeout(function() { 
+                setInvalidInputError(false);
+            }, 2500);
+        }
+        
+        return inputsAreValid;
+    }
+
     addCard = () => { 
-        console.log("adding a manual card")
         var userId = user.getUserId();
 
         var name = inputName.current.state.text;
         var url = inputUrl.current.state.text;
+        var inputsAreValid = validateInputs(name, url);
 
-        cards.addCardToDatabase(name, [], rewards, url).then((cardId) => {
-            console.log("new card id: " + cardId);
-            user.saveCardToUser(userId, cardId, null, null);
-            navigation.navigate('YourCards');
-        });
+        if (inputsAreValid) { 
+            cards.addCardToDatabase(name, [], rewards, url).then((cardId) => {
+                user.saveCardToUser(userId, cardId, null, null);
+                navigation.navigate('YourCards');
+            });
+        } 
     } 
 
     return (
@@ -63,7 +101,11 @@ export function AddCardManual({navigation}) {
             <Text style={mainStyles.title}>Add a Card Manually</Text>
 
             <Text style={styles.inputTitle}>Credit Card Name</Text>
-            <TextBox style={styles.inputBox} ref={inputName} placeholder={'your credit card title here '} />
+            <TextBox 
+                style={!nameError ? styles.inputBox : styles.inputBoxError} 
+                ref={inputName} 
+                placeholder={'your credit card title here '}
+            />
 
             <Text style={styles.inputTitle}>Rewards</Text>    
             <View style={styles.rewardContainer}>
@@ -78,7 +120,7 @@ export function AddCardManual({navigation}) {
                     </View>
                 }
                 {
-                    displayErrorText &&
+                    rewardError &&
                     <Text style={{ color: 'red' }}>Please input a number</Text>
                 }
                 <View style={styles.rewardRow}>
@@ -99,6 +141,10 @@ export function AddCardManual({navigation}) {
                 <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
 
                 <View style={styles.addCardContainer}>
+                    {
+                        (invalidInputError) &&
+                        <Text style={{color:'red'}}>Please add a name and reward</Text>
+                    }
                     <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
                         <Text style={styles.addCardText}>Add this card</Text>
                     </TouchableOpacity>
@@ -137,6 +183,17 @@ const styles = StyleSheet.create({
         borderColor: '#F0F0F0',
         borderWidth: 1,
         backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
+    inputBoxError : {
+        margin: 15,
+        height: 40,
+        width: '90%',
+        borderColor: 'red',
+        borderWidth: 1,
+        // backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
         marginBottom: 8
