@@ -21,6 +21,7 @@ function DisplayCard({route, navigation}) {
     const cardId = route.params.cardId;
     const docId = route.params.docId;
     const cardImage = route.params.img;
+    const origin = route.params.origin;
     const userId = user.getUserId();
     const [cardName, setCardName] = useState("");
     const storeInformation = route.params.storeInformation;
@@ -201,10 +202,12 @@ function DisplayCard({route, navigation}) {
                         })
                     }
                 </View>
-
-                <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
-                    <Text style={styles.deleteText}>Delete this card</Text>
-                </TouchableOpacity>
+                {
+                    (origin !== "main") &&
+                    <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
+                        <Text style={styles.deleteText}>Delete this card</Text>
+                    </TouchableOpacity>
+                }
             </ScrollView>
         </SafeAreaView>
     )
