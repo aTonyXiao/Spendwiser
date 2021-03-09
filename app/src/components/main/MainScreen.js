@@ -9,6 +9,7 @@ import { recommendCard } from './RecommendCard';
 import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { cards } from '../../network/cards';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -35,7 +36,6 @@ export function MainScreen({navigation}) {
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
-    const [recCard, setRecCard] = useState(null);
     const [recCards, setRecCards] = useState(null);
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
@@ -55,10 +55,6 @@ export function MainScreen({navigation}) {
     }
 
     function getRecCardFromDB(myRankedCards) {
-        // console.log("Finally ");
-        // console.log(myRankedCards);
-        setRecCard({recCardId: myRankedCards[0]["cardId"], recCardImg: myRankedCards[0]["cardImg"]});
-
         setRecCards(myRankedCards)
         console.log(myRankedCards)
     }
@@ -74,9 +70,13 @@ export function MainScreen({navigation}) {
     }
 
     function reloadRecCard() {
-        let category = storeArr[curStoreKey]["storeType"];
-        // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
-        recommendCard.getRecCards(category, getRecCardFromDB);
+        if (storeArr[curStoreKey] !== undefined) {
+            let category = storeArr[curStoreKey]["storeType"];
+            // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
+            recommendCard.getRecCards(category, getRecCardFromDB);
+        } else {
+            changeRecCard(curStore, curStoreKey);
+        }
     }
 
     function getLocationFromAPI(json) {
@@ -122,7 +122,6 @@ export function MainScreen({navigation}) {
         const unsubscribe = navigation.addListener('focus', () => {
             if (user.getMainNeedsUpdate()) {
                 /* triggered on a reload of the page */
-                setRecCard(null);
                 setRecCards(null);
                 reloadRecCard();
                 user.setMainNeedsUpdate(false);
@@ -180,6 +179,7 @@ export function MainScreen({navigation}) {
                 docId: item.docId,
                 storeInformation: storeArr[curStoreKey],
                 img: { uri: item.cardImg },
+                origin: "main"
             })
         }
     };
@@ -250,7 +250,6 @@ export function MainScreen({navigation}) {
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    setRecCard(null);
                                                     setRecCards(null);
                                                     changeRecCard(storeName, i);
                                                     setModalVisible(false);
