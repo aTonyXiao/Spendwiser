@@ -1,9 +1,15 @@
 import React from 'react';
-import { Linking, View, Button, Text, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
+import { Linking, Dimensions, ScrollView, Button, Text, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import * as IntentLauncher from 'expo-intent-launcher';
+import HTML from 'react-native-render-html';
+import {privacyContent} from '../privacyContent'
+const width = Dimensions.get('window').width;
 
 export function PrivacyPolicy(props) {
+    const htmlPrivacy = privacyContent;
+
     openAppSettings = () => {
+        console.log(htmlPrivacy);
         if(Platform.OS=='ios'){
             Linking.openURL('app-settings:')
         } else{
@@ -19,7 +25,9 @@ export function PrivacyPolicy(props) {
                 onPress={() => {openAppSettings()}}
                 title="Change geolocation settings"
             />
-            <Text>We have a privacy policy, but shhhhhhh it's private</Text>
+            <ScrollView>
+                <HTML source={{html: htmlPrivacy}} contentWidth={width} />
+            </ScrollView>
         </SafeAreaView>
     );
 }
