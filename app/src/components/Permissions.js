@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Button, Text, Alert } from 'react-native';
+import { View, Button, Text, Alert, StyleSheet, StatusBar } from 'react-native';
 import * as Permissions from 'expo-permissions';
 
 export function AppPermissions() {
@@ -10,7 +10,7 @@ export function AppPermissions() {
 
  
     return (
-        <View>
+        <View style={styles.container}>
             <Button
                 title="Notifications"
                 onPress={() => {
@@ -22,6 +22,7 @@ export function AppPermissions() {
                     }
                 }}
             />
+            <View style={{height:20}} />
             <Button
                 title="Camera"
                 onPress={() => {
@@ -34,5 +35,13 @@ export function AppPermissions() {
             />
         </View>
     );
-    
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingTop: StatusBar.currentHeight,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});

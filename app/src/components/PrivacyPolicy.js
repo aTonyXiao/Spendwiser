@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linking, Dimensions, ScrollView, Button, Text, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
+import { Linking, Dimensions, Text, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import * as IntentLauncher from 'expo-intent-launcher';
 import HTML from 'react-native-render-html';
 import {privacyContent} from '../privacyContent'
@@ -9,7 +9,6 @@ export function PrivacyPolicy(props) {
     const htmlPrivacy = privacyContent;
 
     openAppSettings = () => {
-        console.log(htmlPrivacy);
         if(Platform.OS=='ios'){
             Linking.openURL('app-settings:')
         } else{
@@ -21,11 +20,12 @@ export function PrivacyPolicy(props) {
 
     return(
         <SafeAreaView style={styles.container}>
-            <Button 
+            <TouchableOpacity style={styles.button}
                 onPress={() => {openAppSettings()}}
-                title="Change geolocation settings"
-            />
-            <ScrollView>
+            >
+            <Text>Change geolocation settings</Text>
+            </TouchableOpacity>
+            <ScrollView style={styles.htmlContainer}>
                 <HTML source={{html: htmlPrivacy}} contentWidth={width} />
             </ScrollView>
         </SafeAreaView>
@@ -36,7 +36,12 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: StatusBar.currentHeight,
     },
-    settingsContainer: {
-
-    }
+    button: {
+        alignItems: "center",
+        backgroundColor: "#28b573",
+        padding: 10
+    },
+    htmlContainer: {
+        padding: 10,
+    },
 });
