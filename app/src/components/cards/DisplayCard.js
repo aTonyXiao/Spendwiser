@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, Modal, TextInput } from 'react-native';
+import { Dimensions, View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, SafeAreaView, Modal, TextInput, StatusBar } from 'react-native';
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import CachedImage from 'react-native-expo-cached-image';
@@ -80,131 +80,133 @@ function DisplayCard({route, navigation}) {
     }
 
     return (
-        <ScrollView 
-            style={styles.container} 
-            contentContainerStyle={styles.scrollviewContainer}
-        >
-            <EditTransactionModal
-                transaction={currentTransaction}
-                modalVisible={showEditTransactionModal}
-                setModalVisible={setShowEditTransactionModal}
-                setHasConstructed={setHasConstructed}
-            ></EditTransactionModal>
+        <SafeAreaView style={styles.container}>
+            <ScrollView 
+                style={styles.container} 
+                contentContainerStyle={styles.scrollviewContainer}
+            >
+                <EditTransactionModal
+                    transaction={currentTransaction}
+                    modalVisible={showEditTransactionModal}
+                    setModalVisible={setShowEditTransactionModal}
+                    setHasConstructed={setHasConstructed}
+                ></EditTransactionModal>
 
-            <TransactionModal
-                storeInformation={storeInformation}
-                showTransactionModal={showTransactionModal}
-                setShowTransactionModal={setShowTransactionModal}
-                setHasConstructed={setHasConstructed}
-                cardId={cardId}
-            ></TransactionModal>
+                <TransactionModal
+                    storeInformation={storeInformation}
+                    showTransactionModal={showTransactionModal}
+                    setShowTransactionModal={setShowTransactionModal}
+                    setHasConstructed={setHasConstructed}
+                    cardId={cardId}
+                ></TransactionModal>
 
-            {/* TODO: Add reward modal in beta version*/}
+                {/* TODO: Add reward modal in beta version*/}
 
-            <View style={{justifyContent: 'flex-start'}}>
-                <Text style={styles.cardTitle}>{cardName}</Text>
-                <CachedImage
-                    source={cardImage}
-                    style={styles.card}
-                />
+                <View style={{justifyContent: 'flex-start'}}>
+                    <Text style={styles.cardTitle}>{cardName}</Text>
+                    <CachedImage
+                        source={cardImage}
+                        style={styles.card}
+                    />
 
-                {
-                    showEditTransactionOption &&
-                    <View>
-                        <TouchableOpacity onPress={() => setShowEditTransactionModal(true)}>
-                            <Text style={styles.editTransactionText}>Edit this transaction</Text>
+                    {
+                        showEditTransactionOption &&
+                        <View>
+                            <TouchableOpacity onPress={() => setShowEditTransactionModal(true)}>
+                                <Text style={styles.editTransactionText}>Edit this transaction</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
+                    <View style={styles.sectionTitle}>
+                        <Text style={styles.sectionTitleText}>Transactions</Text> 
+                        <TouchableOpacity
+                            onPress={() => setShowTransactionModal(true)}
+                            style={{margin: 5}}
+                        >
+                            <Ionicons
+                                name="add-circle-outline"
+                                color="white"
+                                size={22}
+                            ></Ionicons>
                         </TouchableOpacity>
                     </View>
-                }
+                    {
+                        displayTransactions &&
+                        <View>
+                            {
+                                transactions.map((transaction, i) => {
+                                    var date = transaction.dateAdded.toDate().toDateString();
+                                    var name = transaction.storeInfo.storeName;
+                                    var dollarAmount = transaction.amountSpent;
+                                    return (
+                                        <TouchableOpacity
+                                            style={
+                                                (currentTransactionIndex == i) ?
+                                                styles.sectionTextSelected :
+                                                styles.sectionText
+                                            } 
+                                            key={i}
+                                            onPress={() => { 
+                                                if (i == currentTransactionIndex) { 
+                                                    setShowEditTransactionOption(false);
+                                                    setCurrentTransactionIndex(-1);
+                                                } else {
+                                                    setCurrentTransactionIndex(i);
+                                                    setShowEditTransactionOption(true);
+                                                    setCurrentTransaction(transaction);
+                                                }
+                                            }}
+                                        >
+                                                <Text style={{fontWeight : 'bold'}}>{date}</Text>
+                                                <Text style={{marginLeft: 5}}>{name}: ${dollarAmount}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                        </View>
+                    }
+                    {
+                        (transactions.length == 0) &&
+                        <View>
+                            <Text style={styles.sectionText}>You currently have no transactions!</Text>
+                        </View>
+                    }
 
-                <View style={styles.sectionTitle}>
-                    <Text style={styles.sectionTitleText}>Transactions</Text> 
-                    <TouchableOpacity
-                        onPress={() => setShowTransactionModal(true)}
-                        style={{margin: 5}}
-                    >
-                        <Ionicons
-                            name="add-circle-outline"
-                            color="white"
-                            size={22}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                </View>
-                {
-                    displayTransactions &&
-                    <View>
-                        {
-                            transactions.map((transaction, i) => {
-                                var date = transaction.dateAdded.toDate().toDateString();
-                                var name = transaction.storeInfo.storeName;
-                                var dollarAmount = transaction.amountSpent;
-                                return (
-                                    <TouchableOpacity
-                                        style={
-                                            (currentTransactionIndex == i) ?
-                                            styles.sectionTextSelected :
-                                            styles.sectionText
-                                        } 
-                                        key={i}
-                                        onPress={() => { 
-                                            if (i == currentTransactionIndex) { 
-                                                setShowEditTransactionOption(false);
-                                                setCurrentTransactionIndex(-1);
-                                            } else {
-                                                setCurrentTransactionIndex(i);
-                                                setShowEditTransactionOption(true);
-                                                setCurrentTransaction(transaction);
-                                            }
-                                        }}
-                                    >
-                                            <Text style={{fontWeight : 'bold'}}>{date}</Text>
-                                            <Text style={{marginLeft: 5}}>{name}: ${dollarAmount}</Text>
-                                    </TouchableOpacity>
-                                )
-                            })
-                        }
+
+                    <View style={styles.sectionTitle}>
+                        <Text style={styles.sectionTitleText}>Rewards</Text> 
+                        <TouchableOpacity
+                            // onPress={() => setShowTransactionModal(true)}
+                            style={{margin: 5}}
+                        >
+                            <Ionicons
+                                name="add-circle-outline"
+                                color="white"
+                                size={22}
+                            ></Ionicons>
+                        </TouchableOpacity>
                     </View>
-                }
-                {
-                    (transactions.length == 0) &&
-                    <View>
-                        <Text style={styles.sectionText}>You currently have no transactions!</Text>
-                    </View>
-                }
-
-
-                <View style={styles.sectionTitle}>
-                    <Text style={styles.sectionTitleText}>Rewards</Text> 
-                    <TouchableOpacity
-                        // onPress={() => setShowTransactionModal(true)}
-                        style={{margin: 5}}
-                    >
-                        <Ionicons
-                            name="add-circle-outline"
-                            color="white"
-                            size={22}
-                        ></Ionicons>
-                    </TouchableOpacity>
+                    {
+                        displayRewards && 
+                        rewards.map((reward, i) => {
+                            var category = reward[0];
+                            var amountCents = reward[1]; 
+                            return (
+                                <View style={styles.sectionText} key={i}>
+                                    <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                    <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                </View>
+                            )
+                        })
+                    }
                 </View>
-                {
-                    displayRewards && 
-                    rewards.map((reward, i) => {
-                        var category = reward[0];
-                        var amountCents = reward[1]; 
-                        return (
-                            <View style={styles.sectionText} key={i}>
-                                <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
-                            </View>
-                        )
-                    })
-                }
-            </View>
 
-            <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
-                <Text style={styles.deleteText}>Delete this card</Text>
-            </TouchableOpacity>
-        </ScrollView>
+                <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
+                    <Text style={styles.deleteText}>Delete this card</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
