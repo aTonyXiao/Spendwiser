@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { LoadingScreen } from './src/components/LoadingScreen';
 import { Login } from './src/components/login/Login';
 import { CreateAccount } from './src/components/login/CreateAccount';
-import { Settings } from './src/components/Settings';
+import { Settings } from './src/components/settings/Settings';
 import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/main/MainScreen';
@@ -13,9 +13,9 @@ import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
-import { AppPermissions } from './src/components/Permissions';
-import { PrivacyPolicy } from './src/components/PrivacyPolicy';
-import { Account } from './src/components/Account';
+import { AppPermissions } from './src/components/settings/Permissions';
+import { PrivacyPolicy } from './src/components/settings/PrivacyPolicy';
+import { Account } from './src/components/settings/Account';
 
 const Stack = createStackNavigator();
 
@@ -93,6 +93,7 @@ export default function App() {
         <Stack.Screen
           name="Account"
           component={Account}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
