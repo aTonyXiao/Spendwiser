@@ -68,6 +68,12 @@ export function MainScreen({navigation}) {
         }
     }
 
+    function reloadRecCard() {
+        let category = storeArr[curStoreKey]["storeType"];
+        // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
+        recommendCard.getRecCards(category, getRecCardFromDB);
+    }
+
     function getLocationFromAPI(json) {
         setPlaces(json.results);
         let fetchResult = json.results;
@@ -106,6 +112,19 @@ export function MainScreen({navigation}) {
         console.log("Attempting to set the StoreArr...")
         setStoreArr(fetchStores);
     };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (user.getMainNeedsUpdate()) {
+                /* triggered on a reload of the page */
+                setRecCard(null);
+                setRecCards(null);
+                reloadRecCard();
+                user.setMainNeedsUpdate(false);
+            }
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
         (async () => {

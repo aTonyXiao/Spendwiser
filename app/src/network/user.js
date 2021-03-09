@@ -1,10 +1,13 @@
 import { app } from 'firebase';
 import { appBackend } from './backend';
 
+let mainNeedsUpdate = false;
+
 /**
  * A user class that peforms user database options
  */
 class userClass { 
+    
     /**
      * Checks if the user is currently in the "users" database. If not  
      * in the database, registers the user. Returns the user id
@@ -85,6 +88,7 @@ class userClass {
                     appBackend.dbDelete("users." + userId + ".transactions." + transactions[i].docId);
                 }
             }
+            mainNeedsUpdate = true;
         })
     }
 
@@ -102,6 +106,7 @@ class userClass {
             transactions: transactions,
             diff: diff
         }, (id) => { 
+            mainNeedsUpdate = true;
             console.log("successfully saved card to user");
         })
     }
@@ -212,6 +217,22 @@ class userClass {
             // TODO apply diff
             callback(data.rewards);
         })
+    }
+
+    /**
+     * Get whether the main page needs to update
+     */
+    getMainNeedsUpdate() {
+        return mainNeedsUpdate;
+    }
+
+    /**
+     * Set whether the main page needs to update
+     * 
+     * @param {boolean} flag - new boolean for flag
+     */
+    setMainNeedsUpdate(flag) {
+        mainNeedsUpdate = flag;
     }
 }
 
