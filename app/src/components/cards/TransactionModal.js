@@ -38,11 +38,11 @@ function TransactionModal({
                 transactionInput, 
                 (docId) => { 
                     user.addTransactionId(userId, docId);
+                    setHasConstructed(false);
                 }
             );
     
             setShowTransactionModal(false);
-            setHasConstructed(false);
         } else {
             setDisplayErrorText(true);
 
