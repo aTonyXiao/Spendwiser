@@ -14,13 +14,6 @@ let Account = function(props) {
     let emailStatus = userInfo.emailVerified ? "Verified" : "Unverified";
     return(
         <View style={mainStyles.container}>
-            <CachedImage
-                style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}
-                source={userInfo.photoURL}
-                onLoad={() => {
-                    console.log("Image loaded");
-                }}
-            />
             <Text>Name: {userInfo.name}</Text>
             <Text>Email: {userInfo.email}</Text>
             <Text>Email Verification Status: {emailStatus}</Text>
