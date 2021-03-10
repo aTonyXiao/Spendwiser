@@ -478,6 +478,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         paddingBottom: 35,
+        // Nathan's local changes for iPhone SE:
+        // marginBottom: 15,
+        // marginTop: 10 
     }
 });
 
