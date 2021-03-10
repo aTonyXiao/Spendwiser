@@ -10,6 +10,7 @@ import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useIsFocused } from '@react-navigation/native';
+import CardImage from '../cards/CardImage';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
@@ -191,12 +192,15 @@ export function MainScreen({navigation}) {
               onPress={() => { recommendedCardPressed(item) }}
               >
             <View style={styles.imageContainer}>
-                <Image source = {{uri: item.cardImg}}
+                <CardImage
                     style = {{ 
                         width: width * .8,  //its same to '20%' of device width
                         aspectRatio: 1.5, // <-- this
                         resizeMode: 'contain', //optional
                     }}
+                    source={item.cardImg}
+                    overlay={item.cardName}
+                    default={item.cardImg.length == 0}
                 />
             </View>
         </TouchableOpacity>
