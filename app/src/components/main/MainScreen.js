@@ -42,6 +42,7 @@ export function MainScreen({navigation}) {
     const ref = useRef(null);
     const [manualModal, setManualModal] = useState(false);
     const isFocused = useIsFocused();
+    const [addedManual, setAddedManual] = useState(false);
       
     function setOfflineMode() {
         setStoreArr([{
@@ -131,6 +132,15 @@ export function MainScreen({navigation}) {
             return unsubscribe;
         }
     }, [isFocused]);
+
+    useEffect(() => {
+        if (isLoading === false) {
+            setRecCards(null);
+            console.log("reset rec cards");
+            reloadRecCard();
+            setAddedManual(false);
+        }
+    }, [addedManual]);
 
     useEffect(() => {
         console.log("got in main useeffect");
@@ -310,19 +320,24 @@ export function MainScreen({navigation}) {
                                     <Button
                                         onPress={() => {
                                             setModalVisible(!modalVisible);
+                                            setManualModal(false);
                                             if (manualInput.storeType.length != 0) {
                                                 let storeArrLen = (storeArr.length).toString();
                                                 console.log(storeArrLen);
+                                                console.log(manualInput.storeName, manualInput.vicinity, manualInput.storeType);
                                                 let manualInputObj = {
                                                     label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                    vicinity: manualInput.storeName.vicinity === 0 ? "N/A" : manualInput.vicinity,
-                                                    store_type: manualInput.storeType,
-                                                    key: Object.keys(storeArr).length - 1,
+                                                    vicinity: manualInput.vicinity.length === 0 ? "N/A" : manualInput.vicinity,
+                                                    storeType: manualInput.storeType,
+                                                    key: Object.keys(storeArr).length,
                                                 }
                                                 setStoreArr(storeList => storeList.concat(manualInputObj));
+                                                let value = manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName;
                                                 setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
-                                                setCurStoreKey(Object.keys(storeArr).length - 1);
+                                                setCurStoreKey(Object.keys(storeArr).length);
+                                                setManualInput({storeName: "", vicinity: "", storeType: ""});
+                                                setAddedManual(true);
                                             }
                                         }}
                                         title="Set"
