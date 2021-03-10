@@ -35,7 +35,8 @@ class Cards {
                     "reward": convertedReward,
                     "image": data.image,
                     "unconvertedReward": unconvertedReward,
-                    "type": data.rewardType
+                    "type": data.rewardType,
+                    "name": data.name
                 }
                 resolve(cardCatInfo);
             })
