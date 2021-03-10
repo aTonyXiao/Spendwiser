@@ -3,6 +3,7 @@ import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
+
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
