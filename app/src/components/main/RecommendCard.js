@@ -52,6 +52,7 @@ class RecommendCard {
                 "cardCatReward": tmpCardInfo["reward"],
                 "cardImg": tmpCardInfo["image"],
                 "cardType": tmpCardInfo["type"],
+                "cardName": tmpCardInfo["name"],
                 "cardCatUncoverted": tmpCardInfo["unconvertedReward"]
             });
         }
