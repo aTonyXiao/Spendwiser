@@ -131,7 +131,9 @@ let Settings = (props) => {
                     ></Ionicons>
                 </TouchableOpacity>
             </View>
-            <Footer navigation={navigation} />
+            <View style={styles.footerContainer}>
+                <Footer navigation={navigation} />
+            </View>
         </SafeAreaView>
     );
 }
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         position: 'absolute', 
         bottom: 0, 
-        paddingBottom: 15,
+        paddingBottom: 35,
         marginTop: 0
     }
 })

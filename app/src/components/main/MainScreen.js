@@ -410,7 +410,9 @@ export function MainScreen({navigation}) {
                     </View>
                 }
             </View>
-            <Footer navigation={navigation} storeInformation={storeArr[curStoreKey]}/>
+            <View style={styles.footerContainer}>
+                <Footer navigation={navigation} />
+            </View>
         </SafeAreaView>
         );
     }
@@ -469,6 +471,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
         alignSelf: 'center',
         margin: 10
+    },
+    footerContainer: {
+        width: '100%',
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 0,
+        paddingBottom: 35,
     }
 });
 
