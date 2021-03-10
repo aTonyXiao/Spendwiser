@@ -39,7 +39,7 @@ function DisplayCard({route, navigation}) {
     const constructor = () => { 
         if (hasConstructed) { 
             return;
-        } else { 
+        } else {
             cards.getCardName(cardId).then((name) => { 
                 setCardName(name);
             });
@@ -193,8 +193,17 @@ function DisplayCard({route, navigation}) {
                     {
                         displayRewards && 
                         rewards.map((reward, i) => {
-                            var category = reward[0];
-                            var amountCents = reward[1]; 
+                            var category;
+                            var amountCents;
+                            // temporary way to tell if card is a manual addition
+                            if (typeof(rewards[0][0]) == 'string') {
+                                category = reward[1].type;
+                                amountCents = reward[1].value;
+                            } else { 
+                                category = reward[0];
+                                amountCents = reward[1]; 
+                            }
+
                             return (
                                 <View style={styles.sectionText} key={i}>
                                     <Text style={{ fontWeight: 'bold' }}>{category}</Text>
