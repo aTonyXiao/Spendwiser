@@ -105,9 +105,7 @@ function YourCards({ route, navigation }) {
                     <View style={{ height: 100 }}></View>
                 </ScrollView>
             </View>
-            <View style={styles.footerContainer}>
-                <Footer navigation={navigation} />
-            </View>
+            <Footer navigation={navigation} />
         </SafeAreaView>
     );
 }
