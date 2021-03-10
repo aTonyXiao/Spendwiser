@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
+import CardImage from './CardImage';
 
 /**
  * Display for a single credit card. Shows information about a card's rewards as well
@@ -82,6 +83,8 @@ function DisplayCard({route, navigation}) {
         navigation.navigate('YourCards');
     }
 
+    console.log(cardImage.uri)
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView 
@@ -107,9 +110,12 @@ function DisplayCard({route, navigation}) {
 
                 <View style={{justifyContent: 'flex-start'}}>
                     <Text style={styles.cardTitle}>{cardName}</Text>
-                    <CachedImage
-                        source={cardImage}
-                        style={styles.card}
+
+                    <CardImage
+                        style={[ styles.card ]}
+                        source={cardImage.uri}
+                        overlay={cardName}
+                        default={cardImage.uri === undefined}
                     />
 
                     {
