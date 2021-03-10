@@ -105,7 +105,9 @@ function YourCards({ route, navigation }) {
                     <View style={{ height: 100 }}></View>
                 </ScrollView>
             </View>
-            <Footer navigation={navigation} />
+            <View style={styles.footerContainer}>
+                <Footer navigation={navigation} />
+            </View>
         </SafeAreaView>
     );
 }
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
-        paddingBottom: 15,
+        paddingBottom: 35,
     }
 });
 
