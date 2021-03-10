@@ -118,6 +118,10 @@ export function MainScreen({navigation}) {
     };
 
     useEffect(() => {
+        user.currentStore = storeArr[curStoreKey];
+    });
+
+    useEffect(() => {
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
                 console.log(user.getMainNeedsUpdate());

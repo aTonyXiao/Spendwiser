@@ -25,7 +25,8 @@ function DisplayCard({route, navigation}) {
     const origin = route.params.origin;
     const userId = user.getUserId();
     const [cardName, setCardName] = useState("");
-    const storeInformation = route.params.storeInformation;
+    // const storeInformation = route.params.storeInformation;
+    const storeInformation = user.currentStore;
     const [displayTransactions, setDisplayTransactions] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
