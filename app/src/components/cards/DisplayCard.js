@@ -196,7 +196,7 @@ function DisplayCard({route, navigation}) {
                             var category;
                             var amountCents;
                             // temporary way to tell if card is a manual addition
-                            if (typeof(rewards[0][0]) == 'string') {
+                            if (rewards[0][0] == '0') {
                                 category = reward[1].type;
                                 amountCents = reward[1].value;
                             } else { 
