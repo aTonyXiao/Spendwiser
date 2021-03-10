@@ -65,7 +65,9 @@ function YourCards({ route, navigation }) {
 
                     <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
                 </View>
-                <Footer navigation={navigation} />
+                <View style={styles.footerContainer}>
+                    <Footer navigation={navigation} />
+                </View>
             </SafeAreaView>
         )
     }
