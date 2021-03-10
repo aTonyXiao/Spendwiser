@@ -7,6 +7,8 @@ let mainNeedsUpdate = false;
  * A user class that peforms user database options
  */
 class userClass { 
+
+    currentStore = null;
     
     /**
      * Checks if the user is currently in the "users" database. If not  
