@@ -13,13 +13,10 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
     if (transaction) { 
         docId = transaction.docId;
     }
-    console.log("doc id: ");
-    console.log(docId);
 
     // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
         if (isNaN(parseFloat(input))) { 
-            console.log('hello?')
             return false;
         }
         return !isNaN(input); 
