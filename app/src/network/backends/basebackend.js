@@ -213,6 +213,12 @@ class BaseBackend {
     signIn(email, password, error_func) {}
         
     /**
+     * Sign in with an offline user account. The user will not be able to access the
+     * credit card database and will only be given manual card-add functionality.
+     */
+    signInOffline() {}
+
+    /**
      * Sign out the currently logged in user
      */
     signOut() {}

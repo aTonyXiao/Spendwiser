@@ -6,8 +6,15 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 
+// This will be set through the onAuthStateChange function
+let onAuthStateChangeCallback = null;
+
 // Internal saved state of wether a user is logged in or not
 let globalUserSignedIn = false;
+
+// Temporary state to show if a user is signed in with an offline account
+// TODO: Store this on disk somehow? (Nathan W)
+let globalUserSignedInOffline = false;
 
 /**
  * Extract the database location from the string
@@ -306,10 +313,26 @@ class FirebaseBackend extends BaseBackend {
             });
     }
 
+    signInOffline() {
+        globalUserSignedInOffline = true;
+        if (onAuthStateChangeCallback) {
+            onAuthStateChangeCallback();
+        }
+    }
+
     /**
      * Sign out the currently logged in user
      */
     signOut() {
+        if (globalUserSignedInOffline) {
+            globalUserSignedInOffline = false;
+            if (onAuthStateChangeCallback != null) {
+                onAuthStateChangeCallback();
+            }
+
+            return;
+        }
+
         firebase.auth().signOut().then(() => {
             // Sign-out successful.
             console.log('Sign out successful');
@@ -360,7 +383,7 @@ class FirebaseBackend extends BaseBackend {
      * Returns true or false depending on if the user is already logged in
      */
     userLoggedIn() {
-        return globalUserSignedIn;
+        return globalUserSignedIn || globalUserSignedInOffline;
     }
 
     /**
@@ -368,9 +391,13 @@ class FirebaseBackend extends BaseBackend {
      * I.E. if a user logs in or logs out the function will be called
      * 
      * @param {requestCallback} callback - The function to callback when a user's
-     * state changes
+     * state changes. This can happen for a logged in user if the firebase 
+     * authentication state changes. For an offline user, this is handled internally
+     * and the callback function will be manually called when a login or logout function
+     * is called.
      */
     onAuthStateChange(callback) {
+        onAuthStateChangeCallback = callback; 
         firebase.auth().onAuthStateChanged(callback);
     }
 

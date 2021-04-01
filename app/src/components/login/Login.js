@@ -85,7 +85,7 @@ export const Login = props => {
             <TouchableOpacity
                 style={styles.offlineAccountWrapper}
                 onPress={() => {
-                    console.log("Signing in with an offline account...");
+                    appBackend.signInOffline();
                 }}>
                 <Text style={styles.signUpButton}>
                     Use an offline account
