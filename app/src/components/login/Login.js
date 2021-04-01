@@ -81,6 +81,16 @@ export const Login = props => {
                     New user? Make an account here
                 </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.offlineAccountWrapper}
+                onPress={() => {
+                    console.log("Signing in with an offline account...");
+                }}>
+                <Text style={styles.signUpButton}>
+                    Use an offline account
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -115,7 +125,11 @@ const styles = StyleSheet.create({
     }, 
     signUpWrapper: { 
         position: 'absolute',
-        bottom: 15
+        bottom: 45,
+    },
+    offlineAccountWrapper: {
+        position: 'absolute',
+        bottom: 20,
     }
 })
 
