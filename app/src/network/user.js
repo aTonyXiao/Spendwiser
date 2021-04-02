@@ -17,6 +17,7 @@ class userClass {
     async getUserId() { 
         return new Promise((resolve, reject) => {
             appBackend.getUserID((userId) => {
+                console.log(userId);
                 if (userId == null) { 
                     // user is not using a login, store all data locally?
                     resolve("test");
@@ -44,8 +45,6 @@ class userClass {
         appBackend.dbSet("users." + userId, { 
             dateCreated: date
             // TODO: maybe add name and email here?
-        }, (id) => { 
-            console.log(id);
         });
     }
 

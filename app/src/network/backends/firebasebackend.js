@@ -221,12 +221,16 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        console.log(databaseLocation);
-        console.log(data);
-        databaseLocation.set(data, { merge: merge }).catch((err) => {
-            console.log(err);
-        });
+        storage.getLoginState((state) => {
+            let databaseLocation = getDatabaseLocation(this.database, location);
+            if (state.signed_in && !state.offline) {
+                databaseLocation.set(data, { merge: merge }).catch((err) => {
+                    console.log(err);
+                });
+            }
+
+            // TODO: (Nathan W) Store local copy as well
+        })
     }
 
     /**
