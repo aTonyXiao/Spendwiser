@@ -13,12 +13,13 @@ async function redirectToLogin() {
 let globalDebugRedirectBasedOnLoginStatus = false;
 async function handleRedirectsBasedOnLoginStatus(navigation) {
     if (globalDebugRedirectBasedOnLoginStatus) {
-        if (appBackend.userLoggedIn()) {
-            console.log(appBackend.getUserID());
-            navigation.navigate('Main');
-        } else {
-            navigation.navigate('Login');
-        }
+        appBackend.userLoggedIn((loggedIn) => {
+            if (loggedIn) {
+                navigation.navigate('Main');
+            } else {
+                navigation.navigate('Login');
+            }
+        });
     }
 }
 

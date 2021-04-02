@@ -216,7 +216,7 @@ class BaseBackend {
      * Sign in with an offline user account. The user will not be able to access the
      * credit card database and will only be given manual card-add functionality.
      */
-    signInOffline() {}
+    async signInOffline() {}
 
     /**
      * Sign out the currently logged in user
@@ -249,7 +249,7 @@ class BaseBackend {
      * 
      * @returns {boolean} - true or false depending on if a user is logged in or not
      */
-    userLoggedIn() {}
+    userLoggedIn(callback) {}
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
