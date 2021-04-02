@@ -215,8 +215,11 @@ class BaseBackend {
     /**
      * Sign in with an offline user account. The user will not be able to access the
      * credit card database and will only be given manual card-add functionality.
+     * 
+     * The onAuthStateChange function which can be supplied in @onAuthStateChange will
+     * be called upon changing this login state.
      */
-    async signInOffline() {}
+    signInOffline() {}
 
     /**
      * Sign out the currently logged in user
@@ -247,7 +250,8 @@ class BaseBackend {
     /**
      * Get the user's log in status
      * 
-     * @returns {boolean} - true or false depending on if a user is logged in or not
+     * @param {callback} - callback function that will be called on login info retreival containing one boolean argument.
+     * 
      */
     userLoggedIn(callback) {}
 
@@ -265,7 +269,7 @@ class BaseBackend {
      * 
      * @returns {string} - string containing the user id of the logged in user
      */
-    getUserID() {}
+    getUserID(callback) {}
 
     /** 
      * @typedef {Object} UserInfo

@@ -222,6 +222,8 @@ class FirebaseBackend extends BaseBackend {
      */
     dbSet(location, data, merge = false) {
         let databaseLocation = getDatabaseLocation(this.database, location);
+        console.log(databaseLocation);
+        console.log(data);
         databaseLocation.set(data, { merge: merge }).catch((err) => {
             console.log(err);
         });
@@ -305,9 +307,11 @@ class FirebaseBackend extends BaseBackend {
             });
     }
 
-    async signInOffline() {
-        await storage.storeLoginState({ 'signed_in': true, 'offline': true });
-        console.log("set the storage state");
+    /**
+     * Uses the storage API to set the login state to 'logged in' and 'offline'
+     */
+    signInOffline() {
+        storage.storeLoginState({ 'signed_in': true, 'offline': true });
         if (onAuthStateChangeCallback) {
             console.log("calling back");
             onAuthStateChangeCallback();
@@ -403,17 +407,23 @@ class FirebaseBackend extends BaseBackend {
     /**
      * Returns a user id associated with the logged in user
      */
-    getUserID() {
-        let user = firebase.auth().currentUser;
-        if (user != null) {
-            // TODO: Some documentation states to use User.getToken() instead
-            // (https://firebase.google.com/docs/auth/web/manage-users), but
-            // there doesn't seem to be a function to do that in the User
-            // documentation:
-            // https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
-            return user.uid;
-        }
-        return null;
+    getUserID(callback) {
+        storage.getLoginState((state) => {
+            if (state.offline) {
+                callback('offline');
+            } else {
+                let user = firebase.auth().currentUser;
+                if (user != null) {
+                    // TODO: Some documentation states to use User.getToken() instead
+                    // (https://firebase.google.com/docs/auth/web/manage-users), but
+                    // there doesn't seem to be a function to do that in the User
+                    // documentation:
+                    // https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
+                    callback(user.uid);
+                }
+                return null;
+            }
+        });
     }
 
     /**
