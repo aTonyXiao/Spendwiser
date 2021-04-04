@@ -38,6 +38,10 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
+function sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
@@ -46,20 +50,19 @@ function filterDatabaseCollection(collection, conditions) {
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 class FirebaseBackend extends BaseBackend {
-
     /**
      * This function initializes the Backend
      */
     initializeApp () {
         // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
         const firebaseConfig = {
-            apiKey: process.env.REACT_NATIVE_API_KEY,
-            authDomain: process.env.REACT_NATIVE_AUTH_DOMAIN,
-            projectId: process.env.REACT_NATIVE_PROJECT_ID,
-            storageBucket: process.env.REACT_NATIVE_STORAGE_BUCKET,
-            messagingSenderId: process.env.REACT_NATIVE_MESSAGING_SENDER_ID,
-            appId: process.env.REACT_NATIVE_APP_ID,
-            measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
+            apiKey: process.env.API_KEY,
+            authDomain: process.env.AUTH_DOMAIN,
+            projectId: process.env.PROJECT_ID,
+            storageBucket: process.env.STORAGE_BUCKET,
+            messagingSenderId: process.env.MESSAGING_SENDER_ID,
+            appId: process.env.APP_ID,
+            measurementId: process.env.MEASUREMENT_ID,
         };
 
         // check if there is a Firebase 'App' already initialized
