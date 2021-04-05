@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, SafeAreaView, Modal, StatusBar } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Button, 
+    Image, 
+    Dimensions, 
+    TouchableOpacity, 
+    SafeAreaView, 
+    Modal, 
+    StatusBar 
+} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { TextInput } from 'react-native-gesture-handler';
@@ -159,7 +170,7 @@ export function MainScreen({navigation}) {
                     if (state.isConnected) {
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
-                            googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                            googlePlaceSearchRadius + process.env.PLACE_SEARCH_API_KEY)
                         .then((response) => response.json())
                         .then((json) => {getLocationFromAPI(json)})
                         .catch((error) => console.log(error))
@@ -359,19 +370,13 @@ export function MainScreen({navigation}) {
             {/* Location text */}
             <View style={mapStyles.textContainer}>
                 <View style={mapStyles.locationTextContainer}>
-                    <Text>{isLoading? "Loading" : curStore}</Text>
-                    {/* TODO: temporary fix to not finding ANY stores nearby */}
-                    {
-                        (storeArr.length > 0) &&
-                        <View>
-                            <Text>
-                                {isLoading ? "" : storeArr[curStoreKey].vicinity}
-                            </Text>
-                            <Text>
-                                {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
-                            </Text>
-                        </View>
-                    }
+                    <Text>{isLoading ? "Loading" : curStore}</Text>
+                    <Text>
+                        {isLoading ? "" : storeArr[curStoreKey].vicinity}
+                    </Text>
+                    <Text>
+                        {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
+                    </Text>
                 </View>
 
                 <TouchableOpacity 

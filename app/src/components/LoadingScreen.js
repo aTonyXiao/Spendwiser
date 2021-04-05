@@ -15,7 +15,7 @@ async function handleRedirectsBasedOnLoginStatus(navigation) {
     if (globalDebugRedirectBasedOnLoginStatus) {
         if (appBackend.userLoggedIn()) {
             console.log(appBackend.getUserID());
-            navigation.navigate('Main');
+            navigation.navigate('AddCardCamera');
         } else {
             navigation.navigate('Login');
         }

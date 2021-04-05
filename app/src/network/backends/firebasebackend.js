@@ -38,10 +38,6 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
-function sleep (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
