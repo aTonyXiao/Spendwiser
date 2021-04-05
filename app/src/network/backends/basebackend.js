@@ -256,6 +256,12 @@ class BaseBackend {
     userLoggedIn(callback) {}
 
     /**
+     * Get the user's account type
+     * @param {function} callback function with one argument in which a string containing the account type will be given.
+     */
+    userAccountType(callback) {}
+
+    /**
      * Calls the supplied function if there is a change in the user's login status.
      * I.E. if a user logs in or logs out the function will be called
      * 

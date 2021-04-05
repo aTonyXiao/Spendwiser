@@ -392,6 +392,12 @@ class FirebaseBackend extends BaseBackend {
             callback(state.signed_in);
         });
     }
+    
+    userAccountType(callback) {
+        storage.getLoginState((state) => {
+            callback(state.account_type);
+        })
+    }
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
