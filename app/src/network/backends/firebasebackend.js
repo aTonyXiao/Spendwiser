@@ -75,7 +75,7 @@ class FirebaseBackend extends BaseBackend {
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -284,7 +284,7 @@ class FirebaseBackend extends BaseBackend {
             .then((userCredential) => {
                 var user = userCredential.user;
                 console.log("Sign up successful");
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -303,7 +303,7 @@ class FirebaseBackend extends BaseBackend {
     signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -315,7 +315,7 @@ class FirebaseBackend extends BaseBackend {
      * Uses the storage API to set the login state to 'logged in' and 'offline'
      */
     signInOffline() {
-        storage.storeLoginState({ 'signed_in': true, 'offline': true });
+        storage.storeLoginState({ 'signed_in': true, 'account_type': 'offline' });
         if (onAuthStateChangeCallback) {
             console.log("calling back");
             onAuthStateChangeCallback();
@@ -330,14 +330,14 @@ class FirebaseBackend extends BaseBackend {
             if (state == null) return;
 
             if (state.signed_in && state.offline) {
-                storage.storeLoginState({ 'signed_in': false, 'offline': true });
+                storage.storeLoginState({ 'signed_in': false, 'account_type': 'offline' });
                 if (onAuthStateChangeCallback != null) {
                     onAuthStateChangeCallback();
                 }
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
-                    storage.storeLoginState({ 'signed_in': false, 'offline': false });
+                    storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
                     return;
                 }).catch((error) => {
                     // An error happened.
