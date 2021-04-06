@@ -11,6 +11,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { enc } from 'crypto-js';
 import * as FileSystem from 'expo-file-system';
+import { Dimensions } from 'react-native';
 // import Constants from 'expo-constants';
 
 // TODO: add a "loading" or "getting results"
@@ -18,6 +19,7 @@ import * as FileSystem from 'expo-file-system';
 export function AddCardCamera({navigation}) {
     const [image, setImage] = useState(null);
     const [encodedImage, setEncodedImage] = useState(null);
+    const [showBox, setShowBox] = useState(false);
 
     const key = process.env.GOOGLE_CLOUD_API_KEY;
 
@@ -105,6 +107,7 @@ export function AddCardCamera({navigation}) {
     };
     
     // TODO: add functionality for from camera
+
     // pick from camera roll
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -114,9 +117,6 @@ export function AddCardCamera({navigation}) {
             quality: 1,
         });
 
-        console.log('got image:')
-        console.log(result);
-
         if (!result.cancelled) {
             const encoded = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' });
 
@@ -125,10 +125,34 @@ export function AddCardCamera({navigation}) {
         }
     };
 
+    addBox = () => { 
+        console.log('hi');
+        setShowBox(true);
+    }
+
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Button title="Pick an image from camera roll" onPress={pickImage} />
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            { 
+                image && 
+                <Image source={{ uri: image }} style={styles.img}/>
+            }
+            { 
+                image && 
+                <TouchableOpacity onPress={addBox}>
+                    <Text>Add box</Text>
+                </TouchableOpacity>
+            }
+            {/* {
+                showBox &&
+            } */}
         </View>
     )
 }
+
+const styles = StyleSheet.create({ 
+    img: { 
+        width: Dimensions.get('window').width * .80,
+        height: Dimensions.get('window').height * .80
+    }
+})
