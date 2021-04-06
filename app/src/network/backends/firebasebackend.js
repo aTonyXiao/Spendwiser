@@ -129,27 +129,35 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbGet(location, ...conditionsWithCallback) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        let callback = conditionsWithCallback.pop();
-        let conditions = conditionsWithCallback;
+        // TODO (Nathan W): Check local storage first before going to the firebase db
 
-        // filter if there are conditions
-        if (conditions.length > 0) {
-            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-        }
+        this.userAccountType((type) => {
+            let callback = conditionsWithCallback.pop();
+            if (type == 'normal') {
+                let databaseLocation = getDatabaseLocation(this.database, location);
+                let conditions = conditionsWithCallback;
 
-        // get the data
-        databaseLocation.get().then((query) => {
-            if (typeof query.get === "function") { // hacky way of checking if a doc
-                callback(query.data());
-            } else {
-                query.forEach(doc => {
-                    callback(doc.data());
+                // filter if there are conditions
+                if (conditions.length > 0) {
+                    databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+                }
+
+                // get the data
+                databaseLocation.get().then((query) => {
+                    if (typeof query.get === "function") { // hacky way of checking if a doc
+                        callback(query.data());
+                    } else {
+                        query.forEach(doc => {
+                            callback(doc.data());
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err);
                 });
+            } else {
+                callback([]);
             }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
     }
 
 
@@ -167,18 +175,27 @@ class FirebaseBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        let dbloc = getDatabaseLocation(this.database, location);
+        // TODO (Nathan W): Check local storage first before going to the firebase db
+        console.log("Get subcollections called");
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                let dbloc = getDatabaseLocation(this.database, location);
 
-        let collection = [];
-        dbloc.get().then((query) => {
-            query.forEach(doc => {
-                var currentDoc = doc.data();
-                currentDoc["docId"] = doc.id;
-                collection.push(currentDoc);
-            })
-            callback(collection);
-        }).catch((err) => {
-            console.log(err);
+                let collection = [];
+                dbloc.get().then((query) => {
+                    query.forEach(doc => {
+                        var currentDoc = doc.data();
+                        currentDoc["docId"] = doc.id;
+                        collection.push(currentDoc);
+                    })
+                    callback(collection);
+                }).catch((err) => {
+                    console.log(err);
+                })
+            } else {
+                console.log("Got here...");
+                callback([]);
+            }
         })
     }
 
@@ -249,11 +266,19 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbAdd(location, data, callback) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.add(data).then((query) => {
-            callback(query.id);
-        }).catch((err) => {
-            console.log(err);
+        // Add card data to our internal storage
+        this.getUserID((accountId) => {
+            storage.addCardToAccount(accountId, location, data);
+
+            if (accountId != 'offline') {
+                // Add card data to our firebase storage
+                let databaseLocation = getDatabaseLocation(this.database, location);
+                databaseLocation.add(data).then((query) => {
+                    callback(query.id);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }
         });
     }
 
@@ -359,6 +384,12 @@ class FirebaseBackend extends BaseBackend {
         };
     }
 
+    userAccountType(callback) {
+        storage.getLoginState((state) => {
+            callback(state.account_type);
+        })
+    }
+
     /**
      * Resets the user's password.
      * 
@@ -366,21 +397,26 @@ class FirebaseBackend extends BaseBackend {
      * @param {function} return_func - callback function on success and failure
      */
     resetPassword(email, return_func) {
-        var auth = firebase.auth();
-        if (email === null) {
-            var user = auth.currentUser;
-            email = user.email;
-        }
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                var auth = firebase.auth();
+                if (email === null) {
+                    var user = auth.currentUser;
+                    email = user.email;
+                }
 
-        // remove leading/trailing whitespace
-        email = email.trim();
+                // remove leading/trailing whitespace
+                email = email.trim();
 
-        auth.sendPasswordResetEmail(email).then(function () {
-            return_func("Success! An email has been sent to reset your password");
-        }).catch(function (error) {
-            return_func("Error! Invalid email address, please input a valid email");
-        });
-
+                auth.sendPasswordResetEmail(email).then(function () {
+                    return_func("Success! An email has been sent to reset your password");
+                }).catch(function (error) {
+                    return_func("Error! Invalid email address, please input a valid email");
+                });
+            } else {
+                return_func("Error! Cannot reset the password of an offline account");
+            }
+        })
     }
 
     /**
@@ -393,11 +429,6 @@ class FirebaseBackend extends BaseBackend {
         });
     }
     
-    userAccountType(callback) {
-        storage.getLoginState((state) => {
-            callback(state.account_type);
-        })
-    }
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
@@ -419,7 +450,7 @@ class FirebaseBackend extends BaseBackend {
      */
     getUserID(callback) {
         storage.getLoginState((state) => {
-            if (state.offline) {
+            if (state.account_type == 'offline') {
                 callback('offline');
             } else {
                 let user = firebase.auth().currentUser;
