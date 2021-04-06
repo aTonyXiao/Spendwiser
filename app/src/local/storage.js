@@ -20,9 +20,9 @@ export const getLoginState = async (callback) => {
     }
 }
 
-export const getCards = async (callback) => {
+export const getDB = async (callback) => {
     try {
-        const jsonValue = await AsyncStorage.getItem('@cards');
+        const jsonValue = await AsyncStorage.getItem('@db');
         if (jsonValue != null) {
             var cards = JSON.parse(jsonValue);
             callback(cards);
@@ -34,35 +34,23 @@ export const getCards = async (callback) => {
     }
 }
 
-const setCards = async (cards) => {
-
-    await AsyncStorage.setItem('@cards', cards);
-    getCards((cards) => {
-        console.log("Stored cards");
-        console.log(cards);
-    })
+const setDB = async (cards) => {
+    await AsyncStorage.setItem('@db', cards);
 }
 
-export const addCardToAccount = async (accountName, location, cardData) => {
+export const addLocalDB = async (accountName, location, cardData) => {
     try {
-        getCards((cards) => {
+        getDB((db) => {
             console.log("Here we are adding cards");
             let key = accountName + "_" + location;
-            if (!(key in cards)) {
-                cards[key] = [];
+            if (!(key in db)) {
+                db[key] = [];
             }
 
-            cards[key].push(cardData);
+            db[key].push(cardData);
 
-            /*
-            console.log(cards);
-            const jsonValue = JSON.stringify(cards);
-
-            cards[accountName + "_" + location] = [cardData];
-            console.log(cards);
-            */
-            jsonValue = JSON.stringify(cards);
-            setCards(jsonValue);
+            jsonValue = JSON.stringify(db);
+            setDB(jsonValue);
 
         });
     } catch (e) {

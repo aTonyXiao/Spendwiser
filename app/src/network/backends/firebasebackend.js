@@ -268,7 +268,7 @@ class FirebaseBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
-            storage.addCardToAccount(accountId, location, data);
+            storage.addLocalDB(accountId, location, data);
 
             if (accountId != 'offline') {
                 // Add card data to our firebase storage
