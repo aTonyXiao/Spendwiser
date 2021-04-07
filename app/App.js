@@ -17,6 +17,7 @@ import { AppPermissions } from './src/components/settings/Permissions';
 import { PrivacyPolicy } from './src/components/settings/PrivacyPolicy';
 import { Account } from './src/components/settings/Account';
 import { About } from './src/components/settings/About';
+import { SpendingSummary } from './src/components/summary/SpendingSummary';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,10 @@ export default function App() {
         <Stack.Screen
           name="CardInfo"
           component={DisplayCard}
+        />
+        <Stack.Screen
+          name="SpendingSummary"
+          component={SpendingSummary}
         />
         <Stack.Screen
         name="Settings"

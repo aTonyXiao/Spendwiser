@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
@@ -37,7 +36,6 @@ class RecommendCard {
         let category = this.getCategory(googleCategory);
         let myCards = [];
         let tmpCardId = "";
-        let tmpCardCatReward = null;
         // Get list of user's cards
         let dbCards = await user.getCards(userId);
         // For each card, get the category reward value
@@ -57,7 +55,6 @@ class RecommendCard {
             });
         }
         myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
-        // console.log(myCards);
         callback(myCards);
     }
 }

@@ -1,28 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Modal, StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { TextInput } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
+
 import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
 import { Footer } from '../util/Footer';
 import { user } from '../../network/user';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useIsFocused } from '@react-navigation/native';
-import CardImage from '../cards/CardImage';
+import { MainModals } from './MainModals';
+import { CardCarousel } from './CardCarousel';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 const googlePlaceSearchRadius = "&radius=100&key="
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-const itemWidth = Math.round(width * 0.7);
-const slideHeight = Math.round(height * 0.3);
-const itemHorizontalMargin = Math.round(width / 50);
-const entryBorderRadius = 8;
 
 export function MainScreen({navigation}) {
-    const [errorMsg, setErrorMsg] = useState(null);
     const [region, setRegion] = useState({
         latitude: 38.542530, 
         longitude: -121.749530,
@@ -30,19 +22,12 @@ export function MainScreen({navigation}) {
         longitudeDelta: 0.0051,
     })
     const [isLoading, setLoading] = useState(true);
-    const [places, setPlaces] = useState([]);
-    const [amountSpent, setAmountSpent] = useState("");
     const [storeArr, setStoreArr] = useState([]);
     const [curStore, setCurStore] = useState(null);
     const [curStoreKey, setCurStoreKey] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-    const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [recCards, setRecCards] = useState(null);
-    const [recIdx, setRecIdx] = useState(0);
-    const ref = useRef(null);
-    const [manualModal, setManualModal] = useState(false);
     const isFocused = useIsFocused();
-    const [addedManual, setAddedManual] = useState(false);
       
     function setOfflineMode() {
         setStoreArr([{
@@ -61,25 +46,25 @@ export function MainScreen({navigation}) {
         console.log(myRankedCards)
     }
 
-    function changeRecCard(value, key) {
+    // Called when changing store to reload recommended cards
+    function reloadRecCard(value, key, storeType) {
+        // console.log("hihi " + storeType);
+        setRecCards(null);
+        recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey) {
-            let category = storeArr[key]["storeType"];
-            // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
-            recommendCard.getRecCards(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
         }
     }
 
-    function reloadRecCard() {
-        if (storeArr[curStoreKey] !== undefined) {
-            let category = storeArr[curStoreKey]["storeType"];
-            recommendCard.getRecCards(category, getRecCardFromDB);
-        }
+    function addManualInput(manualInputObj) {
+        setStoreArr(storeList => storeList.concat(manualInputObj));
+        console.log(manualInputObj);
+        console.log("hi");
+        reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType);
     }
 
     function getLocationFromAPI(json) {
-        setPlaces(json.results);
         let fetchResult = json.results;
         let fetchStores = [];
 
@@ -121,6 +106,7 @@ export function MainScreen({navigation}) {
         user.currentStore = storeArr[curStoreKey];
     });
 
+    // Called to refresh recommended cards if new cards added
     useEffect(() => {
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
@@ -129,7 +115,7 @@ export function MainScreen({navigation}) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
                     console.log("reset rec cards");
-                    reloadRecCard();
+                    reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType);
                     user.setMainNeedsUpdate(false);
                 }
             });
@@ -137,21 +123,12 @@ export function MainScreen({navigation}) {
         }
     }, [isFocused]);
 
-    useEffect(() => {
-        if (isLoading === false) {
-            setRecCards(null);
-            console.log("reset rec cards");
-            reloadRecCard();
-            setAddedManual(false);
-        }
-    }, [addedManual]);
-
+    // Called on mount
     useEffect(() => {
         console.log("got in main useeffect");
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
                 return;
             }
 
@@ -187,176 +164,19 @@ export function MainScreen({navigation}) {
         })();
     }, []);
     
-    recommendedCardPressed = (item) => {
-        if (item !== null) {
-            navigation.navigate('CardInfo', {
-                cardId: item.cardId,
-                docId: item.docId,
-                storeInformation: storeArr[curStoreKey],
-                img: { uri: item.cardImg },
-                origin: "main"
-            })
-        }
-    };
-    
-    const renderItem = useCallback(({ item, index }) => (
-        <TouchableOpacity
-              activeOpacity={1}
-              style={styles.slideInnerContainer}
-              onPress={() => { recommendedCardPressed(item) }}
-              >
-            <View style={styles.imageContainer}>
-                <CardImage
-                    style = {{ 
-                        width: width * .8,  //its same to '20%' of device width
-                        aspectRatio: 1.5, // <-- this
-                        resizeMode: 'contain', //optional
-                    }}
-                    source={item.cardImg}
-                    overlay={item.cardName}
-                    default={item.cardImg.length == 0}
-                />
-            </View>
-        </TouchableOpacity>
-      ), []);
+   
 
     return (
         <SafeAreaView style={styles.screen}>
             {/* Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                backdropOpacity={0.3}
-                visible={modalVisible}
-            >
-                <View style={modalStyles.modalCenteredView}>
-                    <View style={modalStyles.modalView}>
-
-                        {/* Modal header */}
-                        <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity onPress={() => {setModalVisible(false); setManualModal(false)}}>
-                                <Ionicons
-                                    name="close-circle-outline"
-                                    color="black"
-                                    size={26}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                            {
-                                !manualModal &&
-                                <TouchableOpacity onPress={() => setManualModal(true)}>
-                                    <Text style={modalStyles.manualModalSwitchText}>Don't see your store?</Text>
-                                </TouchableOpacity>
-                            }
-                            {
-                                manualModal &&
-                                <TouchableOpacity onPress={() => setManualModal(false)}>
-                                    <Text style={modalStyles.manualModalSwitchText}>Select from store list</Text>
-                                </TouchableOpacity>
-                            }
-                        </View>
-
-                        {/* Modal body */}
-                        {/* Pick from store list */}
-                        {
-                            !manualModal &&
-                            <View>
-                                {
-                                    storeArr.map((store, i) => { 
-                                        var storeName = store.value;
-                                        var storeIsSelected = (storeName == curStore);
-                                        return (
-                                            <TouchableOpacity 
-                                                key={i}
-                                                onPress={()=> {
-                                                    setRecCards(null);
-                                                    changeRecCard(storeName, i);
-                                                    setModalVisible(false);
-                                                }}
-                                            >
-                                                <Text style={storeIsSelected ? modalStyles.storeTextSelected : modalStyles.storeText}>
-                                                        {storeName}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })
-                                }
-                            </View>
-                        }
-
-                        {/* Manual store input */}
-                        {
-                            manualModal &&
-                            <View>
-                                <Text style={modalStyles.manualTitle}>Input the store near you</Text>
-                                <TextInput
-                                    style={modalStyles.manualTextInput}
-                                    onChangeText={text => {
-                                        setManualInput((prevState) => {
-                                            return { ...prevState, storeName: text };
-                                        })
-                                    }}
-                                    value={manualInput.storeName}
-                                    placeholder={"Store Name (Optional)"}
-                                />
-                                <TextInput
-                                    style={modalStyles.manualTextInput}
-                                    onChangeText={text => {
-                                        setManualInput((prevState) => {
-                                            return { ...prevState, vicinity: text };
-                                        })
-                                    }}
-                                    value={manualInput.vicinity}
-                                    placeholder={"Address (Optional)"}
-                                />
-                                {/* TODO: I think category should be a dropdown? */}
-                                <TextInput
-                                    style={modalStyles.manualTextInput}
-                                    onChangeText={text => {
-                                        setManualInput((prevState) => {
-                                            return { ...prevState, storeType: text };
-                                        })
-                                    }}
-                                    value={manualInput.storeType}
-                                    placeholder={"Category (Required)"}
-                                />
-                                {
-                                    (manualInput.storeType.length != 0) &&
-                                    <Button
-                                        onPress={() => {
-                                            setModalVisible(!modalVisible);
-                                            setManualModal(false);
-                                            if (manualInput.storeType.length != 0) {
-                                                let storeArrLen = (storeArr.length).toString();
-                                                console.log(storeArrLen);
-                                                console.log(manualInput.storeName, manualInput.vicinity, manualInput.storeType);
-                                                let manualInputObj = {
-                                                    label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                    value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
-                                                    vicinity: manualInput.vicinity.length === 0 ? "N/A" : manualInput.vicinity,
-                                                    storeType: manualInput.storeType,
-                                                    key: Object.keys(storeArr).length,
-                                                }
-                                                setStoreArr(storeList => storeList.concat(manualInputObj));
-                                                let value = manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName;
-                                                setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
-                                                setCurStoreKey(Object.keys(storeArr).length);
-                                                setManualInput({storeName: "", vicinity: "", storeType: ""});
-                                                setAddedManual(true);
-                                            }
-                                        }}
-                                        title="Set"
-                                        style={{ margin: 10 }}
-                                    ></Button>
-                                }
-                                {
-                                    (manualInput.storeType.length == 0) &&
-                                    <Text style={styles.setButtonNotAllowed}>Set</Text>
-                                }
-                            </View>
-                        }
-                    </View>
-                </View>
-            </Modal>
+            <MainModals
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                reloadRecCard={reloadRecCard}
+                addManualInput={addManualInput}
+                storeArr={storeArr}
+                curStore={curStore}
+            />
 
             {/* Map */}
             <View style={mapStyles.mapContainer}>
@@ -390,45 +210,14 @@ export function MainScreen({navigation}) {
             </View>
 
             {/* Recommended Card */}
-            <View style={styles.cardContainer}>
-                <Text style={{fontSize: 17, paddingTop: 30}}>Your Recommended Card</Text>
-                {recCards == null ?
-                    <Image source = {require("../../../assets/load.jpg")}
-                        style = {{ 
-                            width: width * .8,  //its same to '20%' of device width
-                            aspectRatio: 1.5, // <-- this
-                            resizeMode: 'contain', //optional
-                        }}
-                    />
-                    :
-                    <View>
-                        <Carousel
-                            layout={"default"}
-                            ref={ref}
-                            data={recCards}
-                            sliderWidth={width}
-                            itemWidth={itemWidth}
-                            renderItem={renderItem}
-                            inactiveSlideScale={0.7}
-                            inactiveSlideOpacity={0.7}
-                            containerCustomStyle={styles.slider}
-                            contentContainerCustomStyle={styles.sliderContentContainer}
-                            onSnapToItem={(index) => setRecIdx(index)}
-                        />
-                        <Pagination
-                            dotsLength={recCards.length}
-                            activeDotIndex={recIdx}
-                            dotColor={"green"}
-                            containerStyle={{paddingVertical:0}}
-                            dotContainerStyle={{marginHorizontal:3}}
-                            dotStyle={styles.paginationDot}
-                            inactiveDotColor={"black"}
-                            inactiveDotOpacity={0.4}
-                            inactiveDotScale={0.7}
-                        />
-                    </View>
-                }
-            </View>
+            <CardCarousel
+                recCards={recCards}
+                navigation={navigation}
+                storeArr={storeArr}
+                curStoreKey={curStoreKey}
+            />
+
+            {/* Footer */}
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
@@ -452,44 +241,6 @@ const styles = StyleSheet.create({
     loc_name: {
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    cardContainer: {
-        flex: 5,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    slider: {
-        marginTop: 5,
-        flexGrow: 0,
-        overflow: 'visible', // for custom animations
-    },
-    sliderContentContainer: {
-        paddingVertical: 0, // for custom animation
-    },
-    paginationDot: {
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        marginHorizontal: 1
-    },
-    slideInnerContainer: {
-        width: itemWidth,
-        height: slideHeight,
-        alignItems: 'center',
-        paddingHorizontal: itemHorizontalMargin,
-        // paddingBottom: 18 // needed for shadow
-    },
-    imageContainer: {
-        flex: 1,
-        backgroundColor: 'white',
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius,
-    },
-    setButtonNotAllowed: { 
-        color: 'gray',
-        fontSize: 20,
-        alignSelf: 'center',
-        margin: 10
     },
     footerContainer: {
         width: '100%',
@@ -536,53 +287,3 @@ const mapStyles = StyleSheet.create({
     }
 });
 
-const modalStyles = StyleSheet.create({
-    modalCenteredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
-    },
-    modalView: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-    },
-    modalHeader: { 
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between', 
-        margin: 8
-    },
-    manualTitle: { 
-        textAlign: 'center',
-        fontSize: 18,
-        marginBottom: 4
-    },
-    manualTextInput: {
-        height: 40,
-        borderWidth: 1,
-        margin: 15,
-        marginTop: 7,
-        marginBottom: 7,
-        width: '90%',
-        borderColor: '#F0F0F0',
-        backgroundColor: '#F0F0F0',
-        borderRadius: 5,
-    },
-    manualModalSwitchText: {
-        color: 'dodgerblue'
-    }, 
-    storeText: { 
-        padding: 5,
-        marginLeft: 10 
-    },
-    storeTextSelected: { 
-        padding: 15,
-        backgroundColor: '#28b573'
-    }
-});
