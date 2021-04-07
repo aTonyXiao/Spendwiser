@@ -1,0 +1,4 @@
+# project artifacts
+node_modules
+npm-debug.log
+.gitignore
