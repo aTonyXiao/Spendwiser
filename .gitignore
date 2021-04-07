@@ -1,3 +1,6 @@
 *.pdf
 *.aux
 *.log
+
+# macOS
+.DS_Store
