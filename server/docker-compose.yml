@@ -1,0 +1,24 @@
+services:
+    server:
+        build: ./
+        image: spendwiser-server
+        container_name: spendwiser-server
+        restart: unless-stopped
+        volumes:
+            - .:/usr/src/server
+            - ./node_modules:/usr/src/server/node_modules
+        depends_on:
+            - database
+        networks:
+            - server-bridge
+    database:
+        image: mongo
+        container_name: mongo-db
+        restart: unless-stopped
+        volumes:
+            - ./database:/data/db
+        networks:
+            - server-bridge
+networks:
+    server-bridge:
+        driver: bridge
