@@ -21,7 +21,7 @@ export function AddCardCamera({navigation}) {
     const [encodedImage, setEncodedImage] = useState(null);
     const [showBox, setShowBox] = useState(false);
 
-    const key = process.env.GOOGLE_CLOUD_API_KEY;
+    const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
 
     // get permissions
     useEffect(() => {
