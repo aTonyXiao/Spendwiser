@@ -238,7 +238,12 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false) {
+        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
+            this.getUserID((accountId) => {
+                storage.setLocalDB(accountId, location, data, merge);
+            });
+
             let databaseLocation = getDatabaseLocation(this.database, location);
             if (state.signed_in && !state.offline) {
                 databaseLocation.set(data, { merge: merge }).catch((err) => {
@@ -268,15 +273,19 @@ class FirebaseBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
-            storage.addLocalDB(accountId, location, data);
 
             if (accountId != 'offline') {
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {});
                 // Add card data to our firebase storage
                 let databaseLocation = getDatabaseLocation(this.database, location);
                 databaseLocation.add(data).then((query) => {
                     callback(query.id);
                 }).catch((err) => {
                     console.log(err);
+                });
+            } else {
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    callback(local_query_id);
                 });
             }
         });
