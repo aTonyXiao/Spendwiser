@@ -70,7 +70,7 @@ export const addLocalDB = async (accountName, location, data, callback) => {
     }
 }
 
-export const setLocalDB = async (accountName, location, data, merge = false) => {
+const parseDocAndId = (location) => {
     // Extract the unique_id from location
     let loc = location.lastIndexOf('.');
     if (loc == -1) {
@@ -81,9 +81,15 @@ export const setLocalDB = async (accountName, location, data, merge = false) => 
     let document = location.substring(0, loc);
     let id = location.substring(loc + 1);
 
-    console.log("setLocalDB Info:");
+    console.log("Location info Info:");
     console.log("Document: " + document);
     console.log("ID: " + id);
+
+    return [document, id];
+}
+
+export const setLocalDB = async (accountName, location, data, merge = false) => {
+    const [document, id] = parseDocAndId(location);
     try {
         getDB((db) => {
             let key = accountName + "." + document;
@@ -109,4 +115,39 @@ export const setLocalDB = async (accountName, location, data, merge = false) => 
 
 export const clearLocalDB = async () => {
     await AsyncStorage.removeItem("@db");
+}
+
+export const getLocalDB = async (accountName, location, callback) => {
+    const [document, id] = parseDocAndId(location);
+    console.log("DB GET HAPPENING");
+    try {
+        getDB((db) => {
+            let key = accountName + "." + document;
+
+            // NOTE (Nathan W) the document **should** exist
+            callback(db[key][id]);
+        });
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const getSubcollectionLocalDB = async (accountName, location, callback) => {
+    location = location.substring(location.indexOf('.') + 1);
+    try {
+        getDB((db) => {
+            // TODO: (Nathan W) Ask smarter people about why we don't need the account name here,
+            // but we do for all others
+            let key = location;
+
+            console.log(db[key]);
+            if (key in db) {
+                callback(Object.values(db[key]));
+            } else {
+                callback([]);
+            }
+        });
+    } catch(e) {
+        console.log(e);
+    }
 }

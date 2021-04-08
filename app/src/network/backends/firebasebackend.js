@@ -155,7 +155,9 @@ class FirebaseBackend extends BaseBackend {
                     console.log(err);
                 });
             } else {
-                callback([]);
+                this.getUserID((accountId) => {
+                    storage.getLocalDB(accountId, location, callback);
+                });
             }
         })
     }
@@ -193,8 +195,9 @@ class FirebaseBackend extends BaseBackend {
                     console.log(err);
                 })
             } else {
-                console.log("Got here...");
-                callback([]);
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, callback);
+                });
             }
         })
     }
