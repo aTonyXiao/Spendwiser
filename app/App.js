@@ -10,13 +10,15 @@ import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/main/MainScreen';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
-import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
 import { AppPermissions } from './src/components/settings/Permissions';
 import { PrivacyPolicy } from './src/components/settings/PrivacyPolicy';
 import { Account } from './src/components/settings/Account';
 import { About } from './src/components/settings/About';
+import { EditImage } from './src/components/addCard/fromCamera/EditImage';
+import { ChooseImage } from './src/components/addCard/fromCamera/ChooseImage';
+import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectImage';
 
 const Stack = createStackNavigator();
 
@@ -68,8 +70,16 @@ export default function App() {
           component={AddCardManual}
         />
         <Stack.Screen
-          name="AddCardCamera"
-          component={AddCardCamera}
+          name="EditImage"
+          component={EditImage}
+        />
+        <Stack.Screen
+          name="ChooseImage"
+          component={ChooseImage}
+        />
+        <Stack.Screen
+          name="CardSelectImage"
+          component={CardSelectImage}
         />
         <Stack.Screen
           name="PasswordReset"

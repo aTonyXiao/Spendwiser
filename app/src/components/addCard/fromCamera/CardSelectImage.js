@@ -14,7 +14,7 @@ import { Dimensions } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
 import { captureScreen } from "react-native-view-shot";
 
-export function CameraSettingsBar({navigation}) {
+export function CardSelectImage({navigation}) {
     return(
         <View>
             {/* TODO: go back */}

@@ -4,11 +4,8 @@ import {
     View, 
     StyleSheet, 
     TouchableOpacity, 
-    Platform,
     Image, 
-    Button 
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { Dimensions } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
@@ -19,24 +16,12 @@ import { captureScreen } from "react-native-view-shot";
 // TODO: move choose image functionality to ChooseImage page, 
 //         this page will be for editing image before sending it to google cloud
 
-export function AddCardCamera({navigation}) {
-    const [image, setImage] = useState(null);
+export function EditImage({route, navigation}) {
+    const image = route.params.img;
     const [encodedImage, setEncodedImage] = useState(null);
     const [showBox, setShowBox] = useState(false);
 
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
-
-    // get permissions
-    useEffect(() => {
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-    }, []);
 
     // once encoded image is loaded submit to google cloud
     useEffect(() => { 
@@ -110,21 +95,6 @@ export function AddCardCamera({navigation}) {
         return textAnnotationFormatted;
     }
 
-    // pick from camera roll
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-            setShowBox(true);
-        }
-    };
-
     const done = async () => {
         // capture hidden confidential information
         captureScreen({
@@ -142,11 +112,8 @@ export function AddCardCamera({navigation}) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-            { 
-                image && 
-                <Image source={{ uri: image }} style={styles.img}/>
-            }
+            
+            <Image source={{ uri: image }} style={styles.img}/>
 
             {/* {
                 image &&

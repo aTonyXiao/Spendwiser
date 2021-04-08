@@ -40,7 +40,7 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                         <TouchableOpacity
                             onPress={() => {
                                 setModalVisible(!modalVisible);
-                                navigation.navigate('AddCardCamera');
+                                navigation.navigate('ChooseImage');
                             }}
                             style={modalStyles.modalText}
                         >
