@@ -14,14 +14,40 @@ import { Dimensions } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
 import { captureScreen } from "react-native-view-shot";
 
+// TODO: implement functionality here
+
 export function CameraSettingsBar({navigation}) {
     return(
-        <View>
-            {/* TODO: go back */}
-            {/* TODO: delete box */}
-            {/* TODO: add another box */}
-            {/* TODO: question mark for directions */}
-            {/* TODO: done! */}
+        <View style={styles.container}>
+            <TouchableOpacity>
+                <Text style={styles.txt}>Choose different image</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.txt}>Delete Box</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.txt}>Add Another Box</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.txt}>?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.txt}>Done!</Text>
+            </TouchableOpacity>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: { 
+        width: '100%',
+        position: 'absolute',
+        top: 30,
+        backgroundColor: 'white',
+        zIndex: 999
+    },
+    txt: {
+        fontSize: 18,
+        margin: 10, 
+    }
+})

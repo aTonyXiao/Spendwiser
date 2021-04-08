@@ -9,7 +9,9 @@ import {
 import * as FileSystem from 'expo-file-system';
 import { Dimensions } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
-import { captureScreen } from "react-native-view-shot";
+import { captureScreen } from 'react-native-view-shot';
+import { CameraSettingsBar } from './CameraSettingsBar';
+import { DoubleTap } from './DoubleTap';
 
 // TODO: add a "loading" or "getting results"
 // TODO: add functionality for from camera
@@ -19,7 +21,7 @@ import { captureScreen } from "react-native-view-shot";
 export function EditImage({route, navigation}) {
     const image = route.params.img;
     const [encodedImage, setEncodedImage] = useState(null);
-    const [showBox, setShowBox] = useState(false);
+    const [showSettingsBar, setShowSettingsBar] = useState(true); // TODO: allow double tap to show/hide settings bar
 
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
 
@@ -111,16 +113,16 @@ export function EditImage({route, navigation}) {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            
-            <Image source={{ uri: image }} style={styles.img}/>
-
-            {/* {
-                image &&
+        <View style={styles.container}>
+            <DoubleTap onDoubleTap={()=> setShowSettingsBar(!showSettingsBar)}>
+                <Image source={{ uri: image }} style={styles.img}/>
+            </DoubleTap>
+            {
+                showSettingsBar &&
                 <CameraSettingsBar/>
-            } */}
+            }
 
-            { 
+            {/* { 
                 image && 
                 <TouchableOpacity onPress={done}>
                     <Text>Done!</Text>
@@ -140,15 +142,22 @@ export function EditImage({route, navigation}) {
                         }}
                     />
                 </DragResizeBlock>
-            }
+            } */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({ 
+    container: {
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        zIndex: 1 
+    },
     img: { 
-        width: Dimensions.get('window').width * .80,
-        height: Dimensions.get('window').height * .80
+        width: Dimensions.get('window').width * .90,
+        height: Dimensions.get('window').height * .90,
+        zIndex: 1
     }, 
     box: { 
         width: 200,
