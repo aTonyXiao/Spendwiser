@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
+// TODO: add documentation for this!
 //https://medium.com/handlebar-labs/instagram-style-double-tap-with-react-native-49e757f68de
 export class DoubleTap extends React.Component {
   static defaultProps = {

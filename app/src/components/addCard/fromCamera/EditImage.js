@@ -11,7 +11,8 @@ import { Dimensions } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
 import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
-import { DoubleTap } from './DoubleTap';
+import { DoubleTap } from '../../util/DoubleTap';
+import { MoveableBlock } from './MoveableBlock';
 
 // TODO: add a "loading" or "getting results"
 // TODO: add functionality for from camera
@@ -22,11 +23,16 @@ export function EditImage({route, navigation}) {
     const image = route.params.img;
     const [encodedImage, setEncodedImage] = useState(null);
     const [showSettingsBar, setShowSettingsBar] = useState(true); // TODO: allow double tap to show/hide settings bar
+    const [moveableBlocks, setMoveableBlocks] = useState([]);
+    const [rerender, setRerender] = useState(false);
+
+    console.log('rerender');
 
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
 
     // once encoded image is loaded submit to google cloud
     useEffect(() => { 
+        console.log('rerender');
         if (encodedImage) { 
             submitToGoogle();
         }
@@ -112,52 +118,60 @@ export function EditImage({route, navigation}) {
         );
     }
 
+    // force this component to rerender from child component
+    const forceRerender = () => { 
+        // it doesn't matter what variable this is, it just forces the react lifecycle 
+        // to occur
+        setRerender(!rerender);
+    }
+
     return (
         <View style={styles.container}>
-            <DoubleTap onDoubleTap={()=> setShowSettingsBar(!showSettingsBar)}>
-                <Image source={{ uri: image }} style={styles.img}/>
-            </DoubleTap>
+            {/* Blocks */}
             {
-                showSettingsBar &&
-                <CameraSettingsBar/>
+                (moveableBlocks.length > 0) && 
+                <View style={{zIndex: 900}}>
+                    {
+                        moveableBlocks.map((isSelected, i) => {
+                            console.log(moveableBlocks);
+                            return <MoveableBlock 
+                                key={i} 
+                                moveableBlocks={moveableBlocks} 
+                                setMoveableBlocks={setMoveableBlocks}
+                                forceReRender={forceRerender}
+                                i={i}
+                            ></MoveableBlock>
+                        })
+                    }
+                </View>
             }
 
-            {/* { 
-                image && 
-                <TouchableOpacity onPress={done}>
-                    <Text>Done!</Text>
-                </TouchableOpacity>
-            }
+            {/* Image */}
+            <DoubleTap onDoubleTap={()=> setShowSettingsBar(!showSettingsBar)}>
+                <Image source={{uri: image}} style={styles.img}/>
+            </DoubleTap>
+
+            {/* Settings Bar */}
             {
-                showBox &&
-                <DragResizeBlock
-                    x={0}
-                    y={0}
-                >
-                    <View
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: 'black',
-                        }}
-                    />
-                </DragResizeBlock>
-            } */}
+                showSettingsBar &&
+                <CameraSettingsBar
+                    moveableBlocks={moveableBlocks}
+                    setMoveableBlocks={setMoveableBlocks}
+                />
+            }
         </View>
     )
 }
 
 const styles = StyleSheet.create({ 
     container: {
-        flex: 1, 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        zIndex: 1 
     },
+    // TODO: align this pat so that it keeps photo dimensions and aligns to center
     img: { 
         width: Dimensions.get('window').width * .90,
         height: Dimensions.get('window').height * .90,
-        zIndex: 1
+        zIndex: 1,
+        alignSelf: 'center',
     }, 
     box: { 
         width: 200,

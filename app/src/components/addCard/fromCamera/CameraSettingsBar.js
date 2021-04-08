@@ -16,7 +16,15 @@ import { captureScreen } from "react-native-view-shot";
 
 // TODO: implement functionality here
 
-export function CameraSettingsBar({navigation}) {
+export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks}) {
+    const addBlock = () => {
+        console.log("adding block");
+        setMoveableBlocks([
+            ...moveableBlocks,
+            false
+        ])
+    }
+
     return(
         <View style={styles.container}>
             <TouchableOpacity>
@@ -25,7 +33,7 @@ export function CameraSettingsBar({navigation}) {
             <TouchableOpacity>
                 <Text style={styles.txt}>Delete Box</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={addBlock}>
                 <Text style={styles.txt}>Add Another Box</Text>
             </TouchableOpacity>
             <TouchableOpacity>

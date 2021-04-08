@@ -53,7 +53,7 @@ export function ChooseImage({navigation}) {
     };
 
     return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.container}>
             <TouchableOpacity onPress={launchCameraRoll}>
                 <Text style={styles.txt}>Pick an image from camera roll</Text>
             </TouchableOpacity>
@@ -65,6 +65,11 @@ export function ChooseImage({navigation}) {
 }
 
 const styles = StyleSheet.create({
+    container: { 
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+    },
     txt: {
         fontSize: 18,
         margin: 10
