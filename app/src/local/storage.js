@@ -46,7 +46,6 @@ const setDB = async (cards) => {
     }
 }
 
-var current_unique_id = 0;
 export const addLocalDB = async (accountName, location, data, callback) => {
     try {
         getDB((db) => {
@@ -57,13 +56,13 @@ export const addLocalDB = async (accountName, location, data, callback) => {
                 db[key] = {};
             }
 
-            current_unique_id++;
-            db[key][current_unique_id.toString()] = data;
+            let id = Object.values(db[key]).length.toString();
+            db[key][id] = data;
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue);
 
-            callback(current_unique_id.toString());
+            callback(id);
         });
     } catch (e) {
         console.log(e);
@@ -119,13 +118,16 @@ export const clearLocalDB = async () => {
 
 export const getLocalDB = async (accountName, location, callback) => {
     const [document, id] = parseDocAndId(location);
-    console.log("DB GET HAPPENING");
     try {
         getDB((db) => {
             let key = accountName + "." + document;
 
             // NOTE (Nathan W) the document **should** exist
-            callback(db[key][id]);
+            if (key in db && id in db[key]) {
+                callback(db[key][id]);
+            } else {
+                callback(null);
+            }
         });
     } catch(e) {
         console.log(e);
