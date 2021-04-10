@@ -25,16 +25,19 @@ export function EditImage({route, navigation}) {
     const [showSettingsBar, setShowSettingsBar] = useState(true); // TODO: allow double tap to show/hide settings bar
     const [moveableBlocks, setMoveableBlocks] = useState([]);
     const [rerender, setRerender] = useState(false);
-
-    console.log('rerender');
-
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
+    const [sendToApi, setSendToApi] = useState(false);
 
     // once encoded image is loaded submit to google cloud
     useEffect(() => { 
-        console.log('rerender');
         if (encodedImage) { 
             submitToGoogle();
+        }
+    })
+
+    useEffect(()=> { 
+        if (sendToApi) { 
+            done();
         }
     })
 
@@ -66,11 +69,11 @@ export function EditImage({route, navigation}) {
             );
             let responseJson = await response.json();
 
-            let text = formatApiResponse(responseJson);
+            let formattedResponse = formatApiResponse(responseJson);
 
-            console.log('received text:')
-            console.log(text);
-
+            navigation.navigate('CardSelectImage', {
+                text: formattedResponse 
+            });
         } catch (error) {
             console.log(error);
         }
@@ -118,7 +121,8 @@ export function EditImage({route, navigation}) {
         );
     }
 
-    // force this component to rerender from child component
+    // pass this function to child component, calling this functino in the child component 
+    // forces this component to rerender from child component
     const forceRerender = () => { 
         // it doesn't matter what variable this is, it just forces the react lifecycle 
         // to occur
@@ -133,7 +137,6 @@ export function EditImage({route, navigation}) {
                 <View style={{zIndex: 900}}>
                     {
                         moveableBlocks.map((isSelected, i) => {
-                            console.log(moveableBlocks);
                             return <MoveableBlock 
                                 key={i} 
                                 moveableBlocks={moveableBlocks} 
@@ -155,8 +158,11 @@ export function EditImage({route, navigation}) {
             {
                 showSettingsBar &&
                 <CameraSettingsBar
+                    navigation={navigation}
                     moveableBlocks={moveableBlocks}
                     setMoveableBlocks={setMoveableBlocks}
+                    setShowSettingsBar={setShowSettingsBar}
+                    setSendToApi={setSendToApi}
                 />
             }
         </View>

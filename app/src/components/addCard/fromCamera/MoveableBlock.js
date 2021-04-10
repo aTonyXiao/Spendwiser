@@ -6,7 +6,6 @@ export function MoveableBlock({moveableBlocks, setMoveableBlocks, i, forceReRend
     const [isSelected, setIsSelected] = useState(false);
 
     useEffect(()=> { 
-        console.log(i)
         setIsSelected(moveableBlocks[i]);
     })
 
@@ -17,7 +16,7 @@ export function MoveableBlock({moveableBlocks, setMoveableBlocks, i, forceReRend
                 x={0}
                 y={0}
                 onPress={()=> {
-                    console.log('press')
+                    // choosing only the current block as selected
                     let newBlocks = moveableBlocks;
                     for (let j=0 ; j<newBlocks.length; j++) { 
                         newBlocks[j] = false;

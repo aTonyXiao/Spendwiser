@@ -1,45 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
     Text, 
     View, 
     StyleSheet, 
     TouchableOpacity, 
-    Platform,
-    Image, 
-    Button 
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { Dimensions } from 'react-native';
-import { DragResizeBlock } from 'react-native-drag-resize';
-import { captureScreen } from "react-native-view-shot";
+import { Ionicons } from '@expo/vector-icons';
 
-// TODO: implement functionality here
+export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks, setShowSettingsBar, setSendToApi}) {
+    const chooseDifferentImage = () => {
+        navigation.navigate('ChooseImage');
+    } 
 
-export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks}) {
+    // TODO: need to add some code for checking if no box is currently selected, OR
+    //  only show this option when a box is selected
+    const deleteBox = () => {
+        // let newBlocks = moveableBlocks;
+        // newBlocks.pop();
+        // setMoveableBlocks(newBlocks);
+    }
+
     const addBlock = () => {
-        console.log("adding block");
-        setMoveableBlocks([
-            ...moveableBlocks,
-            false
-        ])
+        let newBlocks = moveableBlocks;
+        for (let j=0 ; j<newBlocks.length; j++) { 
+            newBlocks[j] = false;
+        }
+        newBlocks.push(true);
+        setMoveableBlocks(newBlocks)
+    }
+
+    const showHelp = () => { 
+
+    }
+
+    const callDone = () => { 
+        setShowSettingsBar(false);
+        setSendToApi(true);
     }
 
     return(
         <View style={styles.container}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={chooseDifferentImage}>
                 <Text style={styles.txt}>Choose different image</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={deleteBox}>
                 <Text style={styles.txt}>Delete Box</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={addBlock}>
                 <Text style={styles.txt}>Add Another Box</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={styles.txt}>?</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={showHelp}>
+                    <Ionicons
+                        name="help-circle-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            <TouchableOpacity onPress={callDone}>
                 <Text style={styles.txt}>Done!</Text>
             </TouchableOpacity>
         </View>
