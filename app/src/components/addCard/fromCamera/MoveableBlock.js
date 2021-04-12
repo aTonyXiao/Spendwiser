@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
 
+/**
+ * Wrapper for DragResizeBlock that keeps a selected state for styling purposes
+ * 
+ * @param {{Array, Object, Integer, function}} obj - parameter object
+ * @param {Array} obj.moveableBlocks - list of booleans that represent selected/unselected boxes on screen
+ * @param {Object} obj.setMoveableBlocks - React useState function sets moveableBlocks array
+ * @param {Integer} obj.i - key number of block
+ * @param {function} obj.forceReRender - function passed from parent function that will force the parent component to rerender
+ * @module MoveableBlock
+ */
 export function MoveableBlock({moveableBlocks, setMoveableBlocks, i, forceReRender}) {
     const [isSelected, setIsSelected] = useState(false);
 

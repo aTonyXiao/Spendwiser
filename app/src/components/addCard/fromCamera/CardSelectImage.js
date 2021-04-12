@@ -7,6 +7,14 @@ import { cards } from '../../../network/cards';
 // TODO: change to "CardSelectFromImage"
 // TODO: handle no text
 
+/**
+ * Page that allows user to select an image after taking a picture of their card
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific credit card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module CardSelectImage
+ */
 export function CardSelectImage({route, navigation}) {
     const text = route.params.text;
     const userId = user.getUserId();

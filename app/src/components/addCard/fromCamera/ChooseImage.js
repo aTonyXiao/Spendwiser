@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { 
     Text, 
     View, 
@@ -8,8 +8,17 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+// TODO: need to add permission to settings page
+
+/**
+ * Page for choosing an image. Utilizes Expo ImagePicker to allow user to pick from
+ * camera roll or take picture
+ * 
+ * @param {{Object}} obj - navigation passed directly to display card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module ChooseImage
+ */
 export function ChooseImage({navigation}) {
-    // TODO: need to add permission to settings page
     // get permissions
     useEffect(() => {
         (async () => {

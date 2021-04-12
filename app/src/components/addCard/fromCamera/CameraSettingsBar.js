@@ -7,6 +7,17 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+/**
+ * Child component header bar that gives options to user while editing image
+ * 
+ * @param {{Object, Array, Object, Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @param {Array} obj.moveableBlocks - list of booleans that represent selected/unselected boxes on screen
+ * @param {Object} obj.setMoveableBlocks - React useState function sets moveableBlocks array
+ * @param {Object} obj.setShowSettingsBar - React useState function that sets showSettingsBar boolean
+ * @param {Object} obj.setSendToApi - React useState function that sets sendToApi boolean
+ * @module CameraSettingsBar
+ */
 export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks, setShowSettingsBar, setSendToApi}) {
     const chooseDifferentImage = () => {
         navigation.navigate('ChooseImage');

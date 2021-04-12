@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Text, 
     View, 
     StyleSheet, 
-    TouchableOpacity, 
     Image, 
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { Dimensions } from 'react-native';
-import { DragResizeBlock } from 'react-native-drag-resize';
 import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
 import { DoubleTap } from '../../util/DoubleTap';
@@ -18,7 +15,16 @@ import { MoveableBlock } from './MoveableBlock';
 // TODO: add functionality for from camera
 // TODO: move choose image functionality to ChooseImage page, 
 //         this page will be for editing image before sending it to google cloud
+// TODO: align this pat so that it keeps photo dimensions and aligns to center
 
+/**
+ * Page for allowing user to edit their image before they send it to Google Cloud API
+ * 
+ * @param {{Object, Object}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.route - routing object containing information about a specific credit card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module EditImage 
+ */
 export function EditImage({route, navigation}) {
     const image = route.params.img;
     const [encodedImage, setEncodedImage] = useState(null);
@@ -28,16 +34,17 @@ export function EditImage({route, navigation}) {
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;
     const [sendToApi, setSendToApi] = useState(false);
 
-    // once encoded image is loaded submit to google cloud
+    // once image is encoded submit to google cloud api
     useEffect(() => { 
         if (encodedImage) { 
             submitToGoogle();
         }
     })
 
+    // intermediate step to check for user done editing to encode image
     useEffect(()=> { 
         if (sendToApi) { 
-            done();
+            encodeImage();
         }
     })
 
@@ -106,7 +113,7 @@ export function EditImage({route, navigation}) {
         return textAnnotationFormatted;
     }
 
-    const done = async () => {
+    const encodeImage = async () => {
         // capture hidden confidential information
         captureScreen({
             format: "jpg",
@@ -170,9 +177,6 @@ export function EditImage({route, navigation}) {
 }
 
 const styles = StyleSheet.create({ 
-    container: {
-    },
-    // TODO: align this pat so that it keeps photo dimensions and aligns to center
     img: { 
         width: Dimensions.get('window').width * .90,
         height: Dimensions.get('window').height * .90,
