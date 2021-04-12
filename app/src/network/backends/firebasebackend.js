@@ -134,25 +134,32 @@ class FirebaseBackend extends BaseBackend {
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
             if (type == 'normal') {
-                let databaseLocation = getDatabaseLocation(this.database, location);
-                let conditions = conditionsWithCallback;
+                this.getUserID((accountId) => {
+                    storage.getLocalDB(accountId, location, (data) => {
+                        console.log("Retrived local data");
+                        console.log(data);
 
-                // filter if there are conditions
-                if (conditions.length > 0) {
-                    databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-                }
+                        let databaseLocation = getDatabaseLocation(this.database, location);
+                        let conditions = conditionsWithCallback;
 
-                // get the data
-                databaseLocation.get().then((query) => {
-                    if (typeof query.get === "function") { // hacky way of checking if a doc
-                        callback(query.data());
-                    } else {
-                        query.forEach(doc => {
-                            callback(doc.data());
+                        // filter if there are conditions
+                        if (conditions.length > 0) {
+                            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+                        }
+
+                        // get the data
+                        databaseLocation.get().then((query) => {
+                            if (typeof query.get === "function") { // hacky way of checking if a doc
+                                callback(query.data());
+                            } else {
+                                query.forEach(doc => {
+                                    callback(doc.data());
+                                });
+                            }
+                        }).catch((err) => {
+                            console.log(err);
                         });
-                    }
-                }).catch((err) => {
-                    console.log(err);
+                    });
                 });
             } else {
                 this.getUserID((accountId) => {

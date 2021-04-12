@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { acc } from 'react-native-reanimated';
 
 let storage_debug = true;
 
@@ -80,14 +79,13 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             }
 
             // Create location in account if not exists
-            barebonesLocation = location.substring(location.lastIndexOf('.') + 1);
-            if (!(barebonesLocation in db[accountName])) {
-                db[accountName][barebonesLocation] = {};
+            if (!(location in db[accountName])) {
+                db[accountName][location] = {};
             }
 
             // Insert data in location
-            let id = Object.values(db[accountName][barebonesLocation]).length.toString();
-            db[accountName][barebonesLocation][id] = data;
+            let id = Object.values(db[accountName][location]).length.toString();
+            db[accountName][location][id] = data;
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue);
@@ -130,12 +128,12 @@ export const setLocalDB = async (accountName, location, data, merge = false) => 
 
             // NOTE (Nathan W) the document **should** exist
             if (merge) {
-                db[key][id] = {
-                    ...db[key][id],
+                db[accountName][location][id] = {
+                    ...db[accountName][location][id],
                     ...data,
                 }
             } else {
-                db[key][id] = data;
+                db[accountname][location][id] = data;
             }
 
             jsonValue = JSON.stringify(db);
@@ -168,8 +166,8 @@ export const getLocalDB = async (accountName, location, callback) => {
             }
 
             // NOTE (Nathan W) the document **should** exist
-            if (key in db && id in db[key]) {
-                callback(db[key][id]);
+            if (accountName in db && document in db[accountName]) {
+                callback(db[accountName][document][id]);
             } else {
                 callback(null);
             }
@@ -180,7 +178,6 @@ export const getLocalDB = async (accountName, location, callback) => {
 }
 
 export const getSubcollectionLocalDB = async (accountName, location, callback) => {
-    location = location.substring(location.indexOf('.') + 1);
     try {
         getDB((db) => {
             // TODO: (Nathan W) Ask smarter people about why we don't need the account name here,
@@ -196,8 +193,9 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
                 console.log("----------------------");
             }
 
-            if (key in db) {
-                callback(Object.values(db[key]));
+            
+            if (accountName in db && location in db[accountName]) {
+                callback(Object.values(db[accountName][location]));
             } else {
                 callback([]);
             }
@@ -209,7 +207,7 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
 
 export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId) => {
     try {
-        getDB((db) => {
+        getDB(async (db) => {
             let key = accountName + "." + location;
 
             if (storage_debug) {
@@ -223,15 +221,15 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 console.log("----------------------");
             }
 
-            db[key][newId] = db[key][oldId];
-            delete db[key][oldId];
+            db[accountName][location][newId] = db[accountName][location][oldId];
+            delete db[accountName][location][oldId];
 
 
             id = newId;
-            db[key][id] = addOrUpdateMetainfo(db[key][id], isSynced);
+            db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
 
             jsonValue = JSON.stringify(db);
-            setDB(jsonValue);
+            await setDB(jsonValue);
         });
     } catch (e) {
         console.log(e);
