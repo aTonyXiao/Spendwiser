@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+let storage_debug = true;
+
 export const storeLoginState = async (login_info) => {
     try {
         const jsonValue = JSON.stringify(login_info);
@@ -33,7 +35,7 @@ export const getDB = async (callback) => {
         } else {
             callback({});
         }
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
@@ -42,18 +44,34 @@ const setDB = async (cards) => {
     await AsyncStorage.setItem('@db', cards);
     try {
         getDB((db) => {
-            console.log("Updated database");
-            console.log(db);
+            if (storage_debug)
+                console.log(db);
         });
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
 
+const addOrUpdateMetainfo = (data, isSynced = false) => {
+    data['meta_modified'] = new Date();
+    data['meta_synced'] = isSynced;
+    return data;
+}
+
 export const addLocalDB = async (accountName, location, data, callback) => {
+    data = addOrUpdateMetainfo(data);
     try {
         getDB((db) => {
             let key = accountName + "." + location;
+
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Adding Locally");
+                console.log("Key: " + key);
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
 
             // Create the 'Document' if it doesn't already exist
             if (!(key in db)) {
@@ -84,18 +102,24 @@ const parseDocAndId = (location) => {
     let document = location.substring(0, loc);
     let id = location.substring(loc + 1);
 
-    console.log("Location info Info:");
-    console.log("Document: " + document);
-    console.log("ID: " + id);
-
     return [document, id];
 }
 
 export const setLocalDB = async (accountName, location, data, merge = false) => {
     const [document, id] = parseDocAndId(location);
+    data = addOrUpdateMetainfo(data);
     try {
         getDB((db) => {
             let key = accountName + "." + document;
+
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Setting Locally");
+                console.log("Key: " + key);
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
 
             // NOTE (Nathan W) the document **should** exist
             if (merge) {
@@ -110,7 +134,7 @@ export const setLocalDB = async (accountName, location, data, merge = false) => 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue);
         });
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
@@ -126,6 +150,15 @@ export const getLocalDB = async (accountName, location, callback) => {
         getDB((db) => {
             let key = accountName + "." + document;
 
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Getting Locally");
+                console.log("Key: " + key);
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+
             // NOTE (Nathan W) the document **should** exist
             if (key in db && id in db[key]) {
                 callback(db[key][id]);
@@ -133,7 +166,7 @@ export const getLocalDB = async (accountName, location, callback) => {
                 callback(null);
             }
         });
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
@@ -146,14 +179,53 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
             // but we do for all others
             let key = location;
 
-            console.log(db[key]);
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Getting Subcollection Locally");
+                console.log("Key: " + key);
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+
             if (key in db) {
                 callback(Object.values(db[key]));
             } else {
                 callback([]);
             }
         });
-    } catch(e) {
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId) => {
+    try {
+        getDB((db) => {
+            let key = accountName + "." + location;
+
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Modifying Locally");
+                console.log("Key: " + key);
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("Old Id: " + oldId);
+                console.log("New Id: " + newId);
+                console.log("----------------------");
+            }
+
+            db[key][newId] = db[key][oldId];
+            delete db[key][oldId];
+
+
+            id = newId;
+            db[key][id] = addOrUpdateMetainfo(db[key][id], isSynced);
+
+            jsonValue = JSON.stringify(db);
+            setDB(jsonValue);
+        });
+    } catch (e) {
         console.log(e);
     }
 }

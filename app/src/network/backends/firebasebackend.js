@@ -276,16 +276,21 @@ class FirebaseBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
-
             if (accountId != 'offline') {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {});
-                // Add card data to our firebase storage
-                let databaseLocation = getDatabaseLocation(this.database, location);
-                databaseLocation.add(data).then((query) => {
-                    callback(query.id);
-                }).catch((err) => {
-                    console.log(err);
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    // Add card data to our firebase storage
+
+                    console.log("Added card locally with id: " + local_query_id);
+
+                    let databaseLocation = getDatabaseLocation(this.database, location);
+                    databaseLocation.add(data).then((query) => {
+                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
+                        callback(query.id);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                 });
+
             } else {
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
                     callback(local_query_id);
@@ -440,7 +445,7 @@ class FirebaseBackend extends BaseBackend {
             callback(state.signed_in);
         });
     }
-    
+
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
