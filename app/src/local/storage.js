@@ -13,7 +13,11 @@ export const storeLoginState = async (login_info) => {
 export const getLoginState = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('logged in')
-        callback(jsonValue != null ? JSON.parse(jsonValue) : null);
+        if (jsonValue == null) { // Default to not logged in
+            callback({ 'signed_in': false, 'account_type': 'offline' });
+        } else {
+            callback(JSON.parse(jsonValue));
+        }
     } catch (e) {
         console.log(e);
         return null;
