@@ -15,7 +15,7 @@ async function handleRedirectsBasedOnLoginStatus(navigation) {
     if (globalDebugRedirectBasedOnLoginStatus) {
         if (appBackend.userLoggedIn()) {
             console.log(appBackend.getUserID());
-            navigation.navigate('ChooseImage');
+            navigation.navigate('Main');
         } else {
             navigation.navigate('Login');
         }

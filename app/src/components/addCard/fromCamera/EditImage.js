@@ -121,7 +121,7 @@ export function EditImage({route, navigation}) {
         );
     }
 
-    // pass this function to child component, calling this functino in the child component 
+    // pass this function to child component, calling this function in the child component 
     // forces this component to rerender from child component
     const forceRerender = () => { 
         // it doesn't matter what variable this is, it just forces the react lifecycle 

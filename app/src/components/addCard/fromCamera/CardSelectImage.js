@@ -36,21 +36,17 @@ export function CardSelectImage({route, navigation}) {
 
                 let originalCardNames = Object.keys(mapping);
 
-                console.log('trying to match card names')
-
                 // filter card names for detected words from imag
                 originalCardNames.forEach(cardName => { 
                     for (let i=0 ; i<text.length ; i++) { 
                         detectedWord = text[i];
 
                         const regex = new RegExp(`${detectedWord.trim()}`, 'i');
-                        if (cardName.search(regex) >= 0) { 
+                        if ((cardName.search(regex) >= 0) && (!matchedCardNames.includes(cardName))) { 
                             matchedCardNames.push(cardName);
                         }
                     }
                 })
-
-                console.log(matchedCardNames.length);
 
                 setFilteredCardNames(matchedCardNames);
             });
@@ -113,8 +109,10 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     title: {
-        marginTop: 20,
-        alignSelf: 'center'
+        marginTop: 30,
+        alignSelf: 'center', 
+        fontSize: 18,
+        marginBottom: 10
     }, 
     body: {
         margin: 5
