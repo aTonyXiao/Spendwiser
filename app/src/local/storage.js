@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { acc } from 'react-native-reanimated';
 
 let storage_debug = true;
 
@@ -73,17 +74,23 @@ export const addLocalDB = async (accountName, location, data, callback) => {
                 console.log("----------------------");
             }
 
-            // Create the 'Document' if it doesn't already exist
-            if (!(key in db)) {
-                db[key] = {};
+            // Create account if not exists
+            if (!(accountName in db)) {
+                db[accountName] = {};
             }
 
-            let id = Object.values(db[key]).length.toString();
-            db[key][id] = data;
+            // Create location in account if not exists
+            barebonesLocation = location.substring(location.lastIndexOf('.') + 1);
+            if (!(barebonesLocation in db[accountName])) {
+                db[accountName][barebonesLocation] = {};
+            }
+
+            // Insert data in location
+            let id = Object.values(db[accountName][barebonesLocation]).length.toString();
+            db[accountName][barebonesLocation][id] = data;
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue);
-
             callback(id);
         });
     } catch (e) {
@@ -156,6 +163,7 @@ export const getLocalDB = async (accountName, location, callback) => {
                 console.log("Key: " + key);
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
+                console.log(db);
                 console.log("----------------------");
             }
 
