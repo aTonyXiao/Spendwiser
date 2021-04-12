@@ -1,8 +1,27 @@
 import React from 'react';
-import { StyleSheet, View, Text, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import {appBackend} from '../../network/backend'
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
+    function navigateIfAuthorized(navigation, location, errmsg) {
+        appBackend.userAccountType((type) => {
+            switch(type) {
+            case 'offline':
+                Alert.alert(
+                    "Unable to use this feature",
+                    errmsg,
+                    [
+                        { text: "OK", onPress: () => { setModalVisible(false) }}
+                    ]
+                );
+                break;
+            case 'normal':
+                setModalVisible(false);
+                navigation.navigate(location);
+            }
+        });
+    }
     return (
         <Modal
             animationType="slide"
@@ -29,8 +48,7 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                         <Text style={modalStyles.modalTitle}>Add New Card</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                setModalVisible(!modalVisible);
-                                navigation.navigate('AddCardDB');
+                                navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
                             }}
                             style={modalStyles.modalText}
                         >
@@ -40,7 +58,7 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                         <TouchableOpacity
                             onPress={() => {
                                 setModalVisible(!modalVisible);
-                                navigation.navigate('ChooseImage');
+                                navigateIfAuthorized(navigation, 'ChooseImage', 'Sign up with an account to use this feature!');
                             }}
                             style={modalStyles.modalText}
                         >

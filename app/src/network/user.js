@@ -14,19 +14,22 @@ class userClass {
      * Checks if the user is currently in the "users" database. If not  
      * in the database, registers the user. Returns the user id
      */
-    getUserId() { 
-        var userId = appBackend.getUserID(); 
-        if (userId == null) { 
-            // user is not using a login, store all data locally?
-            userId = "test"; // TODO test is temporary
-        } else {
-            appBackend.dbDoesDocExist("users." + userId, (docExists) => {
-                if (!docExists) {
-                    this.addUser(userId);
+    async getUserId() { 
+        return new Promise((resolve, reject) => {
+            appBackend.getUserID((userId) => {
+                if (userId == null) { 
+                    // user is not using a login, store all data locally?
+                    resolve("test");
+                } else {
+                    appBackend.dbDoesDocExist("users." + userId, (docExists) => {
+                        if (!docExists) {
+                            this.addUser(userId);
+                        }
+                    });
+                    resolve(userId);
                 }
             });
-        }
-        return userId;
+        })
     }
 
     /**
@@ -34,14 +37,13 @@ class userClass {
      * 
      * @param {String} userId - the user's id after logged in 
      */
-    addUser(userId) { 
+    async addUser(userId) { 
+        userId = await userId;
         var date = new Date();
 
         appBackend.dbSet("users." + userId, { 
             dateCreated: date
             // TODO: maybe add name and email here?
-        }, (id) => { 
-            console.log(id);
         });
     }
 
@@ -50,6 +52,8 @@ class userClass {
      * @param {string} userId - The User Id
      */
     async getCards(userId) { 
+        userId = await userId;
+        console.log("Testing");
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
                 resolve(data);
@@ -63,6 +67,7 @@ class userClass {
      * @param {*} cardId - The cardId from the global 'cards' collection
      */
     async getCardDocId(userId, cardId) {
+        userId = await userId;
         return new Promise((resolve, reject) => {
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
                 data.forEach(element => {
@@ -81,7 +86,8 @@ class userClass {
      * @example
      * user.deleteCard(userId, cardId, docId);
      */
-    deleteCard(userId, cardId, docId) { 
+    async deleteCard(userId, cardId, docId) { 
+        userId = await userId;
         appBackend.dbDelete("users." + userId + ".cards." + docId);
 
         appBackend.dbGetSubCollections("users." + userId + ".transactions", (transactions) => { 
@@ -102,7 +108,8 @@ class userClass {
      * @param {*} transactions - should be null when saving initial card to user
      * @param {*} diff  - should be null when saving initial card to user
      */
-    saveCardToUser(userId, cardId, transactions, diff) { 
+    async saveCardToUser(userId, cardId, transactions, diff) { 
+        userId = await userId;
         appBackend.dbAdd("users." + userId + ".cards", {
             cardId: cardId, 
             transactions: transactions,
@@ -120,7 +127,8 @@ class userClass {
      * @param {object} storeInfo - store information (store name, address, category)
      * @param {number} amountSpent - amount spent at the store
      */
-    saveTransaction(userId, cardId, storeInfo, amountSpent, callback) {
+    async saveTransaction(userId, cardId, storeInfo, amountSpent, callback) {
+        userId = await userId;
         timestamp = appBackend.getTimestamp();
         appBackend.dbAdd("users." + userId + ".transactions", {
             cardId: cardId,
@@ -142,7 +150,8 @@ class userClass {
      * @param {string} userId - current user id
      * @param {string} docId  - document id of transaction
      */
-    addTransactionId(userId, docId) { 
+    async addTransactionId(userId, docId) { 
+        userId = await userId;
         appBackend.dbSet("users." + userId + ".transactions." + docId, {
             docId: docId
         }, 
@@ -160,7 +169,8 @@ class userClass {
      *      setDisplayTransactions(true);
      *  })
      */
-    getAllTransactions(userId, callback) { 
+    async getAllTransactions(userId, callback) { 
+        userId = await userId;
         appBackend.dbGetSubCollections("users." + userId + ".transactions", (data) => { 
             callback(data);
         })
@@ -179,7 +189,8 @@ class userClass {
      *      return newTransactions;
      *  })
      */
-    getTransactionsForCard(userId, cardId, callback) { 
+    async getTransactionsForCard(userId, cardId, callback) { 
+        userId = await userId;
         appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], (data) => { 
             callback(data);
         })
@@ -191,7 +202,8 @@ class userClass {
      * @param {string} docId  - document id of transaction to alter
      * @param {object} data - data to set transaction information to
      */
-    editTransaction(userId, docId, data) { 
+    async editTransaction(userId, docId, data) { 
+        userId = await userId;
         appBackend.dbSet("users." + userId + ".transactions." + docId, data, true);
     }
 
@@ -200,7 +212,8 @@ class userClass {
      * @param {string} userId - current user id
      * @param {string} docId - id of transaction to delete
      */
-    deleteTransaction(userId, docId) {
+    async deleteTransaction(userId, docId) {
+        userId = await userId;
         appBackend.dbDelete("users." + userId + ".transactions." + docId);
     }
 
@@ -214,7 +227,8 @@ class userClass {
      * @example
      * TODO
      */
-    getRewards(userId, cardId, callback) {
+    async getRewards(userId, cardId, callback) {
+        userId = await userId;
         appBackend.dbGet("cards." + cardId, (data)=> { 
             // TODO apply diff
             callback(data.rewards);
