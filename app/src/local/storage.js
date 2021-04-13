@@ -40,15 +40,18 @@ export const getDB = async (callback) => {
     }
 }
 
-const setDB = async (cards) => {
+const setDB = async (cards, callback) => {
     await AsyncStorage.setItem('@db', cards);
     try {
         getDB((db) => {
             if (storage_debug)
                 console.log(db);
+
+            callback();
         });
     } catch (e) {
         console.log(e);
+        callback();
     }
 }
 
@@ -87,8 +90,9 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             db[accountName][location][id] = data;
 
             jsonValue = JSON.stringify(db);
-            await setDB(jsonValue);
-            callback(id);
+            setDB(jsonValue, () => {
+                callback(id);
+            });
         });
     } catch (e) {
         console.log(e);
@@ -109,7 +113,7 @@ const parseDocAndId = (location) => {
     return [document, id];
 }
 
-export const setLocalDB = async (accountName, location, data, merge = false) => {
+export const setLocalDB = async (accountName, location, data, merge = false, callback) => {
     const [document, id] = parseDocAndId(location);
     data = addOrUpdateMetainfo(data);
     try {
@@ -135,7 +139,7 @@ export const setLocalDB = async (accountName, location, data, merge = false) => 
             }
 
             jsonValue = JSON.stringify(db);
-            await setDB(jsonValue);
+            setDB(jsonValue, callback);
         });
     } catch (e) {
         console.log(e);
@@ -147,6 +151,19 @@ export const clearLocalDB = async () => {
     await AsyncStorage.removeItem("@db");
 }
 
+/** 
+ * Filter the databse collection depending on the given conditions
+ * each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
+ */
+function filterDatabaseCollection(collection, conditions) {
+    let filteredCollection = collection;
+    for (let i = 0; i < conditions.length; i++) {
+        let condition = conditions[i];
+        filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
+    }
+    return filteredCollection;
+}
+
 export const getLocalDB = async (accountName, location, callback) => {
     const [document, id] = parseDocAndId(location);
     try {
@@ -156,15 +173,15 @@ export const getLocalDB = async (accountName, location, callback) => {
                 console.log("Getting Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log(db);
+                console.log("Document: " + document);
+                console.log("Id: " + id);
                 console.log("----------------------");
             }
 
-            // NOTE (Nathan W) the document **should** exist
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 callback(db[accountName][document][id]);
             } else {
-                callback({});
+                callback(Object.values(db[accountName][location]));
             }
         });
     } catch (e) {

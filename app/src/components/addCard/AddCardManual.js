@@ -81,7 +81,7 @@ export function AddCardManual({navigation}) {
         return inputsAreValid;
     }
 
-    addCard = () => { 
+    addCard = async () => { 
         var userId = user.getUserId();
 
         var name = inputName.current.state.text;
@@ -89,8 +89,8 @@ export function AddCardManual({navigation}) {
         var inputsAreValid = validateInputs(name, url);
 
         if (inputsAreValid) { 
-            cards.addCardToDatabase(name, [], rewards, url).then((cardId) => {
-                user.saveCardToUser(userId, cardId, null, null);
+            cards.addCardToDatabase(name, [], rewards, url).then(async (cardId) => {
+                await user.saveCardToUser(userId, cardId, null, null);
                 navigation.navigate('YourCards');
             });
         } 

@@ -146,6 +146,7 @@ function DisplayCard({route, navigation}) {
                         <View>
                             {
                                 transactions.map((transaction, i) => {
+                                    console.log(transaction);
                                     var date = transaction.dateAdded.toDate().toDateString();
                                     var name = transaction.storeInfo.storeName;
                                     var dollarAmount = transaction.amountSpent;

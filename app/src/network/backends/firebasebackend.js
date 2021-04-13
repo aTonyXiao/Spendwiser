@@ -135,6 +135,7 @@ class FirebaseBackend extends BaseBackend {
             let callback = conditionsWithCallback.pop();
             if (type == 'normal') {
                 this.getUserID((accountId) => {
+                    // TODO: No way to filter locally?
                     storage.getLocalDB(accountId, location, (data) => {
                         console.log("Retrived local data");
                         console.log(data);
@@ -247,19 +248,25 @@ class FirebaseBackend extends BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet(location, data, merge = false) {
+    dbSet(location, data, merge = false, callback) {
         // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
             this.getUserID((accountId) => {
-                storage.setLocalDB(accountId, location, data, merge);
+                // Store locally
+                storage.setLocalDB(accountId, location, data, merge, () => {
+
+                    // Store on firebase if possible
+                    let databaseLocation = getDatabaseLocation(this.database, location);
+                    if (state.signed_in && !state.offline) {
+                        databaseLocation.set(data, { merge: merge }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+
+                    callback();
+                });
             });
 
-            let databaseLocation = getDatabaseLocation(this.database, location);
-            if (state.signed_in && !state.offline) {
-                databaseLocation.set(data, { merge: merge }).catch((err) => {
-                    console.log(err);
-                });
-            }
 
             // TODO: (Nathan W) Store local copy as well
         })
@@ -284,11 +291,10 @@ class FirebaseBackend extends BaseBackend {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
             if (accountId != 'offline') {
+                // Add data locally
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    // Add card data to our firebase storage
 
-                    console.log("Added card locally with id: " + local_query_id);
-
+                    // Add data to our firebase storage
                     let databaseLocation = getDatabaseLocation(this.database, location);
                     databaseLocation.add(data).then((query) => {
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
@@ -296,6 +302,7 @@ class FirebaseBackend extends BaseBackend {
                     }).catch((err) => {
                         console.log(err);
                     });
+
                 });
 
             } else {

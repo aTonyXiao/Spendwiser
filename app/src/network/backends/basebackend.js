@@ -110,7 +110,7 @@ class BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet (location, data, merge = false) {}
+    dbSet (location, data, merge = false, callback) {}
 
     /**
      * This function adds a new 'document' to a 'collection'
