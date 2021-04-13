@@ -226,3 +226,13 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
         console.log(e);
     }
 }
+
+export const printLocalDB = async () => {
+    try {
+        getDB(async (db) => {
+            console.log(db);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
