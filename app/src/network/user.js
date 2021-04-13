@@ -55,7 +55,6 @@ class userClass {
      */
     async getCards(userId) { 
         userId = await userId;
-        console.log("Testing");
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
                 resolve(data);
@@ -196,8 +195,6 @@ class userClass {
     async getTransactionsForCard(userId, cardId, callback) { 
         userId = await userId;
         appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], (data) => { 
-            console.log("Got a list of transactions");
-            console.log(data);
             callback(data);
         })
     }

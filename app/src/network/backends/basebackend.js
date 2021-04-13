@@ -168,7 +168,7 @@ class BaseBackend {
         for (let key of Object.keys(data)) {
             newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
         }
-        this.dbSet(location, newData, merge);
+        this.dbSet(location, newData, merge, () => {});
     }
 
     /**

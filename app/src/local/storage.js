@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let storage_debug = true;
+let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -151,19 +151,6 @@ export const clearLocalDB = async () => {
     await AsyncStorage.removeItem("@db");
 }
 
-/** 
- * Filter the databse collection depending on the given conditions
- * each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
- */
-function filterDatabaseCollection(collection, conditions) {
-    let filteredCollection = collection;
-    for (let i = 0; i < conditions.length; i++) {
-        let condition = conditions[i];
-        filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
-    }
-    return filteredCollection;
-}
-
 export const getLocalDB = async (accountName, location, callback) => {
     const [document, id] = parseDocAndId(location);
     try {
@@ -180,8 +167,10 @@ export const getLocalDB = async (accountName, location, callback) => {
 
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 callback(db[accountName][document][id]);
-            } else {
+            } else if (accountName in db && location in db[accountName]) {
                 callback(Object.values(db[accountName][location]));
+            } else {
+                callback([]);
             }
         });
     } catch (e) {

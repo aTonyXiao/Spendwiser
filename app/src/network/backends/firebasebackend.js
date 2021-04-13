@@ -137,9 +137,6 @@ class FirebaseBackend extends BaseBackend {
                 this.getUserID((accountId) => {
                     // TODO: No way to filter locally?
                     storage.getLocalDB(accountId, location, (data) => {
-                        console.log("Retrived local data");
-                        console.log(data);
-
                         let databaseLocation = getDatabaseLocation(this.database, location);
                         let conditions = conditionsWithCallback;
 
@@ -186,7 +183,6 @@ class FirebaseBackend extends BaseBackend {
      */
     dbGetSubCollections(location, callback) {
         // TODO (Nathan W): Check local storage first before going to the firebase db
-        console.log("Get subcollections called");
         this.userAccountType((type) => {
             if (type == 'normal') {
                 let dbloc = getDatabaseLocation(this.database, location);
@@ -502,7 +498,7 @@ class FirebaseBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now();
+        return firebase.firestore.Timestamp.now().toDate().toString();
     }
 
     /**
