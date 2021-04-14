@@ -1,14 +1,13 @@
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
-
-let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
-let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
-let drugstore = ['Drugstore'];
-let gas = ['Gas station'];
-let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
+export let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
+export let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
+export let drugstore = ['Drugstore', 'Pharmacy'];
+export let gas = ['Gas station'];
+export let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
     'hardware store', 'Plumber', 'Roofing contractor'];
-let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
+export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
     'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo']
 
 class RecommendCard {

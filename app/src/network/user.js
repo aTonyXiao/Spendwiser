@@ -176,6 +176,29 @@ class userClass {
     }
 
     /**
+     * Gets all of a user's transactions within a selected timeframe
+     * @param {string} userId - the user whose transactions to grab
+     * @param {Date} startTimeframe - the chosen start of timeframe
+     * @param {Date} endTimeframe - the chosen end of timeframe
+     * 
+     * @example
+     *  TODO - Nathan Ng
+     */
+    async getTimeFrameTransactions(userId, startTimeframe, endTimeframe, callback) {
+        userId = await userId;
+        // let startTimestamp = startTimeframe - 604800000;
+        // let startTimestampObject = new Date(startTimestamp);
+        // let endTimestamp = endTimeframe - 604800000;
+        // let endTimestampObject = new Date(endTimestamp);
+        appBackend.dbGet("users." + userId + ".transactions",
+            ["dateAdded", ">", startTimeframe],
+            ["dateAdded", "<", endTimeframe],
+            (data) => { 
+            callback(data);
+        })
+    }
+
+    /**
      * Gets transactions for a user's card
      * @param {string} userId - user id of transactions to get
      * @param {string} cardId  - card id of card to get

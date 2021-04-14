@@ -4,16 +4,18 @@ import { Ionicons } from '@expo/vector-icons';
 
 export function ModalSlot(
     {
-    textString,
-    selected,
-    setSelected,
+        textString,
+        selected,
+        setSelected,
+        setModalVisible,
+        isValid,
     }) {
     return (
         <TouchableOpacity 
             style={styles.slot}
-            onPress={() => {setSelected(textString)}}
+            onPress={() => {isValid && setSelected(textString), isValid && setModalVisible(0)}}
         >
-            <Text>{textString}</Text>
+            <Text style={isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
             {selected === true ? 
                 <Ionicons
                     name="checkmark-sharp"
@@ -35,5 +37,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 15,
         borderBottomWidth: 0.5
+    },
+    textValid: {
+        color: 'black'
+    },
+    textInvalid: {
+        color: 'grey'
     }
 });

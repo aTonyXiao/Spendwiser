@@ -1,19 +1,106 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { Footer } from '../util/Footer';
 import { CategoryModal } from './CategoryModal';
-import PieChartSummary from './PieChartSummary';
+import { PieChartSummary } from './PieChartSummary';
+import { Ionicons } from '@expo/vector-icons';
+import { user } from '../../network/user';
+import { dining, grocery, drugstore, gas, homeImprovement, travel } from '../main/RecommendCard';
 
 const modalType = {
     DISABLED: 0,
     TIME: 1,
     CATEGORY: 2,
 }
+const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
 
 export function SpendingSummary({navigation}) {
     const [modalVisible, setModalVisible] = useState(modalType.DISABLED);
-    const [curCategory, setCurCategory] = useState('All categories');
+    const [curCategory, setCurCategory] = useState({
+        label: 'All categories',
+        value: 0,
+    });
     const [curTimeframe, setCurTimeframe] = useState('This month');
+    const [transactions, setTransactions] = useState([]);
+    const [values, setValues] = useState([]);
+
+    function changeCategory(cat) {
+        console.log(cat);
+        setCurCategory({
+            label: cat,
+            value: cat === "All categories" ? values.reduce((a, b) => a + b, 0) : values[keys.indexOf(cat)],
+        });
+    };
+
+    function processTransactionsForSumamry(transaction) {
+        let tmpValues = values;
+        if (dining.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[0] += parseFloat(transaction['amountSpent']);
+        } else if (grocery.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[1] += parseFloat(transaction['amountSpent']);
+        } else if (drugstore.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[2] += parseFloat(transaction['amountSpent']);
+        } else if (gas.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[3] += parseFloat(transaction['amountSpent']);
+        } else if (homeImprovement.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[4] += parseFloat(transaction['amountSpent']);
+        } else if (travel.includes(transaction['storeInfo']['storeType'])) {
+            tmpValues[5] += parseFloat(transaction['amountSpent']);
+        } else {
+            tmpValues[6] += parseFloat(transaction['amountSpent']);
+        }
+        setValues(tmpValues);
+        setCurCategory((prevState) => {
+            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+        });
+    };
+
+    function getTimeFrame() {
+        let endTimeFrame, startTimeFrame;
+        let month, date, year;
+        switch (curTimeframe) {                
+            case "Last month":
+                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
+                endTimeFrame = new Date("20" + (month - 1 !== -1 ? year : year - 1), (month - 1) % 12, 0);
+                startTimeFrame = new Date("20" + (month - 2 !== -1 ? year : year - 1), (month - 2) % 12);
+                break;
+            case "Last 3 months":
+                endTimeFrame = new Date();
+                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
+                startTimeFrame = new Date("20" + (month - 3 >= 0 ? year : year - 1), month - 3 % 12);
+                break;
+            default: 
+                /* Last Month */
+                endTimeFrame = new Date();
+                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
+                startTimeFrame = new Date("20" + year, month - 1);
+                break;
+        }
+        return [startTimeFrame, endTimeFrame];
+    }
+
+    useEffect(() => {
+        if (transactions.length == 0) {
+            return;
+        }
+        processTransactionsForSumamry(transactions[transactions.length - 1]);
+    }, [transactions]);
+
+    useEffect(() => {
+        setValues(Array(7).fill(0));
+        setCurCategory({
+            label: 'All categories',
+            value: 0,
+        });
+        const userId = user.getUserId();
+        let [startTimeFrame, endTimeFrame] = getTimeFrame();
+        console.log(startTimeFrame);
+        console.log(endTimeFrame);
+        user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
+            setTransactions(oldData => [...oldData, data]);
+        });
+    }, [curTimeframe]);
+
     return (
         <SafeAreaView style={styles.screen}>
             <CategoryModal
@@ -23,7 +110,8 @@ export function SpendingSummary({navigation}) {
                 curTimeframe = {curTimeframe}
                 setCurTimeframe = {setCurTimeframe}
                 curCategory = {curCategory}
-                setCurCategory = { setCurCategory}
+                changeCategory = {changeCategory}
+                values = {values}
             />
             <Text style={styles.header}>Spendings & Transactions</Text>
             {/* Tabs */}
@@ -33,19 +121,39 @@ export function SpendingSummary({navigation}) {
                     <Text>Category</Text>
                 </View>
                 <View style={styles.tab}>
-                    <Text 
-                        style={{color: 'blue'}}
-                        onPress={() => {setModalVisible(modalType.TIME)}}
-                    >{curTimeframe}</Text>
-                    <Text 
-                        style={{color: 'blue'}}
-                        onPress={() => {setModalVisible(modalType.CATEGORY)}}
-                    >{curCategory}</Text>
+                    <View style={{flexDirection:'row', alignItems: 'flex-end'}}>
+                        <Text 
+                            style={{color: 'blue'}}
+                            onPress={() => {setModalVisible(modalType.TIME)}}
+                        >{curTimeframe}</Text>
+                        <Ionicons
+                            name="chevron-down"
+                            color="blue"
+                            size={15}
+                        ></Ionicons>
+                    </View>
+                    <View style={{flexDirection:'row', alignItems: 'flex-end'}}>
+                        <Text 
+                            style={{color: 'blue'}}
+                            onPress={() => {setModalVisible(modalType.CATEGORY)}}
+                        >{curCategory.label}</Text>
+                        <Ionicons
+                            name="chevron-down"
+                            color="blue"
+                            size={15}
+                        ></Ionicons>
+                    </View> 
                 </View>
             </View>
             {/* Content */}
             <View style={styles.contentContainer}>
-                <PieChartSummary style={{height:500}}/>
+                <PieChartSummary
+                    style={{height:500}}
+                    values={values}
+                    keys={keys}
+                    curCategory={curCategory}
+                    setCurCategory={setCurCategory}
+                />
             </View>
             {/* Footer */}
             <View style={styles.footerContainer}>

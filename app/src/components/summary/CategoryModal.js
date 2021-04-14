@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
@@ -11,7 +11,8 @@ export function CategoryModal(
         curTimeframe,
         setCurTimeframe,
         curCategory,
-        setCurCategory,
+        changeCategory,
+        values,
     }) {
     const timeframe = ['This month', 'Last month', 'Last 3 months'];
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
@@ -49,7 +50,13 @@ export function CategoryModal(
                             {
                                 timeframe.map((frame) => { 
                                     return (
-                                        <ModalSlot textString={frame} selected={curTimeframe === frame} setSelected={setCurTimeframe}/>
+                                        <ModalSlot
+                                        textString={frame}
+                                        selected={curTimeframe === frame}
+                                        setSelected={setCurTimeframe}
+                                        setModalVisible={setModalVisible}
+                                        isValid = {true}
+                                        />
                                     )
                                 })
                             }
@@ -60,9 +67,16 @@ export function CategoryModal(
                         modalVisible === modalType.CATEGORY &&
                         <View style={{marginBottom: 50}}>
                             {
-                                categories.map((cat) => { 
+                                categories.map((cat, index) => { 
                                     return (
-                                        <ModalSlot textString={cat} selected={curCategory === cat} setSelected={setCurCategory}/>
+                                        <ModalSlot
+                                            key={cat}
+                                            textString={cat}
+                                            selected={curCategory.label === cat}
+                                            setSelected={changeCategory}
+                                            setModalVisible={setModalVisible}
+                                            isValid={index === 0 || values[index - 1] !== 0 ? true : false}
+                                        />
                                     )
                                 })
                             }
