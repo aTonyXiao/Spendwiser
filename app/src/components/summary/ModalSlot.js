@@ -15,7 +15,7 @@ export function ModalSlot(
             style={styles.slot}
             onPress={() => {isValid && setSelected(textString), isValid && setModalVisible(0)}}
         >
-            <Text style={isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
+            <Text style={setSelected === null || isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
             {selected === true ? 
                 <Ionicons
                     name="checkmark-sharp"

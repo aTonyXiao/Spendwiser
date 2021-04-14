@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
+import { summaryHelper } from './SummaryHelper';
 
 export function CategoryModal(
     {
@@ -13,6 +14,7 @@ export function CategoryModal(
         curCategory,
         changeCategory,
         values,
+        transactions,
     }) {
     const timeframe = ['This month', 'Last month', 'Last 3 months'];
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
@@ -37,7 +39,9 @@ export function CategoryModal(
                             ></Ionicons>
                         </TouchableOpacity>
                         <View style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                            {modalVisible === modalType.TIME ? <Text>Time period</Text> : <Text>Category</Text>}
+                            {modalVisible === modalType.TIME ? <Text>Time period</Text> : 
+                            modalVisible === modalType.CATEGORY ? <Text>Category</Text> : <Text>Transactions</Text>}
+                            
                         </View>
                         <View style= {{flex: 1}}></View>
                     </View>
@@ -79,6 +83,31 @@ export function CategoryModal(
                                             isValid={index === 0 || values[index - 1] !== 0 ? true : false}
                                         />
                                     )
+                                })
+                            }
+                        </View>
+                    }
+                    {/* Display transactions */}
+                    {
+                        modalVisible === modalType.TRANSACTIONS &&
+                        <View style={{marginBottom: 50}}>
+                            {
+                                transactions.map((transaction, index) => {
+                                    let curCatIdx = categories.indexOf(curCategory.label);
+                                    if (curCategory.label === 'All categories' || 
+                                        summaryHelper.matchTransactionToCategory(transaction) === curCatIdx - 1) {
+                                            return (
+                                                <ModalSlot
+                                                    key={index}
+                                                    textString={`${transaction['storeInfo']['storeName']} \t $${transaction['amountSpent']}`}
+                                                    selected={null}
+                                                    setSelected={null}
+                                                    setModalVisible={setModalVisible}
+                                                    isValid={false}
+                                                />
+                                            )
+                                        }
+                                       
                                 })
                             }
                         </View>

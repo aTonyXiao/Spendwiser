@@ -5,12 +5,13 @@ import { CategoryModal } from './CategoryModal';
 import { PieChartSummary } from './PieChartSummary';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
-import { dining, grocery, drugstore, gas, homeImprovement, travel } from '../main/RecommendCard';
+import { summaryHelper } from './SummaryHelper';
 
 const modalType = {
     DISABLED: 0,
     TIME: 1,
     CATEGORY: 2,
+    TRANSACTIONS: 3,
 }
 const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
 
@@ -34,21 +35,7 @@ export function SpendingSummary({navigation}) {
 
     function processTransactionsForSumamry(transaction) {
         let tmpValues = values;
-        if (dining.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[0] += parseFloat(transaction['amountSpent']);
-        } else if (grocery.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[1] += parseFloat(transaction['amountSpent']);
-        } else if (drugstore.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[2] += parseFloat(transaction['amountSpent']);
-        } else if (gas.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[3] += parseFloat(transaction['amountSpent']);
-        } else if (homeImprovement.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[4] += parseFloat(transaction['amountSpent']);
-        } else if (travel.includes(transaction['storeInfo']['storeType'])) {
-            tmpValues[5] += parseFloat(transaction['amountSpent']);
-        } else {
-            tmpValues[6] += parseFloat(transaction['amountSpent']);
-        }
+        tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
         setValues(tmpValues);
         setCurCategory((prevState) => {
             return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
@@ -88,6 +75,7 @@ export function SpendingSummary({navigation}) {
 
     useEffect(() => {
         setValues(Array(7).fill(0));
+        setTransactions([]);
         setCurCategory({
             label: 'All categories',
             value: 0,
@@ -112,6 +100,7 @@ export function SpendingSummary({navigation}) {
                 curCategory = {curCategory}
                 changeCategory = {changeCategory}
                 values = {values}
+                transactions = {transactions}
             />
             <Text style={styles.header}>Spendings & Transactions</Text>
             {/* Tabs */}
@@ -153,7 +142,19 @@ export function SpendingSummary({navigation}) {
                     keys={keys}
                     curCategory={curCategory}
                     setCurCategory={setCurCategory}
+                    setModalVisible={setModalVisible}
                 />
+                <View style={styles.viewType}>
+                    <Ionicons
+                        name="list-outline"
+                        color="blue"
+                        size={15}
+                    ></Ionicons>
+                    <Text 
+                        style={{color: 'blue'}}
+                        onPress={() => {console.log("Change content type")}}
+                    >List View</Text>
+                </View>
             </View>
             {/* Footer */}
             <View style={styles.footerContainer}>
@@ -182,6 +183,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'column',
         justifyContent: 'space-between',
+        paddingBottom: 10,
+        borderBottomWidth: 0.5,
     },
     tab: {
         flexDirection: 'row',
@@ -190,6 +193,13 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         width: '100%',
+    },
+    viewType: {
+        flexDirection:'row',
+        alignItems: 'flex-end',
+        paddingBottom: 20,
+        width: '100%',
+        justifyContent: 'center',
     },
     footerContainer: { 
         width: '100%',

@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
+import { Ionicons } from '@expo/vector-icons';
 
 export function PieChartSummary({
   curCategory,
   setCurCategory,
   keys,
-  values
+  values,
+  setModalVisible
   }) {
     const { label, value } = curCategory;
     const [labelWidth, setLabelWidth] = useState(0);
@@ -40,7 +42,18 @@ export function PieChartSummary({
             left: deviceWidth / 2 - labelWidth / 2,
             textAlign: 'center'
           }}>
-          {`${label} \n $${value.toFixed(2)}`}
+          {`${label} \n $${value.toFixed(2)} \n`}
+          <View style={{flexDirection:'row', alignItems: 'flex-end', marginBottom: 10}}>
+              <Text 
+                  style={{color: 'blue'}}
+                  onPress={() => {setModalVisible(3)}}
+              >Show Transactions</Text>
+              <Ionicons
+                  name="chevron-forward"
+                  color="blue"
+                  size={15}
+              ></Ionicons>
+          </View> 
         </Text>
       </View>
     )
