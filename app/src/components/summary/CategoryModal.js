@@ -51,6 +51,7 @@ export function CategoryModal(
                                 timeframe.map((frame) => { 
                                     return (
                                         <ModalSlot
+                                        key={frame}
                                         textString={frame}
                                         selected={curTimeframe === frame}
                                         setSelected={setCurTimeframe}
