@@ -9,13 +9,14 @@ export function ModalSlot(
         setSelected,
         setModalVisible,
         isValid,
+        amountSpent,
     }) {
     return (
         <TouchableOpacity 
             style={styles.slot}
-            onPress={() => {isValid && setSelected(textString), isValid && setModalVisible(0)}}
+            onPress={() => {isValid && setSelected(textString), (isValid && setModalVisible !== null) && setModalVisible(0)}}
         >
-            <Text style={setSelected === null || isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
+            <Text style={amountSpent !== null || isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
             {selected === true ? 
                 <Ionicons
                     name="checkmark-sharp"
@@ -23,6 +24,7 @@ export function ModalSlot(
                     size={24}
                 ></Ionicons>
                 :
+                amountSpent !== null ? <Text>${amountSpent}</Text> :
                 <View></View>
             }
         </TouchableOpacity>

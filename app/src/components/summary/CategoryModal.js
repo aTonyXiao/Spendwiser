@@ -61,6 +61,7 @@ export function CategoryModal(
                                         setSelected={setCurTimeframe}
                                         setModalVisible={setModalVisible}
                                         isValid = {true}
+                                        amountSpent ={null}
                                         />
                                     )
                                 })
@@ -81,6 +82,7 @@ export function CategoryModal(
                                             setSelected={changeCategory}
                                             setModalVisible={setModalVisible}
                                             isValid={index === 0 || values[index - 1] !== 0 ? true : false}
+                                            amountSpent ={null}
                                         />
                                     )
                                 })
@@ -99,11 +101,12 @@ export function CategoryModal(
                                             return (
                                                 <ModalSlot
                                                     key={index}
-                                                    textString={`${transaction['storeInfo']['storeName']} \t $${transaction['amountSpent']}`}
+                                                    textString={transaction['storeInfo']['storeName']}
                                                     selected={null}
                                                     setSelected={null}
                                                     setModalVisible={setModalVisible}
                                                     isValid={false}
+                                                    amountSpent={parseFloat(transaction['amountSpent']).toFixed(2)}
                                                 />
                                             )
                                         }

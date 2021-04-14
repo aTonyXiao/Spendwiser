@@ -6,6 +6,7 @@ import { PieChartSummary } from './PieChartSummary';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 import { summaryHelper } from './SummaryHelper';
+import { ListSummary } from './ListSummary';
 
 const modalType = {
     DISABLED: 0,
@@ -24,6 +25,7 @@ export function SpendingSummary({navigation}) {
     const [curTimeframe, setCurTimeframe] = useState('This month');
     const [transactions, setTransactions] = useState([]);
     const [values, setValues] = useState([]);
+    const [listViewEnabled, setListViewEnabled] = useState(false);
 
     function changeCategory(cat) {
         console.log(cat);
@@ -136,25 +138,33 @@ export function SpendingSummary({navigation}) {
             </View>
             {/* Content */}
             <View style={styles.contentContainer}>
-                <PieChartSummary
-                    style={{height:500}}
-                    values={values}
-                    keys={keys}
-                    curCategory={curCategory}
-                    setCurCategory={setCurCategory}
-                    setModalVisible={setModalVisible}
-                />
-                <View style={styles.viewType}>
-                    <Ionicons
-                        name="list-outline"
-                        color="blue"
-                        size={15}
-                    ></Ionicons>
-                    <Text 
-                        style={{color: 'blue'}}
-                        onPress={() => {console.log("Change content type")}}
-                    >List View</Text>
-                </View>
+                {!(listViewEnabled) ?
+                    <PieChartSummary
+                        style={{height:500}}
+                        values={values}
+                        keys={keys}
+                        curCategory={curCategory}
+                        setCurCategory={setCurCategory}
+                        setModalVisible={setModalVisible}
+                    />
+                    :
+                    <ListSummary
+                        setModalVisible={setModalVisible}
+                        changeCategory={changeCategory}
+                        values={values}
+                    />
+                }
+            </View>
+            <View style={styles.viewType}>
+                <Ionicons
+                    name="list-outline"
+                    color="blue"
+                    size={15}
+                ></Ionicons>
+                <Text 
+                    style={{color: 'blue', marginLeft: 5}}
+                    onPress={() => {setListViewEnabled(!listViewEnabled)}}
+                >{listViewEnabled ? "Chart View" : "List View"}</Text>
             </View>
             {/* Footer */}
             <View style={styles.footerContainer}>
