@@ -24,7 +24,9 @@ app.get("/cards/:cardId", async (req, res) => {
 
 // create card request
 app.post("/cards", async (req, res) => {
-    cardModel.create(req.body, (err, data) => {
+    let requestData = req.body;
+    requestData.dateAdded = Date.now();
+    cardModel.create(requestData, (err, data) => {
         if (err || data == null) res.sendStatus(500);
         else res.send(data._id);
     });
