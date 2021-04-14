@@ -53,6 +53,7 @@ class userClass {
      */
     async getCards(userId) { 
         userId = await userId;
+        console.log("Testing");
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
                 resolve(data);

@@ -75,7 +75,7 @@ class FirebaseBackend extends BaseBackend {
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -129,27 +129,37 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbGet(location, ...conditionsWithCallback) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        let callback = conditionsWithCallback.pop();
-        let conditions = conditionsWithCallback;
+        // TODO (Nathan W): Check local storage first before going to the firebase db
 
-        // filter if there are conditions
-        if (conditions.length > 0) {
-            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-        }
+        this.userAccountType((type) => {
+            let callback = conditionsWithCallback.pop();
+            if (type == 'normal') {
+                let databaseLocation = getDatabaseLocation(this.database, location);
+                let conditions = conditionsWithCallback;
 
-        // get the data
-        databaseLocation.get().then((query) => {
-            if (typeof query.get === "function") { // hacky way of checking if a doc
-                callback(query.data());
+                // filter if there are conditions
+                if (conditions.length > 0) {
+                    databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+                }
+
+                // get the data
+                databaseLocation.get().then((query) => {
+                    if (typeof query.get === "function") { // hacky way of checking if a doc
+                        callback(query.data());
+                    } else {
+                        query.forEach(doc => {
+                            callback(doc.data());
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
             } else {
-                query.forEach(doc => {
-                    callback(doc.data());
+                this.getUserID((accountId) => {
+                    storage.getLocalDB(accountId, location, callback);
                 });
             }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
     }
 
 
@@ -167,18 +177,28 @@ class FirebaseBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        let dbloc = getDatabaseLocation(this.database, location);
+        // TODO (Nathan W): Check local storage first before going to the firebase db
+        console.log("Get subcollections called");
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                let dbloc = getDatabaseLocation(this.database, location);
 
-        let collection = [];
-        dbloc.get().then((query) => {
-            query.forEach(doc => {
-                var currentDoc = doc.data();
-                currentDoc["docId"] = doc.id;
-                collection.push(currentDoc);
-            })
-            callback(collection);
-        }).catch((err) => {
-            console.log(err);
+                let collection = [];
+                dbloc.get().then((query) => {
+                    query.forEach(doc => {
+                        var currentDoc = doc.data();
+                        currentDoc["docId"] = doc.id;
+                        collection.push(currentDoc);
+                    })
+                    callback(collection);
+                }).catch((err) => {
+                    console.log(err);
+                })
+            } else {
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, callback);
+                });
+            }
         })
     }
 
@@ -221,7 +241,12 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false) {
+        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
+            this.getUserID((accountId) => {
+                storage.setLocalDB(accountId, location, data, merge);
+            });
+
             let databaseLocation = getDatabaseLocation(this.database, location);
             if (state.signed_in && !state.offline) {
                 databaseLocation.set(data, { merge: merge }).catch((err) => {
@@ -249,11 +274,23 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbAdd(location, data, callback) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.add(data).then((query) => {
-            callback(query.id);
-        }).catch((err) => {
-            console.log(err);
+        // Add card data to our internal storage
+        this.getUserID((accountId) => {
+
+            if (accountId != 'offline') {
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {});
+                // Add card data to our firebase storage
+                let databaseLocation = getDatabaseLocation(this.database, location);
+                databaseLocation.add(data).then((query) => {
+                    callback(query.id);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            } else {
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    callback(local_query_id);
+                });
+            }
         });
     }
 
@@ -284,7 +321,7 @@ class FirebaseBackend extends BaseBackend {
             .then((userCredential) => {
                 var user = userCredential.user;
                 console.log("Sign up successful");
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -303,7 +340,7 @@ class FirebaseBackend extends BaseBackend {
     signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                storage.storeLoginState({ 'signed_in': true, 'offline': false });
+                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -315,7 +352,7 @@ class FirebaseBackend extends BaseBackend {
      * Uses the storage API to set the login state to 'logged in' and 'offline'
      */
     signInOffline() {
-        storage.storeLoginState({ 'signed_in': true, 'offline': true });
+        storage.storeLoginState({ 'signed_in': true, 'account_type': 'offline' });
         if (onAuthStateChangeCallback) {
             console.log("calling back");
             onAuthStateChangeCallback();
@@ -330,14 +367,14 @@ class FirebaseBackend extends BaseBackend {
             if (state == null) return;
 
             if (state.signed_in && state.offline) {
-                storage.storeLoginState({ 'signed_in': false, 'offline': true });
+                storage.storeLoginState({ 'signed_in': false, 'account_type': 'offline' });
                 if (onAuthStateChangeCallback != null) {
                     onAuthStateChangeCallback();
                 }
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
-                    storage.storeLoginState({ 'signed_in': false, 'offline': false });
+                    storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
                     return;
                 }).catch((error) => {
                     // An error happened.
@@ -359,6 +396,12 @@ class FirebaseBackend extends BaseBackend {
         };
     }
 
+    userAccountType(callback) {
+        storage.getLoginState((state) => {
+            callback(state.account_type);
+        })
+    }
+
     /**
      * Resets the user's password.
      * 
@@ -366,21 +409,26 @@ class FirebaseBackend extends BaseBackend {
      * @param {function} return_func - callback function on success and failure
      */
     resetPassword(email, return_func) {
-        var auth = firebase.auth();
-        if (email === null) {
-            var user = auth.currentUser;
-            email = user.email;
-        }
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                var auth = firebase.auth();
+                if (email === null) {
+                    var user = auth.currentUser;
+                    email = user.email;
+                }
 
-        // remove leading/trailing whitespace
-        email = email.trim();
+                // remove leading/trailing whitespace
+                email = email.trim();
 
-        auth.sendPasswordResetEmail(email).then(function () {
-            return_func("Success! An email has been sent to reset your password");
-        }).catch(function (error) {
-            return_func("Error! Invalid email address, please input a valid email");
-        });
-
+                auth.sendPasswordResetEmail(email).then(function () {
+                    return_func("Success! An email has been sent to reset your password");
+                }).catch(function (error) {
+                    return_func("Error! Invalid email address, please input a valid email");
+                });
+            } else {
+                return_func("Error! Cannot reset the password of an offline account");
+            }
+        })
     }
 
     /**
@@ -392,6 +440,7 @@ class FirebaseBackend extends BaseBackend {
             callback(state.signed_in);
         });
     }
+    
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
@@ -413,7 +462,7 @@ class FirebaseBackend extends BaseBackend {
      */
     getUserID(callback) {
         storage.getLoginState((state) => {
-            if (state.offline) {
+            if (state.account_type == 'offline') {
                 callback('offline');
             } else {
                 let user = firebase.auth().currentUser;
