@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // card schema for the format of a card in the cards collection
 const cardSchema = new mongoose.Schema({
