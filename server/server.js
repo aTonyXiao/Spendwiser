@@ -4,22 +4,20 @@ import mongoose from 'mongoose';
 const port = 3000
 const app = express();
 
-// connection status
-let response = "Not Connected";
-
-// what's being sent to the user
-app.get("/", (req, res) => {
-    res.send(response);
-});
-
 // try to connect to mongo using mongoose
+// TODO: refactor into multiple db and use its own module so mongoose isn't utilized in this file
+// ^https://github.com/Automattic/mongoose/wiki/3.8-Release-Notes#connection-pool-sharing
 mongoose.connect("mongodb://mongo-db:27017/test", {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
-    response = "Connected!";
+
+    app.get("/get_data", (req, res) => {
+        // TODO: get requests
+    });
+
+    // listen on the given port
+    app.listen(port, () => {
+        console.log("Server listening for requests on port: " + port);
+    });
 }).catch((err) => {
-    response = err;
+    console.log(err);
 });
 
-// listen on the given port
-app.listen(port, () => {
-    console.log("Server listening for requests on port: " + port);
-});
