@@ -43,7 +43,6 @@ export function MainScreen({navigation}) {
 
     function getRecCardFromDB(myRankedCards) {
         setRecCards(myRankedCards)
-        console.log(myRankedCards)
     }
 
     // Called when changing store to reload recommended cards
@@ -90,7 +89,6 @@ export function MainScreen({navigation}) {
                     key: addCount,
                 })
                 if (addCount == 0) {
-                    console.log("Attempting to set the CurStore state...");
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
                     recommendCard.getRecCards(storeType, getRecCardFromDB);
@@ -98,7 +96,6 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        console.log("Attempting to set the StoreArr...")
         setStoreArr(fetchStores);
     };
 
@@ -110,7 +107,6 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
-                console.log(user.getMainNeedsUpdate());
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
@@ -125,7 +121,6 @@ export function MainScreen({navigation}) {
 
     // Called on mount
     useEffect(() => {
-        console.log("got in main useeffect");
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
@@ -192,7 +187,7 @@ export function MainScreen({navigation}) {
             {/* Location text */}
             <View style={mapStyles.textContainer}>
                 <View style={mapStyles.locationTextContainer}>
-                    <Text>{isLoading? "Loading" : curStore}</Text>
+                    <Text>{isLoading ? "Loading" : curStore}</Text>
                     <Text>
                         {isLoading ? "" : storeArr[curStoreKey].vicinity}
                     </Text>

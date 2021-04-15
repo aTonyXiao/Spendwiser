@@ -143,6 +143,19 @@ let Settings = (props) => {
                             size={32}
                     ></Ionicons>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        storage.printLocalDB();
+                    }}
+                    style={styles.rowContainer}
+                >
+                    <Text>DEBUG print local storage</Text>
+                    <Ionicons
+                            name="chevron-forward-outline"
+                            color="gray"
+                            size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
             </View>
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />

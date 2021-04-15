@@ -1,8 +1,6 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-import { user } from '../../network/user';
 import {appBackend} from '../../network/backend'
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
@@ -59,7 +57,8 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
 
                         <TouchableOpacity
                             onPress={() => {
-                                navigateIfAuthorized(navigation, 'AddCardCamera', "Sign up with an account to use this feature");
+                                setModalVisible(!modalVisible);
+                                navigateIfAuthorized(navigation, 'ChooseImage', 'Sign up with an account to use this feature!');
                             }}
                             style={modalStyles.modalText}
                         >

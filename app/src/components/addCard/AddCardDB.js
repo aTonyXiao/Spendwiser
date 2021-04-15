@@ -38,7 +38,6 @@ export function AddCardDB({existingUserCards, navigation}) {
     }
     constructor();
 
-    console.log(existingUserCards);
     addCard = () => { 
         if (!query) {
             setDisplayErrorText(true);
