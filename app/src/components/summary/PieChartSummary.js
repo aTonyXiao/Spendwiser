@@ -40,20 +40,18 @@ export function PieChartSummary({
           style={{
             position: 'absolute',
             left: deviceWidth / 2 - labelWidth / 2,
-            textAlign: 'center'
+            textAlign: 'center',
           }}>
           {`${label} \n $${value.toFixed(2)} \n`}
-          <View style={{flexDirection:'row', alignItems: 'flex-end', marginBottom: 10}}>
-              <Text 
-                  style={{color: 'blue'}}
-                  onPress={() => {setModalVisible(3)}}
-              >Show Transactions</Text>
-              <Ionicons
-                  name="chevron-forward"
-                  color="blue"
-                  size={15}
-              ></Ionicons>
-          </View> 
+          <Text 
+              style={{color: 'blue'}}
+              onPress={() => {setModalVisible(3)}}
+          >Show Transactions</Text>
+          <Ionicons
+              name="chevron-forward"
+              color="blue"
+              size={15}
+          ></Ionicons>
         </Text>
       </View>
     )

@@ -47,24 +47,26 @@ export function SpendingSummary({navigation}) {
     function getTimeFrame() {
         let endTimeFrame, startTimeFrame;
         let month, date, year;
+        [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
+        if (year.length == 2) {
+            year = "20" + year;
+        }
+        endTimeFrame = new Date();
         switch (curTimeframe) {                
             case "Last month":
-                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
                 endTimeFrame = new Date("20" + (month - 1 !== -1 ? year : year - 1), (month - 1) % 12, 0);
                 startTimeFrame = new Date("20" + (month - 2 !== -1 ? year : year - 1), (month - 2) % 12);
                 break;
             case "Last 3 months":
-                endTimeFrame = new Date();
-                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
                 startTimeFrame = new Date("20" + (month - 3 >= 0 ? year : year - 1), month - 3 % 12);
                 break;
             default: 
-                /* Last Month */
-                endTimeFrame = new Date();
-                [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
-                startTimeFrame = new Date("20" + year, month - 1);
+                /* This Month */
+                startTimeFrame = new Date(year, month - 1);
                 break;
         }
+        console.log(startTimeFrame);
+        console.log(endTimeFrame);
         return [startTimeFrame, endTimeFrame];
     }
 
@@ -84,8 +86,8 @@ export function SpendingSummary({navigation}) {
         });
         const userId = user.getUserId();
         let [startTimeFrame, endTimeFrame] = getTimeFrame();
-        console.log(startTimeFrame);
-        console.log(endTimeFrame);
+        // console.log(startTimeFrame);
+        // console.log(endTimeFrame);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
             setTransactions(oldData => [...oldData, data]);
         });

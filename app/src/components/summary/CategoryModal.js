@@ -24,6 +24,7 @@ export function CategoryModal(
             animationType="slide"
             transparent={true}
             backdropOpacity={0.3}
+            statusBarTranslucent={true}
             visible={modalVisible !== modalType.DISABLED}
         >
             <View style={modalStyles.modalCenteredView}>

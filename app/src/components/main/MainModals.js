@@ -56,6 +56,7 @@ export function MainModals(
                 animationType="slide"
                 transparent={true}
                 backdropOpacity={0.3}
+                statusBarTranslucent={true}
                 visible={modalVisible}
             >
                 <View style={modalStyles.modalCenteredView}>
