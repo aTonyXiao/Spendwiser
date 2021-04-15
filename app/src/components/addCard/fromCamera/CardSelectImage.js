@@ -5,7 +5,7 @@ import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
 
 // TODO: change to "CardSelectFromImage"
-// TODO: handle no text
+// TODO: handle no texts
 
 /**
  * Page that allows user to select an image after taking a picture of their card
