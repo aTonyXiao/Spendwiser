@@ -54,11 +54,11 @@ export function SpendingSummary({navigation}) {
         endTimeFrame = new Date();
         switch (curTimeframe) {                
             case "Last month":
-                endTimeFrame = new Date("20" + (month - 1 !== -1 ? year : year - 1), (month - 1) % 12, 0);
-                startTimeFrame = new Date("20" + (month - 2 !== -1 ? year : year - 1), (month - 2) % 12);
+                endTimeFrame = new Date(month - 1 !== -1 ? year : year - 1, (month - 1) % 12, 0);
+                startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
                 break;
             case "Last 3 months":
-                startTimeFrame = new Date("20" + (month - 3 >= 0 ? year : year - 1), month - 3 % 12);
+                startTimeFrame = new Date(month - 3 >= 0 ? year : year - 1, month - 3 % 12);
                 break;
             default: 
                 /* This Month */
