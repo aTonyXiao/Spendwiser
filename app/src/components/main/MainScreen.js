@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Modal, StatusBar } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Button, 
+    Image, 
+    Dimensions, 
+    TouchableOpacity, 
+    SafeAreaView, 
+    Modal, 
+    StatusBar 
+} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { TextInput } from 'react-native-gesture-handler';
@@ -30,8 +41,6 @@ export function MainScreen({navigation}) {
         longitudeDelta: 0.0051,
     })
     const [isLoading, setLoading] = useState(true);
-    const [places, setPlaces] = useState([]);
-    const [amountSpent, setAmountSpent] = useState("");
     const [storeArr, setStoreArr] = useState([]);
     const [curStore, setCurStore] = useState(null);
     const [curStoreKey, setCurStoreKey] = useState(null);
@@ -43,6 +52,7 @@ export function MainScreen({navigation}) {
     const [manualModal, setManualModal] = useState(false);
     const isFocused = useIsFocused();
     const [addedManual, setAddedManual] = useState(false);
+    const emptyArr = [];
       
     function setOfflineMode() {
         setStoreArr([{
@@ -58,13 +68,11 @@ export function MainScreen({navigation}) {
 
     function getRecCardFromDB(myRankedCards) {
         setRecCards(myRankedCards)
-        console.log(myRankedCards)
     }
 
     function changeRecCard(value, key) {
         if (key !== curStoreKey) {
             let category = storeArr[key]["storeType"];
-            // console.log("change rec card -> store name: " + storeArr[key]["value"] + " store type: " + storeArr[key]["storeType"]);
             recommendCard.getRecCards(category, getRecCardFromDB);
             setCurStore(value);
             setCurStoreKey(key);
@@ -79,7 +87,6 @@ export function MainScreen({navigation}) {
     }
 
     function getLocationFromAPI(json) {
-        setPlaces(json.results);
         let fetchResult = json.results;
         let fetchStores = [];
 
@@ -105,7 +112,6 @@ export function MainScreen({navigation}) {
                     key: addCount,
                 })
                 if (addCount == 0) {
-                    console.log("Attempting to set the CurStore state...");
                     setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
                     setCurStoreKey(0);
                     recommendCard.getRecCards(storeType, getRecCardFromDB);
@@ -113,7 +119,6 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        console.log("Attempting to set the StoreArr...")
         setStoreArr(fetchStores);
     };
 
@@ -124,11 +129,9 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
-                console.log(user.getMainNeedsUpdate());
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
-                    console.log("reset rec cards");
                     reloadRecCard();
                     user.setMainNeedsUpdate(false);
                 }
@@ -140,14 +143,12 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         if (isLoading === false) {
             setRecCards(null);
-            console.log("reset rec cards");
             reloadRecCard();
             setAddedManual(false);
         }
     }, [addedManual]);
 
     useEffect(() => {
-        console.log("got in main useeffect");
         (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
@@ -327,8 +328,6 @@ export function MainScreen({navigation}) {
                                             setManualModal(false);
                                             if (manualInput.storeType.length != 0) {
                                                 let storeArrLen = (storeArr.length).toString();
-                                                console.log(storeArrLen);
-                                                console.log(manualInput.storeName, manualInput.vicinity, manualInput.storeType);
                                                 let manualInputObj = {
                                                     label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
@@ -337,7 +336,6 @@ export function MainScreen({navigation}) {
                                                     key: Object.keys(storeArr).length,
                                                 }
                                                 setStoreArr(storeList => storeList.concat(manualInputObj));
-                                                let value = manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName;
                                                 setCurStore(manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName);
                                                 setCurStoreKey(Object.keys(storeArr).length);
                                                 setManualInput({storeName: "", vicinity: "", storeType: ""});
@@ -372,7 +370,7 @@ export function MainScreen({navigation}) {
             {/* Location text */}
             <View style={mapStyles.textContainer}>
                 <View style={mapStyles.locationTextContainer}>
-                    <Text>{isLoading? "Loading" : curStore}</Text>
+                    <Text>{isLoading ? "Loading" : curStore}</Text>
                     <Text>
                         {isLoading ? "" : storeArr[curStoreKey].vicinity}
                     </Text>

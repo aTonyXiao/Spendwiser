@@ -48,7 +48,6 @@ function filterDatabaseCollection(collection, conditions) {
  * For more reference: https://firebase.google.com/docs/firestore/data-model
  */
 class FirebaseBackend extends BaseBackend {
-
     /**
      * This function initializes the Backend
      */
