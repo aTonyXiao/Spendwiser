@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
-
-let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
-let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
-let drugstore = ['Drugstore'];
-let gas = ['Gas station'];
-let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
+export let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
+export let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
+export let drugstore = ['Drugstore', 'Pharmacy'];
+export let gas = ['Gas station'];
+export let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
     'hardware store', 'Plumber', 'Roofing contractor'];
-let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
+export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
     'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo']
 
 class RecommendCard {
@@ -37,7 +35,6 @@ class RecommendCard {
         let category = this.getCategory(googleCategory);
         let myCards = [];
         let tmpCardId = "";
-        let tmpCardCatReward = null;
         // Get list of user's cards
         let dbCards = await user.getCards(userId);
         // For each card, get the category reward value
@@ -57,7 +54,6 @@ class RecommendCard {
             });
         }
         myCards.sort((a, b) => (a.cardCatReward < b.cardCatReward ? 1 : -1))
-        // console.log(myCards);
         callback(myCards);
     }
 }

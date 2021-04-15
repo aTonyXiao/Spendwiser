@@ -16,6 +16,7 @@ import { AppPermissions } from './src/components/settings/Permissions';
 import { PrivacyPolicy } from './src/components/settings/PrivacyPolicy';
 import { Account } from './src/components/settings/Account';
 import { About } from './src/components/settings/About';
+import { SpendingSummary } from './src/components/summary/SpendingSummary';
 import { EditImage } from './src/components/addCard/fromCamera/EditImage';
 import { ChooseImage } from './src/components/addCard/fromCamera/ChooseImage';
 import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectImage';
@@ -60,6 +61,10 @@ export default function App() {
         <Stack.Screen
           name="CardInfo"
           component={DisplayCard}
+        />
+        <Stack.Screen
+          name="SpendingSummary"
+          component={SpendingSummary}
         />
         <Stack.Screen
         name="Settings"
