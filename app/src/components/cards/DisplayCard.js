@@ -50,11 +50,20 @@ function DisplayCard({route, navigation}) {
             setCurrentTransactionIndex(-1);
             setShowEditTransactionOption(false);
             user.getTransactionsForCard(userId, cardId, (data) => {
+                console.log("Got transaction data");
+                console.log(data);
                 setTransactions((transactions) => { 
-                    const newTransactions = [...transactions, data];
-                    return newTransactions;
+                    if (data) {
+                        if (Array.isArray(data)) {
+                            return [...transactions, ...data];
+                        } else {
+                            return [...transactions, data];
+                        }
+                    }
+                    else {
+                        return transactions;
+                    }
                 })
-                    
                 setDisplayTransactions(true);
             })
 
@@ -146,7 +155,10 @@ function DisplayCard({route, navigation}) {
                         <View>
                             {
                                 transactions.map((transaction, i) => {
-                                    var date = transaction.dateAdded.toDate().toDateString();
+                                    // TODO: I don't know what the best way to fix this is rn
+                                    // The offline storage used an object to represent time and the
+                                    // firebase db used a string....
+                                    var date = transaction.dateAdded;
                                     var name = transaction.storeInfo.storeName;
                                     var dollarAmount = transaction.amountSpent;
                                     return (

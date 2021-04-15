@@ -133,25 +133,30 @@ class FirebaseBackend extends BaseBackend {
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
             if (type == 'normal') {
-                let databaseLocation = getDatabaseLocation(this.database, location);
-                let conditions = conditionsWithCallback;
+                this.getUserID((accountId) => {
+                    // TODO: No way to filter locally?
+                    storage.getLocalDB(accountId, location, (data) => {
+                        let databaseLocation = getDatabaseLocation(this.database, location);
+                        let conditions = conditionsWithCallback;
 
-                // filter if there are conditions
-                if (conditions.length > 0) {
-                    databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-                }
+                        // filter if there are conditions
+                        if (conditions.length > 0) {
+                            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+                        }
 
-                // get the data
-                databaseLocation.get().then((query) => {
-                    if (typeof query.get === "function") { // hacky way of checking if a doc
-                        callback(query.data());
-                    } else {
-                        query.forEach(doc => {
-                            callback(doc.data());
+                        // get the data
+                        databaseLocation.get().then((query) => {
+                            if (typeof query.get === "function") { // hacky way of checking if a doc
+                                callback(query.data());
+                            } else {
+                                query.forEach(doc => {
+                                    callback(doc.data());
+                                });
+                            }
+                        }).catch((err) => {
+                            console.log(err);
                         });
-                    }
-                }).catch((err) => {
-                    console.log(err);
+                    });
                 });
             } else {
                 this.getUserID((accountId) => {
@@ -177,7 +182,6 @@ class FirebaseBackend extends BaseBackend {
      */
     dbGetSubCollections(location, callback) {
         // TODO (Nathan W): Check local storage first before going to the firebase db
-        console.log("Get subcollections called");
         this.userAccountType((type) => {
             if (type == 'normal') {
                 let dbloc = getDatabaseLocation(this.database, location);
@@ -239,19 +243,25 @@ class FirebaseBackend extends BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet(location, data, merge = false) {
+    dbSet(location, data, merge = false, callback) {
         // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
             this.getUserID((accountId) => {
-                storage.setLocalDB(accountId, location, data, merge);
+                // Store locally
+                storage.setLocalDB(accountId, location, data, merge, () => {
+
+                    // Store on firebase if possible
+                    let databaseLocation = getDatabaseLocation(this.database, location);
+                    if (state.signed_in && !state.offline) {
+                        databaseLocation.set(data, { merge: merge }).catch((err) => {
+                            console.log(err);
+                        });
+                    }
+
+                    callback();
+                });
             });
 
-            let databaseLocation = getDatabaseLocation(this.database, location);
-            if (state.signed_in && !state.offline) {
-                databaseLocation.set(data, { merge: merge }).catch((err) => {
-                    console.log(err);
-                });
-            }
 
             // TODO: (Nathan W) Store local copy as well
         })
@@ -275,16 +285,21 @@ class FirebaseBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
-
             if (accountId != 'offline') {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {});
-                // Add card data to our firebase storage
-                let databaseLocation = getDatabaseLocation(this.database, location);
-                databaseLocation.add(data).then((query) => {
-                    callback(query.id);
-                }).catch((err) => {
-                    console.log(err);
+                // Add data locally
+                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+
+                    // Add data to our firebase storage
+                    let databaseLocation = getDatabaseLocation(this.database, location);
+                    databaseLocation.add(data).then((query) => {
+                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
+                        callback(query.id);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
                 });
+
             } else {
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
                     callback(local_query_id);
@@ -439,7 +454,7 @@ class FirebaseBackend extends BaseBackend {
             callback(state.signed_in);
         });
     }
-    
+
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
@@ -482,7 +497,7 @@ class FirebaseBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now();
+        return firebase.firestore.Timestamp.now().toDate().toString();
     }
 
     /**

@@ -44,6 +44,8 @@ class userClass {
         appBackend.dbSet("users." + userId, { 
             dateCreated: date
             // TODO: maybe add name and email here?
+        }, false, () => {
+            // TODO: introduce callback?
         });
     }
 
@@ -53,7 +55,6 @@ class userClass {
      */
     async getCards(userId) { 
         userId = await userId;
-        console.log("Testing");
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
                 resolve(data);
@@ -155,7 +156,9 @@ class userClass {
         appBackend.dbSet("users." + userId + ".transactions." + docId, {
             docId: docId
         }, 
-        true)
+        true, () => {
+            // TODO: introduce callback?
+        });
     }
 
     /**
@@ -204,7 +207,9 @@ class userClass {
      */
     async editTransaction(userId, docId, data) { 
         userId = await userId;
-        appBackend.dbSet("users." + userId + ".transactions." + docId, data, true);
+        appBackend.dbSet("users." + userId + ".transactions." + docId, data, true, () => {
+            // TODO: Introduce callback?
+        });
     }
 
     /**
