@@ -1,13 +1,13 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, Modal, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
-import {makeCancelable} from '../util/promise-helper'
+import { makeCancelable } from '../util/promise-helper'
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -28,7 +28,9 @@ function YourCards({ route, navigation }) {
 
     const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
+        console.log('trying to get cards');
         cancelableGetCards.promise.then(cards => {
+            console.log('success');
             setCards([]);
             setCards(cards); 
         }).catch(({isCanceled, ...error}) => {});
