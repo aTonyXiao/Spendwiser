@@ -26,11 +26,21 @@ export const getLoginState = async (callback) => {
     }
 }
 
+dateTimeReviver = function (key, value) {
+    if (typeof value === 'string') {
+        let date_val = Date.parse(value);
+        if (date_val) {
+            return new Date(date_val);
+        }
+    }
+    return value;
+}
+
 export const getDB = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('@db');
         if (jsonValue != null) {
-            var cards = JSON.parse(jsonValue);
+            var cards = JSON.parse(jsonValue, dateTimeReviver);
             callback(cards);
         } else {
             callback({});
@@ -175,9 +185,6 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 data = Object.values(db[accountName][location]);
             }
 
-            console.log("Conditions:" );
-            console.log(conditions);
-
             var comp_op = {
                 '==': function (x, y) { return x == y},
                 '>': function (x, y) { return x > y},
@@ -194,7 +201,21 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 for (let j = 0; j < data.length; j++) {
                     let d = data[j];
                     const dataval = d[key];
-                    console.log(dataval);
+
+                    // Convert to date objects if possible
+                    if (typeof dataval == 'string') {
+                        let dataval_date = Date.parse(dataval);
+                        if (dataval_date) {
+                            dataval = dataval_date;
+                        }
+                    }
+                    if (typeof value == 'string') {
+                        let value_date = Date.parse(value);
+                        if (value_date) {
+                            value = value_date;
+                        }
+                    }
+                        
                     if (comp_op[op](dataval, value)) {
                         filtered_data.push(d); 
                     }
