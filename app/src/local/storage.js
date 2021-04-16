@@ -151,10 +151,13 @@ export const clearLocalDB = async () => {
     await AsyncStorage.removeItem("@db");
 }
 
-export const getLocalDB = async (accountName, location, callback) => {
+export const getLocalDB = async (accountName, location, ...conditionWithCallback) => {
+
     const [document, id] = parseDocAndId(location);
     try {
         getDB(async (db) => {
+            let callback = conditionWithCallback.pop();
+            let conditions = conditionWithCallback;
             if (storage_debug) {
                 console.log("----------------------");
                 console.log("Getting Locally");
@@ -165,12 +168,43 @@ export const getLocalDB = async (accountName, location, callback) => {
                 console.log("----------------------");
             }
 
+            let data = [];
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
-                callback(db[accountName][document][id]);
+                data = db[accountName][document][id];
             } else if (accountName in db && location in db[accountName]) {
-                callback(Object.values(db[accountName][location]));
+                data = Object.values(db[accountName][location]);
+            }
+
+            console.log("Conditions:" );
+            console.log(conditions);
+
+            var comp_op = {
+                '==': function (x, y) { return x == y},
+                '>': function (x, y) { return x > y},
+                '<': function (x, y) { return x < y},
+            }
+
+            let filtered_data = [];
+            for (let i = 0; i < conditions.length; i++) {
+                let condition = conditions[i];
+                let key = condition[0];
+                let op = condition[1];
+                let value = condition[2];
+
+                for (let j = 0; j < data.length; j++) {
+                    let d = data[j];
+                    const dataval = d[key];
+                    console.log(dataval);
+                    if (comp_op[op](dataval, value)) {
+                        filtered_data.push(d); 
+                    }
+                }
+            }
+
+            if (conditions.length > 0) {
+                callback(filtered_data);
             } else {
-                callback([]);
+                callback(data);
             }
         });
     } catch (e) {

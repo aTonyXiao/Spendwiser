@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import { cond } from 'react-native-reanimated';
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -132,12 +133,15 @@ class FirebaseBackend extends BaseBackend {
 
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
+            let conditions = conditionsWithCallback;
+            console.log("db get conditions");
+            console.log(conditions);
+
             if (type == 'normal') {
                 this.getUserID((accountId) => {
                     // TODO: No way to filter locally?
-                    storage.getLocalDB(accountId, location, (data) => {
+                    storage.getLocalDB(accountId, location, ...conditionsWithCallback, (data) => {
                         let databaseLocation = getDatabaseLocation(this.database, location);
-                        let conditions = conditionsWithCallback;
 
                         // filter if there are conditions
                         if (conditions.length > 0) {
@@ -160,7 +164,7 @@ class FirebaseBackend extends BaseBackend {
                 });
             } else {
                 this.getUserID((accountId) => {
-                    storage.getLocalDB(accountId, location, callback);
+                    storage.getLocalDB(accountId, location, ...conditionsWithCallback, callback);
                 });
             }
         })
