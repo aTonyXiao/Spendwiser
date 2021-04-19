@@ -7,7 +7,7 @@ import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
 import { cond } from 'react-native-reanimated';
-import { appBackend } from '../backend';
+import {consolidateLocalAndRemoteData} from './basebackend'
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -40,38 +40,6 @@ function filterDatabaseCollection(collection, conditions) {
         filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
     }
     return filteredCollection;
-}
-
-
-function consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
-    let local_data_stripped = storage.stripMetadata(local_data);
-
-    // Check if there are no changes b/w the two pieces of data
-    if (remote_data == local_data_stripped) {
-        return;
-    }
-    
-    // Check if the data exists locally at all
-    else if (typeof local_data == 'array' && local_data.isEmpty()) {
-        storage.addLocalDB(accountName, location, remote_data);
-    } else if (Object.keys(local_data).length === 0) {
-        storage.addLocalDB(accountName, location, remote_data);
-    }
-
-    // Check if the data locally exists, but has not been synced
-    else if (local_data['meta_synced'] == false && remote_data) {
-        // The data exists locally AND remotely, but changes to the local version have
-        // not been synced with the remote version
-
-        // Update the remote data with our local changes
-        appBackend.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
-            storage.modifyDBEntryMetainfo(accountName, location, true, location, location);
-        });
-    } else if (local_data['meta_synced'] == false) {
-        // The remote data does not exist in any form yet.
-        // Create it, then update our local data with the correct id
-        appBackend.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {});
-    }
 }
 
 /**
