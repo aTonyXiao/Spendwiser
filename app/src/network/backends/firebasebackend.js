@@ -105,6 +105,64 @@ class FirebaseBackend extends BaseBackend {
             console.log(err);
         }
     }
+    consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
+        let local_data_stripped = storage.stripMetadata(local_data);
+
+        // Check if there are no changes b/w the two pieces of data
+        if (remote_data == local_data_stripped) {
+            return;
+        }
+        
+        // Check if the data exists locally at all
+        else if ((typeof local_data == 'array' && local_data.isEmpty()) ||
+                (Object.keys(local_data).length === 0)) {
+            let [document, id] = storage.parseDocAndId(location);
+            storage.addLocalDB(accountName, document, remote_data, (assigned_id) => {
+                storage.modifyDBEntryMetainfo(accountName, document, true, assigned_id, id);
+            })
+        }
+
+        // Check if the data locally exists, but has not been synced
+        else if (local_data['meta_synced'] == false && remote_data) {
+            // The data exists locally AND remotely, but changes to the local version have
+            // not been synced with the remote version
+
+            // Update the remote data with our local changes
+            this.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
+                storage.modifyDBEntryMetainfo(accountName, location, true, location, location);
+            });
+        } else if (local_data['meta_synced'] == false) {
+            // The remote data does not exist in any form yet.
+            // Create it, then update our local data with the correct id
+            this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {});
+        }
+    }
+
+    firebaseDbGet(location, ...conditionsWithCallback) {
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+
+        let databaseLocation = getDatabaseLocation(this.database, location);
+
+        // filter if there are conditions
+        if (conditions.length > 0) {
+            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+        }
+
+        // get the data
+        databaseLocation.get().then((query) => {
+            if (typeof query.get === "function") { // hacky way of checking if a doc
+                callback(query.data());
+            } else {
+                query.forEach(doc => {
+                    callback(doc.data());
+                });
+            }
+        }).catch((err) => {
+            console.log("Invalid query")
+            console.log(err);
+        });
+    }
 
     /**
      * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
@@ -132,35 +190,26 @@ class FirebaseBackend extends BaseBackend {
 
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
+            let conditions = conditionsWithCallback;
+            console.log("db get conditions");
+            console.log(conditions);
+
             if (type == 'normal') {
                 this.getUserID((accountId) => {
-                    // TODO: No way to filter locally?
-                    storage.getLocalDB(accountId, location, (data) => {
-                        let databaseLocation = getDatabaseLocation(this.database, location);
-                        let conditions = conditionsWithCallback;
-
-                        // filter if there are conditions
-                        if (conditions.length > 0) {
-                            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-                        }
-
-                        // get the data
-                        databaseLocation.get().then((query) => {
-                            if (typeof query.get === "function") { // hacky way of checking if a doc
-                                callback(query.data());
-                            } else {
-                                query.forEach(doc => {
-                                    callback(doc.data());
-                                });
-                            }
-                        }).catch((err) => {
-                            console.log(err);
+                    // Get the data from firebase
+                    this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
+                        // Get the data (if any) from the local db
+                        storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
+                            this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                            callback(remote_data);
                         });
-                    });
+                    })
+
+
                 });
             } else {
                 this.getUserID((accountId) => {
-                    storage.getLocalDB(accountId, location, callback);
+                    storage.getLocalDB(accountId, location, ...conditionsWithCallback, callback);
                 });
             }
         })
@@ -292,6 +341,7 @@ class FirebaseBackend extends BaseBackend {
                     // Add data to our firebase storage
                     let databaseLocation = getDatabaseLocation(this.database, location);
                     databaseLocation.add(data).then((query) => {
+                        // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
                         callback(query.id);
                     }).catch((err) => {
@@ -497,7 +547,7 @@ class FirebaseBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now().toDate().toString();
+        return firebase.firestore.Timestamp.now().toDate()
     }
 
     /**

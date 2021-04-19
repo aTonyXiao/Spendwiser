@@ -1,6 +1,5 @@
 import BaseBackend from './backends/basebackend'
 import FirebaseBackend from './backends/firebasebackend';
-
 /**
  * The wrapped backend that the app will interface with.  Functions
  * inherited from 'BaseBackend' can be invoked from this object to
