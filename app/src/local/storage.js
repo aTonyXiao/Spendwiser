@@ -71,6 +71,17 @@ const addOrUpdateMetainfo = (local_data, isSynced = false) => {
     return local_data;
 }
 
+export const stripMetadata = (data) => {
+    let stripped_data = JSON.parse(JSON.stringify(data));
+    if ('meta_modified' in data) {
+        delete stripped_data['meta_modified'];
+    }
+    if ('meta_synced' in data) {
+        delete stripped_data['meta_synced'];
+    }
+    return stripped_data;
+}
+
 export const addLocalDB = async (accountName, location, data, callback) => {
     // Create a copy so that we don't modify the original data
     let local_data = JSON.parse(JSON.stringify(data));

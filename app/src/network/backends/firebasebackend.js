@@ -41,6 +41,25 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
+
+function consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
+    let local_data_stripped = storage.stripMetadata(local_data);
+
+    // Check if there are no changes b/w the two pieces of data
+    if (remote_data == local_data_stripped) {
+        return;
+    }
+    
+    // Check if the data exists locally at all
+    else if (typeof local_data == 'array' && local_data.isEmpty()) {
+        storage.addLocalDB(accountName, location, remote_data);
+    } else if (Object.keys(local_data).length === 0) {
+        storage.addLocalDB(accountName, location, remote_data);
+    }
+
+    // TODO (Nathan W): Check if the data locally exists, but has not been synced
+}
+
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
@@ -107,6 +126,32 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
+    firebaseDbGet(location, ...conditionsWithCallback) {
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+
+        let databaseLocation = getDatabaseLocation(this.database, location);
+
+        // filter if there are conditions
+        if (conditions.length > 0) {
+            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
+        }
+
+        // get the data
+        databaseLocation.get().then((query) => {
+            if (typeof query.get === "function") { // hacky way of checking if a doc
+                callback(query.data());
+            } else {
+                query.forEach(doc => {
+                    callback(doc.data());
+                });
+            }
+        }).catch((err) => {
+            console.log("Invalid query")
+            console.log(err);
+        });
+    }
+
     /**
      * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
      * where the callback is called for each document in the collection
@@ -139,28 +184,16 @@ class FirebaseBackend extends BaseBackend {
 
             if (type == 'normal') {
                 this.getUserID((accountId) => {
-                    // TODO: No way to filter locally?
-                    storage.getLocalDB(accountId, location, ...conditionsWithCallback, (data) => {
-                        let databaseLocation = getDatabaseLocation(this.database, location);
-
-                        // filter if there are conditions
-                        if (conditions.length > 0) {
-                            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-                        }
-
-                        // get the data
-                        databaseLocation.get().then((query) => {
-                            if (typeof query.get === "function") { // hacky way of checking if a doc
-                                callback(query.data());
-                            } else {
-                                query.forEach(doc => {
-                                    callback(doc.data());
-                                });
-                            }
-                        }).catch((err) => {
-                            console.log(err);
+                    // Get the data from firebase
+                    this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
+                        // Get the data (if any) from the local db
+                        storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
+                            consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                            callback(remote_data);
                         });
-                    });
+                    })
+
+
                 });
             } else {
                 this.getUserID((accountId) => {
