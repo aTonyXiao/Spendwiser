@@ -123,7 +123,7 @@ export const addLocalDB = async (accountName, location, data, callback) => {
     }
 }
 
-const parseDocAndId = (location) => {
+export const parseDocAndId = (location) => {
     // Extract the unique_id from location
     let loc = location.lastIndexOf('.');
     if (loc == -1) {
@@ -289,7 +289,9 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
             db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
 
             jsonValue = JSON.stringify(db);
-            await setDB(jsonValue);
+            setDB(jsonValue, () => {
+
+            });
         });
     } catch (e) {
         console.log(e);

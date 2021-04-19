@@ -6,8 +6,6 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
-import { cond } from 'react-native-reanimated';
-import {consolidateLocalAndRemoteData} from './basebackend'
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -107,6 +105,38 @@ class FirebaseBackend extends BaseBackend {
             console.log(err);
         }
     }
+    consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
+        let local_data_stripped = storage.stripMetadata(local_data);
+
+        // Check if there are no changes b/w the two pieces of data
+        if (remote_data == local_data_stripped) {
+            return;
+        }
+        
+        // Check if the data exists locally at all
+        else if ((typeof local_data == 'array' && local_data.isEmpty()) ||
+                (Object.keys(local_data).length === 0)) {
+            let [document, id] = storage.parseDocAndId(location);
+            storage.addLocalDB(accountName, document, remote_data, (assigned_id) => {
+                storage.modifyDBEntryMetainfo(accountName, document, true, assigned_id, id);
+            })
+        }
+
+        // Check if the data locally exists, but has not been synced
+        else if (local_data['meta_synced'] == false && remote_data) {
+            // The data exists locally AND remotely, but changes to the local version have
+            // not been synced with the remote version
+
+            // Update the remote data with our local changes
+            this.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
+                storage.modifyDBEntryMetainfo(accountName, location, true, location, location);
+            });
+        } else if (local_data['meta_synced'] == false) {
+            // The remote data does not exist in any form yet.
+            // Create it, then update our local data with the correct id
+            this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {});
+        }
+    }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
         let callback = conditionsWithCallback.pop();
@@ -170,7 +200,7 @@ class FirebaseBackend extends BaseBackend {
                     this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
                         // Get the data (if any) from the local db
                         storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
-                            consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                            this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             callback(remote_data);
                         });
                     })
