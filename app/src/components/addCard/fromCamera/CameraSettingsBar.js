@@ -3,10 +3,9 @@ import {
     View, 
     StyleSheet, 
     TouchableOpacity,
-    Modal,
-    Text
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { HelpModal } from './HelpModal';
 
 /**
  * Child component header bar that gives options to user while editing image
@@ -21,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
  */
 export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks, setShowSettingsBar, setSendToApi, forceReRender}) {
     const showDeleteIcon = (moveableBlocks.length > 0);
-    const [showHelpModal, setShowHelpModal] = useState(false);
+    const [showHelpModal, setShowHelpModal] = useState(false); //useState(showOnStart);
 
     const goBack = () => {
         navigation.navigate('ChooseImage');
@@ -59,34 +58,10 @@ export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks
 
     return (
         <View style={styles.container}>
-            {/* Help Modal */}
-            <Modal
-                transparent={true}
-                backdropOpacity={0.3}
-                statusBarTranslucent={true}
-                visible={showHelpModal}
-            >
-                <View style={styles.modalCenteredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity 
-                            onPress={() => { setShowHelpModal(false) }}
-                            style={styles.modalIcon}
-                        >
-                            <Ionicons
-                                name="close-circle-outline"
-                                color="black"
-                                size={26}
-                            ></Ionicons>
-                        </TouchableOpacity>
-                        <Text style={styles.modalText}>-Use the plus icon to add a box to hide confidential information</Text>
-                        <Text style={styles.modalText}>-Move the boxes by holding and dragging the white box in the center</Text>
-                        <Text style={styles.modalText}>-Resize the boxes by dragging any of the white boxes on the edge</Text>
-                        <Text style={styles.modalText}>-The currently selected boxes are colored yellow, and unselected boxes are black</Text>
-                        <Text style={styles.modalText}>-Select a box by tapping it</Text>
-                        <Text style={styles.modalText}>-Delete the currently selected box by clicking the "X" icon</Text>
-                    </View>
-                </View>
-            </Modal>
+            <HelpModal
+                showHelpModal={showHelpModal}
+                setShowHelpModal={setShowHelpModal}
+            ></HelpModal>
 
             {/* Go Back */}
             <View style={styles.leftContainer}>
@@ -194,26 +169,4 @@ const styles = StyleSheet.create({
     icon: {
         margin: 10
     },
-    modalCenteredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
-    },
-    modalView: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-    },
-    modalText: { 
-        margin: 10
-    },
-    modalIcon: { 
-        marginTop: 8,
-        marginLeft: 8
-    }
 })

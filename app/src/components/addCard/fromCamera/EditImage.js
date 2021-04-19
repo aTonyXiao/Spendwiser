@@ -8,11 +8,10 @@ import * as FileSystem from 'expo-file-system';
 import { Dimensions } from 'react-native';
 import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
-import { DoubleTap } from '../../util/DoubleTap';
 import { MoveableBlock } from './MoveableBlock';
 
 // TODO: add a "loading" or "getting results"
-// TODO: align this part so that it keeps photo dimensions and aligns to center
+// TODO: seems to be an issue if add photo from camera
 
 /**
  * Page for allowing user to edit their image before they send it to Google Cloud API
