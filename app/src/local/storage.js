@@ -307,3 +307,37 @@ export const printLocalDB = async () => {
         console.log(e);
     }
 }
+
+
+/**
+ * Function to store local variable that keeps track of if user wants
+ * to see help menu for adding card by camera
+ * @param {boolean} showCameraHelpMenu - true to show, false to hide on startup
+ */
+export const setShowCameraHelpMenu = async (showCameraHelpMenu) => {
+    try {
+        const jsonValue = JSON.stringify(showCameraHelpMenu);
+        await AsyncStorage.setItem('showCameraHelpMenu', jsonValue);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Function to get local variable that keeps track of if user wants
+ * to see help menu for adding card by camera
+ * @param {function} - callback function to apply to return value
+ */
+export const getShowCameraHelpMenu = async (callback) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('showCameraHelpMenu');
+        if (jsonValue == null) {
+            callback(true);
+        } else {
+            callback(JSON.parse(jsonValue));
+        }
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}

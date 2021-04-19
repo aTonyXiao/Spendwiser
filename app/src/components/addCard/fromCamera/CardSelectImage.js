@@ -47,7 +47,7 @@ export function CardSelectImage({route, navigation}) {
                 // filter card names for detected words from imag
                 originalCardNames.forEach(cardName => { 
                     for (let i=0 ; i<text.length ; i++) { 
-                        detectedWord = text[i];
+                        let detectedWord = text[i];
 
                         const regex = new RegExp(`${detectedWord.trim()}`, 'i');
                         if ((cardName.search(regex) >= 0) && (!matchedCardNames.includes(cardName))) { 
@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
         marginTop: 30,
         alignSelf: 'center', 
         fontSize: 18,
-        marginBottom: 10
+        marginBottom: 10,
+        textDecorationLine: 'underline'
     }, 
     body: {
         margin: 5

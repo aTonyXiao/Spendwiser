@@ -8,14 +8,10 @@ import * as FileSystem from 'expo-file-system';
 import { Dimensions } from 'react-native';
 import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
-import { DoubleTap } from '../../util/DoubleTap';
 import { MoveableBlock } from './MoveableBlock';
 
 // TODO: add a "loading" or "getting results"
-// TODO: add functionality for from camera
-// TODO: move choose image functionality to ChooseImage page, 
-//         this page will be for editing image before sending it to google cloud
-// TODO: align this pat so that it keeps photo dimensions and aligns to center
+// TODO: seems to be an issue if add photo from camera
 
 /**
  * Page for allowing user to edit their image before they send it to Google Cloud API
@@ -156,10 +152,11 @@ export function EditImage({route, navigation}) {
                 </View>
             }
 
-            {/* Image */}
-            <DoubleTap onDoubleTap={()=> setShowSettingsBar(!showSettingsBar)}>
-                <Image source={{uri: image}} style={styles.img}/>
-            </DoubleTap>
+            <Image 
+                source={{uri: image}} 
+                style={styles.img}
+                resizeMode='contain'
+            />
 
             {/* Settings Bar */}
             {
@@ -170,6 +167,7 @@ export function EditImage({route, navigation}) {
                     setMoveableBlocks={setMoveableBlocks}
                     setShowSettingsBar={setShowSettingsBar}
                     setSendToApi={setSendToApi}
+                    forceReRender={forceRerender}
                 />
             }
         </View>
@@ -178,8 +176,8 @@ export function EditImage({route, navigation}) {
 
 const styles = StyleSheet.create({ 
     img: { 
-        width: Dimensions.get('window').width * .90,
-        height: Dimensions.get('window').height * .90,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
         zIndex: 1,
         alignSelf: 'center',
     }, 

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { 
+    View,
+    Dimensions
+} from 'react-native';
 import { DragResizeBlock } from 'react-native-drag-resize';
 
 /**
@@ -23,8 +26,8 @@ export function MoveableBlock({moveableBlocks, setMoveableBlocks, i, forceReRend
     return (
         <View style={{zIndex: 900}}>
             <DragResizeBlock
-                x={0}
-                y={0}
+                x={Dimensions.get('window').width * .5 - 50}
+                y={Dimensions.get('window').width * .5 + 50}
                 onPress={()=> {
                     // choosing only the current block as selected
                     let newBlocks = moveableBlocks;
