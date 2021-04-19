@@ -296,6 +296,7 @@ class FirebaseBackend extends BaseBackend {
                     // Add data to our firebase storage
                     let databaseLocation = getDatabaseLocation(this.database, location);
                     databaseLocation.add(data).then((query) => {
+                        // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
                         callback(query.id);
                     }).catch((err) => {
