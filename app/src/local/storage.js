@@ -110,12 +110,13 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             }
 
             // Insert local_data in location
-            let id = Object.values(db[accountName][location]).length.toString();
-            db[accountName][location][id] = local_data;
+            let id = Object.values(db[accountName][location]).length
+            local_data['meta_id'] = id;
+            db[accountName][location][id.toString()] = local_data;
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
-                callback(id);
+                callback(id.toString());
             });
         });
     } catch (e) {
@@ -283,6 +284,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
             }
 
             db[accountName][location][newId] = db[accountName][location][oldId];
+            db[accountName][location][newId]['meta_id'] = newId;
             delete db[accountName][location][oldId];
 
             id = newId;

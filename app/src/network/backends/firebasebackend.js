@@ -9,6 +9,7 @@ import * as storage from '../../local/storage'
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
+let syncing_items = []
 
 
 /**
@@ -129,13 +130,40 @@ class FirebaseBackend extends BaseBackend {
 
             // Update the remote data with our local changes
             this.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
-                storage.modifyDBEntryMetainfo(accountName, location, true, location, location);
+                let [document, old_id] = storage.parseDocAndId(location);
+                storage.modifyDBEntryMetainfo(accountName, document, true, old_id, old_id);
             });
         } else if (local_data['meta_synced'] == false) {
             // The remote data does not exist in any form yet.
             // Create it, then update our local data with the correct id
-            this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {});
+            this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {
+                let [document, old_id] = storage.parseDocAndId(location);
+                storage.modifyDBEntryMetainfo(accountName, document, true, old_id, id);
+            });
         }
+    }
+
+    consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
+        for (let i = 0; i < local_collection.length; i++) {
+            let sync_id = location + local_collection[i]['meta_id'];
+
+            if (local_collection[i]['meta_synced'] == false && !syncing_items.includes(sync_id)) {
+                let local_data_stripped = storage.stripMetadata(local_collection[i]);
+
+                // Basically put a lock on the data we are syncing
+                syncing_items.push(sync_id);
+
+                this.dbFirebaseAdd(location, local_data_stripped, (id) => {
+                    storage.modifyDBEntryMetainfo(accountName, location, true, local_data['meta_id'], id);
+
+                    // Unlock on the data we synced
+                    syncing_items = syncing_items.filter(item => item !== local_data_stripped);
+               })
+            }
+        }
+
+
+        // TODO (Nathan W): Look through the remote_collection data as well
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
@@ -197,6 +225,8 @@ class FirebaseBackend extends BaseBackend {
             if (type == 'normal') {
                 this.getUserID((accountId) => {
                     // Get the data from firebase
+                    console.log("Getting from firebase");
+                    console.log("location: " + location);
                     this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
                         // Get the data (if any) from the local db
                         storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
@@ -233,19 +263,32 @@ class FirebaseBackend extends BaseBackend {
         // TODO (Nathan W): Check local storage first before going to the firebase db
         this.userAccountType((type) => {
             if (type == 'normal') {
-                let dbloc = getDatabaseLocation(this.database, location);
+                console.log("Getting from firebase");
+                console.log("location: " + location);
 
-                let collection = [];
-                dbloc.get().then((query) => {
-                    query.forEach(doc => {
-                        var currentDoc = doc.data();
-                        currentDoc["docId"] = doc.id;
-                        collection.push(currentDoc);
-                    })
-                    callback(collection);
-                }).catch((err) => {
-                    console.log(err);
-                })
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, (data) => {
+                        let dbloc = getDatabaseLocation(this.database, location);
+
+                        let collection = [];
+                        dbloc.get().then((query) => {
+                            query.forEach(doc => {
+                                var currentDoc = doc.data();
+                                currentDoc["docId"] = doc.id;
+                                collection.push(currentDoc);
+                            })
+
+                            this.consolidateLocalAndRemoteCollections(accountId, location, collection, data)
+                            if (collection.length == 0) {
+                                callback(data);
+                            } else {
+                                callback(collection);
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    });
+                });
             } else {
                 this.getUserID((accountId) => {
                     storage.getSubcollectionLocalDB(accountId, location, callback);
@@ -316,6 +359,16 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    dbFirebaseAdd(location, data, callback) {
+        // Add data to our firebase storage
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        databaseLocation.add(data).then((query) => {
+            callback(query.id);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -337,17 +390,11 @@ class FirebaseBackend extends BaseBackend {
             if (accountId != 'offline') {
                 // Add data locally
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
-
-                    // Add data to our firebase storage
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    databaseLocation.add(data).then((query) => {
+                   this.dbFirebaseAdd(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
-                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
-                        callback(query.id);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-
+                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id);
+                        callback(query_id);
+                   });
                 });
 
             } else {
