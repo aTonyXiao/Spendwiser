@@ -18,9 +18,13 @@ export function CategoryModal(
         cards,
         curCard,
         setCurCardFromModal,
+        modeType,
+        mode,
+        setMode,
     }) {
     const timeframe = ['This month', 'Last month', 'Last 3 months'];
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
+    const modes = [modeType.SUMMARY, modeType.COMPARE, modeType.BUDGET];
 
     return (
         <Modal
@@ -44,7 +48,9 @@ export function CategoryModal(
                         </TouchableOpacity>
                         <View style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                             {modalVisible === modalType.TIME ? <Text>Time period</Text> : 
-                            modalVisible === modalType.CATEGORY ? <Text>Category</Text> : <Text>Transactions</Text>}
+                            modalVisible === modalType.CATEGORY ? <Text>Category</Text> : 
+                            modalVisible === modalType.TRANSACTIONS ? <Text>Transactions</Text> :
+                            modalVisible === modalType.CARDS ? <Text>Cards</Text> : <Text>Mode</Text>}
                             
                         </View>
                         <View style= {{flex: 1}}></View>
@@ -119,8 +125,8 @@ export function CategoryModal(
                             }
                         </View>
                     }
-                     {/* Display card menu */}
-                     {
+                    {/* Display card menu */}
+                    {
                         modalVisible === modalType.CARDS &&
                         <View style={{marginBottom: 50}}>
                             <ModalSlot
@@ -148,6 +154,23 @@ export function CategoryModal(
                                 })
                             }
                         </View>
+                    }
+                    {/* Change Mode */}
+                    {
+                        modalVisible === modalType.MODE &&
+                        modes.map((tmpMode, index) => { 
+                            return (
+                                <ModalSlot
+                                    key={tmpMode}
+                                    textString={tmpMode}
+                                    selected={mode === tmpMode}
+                                    setSelected={setMode}
+                                    setModalVisible={setModalVisible}
+                                    isValid={true}
+                                    amountSpent ={null}
+                                />
+                            )
+                        })
                     }
                 </View>
             </View>

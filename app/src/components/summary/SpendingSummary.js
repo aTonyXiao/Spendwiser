@@ -7,6 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 import { summaryHelper } from './SummaryHelper';
 import { ListSummary } from './ListSummary';
+import { HeaderAndTabContent } from './HeaderAndTabContent';
+import { StackedChartCompare } from './StackedChartCompare';
 
 const modalType = {
     DISABLED: 0,
@@ -14,6 +16,12 @@ const modalType = {
     CATEGORY: 2,
     TRANSACTIONS: 3,
     CARDS: 4,
+    MODE: 5,
+}
+const modeType = {
+    SUMMARY: "Summary",
+    COMPARE: "Compare",
+    BUDGET: "Budget",
 }
 const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
 const colors = ['#FF0000', '#FF7F00', '#FFD700', '#228B22', '#0000FF', '#2E2B5F', '#8B00FF']
@@ -30,6 +38,7 @@ export function SpendingSummary({navigation}) {
     const [listViewEnabled, setListViewEnabled] = useState(false);
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
+    const [mode, setMode] = useState(modeType.SUMMARY);
 
     function getCardFromDB(myCards) {
         setCards(myCards);
@@ -127,60 +136,24 @@ export function SpendingSummary({navigation}) {
                 cards = {cards}
                 curCard = {curCard}
                 setCurCardFromModal = {setCurCardFromModal}
+                modeType={modeType}
+                mode={mode}
+                setMode={setMode}
             />
-            {/* Header */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: 10}}>
-                <Ionicons
-                    name="ellipsis-horizontal-circle"
-                    color={'white'}
-                    size={30}
-                ></Ionicons>
-                <Text style={styles.header}>Spendings & Transactions</Text>
-                <Ionicons
-                    name="ellipsis-horizontal-circle"
-                    color={'black'}
-                    size={30}
-                    onPress={()=> {
-                        setModalVisible(modalType.CARDS);
-                    }}
-                ></Ionicons>
-            </View>
-            <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
 
-            {/* Tabs */}
-            <View style={styles.tabContainer}>
-                <View style={styles.tab}>
-                    <Text>Time period</Text>
-                    <Text>Category</Text>
-                </View>
-                <View style={styles.tab}>
-                    <View style={{flexDirection:'row', alignItems: 'flex-end'}}>
-                        <Text 
-                            style={{color: 'blue'}}
-                            onPress={() => {setModalVisible(modalType.TIME)}}
-                        >{curTimeframe}</Text>
-                        <Ionicons
-                            name="chevron-down"
-                            color="blue"
-                            size={15}
-                        ></Ionicons>
-                    </View>
-                    <View style={{flexDirection:'row', alignItems: 'flex-end'}}>
-                        <Text 
-                            style={{color: 'blue'}}
-                            onPress={() => {setModalVisible(modalType.CATEGORY)}}
-                        >{curCategory.label}</Text>
-                        <Ionicons
-                            name="chevron-down"
-                            color="blue"
-                            size={15}
-                        ></Ionicons>
-                    </View> 
-                </View>
-            </View>
+            {/* Header and Tabs */}
+            <HeaderAndTabContent
+                modalType={modalType}
+                curCard={curCard}
+                curTimeframe={curTimeframe}
+                mode={mode}
+                curCategory={curCategory}
+                setModalVisible={setModalVisible}
+            />
             {/* Content */}
             <View style={styles.contentContainer}>
-                {!(listViewEnabled) ?
+                {mode === modeType.SUMMARY &&
+                    !(listViewEnabled) ?
                     <PieChartSummary
                         style={{height:500}}
                         values={values}
@@ -196,11 +169,15 @@ export function SpendingSummary({navigation}) {
                         changeCategory={changeCategory}
                         values={values}
                     />
+                    
+                }
+                {mode === modeType.COMPARE &&
+                    <StackedChartCompare/>
                 }
             </View>
             {/* Legend */}
             {
-                !(listViewEnabled) && 
+                (mode === modeType.SUMMARY && !(listViewEnabled)) && 
                 <View style={styles.legendContainer}>
                     <FlatList
                         data={keys}
@@ -237,22 +214,6 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
         alignItems: 'center',
         flexDirection: 'column',
-    },
-    header: {
-        fontSize: 20,
-    },
-    tabContainer: {
-        marginTop: 10,
-        width: '100%',
-        paddingHorizontal: 20,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        paddingBottom: 10,
-        borderBottomWidth: 0.5,
-    },
-    tab: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     contentContainer: {
         flex: 5,
