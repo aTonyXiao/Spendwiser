@@ -218,7 +218,7 @@ class FirebaseBackend extends BaseBackend {
 
     consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
         this.consolidateLocalCollection(accountName, location, local_collection);
-        // this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
+        this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
