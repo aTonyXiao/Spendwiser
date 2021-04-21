@@ -149,12 +149,15 @@ class FirebaseBackend extends BaseBackend {
             let sync_id = location + local_collection[i]['meta_id'];
 
             if (local_collection[i]['meta_synced'] == false && !syncing_items.includes(sync_id)) {
+
+                console.log ("A local collection item needs to be synced...");
+                console.log(local_collection[i]);
                 let local_data_stripped = storage.stripMetadata(local_collection[i]);
 
                 // Basically put a lock on the data we are syncing
                 syncing_items.push(sync_id);
 
-                this.dbFirebaseAddWithMetadata(location, local_data_stripped, () => {
+                this.dbFirebaseAddWithMetadata(location, local_data_stripped, (id) => {
                     storage.modifyDBEntryMetainfo(accountName, location, true, local_collection[i]['meta_id'], id);
                     syncing_items = syncing_items.filter(item => item !== sync_id);
                 });
@@ -458,11 +461,13 @@ class FirebaseBackend extends BaseBackend {
             if (accountId != 'offline') {
                 // Add data locally
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id);
                         callback(query_id);
                     });
+                    */
                 });
 
             } else {
