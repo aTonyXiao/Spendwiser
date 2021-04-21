@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import _ from 'lodash';
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -143,7 +144,8 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
-    consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
+
+    consolidateLocalCollection(accountName, location, local_collection) {
         for (let i = 0; i < local_collection.length; i++) {
             let sync_id = location + local_collection[i]['meta_id'];
 
@@ -161,9 +163,62 @@ class FirebaseBackend extends BaseBackend {
                })
             }
         }
+    }
 
+    consolidateRemoteCollection(accountName, location, remote_collection, local_collection) {
+        // Note (Nathan W): This is very brute force, but I don't know if that's actually a problem
+        for (let i = 0; i < remote_collection.length; i++) {
+            // Check if the remote collection item exists at all in the local collection
 
-        // TODO (Nathan W): Look through the remote_collection data as well
+            let item_exists_locally = false;
+            for (let j = 0; j < local_collection.length; j++) {
+                if (remote_collection[i]['id'] == local_collection[j]['meta_id']) {
+                    item_exists_locally = true;
+                    // Note (Nathan W): Compare the remote collection item with a stripped version
+                    // of the local collection because we don't want to use the local item's metadata
+                    // in our comparison check
+                    let local_data_stripped = storage.stripMetadata(local_collection[j]);
+
+                    // Note (Nathan W): Need to convert the remote string date to a date object
+                    // for comparison
+                    let remote_modified = new Date(remote_collection[i]['modified']);
+                    let local_modified = local_collection['meta_modified'];
+
+                    let sync_id = location + local_collection[i]['meta_id'];
+
+                    // If the remote item has been modified more recently AND we are not already trying to
+                    // sync our changes
+                    if (remote_modified >= local_modified && !syncing_items.contains(sync_id)) {
+
+                        // Basically put a lock on the data we are syncing
+                        syncing_items.push(sync_id);
+
+                        storage.setLocalDB(accountName,
+                                        location + "." + local_collection['meta_id'],
+                                        remote_modified, true, () => {
+                            // Unlock on the data we synced
+                            syncing_items = syncing_items.filter(item => item !== local_data_stripped);
+                        })
+                    }
+
+                    storage.modifyDBEntryMetainfo(accountName, location,
+                        true, local_collection['meta_id'], remote_collection[i]['id']);
+                }
+            }
+
+            if (!item_exists_locally) {
+                // Note (Nathan W): Item does not exist in our local database so we
+                // need to add it and set the query id accordingly
+                storage.addLocalDB(accountName, location, remote_collection, (local_id) => {
+                    storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_collection[i]['id']);
+                })
+            }
+        }    
+    }
+
+    consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
+        this.consolidateLocalCollection(accountName, location, local_collection);
+        this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
@@ -393,7 +448,12 @@ class FirebaseBackend extends BaseBackend {
                    this.dbFirebaseAdd(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id);
-                        callback(query_id);
+
+                        // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
+                        // consolidation between our local database and the remote one.
+                        this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
+                            callback(query_id);
+                        });
                    });
                 });
 
