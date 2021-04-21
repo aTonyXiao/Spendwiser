@@ -91,6 +91,7 @@ class Database {
                 if (err || data == null) res.sendStatus(500);
                 else {
                     let requestData = req.body;
+                    if (model.schema.pathType(subdoc + ".dateAdded") !== "adhocOrUndefined") requestData.dateAdded = Date.now();
                     let newSubdoc = data.get(subdoc).create(requestData);
                     data.get(subdoc).push(newSubdoc);
                     data.save((err) => {
