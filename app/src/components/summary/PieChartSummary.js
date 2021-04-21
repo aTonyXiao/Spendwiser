@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
 
 export function PieChartSummary({
   curCategory,
   setCurCategory,
   keys,
   values,
-  setModalVisible
+  setModalVisible,
+  colors,
   }) {
     const { label, value } = curCategory;
     const [labelWidth, setLabelWidth] = useState(0);
-    const colors = ['#FF0000', '#FF7F00', '#FFD700', '#00FF00', '#0000FF', '#2E2B5F', '#8B00FF']
     const data = keys.map((key, index) => {
         return {
           key,

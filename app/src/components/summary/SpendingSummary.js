@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, FlatList } from 'react-native';
 import { Footer } from '../util/Footer';
 import { CategoryModal } from './CategoryModal';
 import { PieChartSummary } from './PieChartSummary';
@@ -13,8 +13,10 @@ const modalType = {
     TIME: 1,
     CATEGORY: 2,
     TRANSACTIONS: 3,
+    CARDS: 4,
 }
 const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
+const colors = ['#FF0000', '#FF7F00', '#FFD700', '#228B22', '#0000FF', '#2E2B5F', '#8B00FF']
 
 export function SpendingSummary({navigation}) {
     const [modalVisible, setModalVisible] = useState(modalType.DISABLED);
@@ -26,6 +28,12 @@ export function SpendingSummary({navigation}) {
     const [transactions, setTransactions] = useState([]);
     const [values, setValues] = useState([]);
     const [listViewEnabled, setListViewEnabled] = useState(false);
+    const [cards, setCards] = useState([]);
+    const [curCard, setCurCard] = useState(null);
+
+    function getCardFromDB(myCards) {
+        setCards(myCards);
+    }
 
     function changeCategory(cat) {
         console.log(cat);
@@ -35,48 +43,56 @@ export function SpendingSummary({navigation}) {
         });
     };
 
-    function processTransactionsForSumamry(transaction) {
-        let tmpValues = values;
-        tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
+    function setCurCardFromModal(cardName) {
+        let curCardIdx = -1;
+        if (cardName === "All Cards") {
+            setCurCard(null);
+        } else {
+            curCardIdx = cards.findIndex(x => x["cardName"] === cardName);
+            setCurCard(cards[curCardIdx]);
+        }
+        let tmpValues = Array(7).fill(0);
+        for (var i = 0; i < transactions.length; i++) {
+            if (curCardIdx === -1 || transactions[i]["cardId"] === cards[curCardIdx]["cardId"]) {
+                tmpValues[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
+            }
+        }
         setValues(tmpValues);
-        setCurCategory((prevState) => {
-            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
-        });
+        setCurCategory({label: "All Categories", value: tmpValues.reduce((a, b) => a + b, 0)});
     };
 
-    function getTimeFrame() {
-        let endTimeFrame, startTimeFrame;
-        let month, date, year;
-        [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
-        if (year.length == 2) {
-            year = "20" + year;
+    // Render legend in flatlist
+    function renderLegend({cat, index}) {
+        if (values[index] !== 0) {
+            return (
+                <View style={styles.legendItem}>
+                    <Ionicons
+                        name="cube"
+                        color={colors[index]}
+                        size={15}
+                    ></Ionicons>
+                    <Text>{keys[index]}</Text>
+                </View>
+            );
         }
-        endTimeFrame = new Date();
-        switch (curTimeframe) {                
-            case "Last month":
-                endTimeFrame = new Date(month - 1 !== -1 ? year : year - 1, (month - 1) % 12, 0);
-                startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
-                break;
-            case "Last 3 months":
-                startTimeFrame = new Date(month - 3 >= 0 ? year : year - 1, month - 3 % 12);
-                break;
-            default: 
-                /* This Month */
-                startTimeFrame = new Date(year, month - 1);
-                break;
-        }
-        console.log(startTimeFrame);
-        console.log(endTimeFrame);
-        return [startTimeFrame, endTimeFrame];
     }
 
+    // process each transaction retrieved from db after timeframe change
     useEffect(() => {
         if (transactions.length == 0) {
             return;
         }
-        processTransactionsForSumamry(transactions[transactions.length - 1]);
+        let tmpValues = values;
+        let transaction = transactions[transactions.length - 1];
+        if (curCard === null || transaction["cardId"] === curCard["cardId"])
+            tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
+        setValues(tmpValues);
+        setCurCategory((prevState) => {
+            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+        });
     }, [transactions]);
 
+    // Get transactions from db when timeframe change
     useEffect(() => {
         setValues(Array(7).fill(0));
         setTransactions([]);
@@ -85,13 +101,16 @@ export function SpendingSummary({navigation}) {
             value: 0,
         });
         const userId = user.getUserId();
-        let [startTimeFrame, endTimeFrame] = getTimeFrame();
-        // console.log(startTimeFrame);
-        // console.log(endTimeFrame);
+        let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
             setTransactions(oldData => [...oldData, data]);
         });
     }, [curTimeframe]);
+
+    // Load card names and id when mount
+    useEffect(() => {
+        summaryHelper.getDbCards(getCardFromDB);
+    }, []);
 
     return (
         <SafeAreaView style={styles.screen}>
@@ -105,8 +124,29 @@ export function SpendingSummary({navigation}) {
                 changeCategory = {changeCategory}
                 values = {values}
                 transactions = {transactions}
+                cards = {cards}
+                curCard = {curCard}
+                setCurCardFromModal = {setCurCardFromModal}
             />
-            <Text style={styles.header}>Spendings & Transactions</Text>
+            {/* Header */}
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: 10}}>
+                <Ionicons
+                    name="ellipsis-horizontal-circle"
+                    color={'white'}
+                    size={30}
+                ></Ionicons>
+                <Text style={styles.header}>Spendings & Transactions</Text>
+                <Ionicons
+                    name="ellipsis-horizontal-circle"
+                    color={'black'}
+                    size={30}
+                    onPress={()=> {
+                        setModalVisible(modalType.CARDS);
+                    }}
+                ></Ionicons>
+            </View>
+            <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
+
             {/* Tabs */}
             <View style={styles.tabContainer}>
                 <View style={styles.tab}>
@@ -148,6 +188,7 @@ export function SpendingSummary({navigation}) {
                         curCategory={curCategory}
                         setCurCategory={setCurCategory}
                         setModalVisible={setModalVisible}
+                        colors={colors}
                     />
                     :
                     <ListSummary
@@ -157,6 +198,18 @@ export function SpendingSummary({navigation}) {
                     />
                 }
             </View>
+            {/* Legend */}
+            {
+                !(listViewEnabled) && 
+                <View style={styles.legendContainer}>
+                    <FlatList
+                        data={keys}
+                        renderItem={renderLegend}
+                        numColumns={4}
+                        keyExtractor={(index) => index.toString()}
+                    />
+                </View>
+            }
             <View style={styles.viewType}>
                 <Ionicons
                     name="list-outline"
@@ -186,8 +239,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     header: {
-        fontSize: 24,
-        paddingTop: 10,
+        fontSize: 20,
     },
     tabContainer: {
         marginTop: 10,
@@ -203,7 +255,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     contentContainer: {
-        flex: 1,
+        flex: 5,
         width: '100%',
     },
     viewType: {
@@ -220,5 +272,13 @@ const styles = StyleSheet.create({
         bottom: 0, 
         paddingBottom: 35,
         marginTop: 0
+    },
+    legendContainer: {
+        flex: 1,
+        paddingTop: 10,
+    },
+    legendItem: {
+        flexDirection: 'row',
+        margin: 5,
     }
 });

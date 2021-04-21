@@ -15,6 +15,9 @@ export function CategoryModal(
         changeCategory,
         values,
         transactions,
+        cards,
+        curCard,
+        setCurCardFromModal,
     }) {
     const timeframe = ['This month', 'Last month', 'Last 3 months'];
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
@@ -112,6 +115,36 @@ export function CategoryModal(
                                             )
                                         }
                                        
+                                })
+                            }
+                        </View>
+                    }
+                     {/* Display card menu */}
+                     {
+                        modalVisible === modalType.CARDS &&
+                        <View style={{marginBottom: 50}}>
+                            <ModalSlot
+                                key={"All Cards"}
+                                textString={"All Cards"}
+                                selected={curCard === null}
+                                setSelected={setCurCardFromModal}
+                                setModalVisible={setModalVisible}
+                                isValid={true}
+                                amountSpent ={null}
+                            />
+                            {
+                                cards.map((card, index) => {
+                                    return (
+                                        <ModalSlot
+                                            key={card["cardName"]}
+                                            textString={card["cardName"]}
+                                            selected={curCard !== null && curCard["cardId"] === card["cardId"]}
+                                            setSelected={setCurCardFromModal}
+                                            setModalVisible={setModalVisible}
+                                            isValid={true}
+                                            amountSpent ={null}
+                                        />
+                                    )
                                 })
                             }
                         </View>
