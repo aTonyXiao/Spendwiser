@@ -70,22 +70,6 @@ export function SpendingSummary({navigation}) {
         setCurCategory({label: "All Categories", value: tmpValues.reduce((a, b) => a + b, 0)});
     };
 
-    // Render legend in flatlist
-    function renderLegend({cat, index}) {
-        if (values[index] !== 0) {
-            return (
-                <View style={styles.legendItem}>
-                    <Ionicons
-                        name="cube"
-                        color={colors[index]}
-                        size={15}
-                    ></Ionicons>
-                    <Text>{keys[index]}</Text>
-                </View>
-            );
-        }
-    }
-
     // process each transaction retrieved from db after timeframe change
     useEffect(() => {
         if (transactions.length == 0) {
@@ -175,18 +159,6 @@ export function SpendingSummary({navigation}) {
                     <StackedChartCompare/>
                 }
             </View>
-            {/* Legend */}
-            {
-                (mode === modeType.SUMMARY && !(listViewEnabled)) && 
-                <View style={styles.legendContainer}>
-                    <FlatList
-                        data={keys}
-                        renderItem={renderLegend}
-                        numColumns={4}
-                        keyExtractor={(index) => index.toString()}
-                    />
-                </View>
-            }
             <View style={styles.viewType}>
                 <Ionicons
                     name="list-outline"
@@ -222,7 +194,7 @@ const styles = StyleSheet.create({
     viewType: {
         flexDirection:'row',
         alignItems: 'flex-end',
-        paddingBottom: 20,
+        paddingBottom: 10,
         width: '100%',
         justifyContent: 'center',
     },
@@ -234,12 +206,4 @@ const styles = StyleSheet.create({
         paddingBottom: 35,
         marginTop: 0
     },
-    legendContainer: {
-        flex: 1,
-        paddingTop: 10,
-    },
-    legendItem: {
-        flexDirection: 'row',
-        margin: 5,
-    }
 });

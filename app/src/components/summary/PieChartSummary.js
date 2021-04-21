@@ -1,9 +1,8 @@
 
 import React, { useState } from 'react';
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, FlatList, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
 
 export function PieChartSummary({
   curCategory,
@@ -25,8 +24,24 @@ export function PieChartSummary({
         }
       })
     const deviceWidth = Dimensions.get('window').width
+     // Render legend in flatlist
+    function renderLegend({cat, index}) {
+      if (values[index] !== 0) {
+        return (
+            <View style={styles.legendItem}>
+                <Ionicons
+                    name="cube"
+                    color={colors[index]}
+                    size={15}
+                ></Ionicons>
+                <Text>{keys[index]}</Text>
+            </View>
+        );
+      }
+    }
 
     return (
+      <View style={{ justifyContent: 'center', flex: 1 }}>
       <View style={{ justifyContent: 'center', flex: 1 }}>
         <PieChart
           style={{ height: 400 }}
@@ -55,5 +70,25 @@ export function PieChartSummary({
           ></Ionicons>
         </Text>
       </View>
+      <View style={styles.legendContainer}>
+                    <FlatList
+                        data={keys}
+                        renderItem={renderLegend}
+                        numColumns={4}
+                        keyExtractor={(index) => index.toString()}
+                    />
+                </View>
+      </View>
     )
   };
+
+  const styles = StyleSheet.create({
+    legendContainer: {
+      alignItems: 'center',
+      marginBottom: 10
+    },
+    legendItem: {
+        flexDirection: 'row',
+        margin: 5,
+    }
+  });
