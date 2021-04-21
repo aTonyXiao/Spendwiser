@@ -68,7 +68,7 @@ class Database {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, (req, res) => {
             model.findById(req.params.id, (err, data) => {
-                if (err || data == null) res.sendStatus(404);
+                if (err || data == null) res.sendStatus(500);
                 else res.json(data.get(subdoc));
             });
         })
@@ -76,7 +76,7 @@ class Database {
         // get a specific doc by ID
         this.app.get(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
             model.findById(req.params.id, (err, data) => {
-                if (err || data == null) res.sendStatus(500);
+                if (err || data == null) res.sendStatus(404);
                 else {
                     let currSubdoc = data.get(subdoc).id(req.params.id2);
                     if (currSubdoc == null) res.sendStatus(404);
