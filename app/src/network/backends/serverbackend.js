@@ -89,7 +89,7 @@ class ServerBackend extends BaseBackend {
      */
     dbGet(location, ...conditionsWithCallback) {
         let uri = location.replace(".", "/");
-        fetch('https://172.17.122.55:3000/' + uri, {
+        fetch('https://localhost:3000/' + uri, {
             method: 'GET'
         }).then((res) => {
             console.log(res);
