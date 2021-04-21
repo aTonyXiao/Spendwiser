@@ -6,7 +6,6 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
-import _ from 'lodash';
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -155,12 +154,10 @@ class FirebaseBackend extends BaseBackend {
                 // Basically put a lock on the data we are syncing
                 syncing_items.push(sync_id);
 
-                this.dbFirebaseAdd(location, local_data_stripped, (id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location, true, local_data['meta_id'], id);
-
-                    // Unlock on the data we synced
-                    syncing_items = syncing_items.filter(item => item !== local_data_stripped);
-               })
+                this.dbFirebaseAddWithMetadata(location, local_data_stripped, () => {
+                    storage.modifyDBEntryMetainfo(accountName, location, true, local_collection[i]['meta_id'], id);
+                    syncing_items = syncing_items.filter(item => item !== sync_id);
+                });
             }
         }
     }
@@ -184,11 +181,11 @@ class FirebaseBackend extends BaseBackend {
                     let remote_modified = new Date(remote_collection[i]['modified']);
                     let local_modified = local_collection['meta_modified'];
 
-                    let sync_id = location + local_collection[i]['meta_id'];
+                    let sync_id = location + local_collection[j]['meta_id'];
 
                     // If the remote item has been modified more recently AND we are not already trying to
                     // sync our changes
-                    if (remote_modified >= local_modified && !syncing_items.contains(sync_id)) {
+                    if (remote_modified > local_modified && !syncing_items.includes(sync_id)) {
 
                         // Basically put a lock on the data we are syncing
                         syncing_items.push(sync_id);
@@ -218,7 +215,7 @@ class FirebaseBackend extends BaseBackend {
 
     consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
         this.consolidateLocalCollection(accountName, location, local_collection);
-        this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
+        // this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
@@ -285,6 +282,8 @@ class FirebaseBackend extends BaseBackend {
                     this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
                         // Get the data (if any) from the local db
                         storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
+
+                            console.log("calling the consolidate function from dbGet");
                             this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             callback(remote_data);
                         });
@@ -424,6 +423,20 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    dbFirebaseAddWithMetadata(location, data, callback) {
+        this.dbFirebaseAdd(location, data, (query_id) => {
+            if (!syncing_items.includes(location + query_id)) {
+                syncing_items.push(location + query_id);
+                // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
+                // consolidation between our local database and the remote one.
+                this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
+                    syncing_items = syncing_items.filter(item => item !== location + query_id);
+                    callback(query_id);
+                });
+            }
+        });
+    }
+
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -445,16 +458,11 @@ class FirebaseBackend extends BaseBackend {
             if (accountId != 'offline') {
                 // Add data locally
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                   this.dbFirebaseAdd(location, data, (query_id) => {
+                    this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id);
-
-                        // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
-                        // consolidation between our local database and the remote one.
-                        this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
-                            callback(query_id);
-                        });
-                   });
+                        callback(query_id);
+                    });
                 });
 
             } else {

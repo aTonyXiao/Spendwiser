@@ -66,9 +66,13 @@ const setDB = async (cards, callback) => {
 }
 
 const addOrUpdateMetainfo = (local_data, isSynced = false) => {
-    local_data['meta_modified'] = new Date();
-    local_data['meta_synced'] = isSynced;
-    return local_data;
+    if (local_data) {
+        local_data['meta_modified'] = new Date();
+        local_data['meta_synced'] = isSynced;
+        return local_data;
+    } else {
+        return null;
+    }
 }
 
 export const stripMetadata = (data) => {
@@ -280,6 +284,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 console.log("Location: " + location);
                 console.log("Old Id: " + oldId);
                 console.log("New Id: " + newId);
+                console.log(db);
                 console.log("----------------------");
             }
 
@@ -287,7 +292,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
             db[accountName][location][newId]['meta_id'] = newId;
             delete db[accountName][location][oldId];
 
-            id = newId;
+            let id = newId;
             db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
 
             jsonValue = JSON.stringify(db);
