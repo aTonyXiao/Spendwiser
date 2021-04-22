@@ -90,7 +90,7 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbGet(location, ...conditionsWithCallback) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         let callback = conditionsWithCallback.pop();
         fetch(this.server_url + uri, {
             method: 'GET',
@@ -120,7 +120,7 @@ class ServerBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         let collection = [];
         fetch(this.server_url + uri, {
             method: 'GET',
@@ -153,7 +153,7 @@ class ServerBackend extends BaseBackend {
      * });
     */
     dbDoesDocExist(location, callback) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         fetch(this.server_url + uri, {
             method: 'GET',
             headers: {
@@ -181,14 +181,15 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         fetch(this.server_url + uri, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify(data)
         });
     }
 
@@ -208,14 +209,15 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbAdd(location, data, callback) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         fetch(this.server_url + uri, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify(data)
         }).then(res => res.json()).then((res) => {
             callback(res)
         }).catch((err) => {
@@ -233,7 +235,7 @@ class ServerBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
-        let uri = location.replace(".", "/");
+        let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         fetch(this.server_url + uri, {
             method: 'DELETE',

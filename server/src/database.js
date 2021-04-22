@@ -42,7 +42,7 @@ class Database {
         // create doc request
         this.app.post(uri, (req, res) => {
             let requestData = req.body;
-            if (model.schema.pathType("dateAdded") !== "adhocOrUndefined") requestData.dateAdded = Date.now();
+            if (model.schema.pathType("dateAdded") !== "adhocOrUndefined") requestData.dateAdded = (new Date()).toUTCString();
             model.create(requestData, (err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else res.send(data._id);
@@ -91,7 +91,7 @@ class Database {
                 if (err || data == null) res.sendStatus(500);
                 else {
                     let requestData = req.body;
-                    if (model.schema.pathType(subdoc + ".dateAdded") !== "adhocOrUndefined") requestData.dateAdded = Date.now();
+                    if (model.schema.pathType(subdoc + ".dateAdded") !== "adhocOrUndefined") requestData.dateAdded = (new Date()).toUTCString();
                     let newSubdoc = data.get(subdoc).create(requestData);
                     data.get(subdoc).push(newSubdoc);
                     data.save((err) => {

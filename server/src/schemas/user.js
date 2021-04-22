@@ -8,14 +8,14 @@ const UserCardSchema = new mongoose.Schema({
 });
 
 const UserTransactionSchema = new mongoose.Schema({
-    dateAdded: {type: Date, default: Date.now()},
+    dateAdded: {type: String, default: ""},
     cardId: {type: String, default: ""},
     amountSpent: {type: String, default: ""},
-    rewards: {type: Map, of: Number, default: {}},
+    rewards: {type: [], default: []},
 });
 
 const UserSchema = new mongoose.Schema({
-    dateAdded: {type: Date, default: Date.now()},
+    dateAdded: {type: String, default: ""},
     cards: [UserCardSchema],
     transactions: [UserTransactionSchema]
 });
