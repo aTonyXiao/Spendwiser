@@ -110,7 +110,7 @@ class BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet (location, data, merge = false) {}
+    dbSet (location, data, merge = false, callback) {}
 
     /**
      * This function adds a new 'document' to a 'collection'
@@ -168,7 +168,7 @@ class BaseBackend {
         for (let key of Object.keys(data)) {
             newData[key] = aes.encrypt(objectToString(data[key]), this.privateKey).toString();
         }
-        this.dbSet(location, newData, merge);
+        this.dbSet(location, newData, merge, () => {});
     }
 
     /**

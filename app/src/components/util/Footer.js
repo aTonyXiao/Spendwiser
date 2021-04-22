@@ -60,6 +60,26 @@ export function Footer(props) {
                 </TouchableOpacity>
             }
             {
+                (page == 'SpendingSummary') &&
+                <TouchableOpacity onPress={() => navigation.navigate('SpendingSummary')}>
+                    <Ionicons
+                        name="pie-chart"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
+                (page != 'SpendingSummary') &&
+                <TouchableOpacity onPress={() => navigation.navigate('SpendingSummary')}>
+                    <Ionicons
+                        name="pie-chart-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            }
+            {
                 (page == 'Settings') &&
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                     <Ionicons

@@ -10,21 +10,24 @@ import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/main/MainScreen';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
-import { AddCardCamera } from './src/components/addCard/AddCardCamera';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
 import { AppPermissions } from './src/components/settings/Permissions';
 import { PrivacyPolicy } from './src/components/settings/PrivacyPolicy';
 import { Account } from './src/components/settings/Account';
 import { About } from './src/components/settings/About';
+import { SpendingSummary } from './src/components/summary/SpendingSummary';
+import { EditImage } from './src/components/addCard/fromCamera/EditImage';
+import { ChooseImage } from './src/components/addCard/fromCamera/ChooseImage';
+import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectImage';
 
 const Stack = createStackNavigator();
 
 // reference: https://stackoverflow.com/questions/35309385/how-do-you-hide-the-warnings-in-react-native-ios-simulator
 // Suppress warnings 
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
+// import { LogBox } from 'react-native';
+// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+// LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 export default function App() {
@@ -60,6 +63,10 @@ export default function App() {
           component={DisplayCard}
         />
         <Stack.Screen
+          name="SpendingSummary"
+          component={SpendingSummary}
+        />
+        <Stack.Screen
         name="Settings"
         component={Settings}
         />
@@ -68,8 +75,16 @@ export default function App() {
           component={AddCardManual}
         />
         <Stack.Screen
-          name="AddCardCamera"
-          component={AddCardCamera}
+          name="EditImage"
+          component={EditImage}
+        />
+        <Stack.Screen
+          name="ChooseImage"
+          component={ChooseImage}
+        />
+        <Stack.Screen
+          name="CardSelectImage"
+          component={CardSelectImage}
         />
         <Stack.Screen
           name="PasswordReset"

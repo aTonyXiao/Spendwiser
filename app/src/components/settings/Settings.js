@@ -4,7 +4,8 @@ import mainStyles from '../../styles/mainStyles';
 import { appBackend } from '../../network/backend';
 import { Footer } from '../util/Footer';
 import { Ionicons } from '@expo/vector-icons';
-import * as storage from '../../local/storage'
+import * as storage from '../../local/storage';
+
 /**
  * Settings page that contains a plethora of navigations to different information and buttons
  * like 'Permissions', 'Privacy', etc.
@@ -137,6 +138,19 @@ let Settings = (props) => {
                     style={styles.rowContainer}
                 >
                     <Text>DEBUG delete local storage</Text>
+                    <Ionicons
+                            name="chevron-forward-outline"
+                            color="gray"
+                            size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        storage.printLocalDB();
+                    }}
+                    style={styles.rowContainer}
+                >
+                    <Text>DEBUG print local storage</Text>
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"

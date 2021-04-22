@@ -77,12 +77,13 @@ class Cards {
                 rewards: rewards, 
                 url: url,
                 dateAdded : date.toUTCString()
-            }, (id) => {
+            }, async (id) => {
                 console.log('added card to database with id: ' + id);
                 appBackend.dbSet("cards." + id, { // need to set the cardId as well
                     cardId: id
-                }, true);
-                resolve(id);
+                }, true, () => {
+                    resolve(id);
+                });
             })
         })
     }
@@ -108,8 +109,9 @@ class Cards {
             }, (id) => {
                 appBackend.dbSet("cards." + id, {
                     cardId: id
-                }, true);
-                console.log('added card to database with id: ' + id);
+                }, true, () => {
+                    console.log('added card to database with id: ' + id);
+                });
             })
         });
     }
