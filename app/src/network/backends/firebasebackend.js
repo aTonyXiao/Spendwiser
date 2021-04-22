@@ -106,6 +106,16 @@ class FirebaseBackend extends BaseBackend {
             console.log(err);
         }
     }
+
+    /**
+     * Look at the remote and local objects queried with a get request and attempts 
+     * to consolidate both pieces of information into a single object that will be 
+     * stored on both the local database and the remote database
+     * @param {string} accountName 
+     * @param {string} location 
+     * @param {object} remote_data 
+     * @param {object} local_data 
+     */
     consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
         let local_data_stripped = storage.stripMetadata(local_data);
 
@@ -144,6 +154,15 @@ class FirebaseBackend extends BaseBackend {
     }
 
 
+    /**
+     * Consolidates a local collection with the firebase remote database by looking through
+     * each item in the database, checking if it has been synced, and uploading unsynced items
+     * to firebase
+     * 
+     * @param {string} accountName 
+     * @param {string} location 
+     * @param {Array} local_collection 
+     */
     consolidateLocalCollection(accountName, location, local_collection) {
         for (let i = 0; i < local_collection.length; i++) {
             let sync_id = location + local_collection[i]['meta_id'];
@@ -165,6 +184,14 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
+    /**
+     * 
+     * 
+     * @param {string} accountName the name of the user's account
+     * @param {string} location the location/document that data can be found at
+     * @param {Array} remote_collection the data retrieved from the location/document remotely from firebase
+     * @param {Array} local_collection the data retrieved from the location/document locally
+     */
     consolidateRemoteCollection(accountName, location, remote_collection, local_collection) {
         // Note (Nathan W): This is very brute force, but I don't know if that's actually a problem
         for (let i = 0; i < remote_collection.length; i++) {
