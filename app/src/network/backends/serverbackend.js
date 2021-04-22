@@ -31,6 +31,8 @@ class ServerBackend extends BaseBackend {
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
 
+        this.server_url = process.env.REACT_NATIVE_SERVER_URL;
+
         // check if there is a Firebase 'App' already initialized
         if (firebase.apps.length == 0) {
             firebase.initializeApp(firebaseConfig); // if not, initialize
@@ -89,9 +91,14 @@ class ServerBackend extends BaseBackend {
      */
     dbGet(location, ...conditionsWithCallback) {
         let uri = location.replace(".", "/");
-        fetch('https://localhost:3000/' + uri, {
-            method: 'GET'
-        }).then((res) => {
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json()).then((res) => {
             console.log(res);
         }).catch((err) => {
             console.log(err);
