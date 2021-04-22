@@ -91,7 +91,7 @@ class ServerBackend extends BaseBackend {
      */
     dbGet(location, ...conditionsWithCallback) {
         let uri = location.replace(".", "/");
-        console.log(this.server_url + uri);
+        let callback = conditionsWithCallback.pop();
         fetch(this.server_url + uri, {
             method: 'GET',
             headers: {
@@ -99,10 +99,10 @@ class ServerBackend extends BaseBackend {
                 'Content-Type': 'application/json',
             }
         }).then(res => res.json()).then((res) => {
-            console.log(res);
+            callback(res);
         }).catch((err) => {
             console.log(err);
-        });;
+        });
     }
 
 
@@ -120,7 +120,23 @@ class ServerBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        
+        let uri = location.replace(".", "/");
+        let collection = [];
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json()).then((res) => {
+            res.forEach(doc => {
+                doc["docId"] = doc._id;
+                collection.push(doc);
+            })
+            callback(collection);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     /** 
@@ -137,7 +153,18 @@ class ServerBackend extends BaseBackend {
      * });
     */
     dbDoesDocExist(location, callback) {
-        
+        let uri = location.replace(".", "/");
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json()).then((res) => {
+            callback(true);
+        }).catch((err) => {
+            callback(false);
+        });
     }
 
     /**
@@ -154,7 +181,15 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false) {
-        
+        let uri = location.replace(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
     }
 
     /**
@@ -173,7 +208,19 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbAdd(location, data, callback) {
-        
+        let uri = location.replace(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json()).then((res) => {
+            callback(res)
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     /**
@@ -186,7 +233,15 @@ class ServerBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
-        
+        let uri = location.replace(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
     }
 
     /**
