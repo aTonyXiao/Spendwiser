@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+// this is a temporary hacky solution to fix user id issues
+function fixID (id) {
+    return id.length > 24 ? id.substring(0, 12) : id;
+}
+
 class Database {
 
     constructor (app, name = "") {
@@ -33,7 +38,7 @@ class Database {
 
         // get a specific doc by ID
         this.app.get(uri + "/:id", (req, res) => {
-            model.findById(req.params.id, (err, data) => {
+            model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(404);
                 else res.json(data);
             });
@@ -51,14 +56,14 @@ class Database {
 
         // update doc request
         this.app.put(uri + "/:id", (req, res) => {
-            model.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
+            model.findByIdAndUpdate(fixID(req.params.id), req.body, {"upsert": true, "new": true, "setDefaultsOnInsert": true}, (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
         });
 
         // delete doc request
         this.app.delete(uri + "/:id", (req, res) => {
-            model.findByIdAndDelete(req.params.id, (err, data) => {
+            model.findByIdAndDelete(fixID(req.params.id), (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
         });
@@ -67,7 +72,7 @@ class Database {
     addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, (req, res) => {
-            model.findById(req.params.id, (err, data) => {
+            model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else res.json(data.get(subdoc));
             });
@@ -75,10 +80,10 @@ class Database {
 
         // get a specific doc by ID
         this.app.get(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
-            model.findById(req.params.id, (err, data) => {
+            model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(404);
                 else {
-                    let currSubdoc = data.get(subdoc).id(req.params.id2);
+                    let currSubdoc = data.get(subdoc).id(fixID(req.params.id2));
                     if (currSubdoc == null) res.sendStatus(404);
                     else res.json(currSubdoc);
                 }
@@ -87,7 +92,7 @@ class Database {
 
         // create doc request
         this.app.post(uri + "/:id/" + subdoc, (req, res) => {
-            model.findById(req.params.id, (err, data) => {
+            model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else {
                     let requestData = req.body;
@@ -110,16 +115,16 @@ class Database {
                 requestData[prefix + key] = obj;
             }
             let filter = subdoc + "._id";
-            model.findOneAndUpdate({"_id": req.params.id, [filter]: req.params.id2}, {"$set": requestData}, (err, data) => {
+            model.findOneAndUpdate({"_id": fixID(req.params.id), [filter]: fixID(req.params.id2)}, {"$set": requestData}, (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
         });
 
         // delete doc request
         this.app.delete(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
-            let requestData = {[subdoc]: {"_id": req.params.id2}};
+            let requestData = {[subdoc]: {"_id": fixID(req.params.id2)}};
             let filter = subdoc + "._id";
-            model.findOneAndUpdate({"_id": req.params.id, [filter]: req.params.id2}, {"$pull": requestData}, (err, data) => {
+            model.findOneAndUpdate({"_id": fixID(req.params.id), [filter]: fixID(req.params.id2)}, {"$pull": requestData}, (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
         });
