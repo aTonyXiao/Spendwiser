@@ -117,6 +117,9 @@ class FirebaseBackend extends BaseBackend {
      * @param {object} local_data 
      */
     consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
+        console.log("Consolidating after a db get...");
+        console.log("Remote data " + JSON.stringify(remote_data));
+        console.log("Local data " + JSON.stringify(local_data));
         let local_data_stripped = storage.stripMetadata(local_data);
 
         // Check if there are no changes b/w the two pieces of data
@@ -185,7 +188,8 @@ class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * 
+     * Consolidates a remote collection with a local collection, making
+     * changes to the local collection to match any additions/changes that occurred remotely 
      * 
      * @param {string} accountName the name of the user's account
      * @param {string} location the location/document that data can be found at
@@ -309,13 +313,16 @@ class FirebaseBackend extends BaseBackend {
                     // Get the data from firebase
                     console.log("Getting from firebase");
                     console.log("location: " + location);
-                    this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
-                        // Get the data (if any) from the local db
-                        storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
+                    // Get the data (if any) from the local db
+                    conditions = JSON.parse(JSON.stringify(conditions));
+                    storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
+                        console.log("Local data");
+                        console.log(local_data);
+                        callback(local_data);
 
+                        this.firebaseDbGet(location, ...conditions, (remote_data) => {
                             console.log("calling the consolidate function from dbGet");
                             this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
-                            callback(remote_data);
                         });
                     })
 
@@ -351,22 +358,22 @@ class FirebaseBackend extends BaseBackend {
                 console.log("location: " + location);
 
                 this.getUserID((accountId) => {
-                    storage.getSubcollectionLocalDB(accountId, location, (data) => {
+                    storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
                         let dbloc = getDatabaseLocation(this.database, location);
 
-                        let collection = [];
+                        let remote_collection = [];
                         dbloc.get().then((query) => {
                             query.forEach(doc => {
                                 var currentDoc = doc.data();
                                 currentDoc["docId"] = doc.id;
-                                collection.push(currentDoc);
+                                remote_collection.push(currentDoc);
                             })
 
-                            this.consolidateLocalAndRemoteCollections(accountId, location, collection, data)
-                            if (collection.length == 0) {
-                                callback(data);
+                            this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
+                            if (remote_collection.length == 0) {
+                                callback(local_collection);
                             } else {
-                                callback(collection);
+                                callback(remote_collection);
                             }
                         }).catch((err) => {
                             console.log(err);

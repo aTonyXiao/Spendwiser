@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let storage_debug = false;
+let storage_debug = true;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -28,9 +28,8 @@ export const getLoginState = async (callback) => {
 
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
-        let date_val = Date.parse(value);
-        if (date_val) {
-            return new Date(date_val);
+        if (value.startsWith("__date__")) {
+            return new Date(value.substr("__date__(".length, value.length - 1));
         }
     }
     return value;
@@ -50,13 +49,23 @@ export const getDB = async (callback) => {
     }
 }
 
-const setDB = async (cards, callback) => {
-    await AsyncStorage.setItem('@db', cards);
+const convertDateToString = (data) => {
+    for (let [key, value] of Object.entries(data)) {
+        if (typeof value == 'Date') {
+            data[key] = "__date__(" + value.toString() + ")";
+        } else if (typeof value == 'object') {
+            data[key] = convertDateToString(value);
+        }
+    }
+
+    return data;
+}
+const setDB = async (data, callback) => {
+    data = convertDateToString(data);
+    await AsyncStorage.setItem('@db', data);
+
     try {
         getDB((db) => {
-            if (storage_debug)
-                console.log(db);
-
             callback();
         });
     } catch (e) {
@@ -99,7 +108,6 @@ export const addLocalDB = async (accountName, location, data, callback) => {
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
                 console.log("Data: ");
-                console.log(local_data);
                 console.log("----------------------");
             }
 
@@ -153,7 +161,6 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
                 console.log("Data: ");
-                console.log(local_data);
                 console.log("----------------------");
             }
 
@@ -241,7 +248,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 }
             }
 
-            if (conditions.length > 0) {
+            if (filtered_local_data.length > 0) {
                 callback(filtered_local_data);
             } else {
                 callback(local_data);
@@ -284,7 +291,6 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 console.log("Location: " + location);
                 console.log("Old Id: " + oldId);
                 console.log("New Id: " + newId);
-                console.log(db);
                 console.log("----------------------");
             }
 
