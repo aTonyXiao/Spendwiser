@@ -12,4 +12,9 @@ const db = new Database(app);
 db.addModel("cards", CardSchema);
 db.addModel("users", UserSchema);
 
+// import fs from "fs";
+// let raw = fs.readFileSync("firebase_dump.json");
+// let data = JSON.parse(raw);
+// db.loadData("cards", data);
+
 export default app;

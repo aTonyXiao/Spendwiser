@@ -130,6 +130,17 @@ class Database {
         });
     }
 
+    loadData (model, data) {
+        let collection = this.database.model(model);
+        data.cards.forEach((obj) => {
+            let requestData = obj;
+            requestData.dateAdded = (new Date()).toUTCString();
+            collection.create(requestData, (err, resp) => {
+                collection.findByIdAndUpdate(resp._id, {cardId: resp._id.toString()}, (err, data) => console.log("added: " + data._id));
+            });
+        });
+    }
+
     createNewDatabase (dbName) {
         return new Database(this.app, dbName);
     }
