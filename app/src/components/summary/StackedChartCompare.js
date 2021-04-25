@@ -4,6 +4,7 @@ import { YAxis, Grid, BarChart } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import { Ionicons } from '@expo/vector-icons';
 import { summaryHelper } from './SummaryHelper';
+import { Text as SvgText } from 'react-native-svg';
 
 export function StackedChartCompare(
     {
@@ -14,6 +15,7 @@ export function StackedChartCompare(
     }) {
         let periodData1 = Array(7).fill(0);
         let periodData2 = Array(7).fill(0);
+        const [cutOff, setCutOff] = useState(50);
         const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
         const [barData, setBarData] = useState([
             {
@@ -26,6 +28,43 @@ export function StackedChartCompare(
                 data: periodData2.map((value) => ({ value })),
             },
         ]);
+        const Labels = ({  x, y, bandwidth, data }) => {
+            return (
+                data[0]["data"].map((valueObj, index) => {
+                    let value = valueObj["value"];
+                    let value2 = data[1]["data"][index]["value"];
+                    return(
+                        <View
+                        key={ index }
+                        style={{flexDirection:'column'}}>
+                            {value !== 0 ? <SvgText
+                                x={ value >= cutOff ? x(value) - value.toString().length * 7 - 5 : x(value) + 5 }
+                                y={ y(index) + (bandwidth / 2) - 12}
+                                fontSize={ 14 }
+                                fill={ value >= cutOff ? 'white' : 'black' }
+                                alignmentBaseline={ 'middle' }
+                            >
+                                {value}
+                            </SvgText>
+                            : <SvgText/>
+                            }
+                            {value2 !== 0 ?
+                            <SvgText
+                                x={ value2 >= cutOff ? x(value) - value.toString().length * 7 - 5 : x(value2) + 5 }
+                                y={ y(index) + (bandwidth / 2) + 12}
+                                fontSize={ 14 }
+                                fill={ value2 >= cutOff ? 'white' : 'black' }
+                                alignmentBaseline={ 'middle' }
+                            >
+                                {value2}
+                            </SvgText>
+                            : <SvgText/>
+                            }
+                        </View>
+                    );
+                })
+            )
+        };
 
         useEffect(() => {
             for (var i = 0; i < compareTransPeriod1.length; i++) {
@@ -40,7 +79,7 @@ export function StackedChartCompare(
                     += parseFloat(compareTransPeriod2[i]['amountSpent']);
                 }
             }
-
+            setCutOff(Math.max(Math.max.apply(Math, periodData1), Math.max.apply(Math, periodData2)));
             setBarData([
                 {
                     data: periodData1.map((value) => ({ value })),
@@ -82,6 +121,7 @@ export function StackedChartCompare(
                     gridMin={0}
                 >
                     <Grid direction={Grid.Direction.VERTICAL}/>
+                    <Labels/>
                 </BarChart>       
             </View>
             {/* Legend */}
