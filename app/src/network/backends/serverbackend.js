@@ -180,7 +180,7 @@ class ServerBackend extends BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet(location, data, merge = false) {
+    dbSet(location, data, merge = false, callback) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         fetch(this.server_url + uri, {
@@ -190,6 +190,10 @@ class ServerBackend extends BaseBackend {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
+        }).then((res) => {
+            callback();
+        }).catch((err) => {
+            console.log(err);
         });
     }
 
