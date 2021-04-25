@@ -58,12 +58,36 @@ class SummaryHelper {
             case "Last 3 months":
                 startTimeFrame = new Date(month - 3 >= 0 ? year : year - 1, month - 3 % 12);
                 break;
+            case "Last 2 months":
+                startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
+                break;
             default: 
                 /* This Month */
                 startTimeFrame = new Date(year, month - 1);
                 break;
         }
         return [startTimeFrame, endTimeFrame];
+    }
+
+    InTimeFrame(timeframe, dateAdded) {
+        let endTimeFrame, startTimeFrame;
+        let month, date, year;
+        [month, date, year] = new Date().toLocaleDateString("en-US").split("/");
+        if (year.length == 2) {
+            year = "20" + year;
+        }
+        
+        if (timeframe === "This month") {
+            endTimeFrame = new Date();
+            startTimeFrame = new Date(year, month - 1);
+            return (startTimeFrame < dateAdded && endTimeFrame > dateAdded);
+        } else if (timeframe === "Last month") {
+            endTimeFrame = new Date(month - 1 !== -1 ? year : year - 1, (month - 1) % 12, 0);
+            startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
+            return (startTimeFrame < dateAdded && endTimeFrame > dateAdded);
+        } else {
+            return false;
+        }
     }
 }
 

@@ -1,131 +1,122 @@
-import React from 'react'
-import { Text, View, Dimensions } from 'react-native';
-import { Grid, StackedBarChart } from 'react-native-svg-charts'
+import React, { useEffect, useState } from 'react'
+import { Text, View, StyleSheet } from 'react-native';
+import { XAxis, Grid, BarChart } from 'react-native-svg-charts'
+import * as scale from 'd3-scale'
+import { Ionicons } from '@expo/vector-icons';
+import { summaryHelper } from './SummaryHelper';
 
-export function StackedChartCompare({}) {
-    const deviceWidth = Dimensions.get('window').width
-    const colors = ['#33691E', '#689F38', '#9CCC65', '#DCEDC8']
-    const data = [
-        {
-            broccoli: {
-                value: 3840,
+export function StackedChartCompare(
+    {
+        transactions,
+        keys,
+        curCard,
+    }) {
+        let thisMonthData = Array(7).fill(0);
+        let lastMonthData = Array(7).fill(0);
+        const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
+        const [barData, setBarData] = useState([
+            {
+                data: thisMonthData.map((value) => ({ value })),
                 svg: {
-                    onPress: () => console.log('onPress => 0:broccoli:3840'),
+                    fill: 'blue',
                 },
             },
-            celery: {
-                value: 1920,
-                svg: {
-                    onPress: () => console.log('onPress => 0:celery:1920'),
-                },
+            {
+                data: lastMonthData.map((value) => ({ value })),
             },
-            onions: {
-                value: 960,
-                svg: {
-                    onPress: () => console.log('onPress => 0:onions:960'),
+        ]);
+
+        useEffect(() => {
+            for (var i = 0; i < transactions.length; i++) {
+                if (curCard === null || curCard["cardId"] === transactions[i]["cardId"]) {
+                    if(summaryHelper.InTimeFrame("This month", transactions[i]["dateAdded"].toDate())) {
+                        thisMonthData[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
+                    } else {
+                        lastMonthData[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
+                    }
+                }
+            }
+            setBarData([
+                {
+                    data: thisMonthData.map((value) => ({ value })),
+                    svg: {
+                        fill: '#0000CD',
+                    },
                 },
-            },
-            tomato: {
-                value: 400,
-                svg: {
-                    onPress: () => console.log('onPress => 0:tomato:400'),
+                {
+                    data: lastMonthData.map((value) => ({ value })),
                 },
-            },
-        },
-        {
-            broccoli: {
-                value: 1600,
-                svg: {
-                    onPress: () => console.log('onPress => 1:broccoli:1600'),
-                },
-            },
-            celery: {
-                value: 1440,
-                svg: {
-                    onPress: () => console.log('onPress => 1:celery:1440'),
-                },
-            },
-            onions: {
-                value: 960,
-                svg: {
-                    onPress: () => console.log('onPress => 1:onions:960'),
-                },
-            },
-            tomato: {
-                value: 400,
-                svg: {
-                    onPress: () => console.log('onPress => 1:tomato:400'),
-                },
-            },
-        },
-        {
-            broccoli: {
-                value: 640,
-                svg: {
-                    onPress: () => console.log('onPress => 2:broccoli:640'),
-                },
-            },
-            celery: {
-                value: 960,
-                svg: {
-                    onPress: () => console.log('onPress => 2:celery:960'),
-                },
-            },
-            onions: {
-                value: 3640,
-                svg: {
-                    onPress: () => console.log('onPress => 2:onions:3640'),
-                },
-            },
-            tomato: {
-                value: 400,
-                svg: {
-                    onPress: () => console.log('onPress => 2:tomato:400'),
-                },
-            },
-        },
-        {
-            broccoli: {
-                value: 3320,
-                svg: {
-                    onPress: () => console.log('onPress => 3:broccoli:3320'),
-                },
-            },
-            celery: {
-                value: 480,
-                svg: {
-                    onPress: () => console.log('onPress => 3:celery:480'),
-                },
-            },
-            onions: {
-                value: 640,
-                svg: {
-                    onPress: () => console.log('onPress => 3:onions:640'),
-                },
-            },
-            tomato: {
-                value: 400,
-                svg: {
-                    onPress: () => console.log('onPress => 3:tomato:400'),
-                },
-            },
-        },
-    ]
-    
-    const keys = ['broccoli', 'celery', 'onions', 'tomato']
+            ]);
+            setOverallSpending([thisMonthData.reduce((a, b) => a + b, 0), lastMonthData.reduce((a, b) => a + b, 0)])
+        }, [curCard, transactions]);
+
+
+
     return (
-        <View style={{ justifyContent: 'center', flex: 1 }}>
-            <StackedBarChart
-                style={{ height: 300 }}
-                colors={colors}
-                contentInset={{ top: 30, bottom: 30 }}
-                data={data}
-                keys={keys}
-                valueAccessor={({ item, key }) => item[key].value}
+        <View style={{ flex: 1, paddingHorizontal: 20 }}>
+            <BarChart
+                style={ { flex: 2 } }
+                data={ barData }
+                yAccessor={({ item }) => item.value}
+                svg={{
+                    fill: '#228B22',
+                }}
+                contentInset={ { top: 30, bottom: 30 } }
             >
-                <Grid />
-            </StackedBarChart>
+                <Grid/>
+            </BarChart>
+            <XAxis
+            data={ barData[0].data }
+            scale={ scale.scaleBand }
+            formatLabel={ ( index ) => keys[index] }
+            svg={{ fontSize: 8, fill: 'black' }}
+            />
+            {/* Legend */}
+            <View style={styles.legendContainer}>
+                <View style={styles.legendItem}>
+                    <Ionicons
+                        name="cube"
+                        color={'#0000CD'}
+                        size={20}
+                    ></Ionicons>
+                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                        <Text>1st Period</Text>
+                        <Text>${overallSpending[0].toFixed(2)}</Text>
+                    </View>
+                </View>
+                <View style={styles.legendItem}>
+                    <Ionicons
+                        name="cube"
+                        color={'#228B22'}
+                        size={20}
+                    ></Ionicons>
+                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                        <Text>2nd Period</Text>
+                        <Text>${overallSpending[1].toFixed(2)}</Text>
+                    </View>
+                </View>
+            </View>
+            {/* Overall */}
+            <Text style={{paddingHorizontal: 10, textAlign: 'center'}}>
+                You spent {overallSpending[0] === 0 ? 0 : (overallSpending[0] * 100/overallSpending[1]).toFixed(2)}% 
+                more
+                {"\n"}
+                this month than last month.
+            </Text>
         </View>
-    );
-
+    )
 }
+
+const styles = StyleSheet.create({
+    legendContainer: {
+      alignItems: 'center',
+      margin: 10,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    legendItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 5,
+    }
+  });

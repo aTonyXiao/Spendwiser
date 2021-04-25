@@ -17,6 +17,7 @@ const modalType = {
     TRANSACTIONS: 3,
     CARDS: 4,
     MODE: 5,
+    MONTH: 6,
 }
 const modeType = {
     SUMMARY: "Summary",
@@ -39,13 +40,16 @@ export function SpendingSummary({navigation}) {
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
     const [mode, setMode] = useState(modeType.SUMMARY);
+    const [compareTrans, setCompareTrans] = useState([]);
+    const [compareTimeframe, setCompareTimeframe] = useState([]);
+    const [whichPeriod, setWhichPeriod] = useState(1);
 
+    const userId = user.getUserId();
     function getCardFromDB(myCards) {
         setCards(myCards);
     }
 
     function changeCategory(cat) {
-        console.log(cat);
         setCurCategory({
             label: cat,
             value: cat === "All categories" ? values.reduce((a, b) => a + b, 0) : values[keys.indexOf(cat)],
@@ -70,6 +74,17 @@ export function SpendingSummary({navigation}) {
         setCurCategory({label: "All Categories", value: tmpValues.reduce((a, b) => a + b, 0)});
     };
 
+    function setNewPeriod(date) {
+        const dateSplit = date.split(' ');
+        let newCompare = compareTimeframe;
+        if (whichPeriod === 1) {
+            newCompare[0] = new Date(dateSplit[0], dateSplit[1] - 1);
+        } else {
+            newCompare[1] = new Date(dateSplit[0], dateSplit[1] - 1);
+        }
+        setCompareTimeframe(newCompare);
+    }
+
     // process each transaction retrieved from db after timeframe change
     useEffect(() => {
         if (transactions.length == 0) {
@@ -93,16 +108,38 @@ export function SpendingSummary({navigation}) {
             label: 'All categories',
             value: 0,
         });
-        const userId = user.getUserId();
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
             setTransactions(oldData => [...oldData, data]);
         });
     }, [curTimeframe]);
 
-    // Load card names and id when mount
+    // Initialize transactions for compare mode
+    useEffect(() => {
+        console.log(compareTimeframe);
+        setCompareTrans([]);
+        if (compareTimeframe.length === 0) {
+            return;
+        }
+        let endTimeFrame0 = new Date(compareTimeframe[0].getFullYear(), compareTimeframe[0].getMonth() + 1, 0);
+        let endTimeFrame1 = new Date(compareTimeframe[1].getFullYear(), compareTimeframe[1].getMonth() + 1, 0);
+        user.getTimeFrameTransactions(userId, compareTimeframe[0], endTimeFrame0, (data) => {
+            setCompareTrans(oldData => [...oldData, data]);
+        });
+        user.getTimeFrameTransactions(userId, compareTimeframe[1], endTimeFrame1, (data) => {
+            setCompareTrans(oldData => [...oldData, data]);
+        });
+    }, [compareTimeframe]);
+
+    useEffect(() => {console.log("hi")}, [compareTimeframe]);
+
+    // Load card names and id, and COMPARE mode info when mount
     useEffect(() => {
         summaryHelper.getDbCards(getCardFromDB);
+        let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
+        let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
+        console.log(thisMonth + " " + startTimeFrame);
+        setCompareTimeframe([thisMonth, startTimeFrame]);
     }, []);
 
     return (
@@ -131,13 +168,16 @@ export function SpendingSummary({navigation}) {
                 curCard={curCard}
                 curTimeframe={curTimeframe}
                 mode={mode}
+                modeType={modeType}
                 curCategory={curCategory}
                 setModalVisible={setModalVisible}
+                compareTimeframe = {compareTimeframe}
+                setNewPeriod = {setNewPeriod}
+                setWhichPeriod = {setWhichPeriod}
             />
             {/* Content */}
             <View style={styles.contentContainer}>
-                {mode === modeType.SUMMARY &&
-                    !(listViewEnabled) ?
+                {mode === modeType.SUMMARY && !(listViewEnabled) &&
                     <PieChartSummary
                         style={{height:500}}
                         values={values}
@@ -147,7 +187,8 @@ export function SpendingSummary({navigation}) {
                         setModalVisible={setModalVisible}
                         colors={colors}
                     />
-                    :
+                }
+                {mode === modeType.SUMMARY && listViewEnabled &&
                     <ListSummary
                         setModalVisible={setModalVisible}
                         changeCategory={changeCategory}
@@ -156,20 +197,27 @@ export function SpendingSummary({navigation}) {
                     
                 }
                 {mode === modeType.COMPARE &&
-                    <StackedChartCompare/>
+                    <StackedChartCompare
+                        transactions={compareTrans}
+                        keys={keys}
+                        curCard={curCard}
+                        compareTimeframe={compareTimeframe}
+                    />
                 }
             </View>
-            <View style={styles.viewType}>
-                <Ionicons
-                    name="list-outline"
-                    color="blue"
-                    size={15}
-                ></Ionicons>
-                <Text 
-                    style={{color: 'blue', marginLeft: 5}}
-                    onPress={() => {setListViewEnabled(!listViewEnabled)}}
-                >{listViewEnabled ? "Chart View" : "List View"}</Text>
-            </View>
+            {mode === modeType.SUMMARY &&
+                <View style={styles.viewType}>
+                    <Ionicons
+                        name="list-outline"
+                        color="blue"
+                        size={15}
+                    ></Ionicons>
+                    <Text 
+                        style={{color: 'blue', marginLeft: 5}}
+                        onPress={() => {setListViewEnabled(!listViewEnabled)}}
+                    >{listViewEnabled ? "Chart View" : "List View"}</Text>
+                </View>
+            }
             {/* Footer */}
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />

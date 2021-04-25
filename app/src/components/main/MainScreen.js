@@ -179,8 +179,10 @@ export function MainScreen({navigation}) {
                     style={mapStyles.map}
                     provider="google"
                     region = {region}
+                    showsUserLocation={true}
+                    onPoiClick={e => console.log(e.nativeEvent)}
                 >
-                    <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
+                    {/* <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} /> */}
                 </MapView>
             </View>
 
