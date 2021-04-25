@@ -117,9 +117,6 @@ class FirebaseBackend extends BaseBackend {
      * @param {object} local_data 
      */
     consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
-        console.log("Consolidating after a db get...");
-        console.log("Remote data " + JSON.stringify(remote_data));
-        console.log("Local data " + JSON.stringify(local_data));
         let local_data_stripped = storage.stripMetadata(local_data);
 
         // Check if there are no changes b/w the two pieces of data
@@ -275,6 +272,7 @@ class FirebaseBackend extends BaseBackend {
         }).catch((err) => {
             console.log("Invalid query")
             console.log(err);
+            callback(null);
         });
     }
 
@@ -305,24 +303,19 @@ class FirebaseBackend extends BaseBackend {
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
             let conditions = conditionsWithCallback;
-            console.log("db get conditions");
-            console.log(conditions);
-
             if (type == 'normal') {
                 this.getUserID((accountId) => {
                     // Get the data from firebase
-                    console.log("Getting from firebase");
-                    console.log("location: " + location);
-                    // Get the data (if any) from the local db
-                    conditions = JSON.parse(JSON.stringify(conditions));
-                    storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
-                        console.log("Local data");
-                        console.log(local_data);
-                        callback(local_data);
 
+                    // Get the data (if any) from the local db
+                    storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
                         this.firebaseDbGet(location, ...conditions, (remote_data) => {
-                            console.log("calling the consolidate function from dbGet");
-                            this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                            if (conditions.length == 0) {
+                                this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                            } else {
+                                this.consolidateLocalAndRemoteCollections(accountId, location, remote_data, local_data);
+                            }
+                            callback(remote_data);
                         });
                     })
 
@@ -354,9 +347,6 @@ class FirebaseBackend extends BaseBackend {
         // TODO (Nathan W): Check local storage first before going to the firebase db
         this.userAccountType((type) => {
             if (type == 'normal') {
-                console.log("Getting from firebase");
-                console.log("location: " + location);
-
                 this.getUserID((accountId) => {
                     storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
                         let dbloc = getDatabaseLocation(this.database, location);
@@ -495,13 +485,11 @@ class FirebaseBackend extends BaseBackend {
             if (accountId != 'offline') {
                 // Add data locally
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id);
                         callback(query_id);
                     });
-                    */
                 });
 
             } else {

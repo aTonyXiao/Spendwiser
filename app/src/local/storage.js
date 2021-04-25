@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let storage_debug = true;
+let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -160,18 +160,22 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 console.log("Setting Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log("Data: ");
+                console.log("Document: " + document);
+                console.log("ID: " + id);
                 console.log("----------------------");
             }
 
             // NOTE (Nathan W) the document **should** exist
-            if (merge) {
-                db[accountName][document][id] = {
-                    ...db[accountName][document][id],
-                    ...local_data,
+
+            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+                if (merge) {
+                    db[accountName][document][id] = {
+                        ...db[accountName][document][id],
+                        ...local_data,
+                    }
+                } else {
+                    db[accountName][document][id] = local_data;
                 }
-            } else {
-                db[accountName][document][id] = local_data;
             }
 
             jsonValue = JSON.stringify(db);
@@ -202,6 +206,10 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("Document: " + document);
                 console.log("Id: " + id);
                 console.log("----------------------");
+            }
+
+            if (!(accountName in db && document in db[accountName])) {
+                callback([]);
             }
 
             let local_data = [];
@@ -294,12 +302,13 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 console.log("----------------------");
             }
 
-            db[accountName][location][newId] = db[accountName][location][oldId];
-            db[accountName][location][newId]['meta_id'] = newId;
-            delete db[accountName][location][oldId];
-
-            let id = newId;
-            db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+            if (accountName in db && location in db[accountName] && oldId in db[accountName][location]) {
+                db[accountName][location][newId] = db[accountName][location][oldId];
+                db[accountName][location][newId]['meta_id'] = newId;
+                delete db[accountName][location][oldId];
+                let id = newId;
+                db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+            }
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {

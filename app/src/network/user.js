@@ -139,7 +139,7 @@ class userClass {
                 storeType: storeInfo["storeType"]
             },
             amountSpent: amountSpent,
-            dateAdded: timestamp
+            dateAdded: timestamp 
         }, (id) => { 
             callback(id);
         })
@@ -259,7 +259,11 @@ class userClass {
         userId = await userId;
         appBackend.dbGet("cards." + cardId, (data)=> { 
             // TODO apply diff
-            callback(data.rewards);
+            if (typeof data != 'undefined' && 'rewards' in data) {
+                callback(data.rewards);
+            } else {
+                callback(null);
+            }
         })
     }
 
