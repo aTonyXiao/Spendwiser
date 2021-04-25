@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet } from 'react-native';
-import { XAxis, Grid, BarChart } from 'react-native-svg-charts'
+import { YAxis, Grid, BarChart } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
 import { Ionicons } from '@expo/vector-icons';
 import { summaryHelper } from './SummaryHelper';
@@ -58,24 +58,32 @@ export function StackedChartCompare(
 
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: 20 }}>
-            <BarChart
-                style={ { flex: 2 } }
-                data={ barData }
-                yAccessor={({ item }) => item.value}
-                svg={{
-                    fill: '#228B22',
-                }}
-                contentInset={ { top: 30, bottom: 30 } }
-            >
-                <Grid/>
-            </BarChart>
-            <XAxis
-            data={ barData[0].data }
-            scale={ scale.scaleBand }
-            formatLabel={ ( index ) => keys[index] }
-            svg={{ fontSize: 8, fill: 'black' }}
-            />
+        <View style={{ flex: 1, paddingHorizontal: 10}}>
+            <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 8 }}>
+                <YAxis
+                    data={barData[0].data}
+                    yAccessor={({ index }) => index}
+                    scale={scale.scaleBand}
+                    contentInset={{ top: 10, bottom: 10 }}
+                    spacing={0.2}
+                    formatLabel={(_, index) => keys[index]}
+                    svg={{ fontSize: 12, fill: 'black' }}
+                />
+                <BarChart
+                    style={ { flex: 2, marginLeft: 8 } }
+                    data={barData}
+                    horizontal={true}
+                    yAccessor={({ item }) => item.value}
+                    svg={{
+                        fill: '#228B22',
+                    }}
+                    contentInset={ { top: 10, bottom: 10 } }
+                    spacing={0.2}
+                    gridMin={0}
+                >
+                    <Grid direction={Grid.Direction.VERTICAL}/>
+                </BarChart>       
+            </View>
             {/* Legend */}
             <View style={styles.legendContainer}>
                 <View style={styles.legendItem}>
