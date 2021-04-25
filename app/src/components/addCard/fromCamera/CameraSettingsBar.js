@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-    Text, 
     View, 
     StyleSheet, 
-    TouchableOpacity, 
+    TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { HelpModal } from './HelpModal';
 
 /**
  * Child component header bar that gives options to user while editing image
@@ -18,58 +18,129 @@ import { Ionicons } from '@expo/vector-icons';
  * @param {Object} obj.setSendToApi - React useState function that sets sendToApi boolean
  * @module CameraSettingsBar
  */
-export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks, setShowSettingsBar, setSendToApi}) {
-    const chooseDifferentImage = () => {
+export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks, setShowSettingsBar, setSendToApi, forceReRender}) {
+    const showDeleteIcon = (moveableBlocks.length > 0);
+    const [showHelpModal, setShowHelpModal] = useState(false); //useState(showOnStart);
+
+    const goBack = () => {
         navigation.navigate('ChooseImage');
     } 
 
     // TODO: need to add some code for checking if no box is currently selected, OR
     //  only show this option when a box is selected
     const deleteBox = () => {
-        // let newBlocks = moveableBlocks;
-        // newBlocks.pop();
-        // setMoveableBlocks(newBlocks);
+        console.log('delete box')
+        let newBlocks = moveableBlocks;
+        newBlocks.pop();
+        setMoveableBlocks(newBlocks);
+        forceReRender();
     }
 
     const addBlock = () => {
+        console.log('add box');
         let newBlocks = moveableBlocks;
         for (let j=0 ; j<newBlocks.length; j++) { 
             newBlocks[j] = false;
         }
         newBlocks.push(true);
-        setMoveableBlocks(newBlocks)
+        setMoveableBlocks(newBlocks);
+        forceReRender();
     }
 
     const showHelp = () => { 
-
+        setShowHelpModal(true);
     }
 
-    const callDone = () => { 
+    const callDone = () => {
         setShowSettingsBar(false);
         setSendToApi(true);
     }
 
-    return(
+    return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={chooseDifferentImage}>
-                <Text style={styles.txt}>Choose different image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={deleteBox}>
-                <Text style={styles.txt}>Delete Box</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={addBlock}>
-                <Text style={styles.txt}>Add Another Box</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={showHelp}>
+            <HelpModal
+                showHelpModal={showHelpModal}
+                setShowHelpModal={setShowHelpModal}
+            ></HelpModal>
+
+            {/* Go Back */}
+            <View style={styles.leftContainer}>
+                <TouchableOpacity 
+                    onPress={goBack}
+                    style={styles.icon}
+                >
+                    <Ionicons
+                        name="arrow-back-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.rightContainer}>
+                {/* Help */}
+                <TouchableOpacity 
+                    onPress={showHelp}
+                    style={styles.icon}
+                >
                     <Ionicons
                         name="help-circle-outline"
                         color="black"
                         size={32}
                     ></Ionicons>
                 </TouchableOpacity>
-            <TouchableOpacity onPress={callDone}>
-                <Text style={styles.txt}>Done!</Text>
-            </TouchableOpacity>
+
+                {/* Delete */}
+                {
+                    showDeleteIcon &&
+                    <TouchableOpacity
+                        onPress={deleteBox}
+                        style={styles.icon}
+                    >
+                        <Ionicons
+                            name="close-outline"
+                            color="black"
+                            size={32}
+                        ></Ionicons>
+                    </TouchableOpacity>
+                }
+                {
+                    !showDeleteIcon && 
+                    <TouchableOpacity
+                        style={styles.icon}
+                    >
+                        <Ionicons
+                            name="close-outline"
+                            color="lightgray"
+                            size={32}
+                        ></Ionicons>
+                    </TouchableOpacity>
+                }
+
+                {/* Add box */}
+                <TouchableOpacity 
+                    onPress={addBlock}
+                    style={styles.icon}
+                >
+                    <Ionicons
+                        name="add-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+
+                {/* Done */}
+                <TouchableOpacity 
+                    onPress={callDone}
+                    style={styles.icon}
+                >
+                    <Ionicons
+                        name="checkmark-outline"
+                        color="black"
+                        size={32}
+                    ></Ionicons>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -78,12 +149,24 @@ const styles = StyleSheet.create({
     container: { 
         width: '100%',
         position: 'absolute',
-        top: 30,
-        backgroundColor: 'white',
-        zIndex: 999
+        zIndex: 999,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    txt: {
-        fontSize: 18,
+    leftContainer: {
+        top: 15,
         margin: 10, 
-    }
+        opacity: 1,
+    },
+    rightContainer: {
+        top: 15,
+        display: 'flex',
+        flexDirection: 'row',
+        margin: 10,
+        opacity: 1
+    },
+    icon: {
+        margin: 10
+    },
 })

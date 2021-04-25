@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.1.0",
     "@react-native-async-storage/async-storage": "^1.15.0",
+    "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "5.9.7",
     "@react-navigation/native": "^5.9.2",
@@ -56,6 +57,7 @@
     "react-native-render-html": "^5.1.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.2",
+    "react-native-select-multiple": "^2.1.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.1.0",
     "react-native-svg-charts": "^5.4.0",
@@ -63,13 +65,16 @@
     "react-native-unimodules": "^0.12.0",
     "react-native-vector-icons": "^8.0.0",
     "react-native-view-shot": "^3.1.2",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "@unimodules/core": "~6.0.0",
+    "unimodules-permissions-interface": "~5.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "babel-plugin-inline-dotenv": "^1.6.0",
     "better-docs": "^2.3.2",
-    "loke-jsdoc-theme": "^2.1.0"
+    "loke-jsdoc-theme": "^2.1.0",
+    "node-pre-gyp": "~0.15.0"
   },
   "private": true
 }

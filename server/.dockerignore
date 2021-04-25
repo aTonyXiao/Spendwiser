@@ -1,4 +1,5 @@
 # project artifacts
 node_modules
+database
 npm-debug.log
 .gitignore
