@@ -40,9 +40,10 @@ export function SpendingSummary({navigation}) {
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
     const [mode, setMode] = useState(modeType.SUMMARY);
-    const [compareTrans, setCompareTrans] = useState([]);
+    const [compareTransPeriod1, setCompareTransPeriod1] = useState([]);
+    const [compareTransPeriod2, setCompareTransPeriod2] = useState([]);
     const [compareTimeframe, setCompareTimeframe] = useState([]);
-    const [whichPeriod, setWhichPeriod] = useState(1);
+    const [whichPeriod, setWhichPeriod] = useState(0);
 
     const userId = user.getUserId();
     function getCardFromDB(myCards) {
@@ -79,11 +80,33 @@ export function SpendingSummary({navigation}) {
         let newCompare = compareTimeframe;
         if (whichPeriod === 1) {
             newCompare[0] = new Date(dateSplit[0], dateSplit[1] - 1);
+            setCompareTransPeriod1([]);
         } else {
             newCompare[1] = new Date(dateSplit[0], dateSplit[1] - 1);
+            setCompareTransPeriod2([]);
         }
         setCompareTimeframe(newCompare);
+        getCompareTimeframeTransactions(newCompare)
     }
+    
+    // Initialize transactions for compare mode
+    function getCompareTimeframeTransactions(newCompareTimeframe) {
+        if (newCompareTimeframe.length === 0) {
+            return;
+        }
+        if (whichPeriod === 1 || whichPeriod === 0) {
+            let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0);
+            user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
+                setCompareTransPeriod1(oldData => [...oldData, data]);
+            });
+        }
+        if (whichPeriod === 2 || whichPeriod === 0) {
+            let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0);
+            user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
+                setCompareTransPeriod2(oldData => [...oldData, data]);
+            });
+        }
+    };
 
     // process each transaction retrieved from db after timeframe change
     useEffect(() => {
@@ -114,25 +137,6 @@ export function SpendingSummary({navigation}) {
         });
     }, [curTimeframe]);
 
-    // Initialize transactions for compare mode
-    useEffect(() => {
-        console.log(compareTimeframe);
-        setCompareTrans([]);
-        if (compareTimeframe.length === 0) {
-            return;
-        }
-        let endTimeFrame0 = new Date(compareTimeframe[0].getFullYear(), compareTimeframe[0].getMonth() + 1, 0);
-        let endTimeFrame1 = new Date(compareTimeframe[1].getFullYear(), compareTimeframe[1].getMonth() + 1, 0);
-        user.getTimeFrameTransactions(userId, compareTimeframe[0], endTimeFrame0, (data) => {
-            setCompareTrans(oldData => [...oldData, data]);
-        });
-        user.getTimeFrameTransactions(userId, compareTimeframe[1], endTimeFrame1, (data) => {
-            setCompareTrans(oldData => [...oldData, data]);
-        });
-    }, [compareTimeframe]);
-
-    useEffect(() => {console.log("hi")}, [compareTimeframe]);
-
     // Load card names and id, and COMPARE mode info when mount
     useEffect(() => {
         summaryHelper.getDbCards(getCardFromDB);
@@ -140,6 +144,7 @@ export function SpendingSummary({navigation}) {
         let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
         console.log(thisMonth + " " + startTimeFrame);
         setCompareTimeframe([thisMonth, startTimeFrame]);
+        getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
     }, []);
 
     return (
@@ -198,7 +203,8 @@ export function SpendingSummary({navigation}) {
                 }
                 {mode === modeType.COMPARE &&
                     <StackedChartCompare
-                        transactions={compareTrans}
+                        compareTransPeriod1={compareTransPeriod1}
+                        compareTransPeriod2={compareTransPeriod2}
                         keys={keys}
                         curCard={curCard}
                         compareTimeframe={compareTimeframe}

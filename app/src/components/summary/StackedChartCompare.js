@@ -7,48 +7,53 @@ import { summaryHelper } from './SummaryHelper';
 
 export function StackedChartCompare(
     {
-        transactions,
+        compareTransPeriod1,
+        compareTransPeriod2,
         keys,
         curCard,
     }) {
-        let thisMonthData = Array(7).fill(0);
-        let lastMonthData = Array(7).fill(0);
+        let periodData1 = Array(7).fill(0);
+        let periodData2 = Array(7).fill(0);
         const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
         const [barData, setBarData] = useState([
             {
-                data: thisMonthData.map((value) => ({ value })),
+                data: periodData1.map((value) => ({ value })),
                 svg: {
                     fill: 'blue',
                 },
             },
             {
-                data: lastMonthData.map((value) => ({ value })),
+                data: periodData2.map((value) => ({ value })),
             },
         ]);
 
         useEffect(() => {
-            for (var i = 0; i < transactions.length; i++) {
-                if (curCard === null || curCard["cardId"] === transactions[i]["cardId"]) {
-                    if(summaryHelper.InTimeFrame("This month", transactions[i]["dateAdded"].toDate())) {
-                        thisMonthData[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
-                    } else {
-                        lastMonthData[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
-                    }
+            for (var i = 0; i < compareTransPeriod1.length; i++) {
+                if (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"]) {
+                    periodData1[summaryHelper.matchTransactionToCategory(compareTransPeriod1[i])]
+                    += parseFloat(compareTransPeriod1[i]['amountSpent']);
                 }
             }
+            for (var i = 0; i < compareTransPeriod2.length; i++) {
+                if (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"]) {
+                    periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
+                    += parseFloat(compareTransPeriod2[i]['amountSpent']);
+                }
+            }
+
             setBarData([
                 {
-                    data: thisMonthData.map((value) => ({ value })),
+                    data: periodData1.map((value) => ({ value })),
                     svg: {
                         fill: '#0000CD',
                     },
                 },
                 {
-                    data: lastMonthData.map((value) => ({ value })),
+                    data: periodData2.map((value) => ({ value })),
                 },
             ]);
-            setOverallSpending([thisMonthData.reduce((a, b) => a + b, 0), lastMonthData.reduce((a, b) => a + b, 0)])
-        }, [curCard, transactions]);
+            setOverallSpending([periodData1.reduce((a, b) => a + b, 0), periodData2.reduce((a, b) => a + b, 0)])
+        }, [curCard, compareTransPeriod1, compareTransPeriod2]);
 
 
 
