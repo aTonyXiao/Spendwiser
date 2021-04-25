@@ -165,7 +165,7 @@ class FirebaseBackend extends BaseBackend {
      */
     consolidateLocalCollection(accountName, location, local_collection) {
         for (let i = 0; i < local_collection.length; i++) {
-            let sync_id = location + local_collection[i]['meta_id'];
+            let sync_id = JSON.stringify(local_collection[i]);
 
             if (local_collection[i]['meta_synced'] == false && !syncing_items.includes(sync_id)) {
 
@@ -212,7 +212,8 @@ class FirebaseBackend extends BaseBackend {
                     let remote_modified = new Date(remote_collection[i]['modified']);
                     let local_modified = local_collection['meta_modified'];
 
-                    let sync_id = location + local_collection[j]['meta_id'];
+                    // let sync_id = location + local_collection[j]['meta_id'];
+                    let sync_id = JSON.stringify(local_collection[j]);
 
                     // If the remote item has been modified more recently AND we are not already trying to
                     // sync our changes
@@ -225,7 +226,7 @@ class FirebaseBackend extends BaseBackend {
                                         location + "." + local_collection['meta_id'],
                                         remote_modified, true, () => {
                             // Unlock on the data we synced
-                            syncing_items = syncing_items.filter(item => item !== local_data_stripped);
+                            syncing_items = syncing_items.filter(item => item !== sync_id);
                         })
                     }
 
@@ -451,17 +452,18 @@ class FirebaseBackend extends BaseBackend {
     }
 
     dbFirebaseAddWithMetadata(location, data, callback) {
-        this.dbFirebaseAdd(location, data, (query_id) => {
-            if (!syncing_items.includes(location + query_id)) {
-                syncing_items.push(location + query_id);
+        let sync_id = JSON.stringify(data);
+        if (!syncing_items.includes(sync_id)) {
+            syncing_items.push(sync_id);
+            this.dbFirebaseAdd(location, data, (query_id) => {
                 // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
                 // consolidation between our local database and the remote one.
                 this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
-                    syncing_items = syncing_items.filter(item => item !== location + query_id);
+                    syncing_items = syncing_items.filter(item => item !== sync_id);
                     callback(query_id);
                 });
-            }
-        });
+            });
+        }
     }
 
     /**
