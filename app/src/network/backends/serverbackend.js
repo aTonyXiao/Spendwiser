@@ -99,7 +99,13 @@ class ServerBackend extends BaseBackend {
                 'Content-Type': 'application/json',
             }
         }).then(res => res.json()).then((res) => {
-            callback(Array.isArray(res) && res.length == 1 ? res[0] : res);
+            if (Array.isArray(res)) {
+                res.forEach(doc => {
+                    callback(doc);
+                });
+            } else {
+                callback(res);
+            }
         }).catch((err) => {
             console.log(err);
         });
