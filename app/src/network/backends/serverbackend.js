@@ -10,44 +10,12 @@ import * as storage from '../../local/storage'
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
 
-
 /**
- * Extract the database location from the string
+ * Backend for containerized server
+ * TODO TROI: https://reactnative.dev/docs/network
  */
-function getDatabaseLocation(database, location) {
-    let locationList = location.split(".");
-    let databaseLocation = database;
-    for (let i = 0; i < locationList.length; i++) {
-        if (i % 2 == 0) { // collection
-            databaseLocation = databaseLocation.collection(locationList[i]);
-        } else { // document
-            databaseLocation = databaseLocation.doc(locationList[i]);
-        }
-    }
-    return databaseLocation;
-}
+class ServerBackend extends BaseBackend {
 
-/** 
- * Filter the databse collection depending on the given conditions
- * each condition is an array in the format of [FIELD, OPERATOR, COMPARISON]
- */
-function filterDatabaseCollection(collection, conditions) {
-    let filteredCollection = collection;
-    for (let i = 0; i < conditions.length; i++) {
-        let condition = conditions[i];
-        filteredCollection = filteredCollection.where(condition[0], condition[1], condition[2]);
-    }
-    return filteredCollection;
-}
-
-/**
- * Firebase Backend designed around the Firebase Web SDK
- * Database functions are designed around the Firestore Collection/Document style
- * - Collections contain Documents
- * - Documents contain data and sometimes Collections
- * For more reference: https://firebase.google.com/docs/firestore/data-model
- */
-class FirebaseBackend extends BaseBackend {
     /**
      * This function initializes the Backend
      */
@@ -63,13 +31,14 @@ class FirebaseBackend extends BaseBackend {
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
 
+        this.server_url = process.env.REACT_NATIVE_SERVER_URL;
+
         // check if there is a Firebase 'App' already initialized
         if (firebase.apps.length == 0) {
             firebase.initializeApp(firebaseConfig); // if not, initialize
         } else {
             firebase.app(); //if there is, retrieve the default app
         }
-        this.database = firebase.firestore(); // set the database to the firestore instance
 
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
@@ -96,72 +65,7 @@ class FirebaseBackend extends BaseBackend {
      * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)
      */
     enableDatabaseCaching(cacheSize = -1) {
-        try {
-            this.database.settings({
-                cacheSizeBytes: cacheSize < 0 ? firebase.firestore.CACHE_SIZE_UNLIMITED : cacheSize
-            });
-            this.database.enablePersistence()
-        } catch (err) {
-            console.log(err);
-        }
-    }
-    consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
-        let local_data_stripped = storage.stripMetadata(local_data);
-
-        // Check if there are no changes b/w the two pieces of data
-        if (remote_data == local_data_stripped) {
-            return;
-        }
         
-        // Check if the data exists locally at all
-        else if ((typeof local_data == 'array' && local_data.isEmpty()) ||
-                (Object.keys(local_data).length === 0)) {
-            let [document, id] = storage.parseDocAndId(location);
-            storage.addLocalDB(accountName, document, remote_data, (assigned_id) => {
-                storage.modifyDBEntryMetainfo(accountName, document, true, assigned_id, id);
-            })
-        }
-
-        // Check if the data locally exists, but has not been synced
-        else if (local_data['meta_synced'] == false && remote_data) {
-            // The data exists locally AND remotely, but changes to the local version have
-            // not been synced with the remote version
-
-            // Update the remote data with our local changes
-            this.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
-                storage.modifyDBEntryMetainfo(accountName, location, true, location, location);
-            });
-        } else if (local_data['meta_synced'] == false) {
-            // The remote data does not exist in any form yet.
-            // Create it, then update our local data with the correct id
-            this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {});
-        }
-    }
-
-    firebaseDbGet(location, ...conditionsWithCallback) {
-        let callback = conditionsWithCallback.pop();
-        let conditions = conditionsWithCallback;
-
-        let databaseLocation = getDatabaseLocation(this.database, location);
-
-        // filter if there are conditions
-        if (conditions.length > 0) {
-            databaseLocation = filterDatabaseCollection(databaseLocation, conditions);
-        }
-
-        // get the data
-        databaseLocation.get().then((query) => {
-            if (typeof query.get === "function") { // hacky way of checking if a doc
-                callback(query.data());
-            } else {
-                query.forEach(doc => {
-                    callback(doc.data());
-                });
-            }
-        }).catch((err) => {
-            console.log("Invalid query")
-            console.log(err);
-        });
     }
 
     /**
@@ -186,33 +90,19 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbGet(location, ...conditionsWithCallback) {
-        // TODO (Nathan W): Check local storage first before going to the firebase db
-
-        this.userAccountType((type) => {
-            let callback = conditionsWithCallback.pop();
-            let conditions = conditionsWithCallback;
-            console.log("db get conditions");
-            console.log(conditions);
-
-            if (type == 'normal') {
-                this.getUserID((accountId) => {
-                    // Get the data from firebase
-                    this.firebaseDbGet(location, ...conditionsWithCallback, (remote_data) => {
-                        // Get the data (if any) from the local db
-                        storage.getLocalDB(accountId, location, ...conditionsWithCallback, (local_data) => {
-                            this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
-                            callback(remote_data);
-                        });
-                    })
-
-
-                });
-            } else {
-                this.getUserID((accountId) => {
-                    storage.getLocalDB(accountId, location, ...conditionsWithCallback, callback);
-                });
+        let uri = location.replaceAll(".", "/");
+        let callback = conditionsWithCallback.pop();
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             }
-        })
+        }).then(res => res.json()).then((res) => {
+            callback(res);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
 
@@ -230,28 +120,23 @@ class FirebaseBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        // TODO (Nathan W): Check local storage first before going to the firebase db
-        this.userAccountType((type) => {
-            if (type == 'normal') {
-                let dbloc = getDatabaseLocation(this.database, location);
-
-                let collection = [];
-                dbloc.get().then((query) => {
-                    query.forEach(doc => {
-                        var currentDoc = doc.data();
-                        currentDoc["docId"] = doc.id;
-                        collection.push(currentDoc);
-                    })
-                    callback(collection);
-                }).catch((err) => {
-                    console.log(err);
-                })
-            } else {
-                this.getUserID((accountId) => {
-                    storage.getSubcollectionLocalDB(accountId, location, callback);
-                });
+        let uri = location.replaceAll(".", "/");
+        let collection = [];
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             }
-        })
+        }).then(res => res.json()).then((res) => {
+            res.forEach(doc => {
+                doc["docId"] = doc._id;
+                collection.push(doc);
+            })
+            callback(collection);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     /** 
@@ -268,14 +153,17 @@ class FirebaseBackend extends BaseBackend {
      * });
     */
     dbDoesDocExist(location, callback) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.get().then((query) => {
-            if (!query.exists) {
-                console.log('No such document!');
-                callback(false);
-            } else {
-                callback(true);
+        let uri = location.replaceAll(".", "/");
+        fetch(this.server_url + uri, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             }
+        }).then(res => res.json()).then((res) => {
+            callback(true);
+        }).catch((err) => {
+            callback(false);
         });
     }
 
@@ -292,28 +180,17 @@ class FirebaseBackend extends BaseBackend {
      *     hello: "what"
      * });
      */
-    dbSet(location, data, merge = false, callback) {
-        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
-        storage.getLoginState((state) => {
-            this.getUserID((accountId) => {
-                // Store locally
-                storage.setLocalDB(accountId, location, data, merge, () => {
-
-                    // Store on firebase if possible
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    if (state.signed_in && !state.offline) {
-                        databaseLocation.set(data, { merge: merge }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-
-                    callback();
-                });
-            });
-
-
-            // TODO: (Nathan W) Store local copy as well
-        })
+    dbSet(location, data, merge = false) {
+        let uri = location.replaceAll(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
     }
 
     /**
@@ -332,29 +209,19 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbAdd(location, data, callback) {
-        // Add card data to our internal storage
-        this.getUserID((accountId) => {
-            if (accountId != 'offline') {
-                // Add data locally
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-
-                    // Add data to our firebase storage
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    databaseLocation.add(data).then((query) => {
-                        // We added data successfully, update our local storage metadata
-                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query.id);
-                        callback(query.id);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-
-                });
-
-            } else {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    callback(local_query_id);
-                });
-            }
+        let uri = location.replaceAll(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then((res) => {
+            callback(res)
+        }).catch((err) => {
+            console.log(err);
         });
     }
 
@@ -368,8 +235,15 @@ class FirebaseBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
-        let databaseLocation = getDatabaseLocation(this.database, location);
-        databaseLocation.delete();
+        let uri = location.replaceAll(".", "/");
+        console.log(this.server_url + uri);
+        fetch(this.server_url + uri, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
     }
 
     /**
@@ -504,7 +378,7 @@ class FirebaseBackend extends BaseBackend {
             callback(state.signed_in);
         });
     }
-
+    
 
     /**
      * Calls the supplied function if there is a change in the user's login status.
@@ -547,7 +421,7 @@ class FirebaseBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now().toDate()
+        return firebase.firestore.Timestamp.now();
     }
 
     /**
@@ -566,4 +440,4 @@ class FirebaseBackend extends BaseBackend {
     }
 }
 
-export default FirebaseBackend;
+export default ServerBackend;

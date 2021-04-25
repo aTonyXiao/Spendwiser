@@ -1,5 +1,6 @@
 import BaseBackend from './backends/basebackend'
 import FirebaseBackend from './backends/firebasebackend';
+import ServerBackend from './backends/serverbackend';
 
 /**
  * The wrapped backend that the app will interface with.  Functions
@@ -16,6 +17,9 @@ function setAppBackend (type) {
     switch (type) {
         case "firebase":
             appBackend = new FirebaseBackend();
+            break;
+        case "server":
+            appBackend = new ServerBackend();
             break;
         default:
             appBackend = new BaseBackend();
