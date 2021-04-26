@@ -7,29 +7,33 @@ function fixID (id) {
 
 class Database {
 
-    constructor (app, name = "") {
+    constructor (app, auth, name = "") {
         this.app = app;
+        this.auth = auth;
         this.database = name.length == 0 ? mongoose : mongoose.useDb(name);
         this.name = name;
         this.models = [];
     }
 
-    addModel (modelName, modelSchema) {
+    addModel (modelName, permissions, modelSchema) {
         let newModel = this.database.model(modelName, modelSchema);
         let prefix = this.name.length == 0 ? "/" : "/" + this.name + "/";
         
-        this.addModelRequests(prefix + modelName, newModel);
+        this.addModelRequests(prefix, modelName, permissions, newModel);
         modelSchema.eachPath((name, type) => {
             if (type instanceof mongoose.Schema.Types.DocumentArray) {
-                this.addSubdocRequests(prefix + modelName, newModel, name);
+                this.addSubdocRequests(prefix + modelName, permissions, newModel, name);
             }
         });
         this.models.push(newModel);
     }
 
-    addModelRequests (uri, model) {
-        // get all docs
-        this.app.get(uri, (req, res) => {
+    addModelRequests (prefix, modelName, permissions, model) {
+        let uri = prefix + modelName;
+        let scopes = permissions !== undefined ? permissions[modelName] : undefined;
+
+        // get all docs :: scopes !== undefined ? scopes["read"] : undefined
+        this.app.get(uri, this.auth, (req, res) => {
             model.find((err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else res.json(data);
@@ -37,7 +41,7 @@ class Database {
         })
 
         // get a specific doc by ID
-        this.app.get(uri + "/:id", (req, res) => {
+        this.app.get(uri + "/:id", this.auth, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(404);
                 else res.json(data);
@@ -69,7 +73,7 @@ class Database {
         });
     }
 
-    addSubdocRequests (uri, model, subdoc) {
+    addSubdocRequests (uri, permissions, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
