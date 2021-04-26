@@ -63,15 +63,7 @@ const convertDateToString = (data) => {
 const setDB = async (data, callback) => {
     data = convertDateToString(data);
     await AsyncStorage.setItem('@db', data);
-
-    try {
-        getDB((db) => {
-            callback();
-        });
-    } catch (e) {
-        console.log(e);
-        callback();
-    }
+    callback();
 }
 
 const addOrUpdateMetainfo = (local_data, isSynced = false) => {
@@ -176,10 +168,14 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 } else {
                     db[accountName][document][id] = local_data;
                 }
+                jsonValue = JSON.stringify(db);
+                setDB(jsonValue, () => {
+                    callback();
+                });
+            }  else {
+                callback();
             }
 
-            jsonValue = JSON.stringify(db);
-            setDB(jsonValue, callback);
         });
     } catch (e) {
         console.log(e);
