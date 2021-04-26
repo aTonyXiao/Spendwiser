@@ -15,22 +15,21 @@ class Database {
         this.models = [];
     }
 
-    addModel (modelName, permissions, modelSchema) {
+    addModel (modelName, modelSchema) {
         let newModel = this.database.model(modelName, modelSchema);
         let prefix = this.name.length == 0 ? "/" : "/" + this.name + "/";
         
-        this.addModelRequests(prefix, modelName, permissions, newModel);
+        this.addModelRequests(prefix, modelName, newModel);
         modelSchema.eachPath((name, type) => {
             if (type instanceof mongoose.Schema.Types.DocumentArray) {
-                this.addSubdocRequests(prefix + modelName, permissions, newModel, name);
+                this.addSubdocRequests(prefix + modelName, newModel, name);
             }
         });
         this.models.push(newModel);
     }
 
-    addModelRequests (prefix, modelName, permissions, model) {
+    addModelRequests (prefix, modelName, model) {
         let uri = prefix + modelName;
-        let scopes = permissions !== undefined ? permissions[modelName] : undefined;
 
         // get all docs :: scopes !== undefined ? scopes["read"] : undefined
         this.app.get(uri, this.auth, (req, res) => {
@@ -73,7 +72,7 @@ class Database {
         });
     }
 
-    addSubdocRequests (uri, permissions, model, subdoc) {
+    addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
