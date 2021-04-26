@@ -154,6 +154,26 @@ class FirebaseBackend extends BaseBackend {
     }
 
 
+    async consolidateIndividualItem(accountName, location, local_item) {
+        if (local_item['meta_synced'] == false && !syncing_items.includes(sync_id)) {
+            let sync_id = JSON.stringify(local_item);
+            let local_data_stripped = storage.stripMetadata(local_item);
+
+            // Basically put a lock on the data we are syncing
+            syncing_items.push(sync_id);
+
+            return new Promise((resolve, reject) => {
+                this.dbFirebaseAddWithMetadata(location, local_data_stripped, async (id) => {
+                    await storage.modifyDBEntryMetainfo(accountName, location, true, local_item['meta_id'], id);
+                    syncing_items = syncing_items.filter(item => item !== sync_id);
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {resolve()});
+        }
+    }
+
     /**
      * Consolidates a local collection with the firebase remote database by looking through
      * each item in the database, checking if it has been synced, and uploading unsynced items
@@ -163,25 +183,10 @@ class FirebaseBackend extends BaseBackend {
      * @param {string} location 
      * @param {Array} local_collection 
      */
-    consolidateLocalCollection(accountName, location, local_collection) {
-        for (let i = 0; i < local_collection.length; i++) {
-            let sync_id = JSON.stringify(local_collection[i]);
-
-            if (local_collection[i]['meta_synced'] == false && !syncing_items.includes(sync_id)) {
-
-                console.log ("A local collection item needs to be synced...");
-                console.log(local_collection[i]);
-                let local_data_stripped = storage.stripMetadata(local_collection[i]);
-
-                // Basically put a lock on the data we are syncing
-                syncing_items.push(sync_id);
-
-                this.dbFirebaseAddWithMetadata(location, local_data_stripped, (id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location, true, local_collection[i]['meta_id'], id);
-                    syncing_items = syncing_items.filter(item => item !== sync_id);
-                });
-            }
-        }
+    async consolidateLocalCollection(accountName, location, local_collection) {
+        const promises = local_collection.map((item) => {return this.consolidateIndividualItem(accountName, location, item)});
+        console.log(promises);
+        await Promise.all(promises);
     }
 
     /**
@@ -245,8 +250,8 @@ class FirebaseBackend extends BaseBackend {
         }    
     }
 
-    consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
-        this.consolidateLocalCollection(accountName, location, local_collection);
+    async consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
+        await this.consolidateLocalCollection(accountName, location, local_collection);
         this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
@@ -298,7 +303,7 @@ class FirebaseBackend extends BaseBackend {
      *   console.log(data);
      * });
      */
-    dbGet(location, ...conditionsWithCallback) {
+    async dbGet(location, ...conditionsWithCallback) {
         // TODO (Nathan W): Check local storage first before going to the firebase db
 
         this.userAccountType((type) => {
@@ -312,9 +317,9 @@ class FirebaseBackend extends BaseBackend {
                     storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
                         this.firebaseDbGet(location, ...conditions, (remote_data) => {
                             if (conditions.length == 0) {
-                                this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
+                                await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             } else {
-                                this.consolidateLocalAndRemoteCollections(accountId, location, remote_data, local_data);
+                                await this.consolidateLocalAndRemoteCollections(accountId, location, remote_data, local_data);
                             }
                             callback(remote_data);
                         });
