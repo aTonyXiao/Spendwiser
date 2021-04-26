@@ -77,14 +77,18 @@ const addOrUpdateMetainfo = (local_data, isSynced = false) => {
 }
 
 export const stripMetadata = (data) => {
-    let stripped_data = JSON.parse(JSON.stringify(data));
-    if ('meta_modified' in data) {
-        delete stripped_data['meta_modified'];
+    if (typeof data == 'object') {
+        let stripped_data = JSON.parse(JSON.stringify(data));
+        if ('meta_modified' in data) {
+            delete stripped_data['meta_modified'];
+        }
+        if ('meta_synced' in data) {
+            delete stripped_data['meta_synced'];
+        }
+        return stripped_data;
+    } else {
+        throw 'Data is not an object! ' + typeof data;
     }
-    if ('meta_synced' in data) {
-        delete stripped_data['meta_synced'];
-    }
-    return stripped_data;
 }
 
 export const addLocalDB = async (accountName, location, data, callback) => {
