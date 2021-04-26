@@ -191,8 +191,8 @@ class FirebaseBackend extends BaseBackend {
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
             let conditions = conditionsWithCallback;
-            console.log("db get conditions");
-            console.log(conditions);
+            // console.log("db get conditions");
+            // console.log(conditions);
 
             if (type == 'normal') {
                 this.getUserID((accountId) => {

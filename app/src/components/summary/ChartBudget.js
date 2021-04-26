@@ -6,15 +6,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { summaryHelper } from './SummaryHelper';
 import { Text as SvgText } from 'react-native-svg';
 
-export function StackedChartCompare(
+export function ChartBudget(
     {
         compareTransPeriod1,
-        compareTransPeriod2,
+        categoriesLimit,
         keys,
         curCard,
     }) {
         let periodData1 = Array(7).fill(0);
-        let periodData2 = Array(7).fill(0);
         const [cutOff, setCutOff] = useState(50);
         const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
         const [barData, setBarData] = useState([
@@ -25,7 +24,7 @@ export function StackedChartCompare(
                 },
             },
             {
-                data: periodData2.map((value) => ({ value })),
+                data: categoriesLimit.map((value) => ({ value })),
             },
         ]);
         const Labels = ({  x, y, bandwidth, data }) => {
@@ -38,10 +37,10 @@ export function StackedChartCompare(
                         key={ index }
                         style={{flexDirection:'column'}}>
                             {value !== 0 ? <SvgText
-                                x={ value >= cutOff ? x(value) - value.toString().length * 7 - 5 : x(value) + 5 }
+                                x={ value + value.toString().length * 8 >= cutOff ? x(value) - value.toString().length * 8 - 20 : x(value) + 5 }
                                 y={ y(index) + (bandwidth / 2) - 12}
                                 fontSize={ 14 }
-                                fill={ value >= cutOff ? 'white' : 'black' }
+                                fill={ value + value2.toString().length * 8 >= cutOff ? 'white' : 'black' }
                                 alignmentBaseline={ 'middle' }
                             >
                                 {value}
@@ -50,10 +49,10 @@ export function StackedChartCompare(
                             }
                             {value2 !== 0 ?
                             <SvgText
-                                x={ value2 >= cutOff ? x(value) - value.toString().length * 7 - 5 : x(value2) + 5 }
+                                x={ value2 + value2.toString().length * 8 >= cutOff ? x(value2) - value.toString().length * 8 - 20 : x(value2) + 5 }
                                 y={ y(index) + (bandwidth / 2) + 12}
                                 fontSize={ 14 }
-                                fill={ value2 >= cutOff ? 'white' : 'black' }
+                                fill={ value2 + value2.toString().length * 8 >= cutOff ? 'white' : 'black' }
                                 alignmentBaseline={ 'middle' }
                             >
                                 {value2}
@@ -73,13 +72,7 @@ export function StackedChartCompare(
                     += parseFloat(compareTransPeriod1[i]['amountSpent']);
                 }
             }
-            for (var i = 0; i < compareTransPeriod2.length; i++) {
-                if (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"]) {
-                    periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
-                    += parseFloat(compareTransPeriod2[i]['amountSpent']);
-                }
-            }
-            setCutOff(Math.max(Math.max.apply(Math, periodData1), Math.max.apply(Math, periodData2)));
+            setCutOff(Math.max(Math.max.apply(Math, periodData1), Math.max.apply(Math, categoriesLimit)));
             setBarData([
                 {
                     data: periodData1.map((value) => ({ value })),
@@ -88,11 +81,11 @@ export function StackedChartCompare(
                     },
                 },
                 {
-                    data: periodData2.map((value) => ({ value })),
+                    data: categoriesLimit.map((value) => ({ value })),
                 },
             ]);
-            setOverallSpending([periodData1.reduce((a, b) => a + b, 0), periodData2.reduce((a, b) => a + b, 0)])
-        }, [curCard, compareTransPeriod1, compareTransPeriod2]);
+            setOverallSpending([periodData1.reduce((a, b) => a + b, 0), categoriesLimit.reduce((a, b) => a + b, 0)])
+        }, [curCard, compareTransPeriod1, categoriesLimit]);
 
 
 
@@ -133,7 +126,7 @@ export function StackedChartCompare(
                         size={20}
                     ></Ionicons>
                     <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                        <Text>1st Period</Text>
+                        <Text>Time Period</Text>
                         <Text>${overallSpending[0].toFixed(2)}</Text>
                     </View>
                 </View>
@@ -144,17 +137,16 @@ export function StackedChartCompare(
                         size={20}
                     ></Ionicons>
                     <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                        <Text>2nd Period</Text>
+                        <Text>Total Limit</Text>
                         <Text>${overallSpending[1].toFixed(2)}</Text>
                     </View>
                 </View>
             </View>
             {/* Overall */}
             <Text style={{paddingHorizontal: 10, textAlign: 'center'}}>
-                You spent {overallSpending[0] === 0 ? 0 : (overallSpending[0] * 100/overallSpending[1]).toFixed(2)}% 
-                more
+                You spent 
                 {"\n"}
-                this month than last month.
+                {overallSpending[0] === 0 ? 0 : (overallSpending[0] * 100/overallSpending[1]).toFixed(2)}% of your limit.
             </Text>
         </View>
     )

@@ -78,6 +78,7 @@ export function HeaderAndTabContent(
              <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
             {/* Tabs */}
             <View style={styles.tabContainer}>
+                {/* Tab Headers */}
                 <View style={styles.tab}>
                     <View style={{flex: 1, alignItems: 'center'}}>
                         <Text>{mode !== modeType.COMPARE ? "Time Period" : "1st period"}</Text>
@@ -87,6 +88,7 @@ export function HeaderAndTabContent(
                         <Text>{mode !== modeType.COMPARE ? "Category" : "2nd period"}</Text>
                     </View>
                 </View>
+                {/* Tab Content */}
                 <View style={styles.tab}>
                     <View style={{flex: 1, flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
                         <Text 
@@ -117,16 +119,18 @@ export function HeaderAndTabContent(
                     </View>
                     <View style={{flex: 1,flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
                         <Text 
-                            style={{color: 'blue'}}
-                            onPress={() => {mode === modeType.SUMMARY ? 
-                                setModalVisible(modalType.TIME) : (setWhichPeriod(2), setPickerVisible(true))}
+                            style={{color: "blue"}}
+                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.TIME)
+                            : mode === modeType.BUDGET ? setModalVisible(modalType.LIMITS)
+                            : (setWhichPeriod(2), setPickerVisible(true))}
                             }>
                             {mode === modeType.SUMMARY ? curCategory.label
+                            : mode === modeType.BUDGET ? "Limits"
                             : `${months[compareTimeframe[1].getMonth()]} ${compareTimeframe[1].getFullYear()}`}
                         </Text>
                         <Ionicons
                             name="chevron-down"
-                            color={mode === modeType.SUMMARY ? "blue" : "darkgrey"}
+                            color={"blue"}
                             size={15}
                         ></Ionicons>
                     </View>

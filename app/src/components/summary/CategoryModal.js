@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Button, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
 import { summaryHelper } from './SummaryHelper';
@@ -21,10 +21,18 @@ export function CategoryModal(
         modeType,
         mode,
         setMode,
+        categoriesLimit,
+        changeCategoriesLimit,
     }) {
     const timeframe = ['This month', 'Last month', 'Last 3 months'];
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
     const modes = [modeType.SUMMARY, modeType.COMPARE, modeType.BUDGET];
+    const [tmpCatLimits, setTmpCatLimits] = useState([]);
+
+    useEffect(() => {
+        setTmpCatLimits([...categoriesLimit]);
+        console.log(categoriesLimit);
+    }, []);
 
     return (
         <Modal
@@ -34,9 +42,8 @@ export function CategoryModal(
             statusBarTranslucent={true}
             visible={modalVisible !== modalType.DISABLED}
         >
-            <View style={modalStyles.modalCenteredView}>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={modalStyles.modalBottomView}>
                 <View style={modalStyles.modalView}>
-
                     {/* Modal header */}
                     <View style={modalStyles.modalHeader}>
                         <TouchableOpacity style={{flex: 1}} onPress={() => {setModalVisible(modalType.DISABLED)}}>
@@ -158,29 +165,70 @@ export function CategoryModal(
                     {/* Change Mode */}
                     {
                         modalVisible === modalType.MODE &&
-                        modes.map((tmpMode, index) => { 
-                            return (
-                                <ModalSlot
-                                    key={tmpMode}
-                                    textString={tmpMode}
-                                    selected={mode === tmpMode}
-                                    setSelected={setMode}
-                                    setModalVisible={setModalVisible}
-                                    isValid={true}
-                                    amountSpent ={null}
-                                />
-                            )
-                        })
+                        <View style={{marginBottom: 50}}>
+                            {modes.map((tmpMode, index) => { 
+                                return (
+                                    <ModalSlot
+                                        key={tmpMode}
+                                        textString={tmpMode}
+                                        selected={mode === tmpMode}
+                                        setSelected={setMode}
+                                        setModalVisible={setModalVisible}
+                                        isValid={true}
+                                        amountSpent ={null}
+                                    />
+                                )
+                            })}
+                        </View>
+                    }
+                     {/* View and change category limits */}
+                     {
+                        modalVisible === modalType.LIMITS &&
+                        <View style={{marginBottom: 50}}>
+                            {tmpCatLimits.map((catLimit, index) => { 
+                                return (
+                                    <TouchableOpacity 
+                                        key={index}
+                                        style={modalStyles.slot}
+                                        onPress={() => {}}
+                                    >
+                                        <Text>{categories[index + 1]}</Text>
+                                        <TextInput 
+                                            style={modalStyles.input}
+                                            value={catLimit.toString()}
+                                            onChangeText={(val) => {
+                                                let valDouble = parseFloat(val);
+                                                if (val.length === 0)
+                                                    valDouble = 0;
+                                                let newTmpCatLimits = [...tmpCatLimits];
+                                                newTmpCatLimits[index] = valDouble;
+                                                setTmpCatLimits(newTmpCatLimits);
+                                            }}
+                                            placeholder={catLimit.toString()}
+                                            keyboardType="numeric"
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            })}
+                            {
+                            <TouchableOpacity 
+                                style={{...modalStyles.slot, justifyContent: 'center'}}
+                                onPress={() => {changeCategoriesLimit(tmpCatLimits), setModalVisible(modalType.DISABLED)}}
+                            >
+                                <Text style={{color:'green', fontSize:16, fontWeight:'bold'}}>Save</Text>
+                            </TouchableOpacity>
+                            }
+                        </View>
                     }
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     )
     
 };
 
 const modalStyles = StyleSheet.create({
-    modalCenteredView: {
+    modalBottomView: {
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'stretch',
@@ -243,5 +291,20 @@ const modalStyles = StyleSheet.create({
         fontSize: 20,
         alignSelf: 'center',
         margin: 10
+    },
+    slot: {
+        width: '100%',
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 15,
+        borderBottomWidth: 0.5
+    },
+    input: {
+        height: 30,
+        textAlign: 'center',
+        borderWidth: 0.5,
+        paddingHorizontal: 20,
     },
 });

@@ -8,7 +8,9 @@ import { user } from '../../network/user';
 import { summaryHelper } from './SummaryHelper';
 import { ListSummary } from './ListSummary';
 import { HeaderAndTabContent } from './HeaderAndTabContent';
-import { StackedChartCompare } from './StackedChartCompare';
+import { ChartCompare } from './ChartCompare';
+import { ChartBudget } from './ChartBudget';
+import * as storage from '../../local/storage';
 
 const modalType = {
     DISABLED: 0,
@@ -18,6 +20,7 @@ const modalType = {
     CARDS: 4,
     MODE: 5,
     MONTH: 6,
+    LIMITS: 7,
 }
 const modeType = {
     SUMMARY: "Summary",
@@ -40,10 +43,12 @@ export function SpendingSummary({navigation}) {
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
     const [mode, setMode] = useState(modeType.SUMMARY);
+    // Compare and Budget mode variables
     const [compareTransPeriod1, setCompareTransPeriod1] = useState([]);
     const [compareTransPeriod2, setCompareTransPeriod2] = useState([]);
     const [compareTimeframe, setCompareTimeframe] = useState([]);
     const [whichPeriod, setWhichPeriod] = useState(0);
+    const [categoriesLimit, setCategoriesLimit] = useState(Array(7).fill(0));
 
     const userId = user.getUserId();
     function getCardFromDB(myCards) {
@@ -108,6 +113,12 @@ export function SpendingSummary({navigation}) {
         }
     };
 
+    // Change category limits
+    function changeCategoriesLimit(newCategoriesLimit) {
+        setCategoriesLimit(newCategoriesLimit);
+        storage.storeCategoriesLimit(newCategoriesLimit);
+    }
+
     // process each transaction retrieved from db after timeframe change
     useEffect(() => {
         if (transactions.length == 0) {
@@ -142,9 +153,12 @@ export function SpendingSummary({navigation}) {
         summaryHelper.getDbCards(getCardFromDB);
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
         let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
-        console.log(thisMonth + " " + startTimeFrame);
         setCompareTimeframe([thisMonth, startTimeFrame]);
         getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
+        storage.getCategoriesLimit((val) => {
+            if (val !== null)
+                setCategoriesLimit(val);
+        });
     }, []);
 
     return (
@@ -165,6 +179,8 @@ export function SpendingSummary({navigation}) {
                 modeType={modeType}
                 mode={mode}
                 setMode={setMode}
+                categoriesLimit={categoriesLimit}
+                changeCategoriesLimit={changeCategoriesLimit}
             />
 
             {/* Header and Tabs */}
@@ -202,9 +218,18 @@ export function SpendingSummary({navigation}) {
                     
                 }
                 {mode === modeType.COMPARE &&
-                    <StackedChartCompare
+                    <ChartCompare
                         compareTransPeriod1={compareTransPeriod1}
                         compareTransPeriod2={compareTransPeriod2}
+                        keys={keys}
+                        curCard={curCard}
+                        compareTimeframe={compareTimeframe}
+                    />
+                }
+                {mode === modeType.BUDGET &&
+                    <ChartBudget
+                        compareTransPeriod1={compareTransPeriod1}
+                        categoriesLimit={categoriesLimit}
                         keys={keys}
                         curCard={curCard}
                         compareTimeframe={compareTimeframe}

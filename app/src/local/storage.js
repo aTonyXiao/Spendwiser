@@ -341,3 +341,35 @@ export const getShowCameraHelpMenu = async (callback) => {
         return null;
     }
 }
+
+
+/**
+ * Function to store limits for each category
+ * @param {Array<int>} categoriesLimit - limit in dollars for each category
+ */
+ export const storeCategoriesLimit = async (categoriesLimit) => {
+    try {
+        const jsonValue = JSON.stringify(categoriesLimit);
+        await AsyncStorage.setItem('categoriesLimit', jsonValue);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Function to get limits for each category
+ * @param {function} - callback function to apply to return value
+ */
+ export const getCategoriesLimit = async (callback) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('categoriesLimit');
+        if (jsonValue == null) {
+            callback(null);
+        } else {
+            callback(JSON.parse(jsonValue));
+        }
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}
