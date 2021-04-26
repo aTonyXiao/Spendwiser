@@ -2,6 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Containerized server interface for database and user authentication",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,7 +10,10 @@
   },
   "author": "Troi and the Nathans",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jwks-rsa": "^2.0.3",
     "mongoose": "^5.12.3"
   },
   "devDependencies": {

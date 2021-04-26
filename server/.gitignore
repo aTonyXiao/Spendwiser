@@ -9,9 +9,14 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+firebase_dump.json
+.env
 
 # macOS
 .DS_Store
 
 # db artifacts
 database/
+
+#ssl
+cert/
