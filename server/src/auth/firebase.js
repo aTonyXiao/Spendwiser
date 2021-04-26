@@ -11,7 +11,7 @@ admin.initializeApp({
 function firebase (req, res, next) {
     try {
         // force it to be at index 1
-        const header = req.headers.split("Bearer ");
+        const header = req.headers.authorization.split("Bearer ");
         admin.auth().verifyIdToken(header[1]).then((usr) => {
             req.user = usr;
             next();
