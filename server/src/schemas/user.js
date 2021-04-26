@@ -10,8 +10,9 @@ const UserCardSchema = new mongoose.Schema({
 const UserTransactionSchema = new mongoose.Schema({
     dateAdded: {type: String, default: ""},
     cardId: {type: String, default: ""},
+    docId: {type: String, default: ""},
     amountSpent: {type: String, default: ""},
-    rewards: {type: [], default: []},
+    storeInfo: {type: [], default: []},
 });
 
 const UserSchema = new mongoose.Schema({

@@ -1,4 +1,6 @@
 import express from "express";
+import jwt from "express-jwt";
+import jwksRsa from "jwks-rsa";
 
 import Database from "./database.js";
 import CardSchema from "./schemas/card.js";
@@ -11,5 +13,10 @@ app.use(express.json());
 const db = new Database(app);
 db.addModel("cards", CardSchema);
 db.addModel("users", UserSchema);
+
+// import fs from "fs";
+// let raw = fs.readFileSync("firebase_dump.json");
+// let data = JSON.parse(raw);
+// db.loadData("cards", data);
 
 export default app;
