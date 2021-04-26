@@ -272,15 +272,7 @@ class FirebaseBackend extends BaseBackend {
     }
 
     async consolidateRemoteCollectionHelper(accountName, location, remote_item, local_collection) {
-        const promises = local_collection.map((item) => {
-            return this.consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, item)
-        });
-
-        let values = await Promise.all(promises);
-        if (values.includes('true')) {
-            // Note (Nathan W): Item does not exist in our local database so we
-            // need to add it and set the query id accordingly
-
+        if (local_collection.length == 0) {
             return new Promise((resolve, reject) => {
                 storage.addLocalDB(accountName, location, remote_item, (local_id) => {
                     storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id'], () => {
@@ -289,7 +281,25 @@ class FirebaseBackend extends BaseBackend {
                 });
             });
         } else {
-            return new Promise((resolve, reject) => {resolve()});
+            const promises = local_collection.map((item) => {
+                return this.consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, item)
+            });
+
+            let values = await Promise.all(promises);
+            if (values.includes('true') || values.length == 0) {
+                // Note (Nathan W): Item does not exist in our local database so we
+                // need to add it and set the query id accordingly
+
+                return new Promise((resolve, reject) => {
+                    storage.addLocalDB(accountName, location, remote_item, (local_id) => {
+                        storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id'], () => {
+                            resolve();
+                        });
+                    });
+                });
+            } else {
+                return new Promise((resolve, reject) => {resolve()});
+            }
         }
     }
 
@@ -311,8 +321,8 @@ class FirebaseBackend extends BaseBackend {
     }
 
     async consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
-        // await this.consolidateLocalCollection(accountName, location, local_collection);
-        // // await this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
+        await this.consolidateLocalCollection(accountName, location, local_collection);
+        // await this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
@@ -427,6 +437,11 @@ class FirebaseBackend extends BaseBackend {
                             })
 
                             console.log("Consolidating local and remote collections from dbGetSubcollections...");
+                            console.log("Local collection: ");
+                            console.log(local_collection);
+
+                            console.log("Remote collection");
+                            console.log(remote_collection);
                             await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
 
                             console.log("finsihed consolidating from dbGetSubcollections");
