@@ -289,7 +289,7 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
     }
 }
 
-export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId) => {
+export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
             if (storage_debug) {
@@ -312,7 +312,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
-
+                callback();
             });
         });
     } catch (e) {

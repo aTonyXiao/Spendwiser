@@ -189,6 +189,81 @@ class FirebaseBackend extends BaseBackend {
         await Promise.all(promises);
     }
 
+
+    async consolidateRemoteCollectionDateModified(accountName, location, remote_item, local_item, remote_modified, local_modified) {
+        // let sync_id = location + local_collection[j]['meta_id'];
+        let sync_id = JSON.stringify(local_item);
+
+        // If the remote item has been modified more recently AND we are not already trying to
+        // sync our changes
+        if (remote_modified > local_modified && !syncing_items.includes(sync_id)) {
+
+            // Basically put a lock on the data we are syncing
+            syncing_items.push(sync_id);
+
+            return new Promise((resolve, reject) => {
+                storage.setLocalDB(accountName,
+                                location + "." + local_item['meta_id'],
+                                remote_modified, true, () => {
+                    // Unlock on the data we synced
+                    syncing_items = syncing_items.filter(item => item !== sync_id);
+                    storage.modifyDBEntryMetainfo(accountName, location,
+                        true, local_item['meta_id'], remote_item['id'], () => {
+                            resolve(true);
+                        });
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                storage.modifyDBEntryMetainfo(accountName, location,
+                        true, local_item['meta_id'], remote_item['id'], () => {
+                            
+                        resolve(true);
+                });
+            });
+        }
+    }
+
+    async consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, local_item) {
+        if (remote_item['id'] == local_item['meta_id']) {
+            // Note (Nathan W): Compare the remote collection item with a stripped version
+            // of the local collection because we don't want to use the local item's metadata
+            // in our comparison check
+            // let local_data_stripped = storage.stripMetadata(local_item);
+
+            // Note (Nathan W): Need to convert the remote string date to a date object
+            // for comparison
+            let remote_modified = new Date(remote_item['modified']);
+            let local_modified = local_item['meta_modified'];
+
+            return this.consolidateRemoteCollectionDateModified(accountName, location, 
+                remote_item, local_item, remote_modified, local_modified);
+        } else {
+            return false;
+        }
+    }
+
+    async consolidateRemoteCollectionHelper(accountName, location, remote_item, local_collection) {
+        const promises = local_collection.map((item) => {
+            return this.consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, item)
+        });
+
+        let values = await Promise.all(promises);
+        if (values.includes('true')) {
+            // Note (Nathan W): Item does not exist in our local database so we
+            // need to add it and set the query id accordingly
+
+            return new Promise((resolve, reject) => {
+                storage.addLocalDB(accountName, location, remote_item, (local_id) => {
+                    storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id']);
+                    resolve();
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {resolve()});
+        }
+    }
+
     /**
      * Consolidates a remote collection with a local collection, making
      * changes to the local collection to match any additions/changes that occurred remotely 
@@ -198,61 +273,17 @@ class FirebaseBackend extends BaseBackend {
      * @param {Array} remote_collection the data retrieved from the location/document remotely from firebase
      * @param {Array} local_collection the data retrieved from the location/document locally
      */
-    consolidateRemoteCollection(accountName, location, remote_collection, local_collection) {
+    async consolidateRemoteCollection(accountName, location, remote_collection, local_collection) {
         // Note (Nathan W): This is very brute force, but I don't know if that's actually a problem
-        for (let i = 0; i < remote_collection.length; i++) {
-            // Check if the remote collection item exists at all in the local collection
-
-            let item_exists_locally = false;
-            for (let j = 0; j < local_collection.length; j++) {
-                if (remote_collection[i]['id'] == local_collection[j]['meta_id']) {
-                    item_exists_locally = true;
-                    // Note (Nathan W): Compare the remote collection item with a stripped version
-                    // of the local collection because we don't want to use the local item's metadata
-                    // in our comparison check
-                    let local_data_stripped = storage.stripMetadata(local_collection[j]);
-
-                    // Note (Nathan W): Need to convert the remote string date to a date object
-                    // for comparison
-                    let remote_modified = new Date(remote_collection[i]['modified']);
-                    let local_modified = local_collection['meta_modified'];
-
-                    // let sync_id = location + local_collection[j]['meta_id'];
-                    let sync_id = JSON.stringify(local_collection[j]);
-
-                    // If the remote item has been modified more recently AND we are not already trying to
-                    // sync our changes
-                    if (remote_modified > local_modified && !syncing_items.includes(sync_id)) {
-
-                        // Basically put a lock on the data we are syncing
-                        syncing_items.push(sync_id);
-
-                        storage.setLocalDB(accountName,
-                                        location + "." + local_collection['meta_id'],
-                                        remote_modified, true, () => {
-                            // Unlock on the data we synced
-                            syncing_items = syncing_items.filter(item => item !== sync_id);
-                        })
-                    }
-
-                    storage.modifyDBEntryMetainfo(accountName, location,
-                        true, local_collection['meta_id'], remote_collection[i]['id']);
-                }
-            }
-
-            if (!item_exists_locally) {
-                // Note (Nathan W): Item does not exist in our local database so we
-                // need to add it and set the query id accordingly
-                storage.addLocalDB(accountName, location, remote_collection, (local_id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_collection[i]['id']);
-                })
-            }
-        }    
+        const promises = remote_collection.map((item) => {
+            return this.consolidateRemoteCollectionHelper(accountName, location, item, local_collection);
+        });
+        await Promise.all(promises);
     }
 
     async consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
         await this.consolidateLocalCollection(accountName, location, local_collection);
-        this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
+        await this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     firebaseDbGet(location, ...conditionsWithCallback) {
@@ -315,7 +346,7 @@ class FirebaseBackend extends BaseBackend {
 
                     // Get the data (if any) from the local db
                     storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
-                        this.firebaseDbGet(location, ...conditions, (remote_data) => {
+                        this.firebaseDbGet(location, ...conditions, async (remote_data) => {
                             if (conditions.length == 0) {
                                 await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             } else {
