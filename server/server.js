@@ -1,5 +1,10 @@
+import dotenv from "dotenv";
 import mongoose from "mongoose";
+
 import app from "./src/app.js";
+
+// load environment constants
+dotenv.config();
 
 // some server constants
 const mongo_url = "mongodb://mongo-db:27017/test";
