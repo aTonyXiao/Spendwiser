@@ -1,12 +1,12 @@
 import fs from "fs";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
 let rawData = fs.readFileSync("firebase_admin.json");
 let firebaseKey = JSON.parse(rawData);
 
 admin.initializeApp({
     credential: admin.credential.cert(firebaseKey)
-})
+});
 
 function firebase (req, res, next) {
     try {

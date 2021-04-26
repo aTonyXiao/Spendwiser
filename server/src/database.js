@@ -48,7 +48,7 @@ class Database {
         });
 
         // create doc request
-        this.app.post(uri, (req, res) => {
+        this.app.post(uri, this.auth, (req, res) => {
             let requestData = req.body;
             if (model.schema.pathType("dateAdded") !== "adhocOrUndefined") requestData.dateAdded = (new Date()).toUTCString();
             model.create(requestData, (err, data) => {
@@ -58,14 +58,14 @@ class Database {
         });
 
         // update doc request
-        this.app.put(uri + "/:id", (req, res) => {
+        this.app.put(uri + "/:id", this.auth, (req, res) => {
             model.findByIdAndUpdate(fixID(req.params.id), req.body, {"upsert": true, "new": true, "setDefaultsOnInsert": true}, (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
         });
 
         // delete doc request
-        this.app.delete(uri + "/:id", (req, res) => {
+        this.app.delete(uri + "/:id", this.auth, (req, res) => {
             model.findByIdAndDelete(fixID(req.params.id), (err, data) => {
                 res.sendStatus(err || data == null ? 500 : 200);
             });
@@ -74,7 +74,7 @@ class Database {
 
     addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
-        this.app.get(uri + "/:id/" + subdoc, (req, res) => {
+        this.app.get(uri + "/:id/" + subdoc, this.auth, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else res.json(data.get(subdoc));
@@ -82,7 +82,7 @@ class Database {
         })
 
         // get a specific doc by ID
-        this.app.get(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
+        this.app.get(uri + "/:id/" + subdoc + "/:id2", this.auth, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(404);
                 else {
@@ -94,7 +94,7 @@ class Database {
         });
 
         // create doc request
-        this.app.post(uri + "/:id/" + subdoc, (req, res) => {
+        this.app.post(uri + "/:id/" + subdoc, this.auth, (req, res) => {
             model.findById(fixID(req.params.id), (err, data) => {
                 if (err || data == null) res.sendStatus(500);
                 else {
@@ -111,7 +111,7 @@ class Database {
         });
 
         // update doc request
-        this.app.put(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
+        this.app.put(uri + "/:id/" + subdoc + "/:id2", this.auth, (req, res) => {
             let prefix = subdoc + ".$.";
             let requestData = {};
             for (const [key, obj] of Object.entries(req.body)) {
@@ -124,7 +124,7 @@ class Database {
         });
 
         // delete doc request
-        this.app.delete(uri + "/:id/" + subdoc + "/:id2", (req, res) => {
+        this.app.delete(uri + "/:id/" + subdoc + "/:id2", this.auth, (req, res) => {
             let requestData = {[subdoc]: {"_id": fixID(req.params.id2)}};
             let filter = subdoc + "._id";
             model.findOneAndUpdate({"_id": fixID(req.params.id), [filter]: fixID(req.params.id2)}, {"$pull": requestData}, (err, data) => {

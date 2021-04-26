@@ -32,6 +32,7 @@ class ServerBackend extends BaseBackend {
         };
 
         this.server_url = process.env.REACT_NATIVE_SERVER_URL;
+        this.user_token = "";
 
         // check if there is a Firebase 'App' already initialized
         if (firebase.apps.length == 0) {
@@ -97,6 +98,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             }
         }).then(res => res.json()).then((res) => {
             if (Array.isArray(res)) {
@@ -133,6 +135,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             }
         }).then(res => res.json()).then((res) => {
             res.forEach(doc => {
@@ -165,6 +168,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             }
         }).then(res => res.json()).then((res) => {
             callback(true);
@@ -194,6 +198,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             },
             body: JSON.stringify(data)
         }).then((res) => {
@@ -226,6 +231,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             },
             body: JSON.stringify(data)
         }).then(res => res.json()).then((res) => {
@@ -252,6 +258,7 @@ class ServerBackend extends BaseBackend {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: "Bearer " + this.user_token
             }
         });
     }
@@ -270,6 +277,9 @@ class ServerBackend extends BaseBackend {
                 var user = userCredential.user;
                 console.log("Sign up successful");
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+
+                // store the user token
+                this.user_token = await userCredential.user.getIdToken();
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -289,6 +299,9 @@ class ServerBackend extends BaseBackend {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+
+                // store the user token
+                this.user_token = await userCredential.user.getIdToken();
             })
             .catch((error) => {
                 var errorMessage = error.message;
