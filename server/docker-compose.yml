@@ -8,7 +8,6 @@ services:
             - "3000:3000"
         volumes:
             - .:/usr/src/server
-            - ./node_modules:/usr/src/server/node_modules
         depends_on:
             - database
         networks:
