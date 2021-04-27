@@ -5,7 +5,7 @@ services:
         container_name: spendwiser-server
         restart: unless-stopped
         expose:
-            - "3000:3000"
+            - "3000"
         volumes:
             - .:/usr/src/server
         depends_on:
@@ -17,7 +17,7 @@ services:
         container_name: mongo-db
         restart: unless-stopped
         expose:
-            - "27017:27017"
+            - "27017"
         volumes:
             - ./database:/data/db
         networks:
