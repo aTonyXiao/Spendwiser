@@ -28,9 +28,8 @@ export const getLoginState = async (callback) => {
 
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
-        let date_val = Date.parse(value);
-        if (date_val) {
-            return new Date(date_val);
+        if (value.startsWith("__date__")) {
+            return new Date(value.substr("__date__(".length, value.length - 1));
         }
     }
     return value;
@@ -50,36 +49,46 @@ export const getDB = async (callback) => {
     }
 }
 
-const setDB = async (cards, callback) => {
-    await AsyncStorage.setItem('@db', cards);
-    try {
-        getDB((db) => {
-            if (storage_debug)
-                console.log(db);
-
-            callback();
-        });
-    } catch (e) {
-        console.log(e);
-        callback();
+const convertDateToString = (data) => {
+    for (let [key, value] of Object.entries(data)) {
+        if (typeof value == 'Date') {
+            data[key] = "__date__(" + value.toString() + ")";
+        } else if (typeof value == 'object') {
+            data[key] = convertDateToString(value);
+        }
     }
+
+    return data;
+}
+const setDB = async (data, callback) => {
+    data = convertDateToString(data);
+    await AsyncStorage.setItem('@db', data);
+    callback();
 }
 
 const addOrUpdateMetainfo = (local_data, isSynced = false) => {
-    local_data['meta_modified'] = new Date();
-    local_data['meta_synced'] = isSynced;
-    return local_data;
+    if (local_data) {
+        local_data['meta_modified'] = new Date();
+        local_data['meta_synced'] = isSynced;
+        return local_data;
+    } else {
+        return null;
+    }
 }
 
 export const stripMetadata = (data) => {
-    let stripped_data = JSON.parse(JSON.stringify(data));
-    if ('meta_modified' in data) {
-        delete stripped_data['meta_modified'];
+    if (typeof data == 'object') {
+        let stripped_data = JSON.parse(JSON.stringify(data));
+        if ('meta_modified' in data) {
+            delete stripped_data['meta_modified'];
+        }
+        if ('meta_synced' in data) {
+            delete stripped_data['meta_synced'];
+        }
+        return stripped_data;
+    } else {
+        throw 'Data is not an object! ' + typeof data;
     }
-    if ('meta_synced' in data) {
-        delete stripped_data['meta_synced'];
-    }
-    return stripped_data;
 }
 
 export const addLocalDB = async (accountName, location, data, callback) => {
@@ -95,7 +104,6 @@ export const addLocalDB = async (accountName, location, data, callback) => {
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
                 console.log("Data: ");
-                console.log(local_data);
                 console.log("----------------------");
             }
 
@@ -110,12 +118,13 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             }
 
             // Insert local_data in location
-            let id = Object.values(db[accountName][location]).length.toString();
-            db[accountName][location][id] = local_data;
+            let id = Object.values(db[accountName][location]).length
+            local_data['meta_id'] = id;
+            db[accountName][location][id.toString()] = local_data;
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
-                callback(id);
+                callback(id.toString());
             });
         });
     } catch (e) {
@@ -147,23 +156,30 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 console.log("Setting Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log("Data: ");
-                console.log(local_data);
+                console.log("Document: " + document);
+                console.log("ID: " + id);
                 console.log("----------------------");
             }
 
             // NOTE (Nathan W) the document **should** exist
-            if (merge) {
-                db[accountName][document][id] = {
-                    ...db[accountName][document][id],
-                    ...local_data,
+
+            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+                if (merge) {
+                    db[accountName][document][id] = {
+                        ...db[accountName][document][id],
+                        ...local_data,
+                    }
+                } else {
+                    db[accountName][document][id] = local_data;
                 }
-            } else {
-                db[accountName][document][id] = local_data;
+                jsonValue = JSON.stringify(db);
+                setDB(jsonValue, () => {
+                    callback();
+                });
+            }  else {
+                callback();
             }
 
-            jsonValue = JSON.stringify(db);
-            setDB(jsonValue, callback);
         });
     } catch (e) {
         console.log(e);
@@ -190,6 +206,10 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("Document: " + document);
                 console.log("Id: " + id);
                 console.log("----------------------");
+            }
+
+            if (!(accountName in db && document in db[accountName])) {
+                callback([]);
             }
 
             let local_data = [];
@@ -236,7 +256,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 }
             }
 
-            if (conditions.length > 0) {
+            if (filtered_local_data.length > 0) {
                 callback(filtered_local_data);
             } else {
                 callback(local_data);
@@ -269,7 +289,7 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
     }
 }
 
-export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId) => {
+export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
             if (storage_debug) {
@@ -282,15 +302,17 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 console.log("----------------------");
             }
 
-            db[accountName][location][newId] = db[accountName][location][oldId];
-            delete db[accountName][location][oldId];
-
-            id = newId;
-            db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+            if (accountName in db && location in db[accountName] && oldId in db[accountName][location]) {
+                db[accountName][location][newId] = db[accountName][location][oldId];
+                db[accountName][location][newId]['meta_id'] = newId;
+                delete db[accountName][location][oldId];
+                let id = newId;
+                db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+            }
 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
-
+                callback();
             });
         });
     } catch (e) {
