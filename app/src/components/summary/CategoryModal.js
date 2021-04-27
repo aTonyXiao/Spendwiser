@@ -31,7 +31,6 @@ export function CategoryModal(
 
     useEffect(() => {
         setTmpCatLimits([...categoriesLimit]);
-        console.log(categoriesLimit);
     }, []);
 
     return (

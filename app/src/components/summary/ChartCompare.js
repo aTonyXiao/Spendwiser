@@ -34,14 +34,14 @@ export function ChartCompare(
                     let value = valueObj["value"];
                     let value2 = data[1]["data"][index]["value"];
                     return(
-                        <View
+                        <SvgText
                         key={ index }
                         style={{flexDirection:'column'}}>
                             {value !== 0 ? <SvgText
-                                x={ value >= cutOff ? x(value) - value.toString().length * 8 - 10 : x(value) + 5 }
+                                x={ value + value.toString().length * 8 >= cutOff ? x(value) - value.toString().length * 8 - 10 : x(value) + 5 }
                                 y={ y(index) + (bandwidth / 2) - 12}
                                 fontSize={ 14 }
-                                fill={ value >= cutOff ? 'white' : 'black' }
+                                fill={ value + value.toString().length * 8 >= cutOff ? 'white' : 'black' }
                                 alignmentBaseline={ 'middle' }
                             >
                                 {value}
@@ -50,17 +50,17 @@ export function ChartCompare(
                             }
                             {value2 !== 0 ?
                             <SvgText
-                                x={ value2 >= cutOff ? x(value2) - value.toString().length * 8 - 10 : x(value2) + 5 }
+                                x={ value2 + value2.toString().length * 8 >= cutOff ? x(value2) - value2.toString().length * 8 - 10 : x(value2) + 5 }
                                 y={ y(index) + (bandwidth / 2) + 12}
                                 fontSize={ 14 }
-                                fill={ value2 >= cutOff ? 'white' : 'black' }
+                                fill={ value2 + value2.toString().length * 8 >= cutOff ? 'white' : 'black' }
                                 alignmentBaseline={ 'middle' }
                             >
                                 {value2}
                             </SvgText>
                             : <SvgText/>
                             }
-                        </View>
+                        </SvgText>
                     );
                 })
             )
