@@ -94,13 +94,14 @@ export function MainScreen({navigation}) {
                     storeType: storeType,
                     key: addCount,
                 })
-                if (addCount == 0) {
-                    setCurStore(JSON.stringify(fetchResult[i].name).slice(1,-1));
-                    setCurStoreKey(0);
-                    recommendCard.getRecCards(storeType, getRecCardFromDB);
-                }
                 addCount++;
             }
+        }
+        console.log(fetchStores);
+        if (fetchStores.length > 0) {
+            setCurStore(fetchStores[0].label);
+            setCurStoreKey(0);
+            recommendCard.getRecCards(fetchStores[0].storeType, getRecCardFromDB);
         }
         setStoreArr(fetchStores);
     };
@@ -230,9 +231,10 @@ export function MainScreen({navigation}) {
                         showsUserLocation={true}
                         onPoiClick={e => console.log(e.nativeEvent)}
                     >
-                        <Marker coordinate={
+                        <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
+                            { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                             { latitude: region.latitude, longitude: region.longitude }
-                            } />
+                        )} />
                     </MapView>
                 </View>
 
