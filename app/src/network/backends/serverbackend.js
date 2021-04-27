@@ -461,7 +461,7 @@ class ServerBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now();
+        return firebase.firestore.Timestamp.now().toDate();
     }
 
     /**

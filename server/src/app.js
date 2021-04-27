@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 
 import Database from "./database.js";
 import CardSchema from "./schemas/card.js";
@@ -10,6 +11,7 @@ import firebase from "./auth/firebase.js";
 // initialize express
 const app = express();
 app.use(express.json());
+app.use(helmet());
 
 // create the database with auth0 authentication middleware
 const db = new Database(app, firebase);
