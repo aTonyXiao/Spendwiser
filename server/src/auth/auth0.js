@@ -1,7 +1,12 @@
+/** @module Auth0 Middleware that utilizes auth0 for request token auth */
+
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";
 
-// reference: https://auth0.com/docs/quickstart/backend/nodejs
+/**
+ * Middleware that is utilized when authenticating requests
+ * reference: https://auth0.com/docs/quickstart/backend/nodejs
+ */ 
 const auth0 = jwt({
     secret: jwksRsa.expressJwtSecret({
       cache: true,

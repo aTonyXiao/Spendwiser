@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "docs": "node_modules/jsdoc -c jsdoc.json"
   },
   "author": "Troi and the Nathans",
   "dependencies": {
@@ -19,6 +20,8 @@
     "mongoose": "^5.12.3"
   },
   "devDependencies": {
+    "jsdoc": "^3.6.6",
+    "loke-jsdoc-theme": "^2.1.0",
     "nodemon": "^2.0.7"
   }
 }
