@@ -1,0 +1,11 @@
+{
+    "plugins": [],
+    "source": {
+        "include": ["server.js", "src"]
+    },
+    "opts": {
+        "recurse": true,
+        "destination": "../docs/",
+        "template": "node_modules/loke-jsdoc-theme"
+    }
+}

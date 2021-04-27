@@ -43,7 +43,9 @@ class ServerBackend extends BaseBackend {
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+                user.getIdToken().then((token) => {
+                    storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal', 'user_token': token });
+                });
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -92,22 +94,25 @@ class ServerBackend extends BaseBackend {
     dbGet(location, ...conditionsWithCallback) {
         let uri = location.replaceAll(".", "/");
         let callback = conditionsWithCallback.pop();
-        fetch(this.server_url + uri, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then(res => res.json()).then((res) => {
-            if (Array.isArray(res)) {
-                res.forEach(doc => {
-                    callback(doc);
-                });
-            } else {
-                callback(res);
-            }
-        }).catch((err) => {
-            console.log(err);
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                }
+            }).then(res => res.json()).then((res) => {
+                if (Array.isArray(res)) {
+                    res.forEach(doc => {
+                        callback(doc);
+                    });
+                } else {
+                    callback(res);
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
         });
     }
 
@@ -128,20 +133,23 @@ class ServerBackend extends BaseBackend {
     dbGetSubCollections(location, callback) {
         let uri = location.replaceAll(".", "/");
         let collection = [];
-        fetch(this.server_url + uri, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then(res => res.json()).then((res) => {
-            res.forEach(doc => {
-                doc["docId"] = doc._id;
-                collection.push(doc);
-            })
-            callback(collection);
-        }).catch((err) => {
-            console.log(err);
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                }
+            }).then(res => res.json()).then((res) => {
+                res.forEach(doc => {
+                    doc["docId"] = doc._id;
+                    collection.push(doc);
+                })
+                callback(collection);
+            }).catch((err) => {
+                console.log(err);
+            });
         });
     }
 
@@ -160,16 +168,19 @@ class ServerBackend extends BaseBackend {
     */
     dbDoesDocExist(location, callback) {
         let uri = location.replaceAll(".", "/");
-        fetch(this.server_url + uri, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then(res => res.json()).then((res) => {
-            callback(true);
-        }).catch((err) => {
-            callback(false);
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                }
+            }).then(res => res.json()).then((res) => {
+                callback(true);
+            }).catch((err) => {
+                callback(false);
+            });
         });
     }
 
@@ -189,17 +200,20 @@ class ServerBackend extends BaseBackend {
     dbSet(location, data, merge = false, callback) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
-        fetch(this.server_url + uri, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        }).then((res) => {
-            callback();
-        }).catch((err) => {
-            console.log(err);
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                },
+                body: JSON.stringify(data)
+            }).then((res) => {
+                callback();
+            }).catch((err) => {
+                console.log(err);
+            });
         });
     }
 
@@ -221,17 +235,20 @@ class ServerBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
-        fetch(this.server_url + uri, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        }).then(res => res.json()).then((res) => {
-            callback(res)
-        }).catch((err) => {
-            console.log(err);
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                },
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then((res) => {
+                callback(res)
+            }).catch((err) => {
+                console.log(err);
+            });
         });
     }
 
@@ -247,12 +264,21 @@ class ServerBackend extends BaseBackend {
     dbDelete(location) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
-        fetch(this.server_url + uri, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }
+        this.getUserToken((user_token) => {
+            fetch(this.server_url + uri, {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + user_token
+                }
+            });
+        });
+    }
+
+    getUserToken (callback) {
+        storage.getLoginState((state) => {
+            callback(state.user_token)
         });
     }
 
@@ -269,7 +295,9 @@ class ServerBackend extends BaseBackend {
             .then((userCredential) => {
                 var user = userCredential.user;
                 console.log("Sign up successful");
-                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+                userCredential.user.getIdToken().then((token) => {
+                    storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal', 'user_token': token});
+                });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -288,7 +316,9 @@ class ServerBackend extends BaseBackend {
     signIn(email, password, error_func) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+                userCredential.user.getIdToken().then((token) => {
+                    storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal', 'user_token': token});
+                });
             })
             .catch((error) => {
                 var errorMessage = error.message;
@@ -300,7 +330,7 @@ class ServerBackend extends BaseBackend {
      * Uses the storage API to set the login state to 'logged in' and 'offline'
      */
     signInOffline() {
-        storage.storeLoginState({ 'signed_in': true, 'account_type': 'offline' });
+        storage.storeLoginState({ 'signed_in': true, 'account_type': 'offline', 'user_token': '' });
         if (onAuthStateChangeCallback) {
             console.log("calling back");
             onAuthStateChangeCallback();
@@ -315,14 +345,14 @@ class ServerBackend extends BaseBackend {
             if (state == null) return;
 
             if (state.signed_in && state.offline) {
-                storage.storeLoginState({ 'signed_in': false, 'account_type': 'offline' });
+                storage.storeLoginState({ 'signed_in': false, 'account_type': 'offline', 'user_token': '' });
                 if (onAuthStateChangeCallback != null) {
                     onAuthStateChangeCallback();
                 }
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
-                    storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
+                    storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal', 'user_token': '' });
                     return;
                 }).catch((error) => {
                     // An error happened.
@@ -431,7 +461,7 @@ class ServerBackend extends BaseBackend {
      * Get the current Timestamp
      */
     getTimestamp() {
-        return firebase.firestore.Timestamp.now();
+        return firebase.firestore.Timestamp.now().toDate();
     }
 
     /**
