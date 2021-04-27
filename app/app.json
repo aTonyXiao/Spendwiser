@@ -31,6 +31,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "spendwiser",
+            "project": "spendwiser",
+            "authToken": "a54be7cc484441f6b3e437513831dd32bcf49aee3682413ab553f93eca877010"
+          }
+        }
+      ]
     }
   }
 }
