@@ -289,7 +289,6 @@ class FirebaseBackend extends BaseBackend {
             if (values.includes('true') || values.length == 0) {
                 // Note (Nathan W): Item does not exist in our local database so we
                 // need to add it and set the query id accordingly
-
                 return new Promise((resolve, reject) => {
                     storage.addLocalDB(accountName, location, remote_item, (local_id) => {
                         storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id'], () => {
@@ -325,6 +324,20 @@ class FirebaseBackend extends BaseBackend {
         // await this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
+    // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
+    // to Date objects
+    convertTimestampToDate = (data) => {
+        for (let [key, value] of Object.entries(data)) {
+            if (value instanceof firebase.firestore.Timestamp) {
+                console.log("Found a timestamp");
+                data[key] = value.toDate();
+            } else if (typeof value == 'object') {
+                data[key] = this.convertTimestampToDate(value);
+            }
+        }
+        return data;
+    }
+
     firebaseDbGet(location, ...conditionsWithCallback) {
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
@@ -339,10 +352,12 @@ class FirebaseBackend extends BaseBackend {
         // get the data
         databaseLocation.get().then((query) => {
             if (typeof query.get === "function") { // hacky way of checking if a doc
-                callback(query.data());
+                let data = this.convertTimestampToDate(query.data());
+                callback(data);
             } else {
                 query.forEach(doc => {
-                    callback(doc.data());
+                    let data = this.convertTimestampToDate(doc.data());
+                    callback(data);
                 });
             }
         }).catch((err) => {
