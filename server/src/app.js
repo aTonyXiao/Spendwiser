@@ -11,8 +11,8 @@ import firebase from "./auth/firebase.js";
 
 // initialize express
 const app = express();
-app.use(express.json());
-app.use(helmet());
+app.use(express.json()); // use express JSON decoding
+app.use(helmet()); // use helmet middlewares for enhanced security
 
 // create the database with firebase authentication middleware
 const db = new Database(app, firebase);
