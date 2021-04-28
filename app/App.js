@@ -38,7 +38,6 @@ Sentry.init({
 
 
 export default function App() {
-
   initializeAppBackend("firebase");
 
   return (

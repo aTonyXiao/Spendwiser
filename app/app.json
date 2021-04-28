@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.spendwiser",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.5"
     },
     "android": {
       "package": "com.spendwiser",
