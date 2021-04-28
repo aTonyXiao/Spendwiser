@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
@@ -12,16 +13,19 @@ import { useIsFocused } from '@react-navigation/native';
 import { MainModals } from './MainModals';
 import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
+import { setStatusBarStyle, StatusBar } from 'expo-status-bar';
 
-const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-const googlePlaceSearchRadius = "&radius=100&key="
+const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
+const googlePlaceSearchRadius = "&radius=100&key=";
+const googlePlaceDetailsURL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
+const googlePlaceDetailsFields = "&fields=geometry,name,types,formatted_address,place_id&key=";
 
 export function MainScreen({navigation}) {
     const [region, setRegion] = useState({
         latitude: 38.542530, 
         longitude: -121.749530,
-        latitudeDelta: 0.0052,
-        longitudeDelta: 0.0051,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
     })
     const [isLoading, setLoading] = useState(true);
     const [storeArr, setStoreArr] = useState([]);
@@ -60,34 +64,64 @@ export function MainScreen({navigation}) {
         }
     }
 
+    function switchStoresFromPOI(event) {
+        let last5placeId = event.placeId.substr(event.placeId.length - 5);
+        let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
+            && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
+        console.log(found);
+        console.log(last5placeId);
+        console.log(event.placeId);
+        console.log(event.name.slice(0, event.name.indexOf("\n")));
+        if (found === undefined) {
+            fetch(googlePlaceDetailsURL + 
+                event.placeId + 
+                googlePlaceDetailsFields + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+            .then((response) => response.json())
+            .then((json) => {getLocationFromAPI(json)})
+            .catch((error) => console.log(error))
+        } else {
+            let index = storeArr.indexOf(found);
+            reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType);
+        }
+    }
+
     function addManualInput(manualInputObj) {
         setStoreArr(storeList => storeList.concat(manualInputObj));
         console.log(manualInputObj);
-        console.log("hi");
         reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType);
     }
 
     function getLocationFromAPI(json) {
-        let fetchResult = json.results;
+        let fetchResult = json.results !== undefined ? json.results : [json.result];
         let fetchStores = [];
         if (fetchResult == undefined || fetchResult.length == 0) {
             return;
         }
-        let addCount = 0;
-        let fetchResultLen = Object.keys(fetchResult).length - 1;
+        let addCount = storeArr.length - 1 === -1 ? 0 : storeArr.length;
+        let fetchResultLen = Object.keys(fetchResult).length;
+
         for (let i = 0; i < fetchResultLen; i++) {
             if (i === fetchResultLen) {
                 break;
             }
             if (fetchResult[i].types.includes("locality")) {
                 continue;
-            } else {
+            } else if (storeArr.length === 0 || storeArr.find(o => o.placeId === JSON.stringify(fetchResult[i].place_id).slice(1,-1)) === undefined) {
                 let storeType = JSON.stringify(fetchResult[i].types[0]).slice(1,-1).replace(/_/g, " ");
-                storeType = storeType.charAt(0).toUpperCase() + storeType.slice(1)
+                storeType = storeType.charAt(0).toUpperCase() + storeType.slice(1);
+                let address;
+                if (json.results !== undefined) {
+                    address = JSON.stringify(fetchResult[i].vicinity).slice(1,-1);
+                } else {
+                    address = JSON.stringify(fetchResult[i].formatted_address).slice(1,-1);
+                    let commaIdx = address.indexOf(",");
+                    commaIdx = address.indexOf(",", commaIdx + 1);
+                    address = address.substr(0, commaIdx);
+                }
                 fetchStores.push({
                     label: JSON.stringify(fetchResult[i].name).slice(1,-1),
                     value: JSON.stringify(fetchResult[i].name).slice(1,-1),
-                    vicinity: JSON.stringify(fetchResult[i].vicinity).slice(1,-1),
+                    vicinity: address,
                     placeId: JSON.stringify(fetchResult[i].place_id).slice(1,-1),
                     geometry: [parseFloat(JSON.stringify(fetchResult[i].geometry.location.lat)),
                         parseFloat(JSON.stringify(fetchResult[i].geometry.location.lng))],
@@ -97,13 +131,12 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        console.log(fetchStores);
+        setStoreArr(prevStores => [...prevStores, ...fetchStores]);
         if (fetchStores.length > 0) {
             setCurStore(fetchStores[0].label);
-            setCurStoreKey(0);
+            setCurStoreKey(fetchStores[0].key);
             recommendCard.getRecCards(fetchStores[0].storeType, getRecCardFromDB);
         }
-        setStoreArr(fetchStores);
     };
 
     function onBottomSheetLayout(event, isFooter) {
@@ -119,6 +152,7 @@ export function MainScreen({navigation}) {
             }
             setFooterHeight(height);
         }
+        console.log(isFooter + " " + height);
     }
 
     useEffect(() => {
@@ -144,7 +178,7 @@ export function MainScreen({navigation}) {
     // Called on mount
     useEffect(() => {
         (async () => {
-            let { status } = await Location.requestPermissionsAsync();
+            let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 return;
             }
@@ -184,8 +218,9 @@ export function MainScreen({navigation}) {
    
 
     return (
-        <SafeAreaView style={styles.screen}>
-            <View style={{flex: 1, zIndex: 1}}>
+        <View style={styles.screen}>
+            <StatusBar barStyle='dark-content'/>
+            <View style={{zIndex: 1}}>
                 {/* Modal */}
                 <MainModals
                     modalVisible={modalVisible}
@@ -229,7 +264,7 @@ export function MainScreen({navigation}) {
                         provider="google"
                         region = {region}
                         showsUserLocation={true}
-                        onPoiClick={e => console.log(e.nativeEvent)}
+                        onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
                     >
                         <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                             { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
@@ -237,37 +272,40 @@ export function MainScreen({navigation}) {
                         )} />
                     </MapView>
                 </View>
-
-                <BottomSheet isOpen={false}
-                    sliderMinHeight={locationInfoHeight + footerHeight + 50}
-                >
-                    {/* Location text */}
-                    <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
-                        <View style={mapStyles.locationTextContainer}>
-                            <Text>{isLoading ? "Loading" : curStore}</Text>
-                            <Text>
-                                {isLoading ? "" : storeArr[curStoreKey].vicinity}
-                            </Text>
-                            <Text>
-                                {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
-                            </Text>
+                <View>
+                    <BottomSheet isOpen={false}
+                        sliderMinHeight={Platform.OS === 'ios' ? locationInfoHeight + footerHeight + 75 : locationInfoHeight + 75}
+                        sliderMaxHeight={(Dimensions.get('window').height)}
+                        wrapperStyle={Platform.OS === 'ios' ? {paddingBottom: footerHeight + 50} : {paddingBottom: footerHeight}}
+                    >
+                        {/* Location text */}
+                        <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
+                            <View style={mapStyles.locationTextContainer}>
+                                <Text>{isLoading ? "Loading" : curStore}</Text>
+                                <Text>
+                                    {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
+                                </Text>
+                                <Text>
+                                    {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
 
-                    {/* Recommended Card */}
-                    <CardCarousel
-                        recCards={recCards}
-                        navigation={navigation}
-                        storeArr={storeArr}
-                        curStoreKey={curStoreKey}
-                    />
-                </BottomSheet>
+                        {/* Recommended Card */}
+                        <CardCarousel
+                            recCards={recCards}
+                            navigation={navigation}
+                            storeArr={storeArr}
+                            curStoreKey={curStoreKey}
+                        />
+                    </BottomSheet>
+                </View>
             </View>
             {/* Footer */}
             <View style={styles.footerContainer} onLayout={(LayoutEvent => onBottomSheetLayout(LayoutEvent, true))}>
                 <Footer navigation={navigation} />
             </View>
-        </SafeAreaView>
+        </View>
         );
     }
     
@@ -277,7 +315,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
-        paddingTop: StatusBar.currentHeight
     },
     loc: {
         marginTop: 20,
@@ -294,21 +331,22 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         bottom: 0, 
         paddingBottom: 35,
-        marginTop: 0,
         zIndex: 10,
     }
 });
 
 const mapStyles = StyleSheet.create({
     buttonArea: {
+        top: Constants.statusBarHeight,
         position: 'absolute',
         zIndex: 1,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     buttonContainer: {
         flexDirection: 'column',
+        position: 'relative',
         borderRadius: 5,
         backgroundColor: 'white',
         padding: 5,
