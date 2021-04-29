@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
@@ -13,7 +13,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { MainModals } from './MainModals';
 import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
-import { setStatusBarStyle, StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'expo-status-bar';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -68,10 +68,10 @@ export function MainScreen({navigation}) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
-        console.log(found);
-        console.log(last5placeId);
-        console.log(event.placeId);
-        console.log(event.name.slice(0, event.name.indexOf("\n")));
+        // console.log(found);
+        // console.log(last5placeId);
+        // console.log(event.placeId);
+        // console.log(event.name.slice(0, event.name.indexOf("\n")));
         if (found === undefined) {
             fetch(googlePlaceDetailsURL + 
                 event.placeId + 
@@ -229,6 +229,7 @@ export function MainScreen({navigation}) {
                     addManualInput={addManualInput}
                     storeArr={storeArr}
                     curStore={curStore}
+                    region={region}
                 />
                 
                 {/* Map Area */}
@@ -261,7 +262,7 @@ export function MainScreen({navigation}) {
                     {/* Map (Google) */}
                     <MapView 
                         style={mapStyles.map}
-                        provider="google"
+                        provider= {PROVIDER_GOOGLE}
                         region = {region}
                         showsUserLocation={true}
                         onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
