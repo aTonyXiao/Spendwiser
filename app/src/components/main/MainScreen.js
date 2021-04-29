@@ -68,10 +68,10 @@ export function MainScreen({navigation}) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
-        console.log(found);
-        console.log(last5placeId);
-        console.log(event.placeId);
-        console.log(event.name.slice(0, event.name.indexOf("\n")));
+        // console.log(found);
+        // console.log(last5placeId);
+        // console.log(event.placeId);
+        // console.log(event.name.slice(0, event.name.indexOf("\n")));
         if (found === undefined) {
             fetch(googlePlaceDetailsURL + 
                 event.placeId + 
@@ -229,6 +229,7 @@ export function MainScreen({navigation}) {
                     addManualInput={addManualInput}
                     storeArr={storeArr}
                     curStore={curStore}
+                    region={region}
                 />
                 
                 {/* Map Area */}

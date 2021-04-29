@@ -11,7 +11,8 @@ export function MainModals(
         reloadRecCard,
         addManualInput,
         storeArr,
-        curStore
+        curStore,
+        region,
     }) {
 
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
@@ -176,6 +177,7 @@ export function MainModals(
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     vicinity: manualInput.vicinity.length === 0 ? "N/A" : manualInput.vicinity,
                                                     storeType: manualInput.storeType,
+                                                    geometry: [region.latitude, region.longitude],
                                                     key: Object.keys(storeArr).length,
                                                 }
                                                 addManualInput(manualInputObj);
