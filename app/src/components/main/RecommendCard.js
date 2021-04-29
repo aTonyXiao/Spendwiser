@@ -1,14 +1,14 @@
 import { user } from '../../network/user';
 import { cards } from '../../network/cards'
 
-export let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant'];
-export let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket'];
+export let dining = ['Bar', 'Cafe', 'Meal delivery', 'Meal takeaway', 'Restaurant', 'Dining'];
+export let grocery = ['Bakery','Liquor Store', 'Supermarket', 'Grocery or supermarket', 'Grocery'];
 export let drugstore = ['Drugstore', 'Pharmacy'];
-export let gas = ['Gas station'];
-export let homeImprovement = ['Furniture store', 'Home goods store', 'electrician', 
-    'hardware store', 'Plumber', 'Roofing contractor'];
+export let gas = ['Gas station', 'Gas'];
+export let homeImprovement = ['Furniture store', 'Home goods store', 'Electrician', 
+    'Hardware store', 'Plumber', 'Roofing contractor', 'Home Improvement'];
 export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
-    'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo']
+    'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo', 'Travel'];
 
 class RecommendCard {
     getCategory(googleCategory) {

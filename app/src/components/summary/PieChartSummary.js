@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, FlatList, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { Ionicons } from '@expo/vector-icons';
 
@@ -9,11 +9,11 @@ export function PieChartSummary({
   setCurCategory,
   keys,
   values,
-  setModalVisible
+  setModalVisible,
+  colors,
   }) {
     const { label, value } = curCategory;
     const [labelWidth, setLabelWidth] = useState(0);
-    const colors = ['#FF0000', '#FF7F00', '#FFD700', '#00FF00', '#0000FF', '#2E2B5F', '#8B00FF']
     const data = keys.map((key, index) => {
         return {
           key,
@@ -24,8 +24,24 @@ export function PieChartSummary({
         }
       })
     const deviceWidth = Dimensions.get('window').width
+     // Render legend in flatlist
+    function renderLegend({cat, index}) {
+      if (values[index] !== 0) {
+        return (
+            <View style={styles.legendItem}>
+                <Ionicons
+                    name="cube"
+                    color={colors[index]}
+                    size={15}
+                ></Ionicons>
+                <Text>{keys[index]}</Text>
+            </View>
+        );
+      }
+    }
 
     return (
+      <View style={{ justifyContent: 'center', flex: 1 }}>
       <View style={{ justifyContent: 'center', flex: 1 }}>
         <PieChart
           style={{ height: 400 }}
@@ -54,5 +70,25 @@ export function PieChartSummary({
           ></Ionicons>
         </Text>
       </View>
+      <View style={styles.legendContainer}>
+                    <FlatList
+                        data={keys}
+                        renderItem={renderLegend}
+                        numColumns={4}
+                        keyExtractor={(index) => index.toString()}
+                    />
+                </View>
+      </View>
     )
   };
+
+  const styles = StyleSheet.create({
+    legendContainer: {
+      alignItems: 'center',
+      marginBottom: 10
+    },
+    legendItem: {
+        flexDirection: 'row',
+        margin: 5,
+    }
+  });

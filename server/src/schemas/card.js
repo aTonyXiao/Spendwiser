@@ -1,6 +1,10 @@
+/** @module CardSchema The schema for the structure of the Cards collection */
+
 import mongoose from "mongoose";
 
-// card schema for the format of a card in the cards collection
+/**
+ * Schema for the Card model
+ */
 const CardSchema = new mongoose.Schema({
     dateAdded: {type: String, default: ""},
     name: {type: String, default: ""},

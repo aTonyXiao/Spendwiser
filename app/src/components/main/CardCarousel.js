@@ -55,7 +55,7 @@ export function CardCarousel(
 
     return (
         <View style={carouselStyles.cardContainer}>
-            <Text style={{fontSize: 17, paddingTop: 30}}>Your Recommended Card</Text>
+            <Text style={{fontSize: 17, paddingTop: 5}}>Your Recommended Card</Text>
             {recCards == null ?
                 <Image source = {require("../../../assets/load.jpg")}
                     style = {{ 

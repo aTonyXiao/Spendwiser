@@ -1,19 +1,31 @@
+/** @module UserSchema The schema for the structure of the Users collection */
+
 import mongoose from "mongoose";
 
-// card schema for the format of a card in the cards collection
-
+/**
+ * Schema for the user's cards
+ */
 const UserCardSchema = new mongoose.Schema({
     cardId: {type: String, default: ""},
     diff: {type: String, default: ""}
 });
 
+/**
+ * Schema for the user's transactions
+ */
 const UserTransactionSchema = new mongoose.Schema({
-    dateAdded: {type: String, default: ""},
+    dateAdded: {type: Date, default: Date.now()},
     cardId: {type: String, default: ""},
+    docId: {type: String, default: ""},
     amountSpent: {type: String, default: ""},
-    rewards: {type: [], default: []},
+    storeInfo: {type: Object, default: {}},
+    meta_synced: {type: Boolean, default: false},
+    meta_modified: {type: Date, default: Date.now()}
 });
 
+/**
+ * Schema for the user model
+ */
 const UserSchema = new mongoose.Schema({
     dateAdded: {type: String, default: ""},
     cards: [UserCardSchema],

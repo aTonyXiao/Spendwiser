@@ -6,14 +6,22 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "docs": "node_modules/jsdoc -c jsdoc.json"
   },
   "author": "Troi and the Nathans",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "firebase-admin": "^9.6.0",
+    "helmet": "^4.5.0",
+    "jwks-rsa": "^2.0.3",
     "mongoose": "^5.12.3"
   },
   "devDependencies": {
+    "jsdoc": "^3.6.6",
+    "loke-jsdoc-theme": "^2.1.0",
     "nodemon": "^2.0.7"
   }
 }
