@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Sentry from 'sentry-expo';
 import { initializeAppBackend } from './src/network/backend';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,11 +24,17 @@ import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectI
 
 const Stack = createStackNavigator();
 
+Sentry.init({
+  dsn: "https://1efe58005d664f3abfdae0e7a655de80@o584902.ingest.sentry.io/5737353",
+  enableInExpoDevelopment: true,
+  debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+});
+
 // reference: https://stackoverflow.com/questions/35309385/how-do-you-hide-the-warnings-in-react-native-ios-simulator
 // Suppress warnings 
-// import { LogBox } from 'react-native';
-// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-// LogBox.ignoreAllLogs();//Ignore all log notifications
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 export default function App() {
@@ -36,7 +43,12 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={{headerShown: false}}
+        screenOptions={
+          {
+            headerShown: false,
+            swipeEnabled: false,
+          }
+        }
       >
         <Stack.Screen
           name="Home"
@@ -53,10 +65,12 @@ export default function App() {
         <Stack.Screen
           name="Main"
           component={MainScreen}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="YourCards"
           component={YourCards}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="CardInfo"
@@ -65,10 +79,12 @@ export default function App() {
         <Stack.Screen
           name="SpendingSummary"
           component={SpendingSummary}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
         name="Settings"
         component={Settings}
+        options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="AddCardManual"
