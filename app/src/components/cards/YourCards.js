@@ -1,5 +1,13 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { 
+    SafeAreaView, 
+    ScrollView, 
+    StyleSheet, 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    StatusBar 
+} from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
 import { useState, useEffect } from "react";
@@ -28,27 +36,20 @@ function YourCards({ route, navigation }) {
 
     const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
-        console.log('trying to get cards');
         cancelableGetCards.promise.then(cards => {
-            console.log('success');
             setCards([]);
             setCards(cards); 
         }).catch(({isCanceled, ...error}) => {});
-
 
         return () => {
             cancelableGetCards.cancel();
         }
     }, [focused])
 
-
-
-    // TODO: make this modal a component
     if (cards.length == 0) {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.bodyContainer}>
-
                     <AddCardModal
                         navigation={navigation}
                         modalVisible={modalVisible}
@@ -105,7 +106,7 @@ function YourCards({ route, navigation }) {
                         })}
                     </View>
 
-                    {/* Below is empty height at bottom of scrollview becuase absolute footer cuts it off */}
+                    {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
                     <View style={{ height: 100 }}></View>
                 </ScrollView>
             </View>
@@ -115,7 +116,6 @@ function YourCards({ route, navigation }) {
         </SafeAreaView>
     );
 }
-
 
 const styles = StyleSheet.create({
     screen: {
