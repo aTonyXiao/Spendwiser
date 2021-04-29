@@ -18,7 +18,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.spendwiser"
+      "bundleIdentifier": "com.spendwiser",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
+      }
     },
     "android": {
       "adaptiveIcon": {
