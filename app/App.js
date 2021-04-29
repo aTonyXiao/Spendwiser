@@ -47,7 +47,6 @@ export default function App() {
           {
             headerShown: false,
             swipeEnabled: false,
-            animationEnabled: false
           }
         }
       >
@@ -66,10 +65,12 @@ export default function App() {
         <Stack.Screen
           name="Main"
           component={MainScreen}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="YourCards"
           component={YourCards}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="CardInfo"
@@ -78,10 +79,12 @@ export default function App() {
         <Stack.Screen
           name="SpendingSummary"
           component={SpendingSummary}
+          options={{animationEnabled: false}}
         />
         <Stack.Screen
         name="Settings"
         component={Settings}
+        options={{animationEnabled: false}}
         />
         <Stack.Screen
           name="AddCardManual"
