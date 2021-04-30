@@ -49,6 +49,9 @@
           }
         }
       ]
-    }
+    },
+    "facebookScheme": "fb460373351715327",
+    "facebookAppId": "460373351715327",
+    "facebookDisplayName": "Spendwiser"
   }
 }
