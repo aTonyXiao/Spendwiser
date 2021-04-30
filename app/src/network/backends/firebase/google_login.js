@@ -2,10 +2,9 @@ import * as Google from 'expo-google-app-auth'
 import * as firebase from 'firebase';
 import LoginAuthorizer from '../login_authorizer';
 
-const iosClientID = '989741516714-hqrk7f1k8vkab4c6g8h0qai6nl1cv41f.apps.googleusercontent.com'
+const iosClientID = '307958704226-gprtm07sev8ho8puqkjdkb9fa6m8enrl.apps.googleusercontent.com'
 const iosStandaloneAppClientID =
-      '989741516714-fqhdv9b748k8gt5tpclgt2ji79r9pj9r.apps.googleusercontent.com'
-
+    '307958704226-e3etjf7vngbf67j53g8qdotkgnbauhk8.apps.googleusercontent.com'
 
 /**
  * Google login implementation using Expo's google authentication library: 'expo-google-app-auth'
@@ -32,6 +31,8 @@ class GoogleLogin extends LoginAuthorizer {
                     console.log("Google login error...");
                     console.log(error);
                 });
+        } else {
+            console.log("Failed to sign in with google");
         }
     }
 }
