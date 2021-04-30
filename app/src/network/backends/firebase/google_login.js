@@ -2,9 +2,9 @@ import * as Google from 'expo-google-app-auth'
 import * as firebase from 'firebase';
 import LoginAuthorizer from '../login_authorizer';
 
-const iosClientID = '642982422441-6o96s9qkfde6im08e57g4hon1pdm19pa.apps.googleusercontent.com'
+const iosClientID = '307958704226-gprtm07sev8ho8puqkjdkb9fa6m8enrl.apps.googleusercontent.com'
 const iosStandaloneAppClientID =
-    '642982422441-753qbbvtl4vs892mfr3e0627tp81lmne.apps.googleusercontent.com'
+    '307958704226-e3etjf7vngbf67j53g8qdotkgnbauhk8.apps.googleusercontent.com'
 
 /**
  * Google login implementation using Expo's google authentication library: 'expo-google-app-auth'
