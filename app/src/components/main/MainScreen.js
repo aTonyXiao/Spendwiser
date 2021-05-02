@@ -24,8 +24,8 @@ export function MainScreen({navigation}) {
     const [region, setRegion] = useState({
         latitude: 38.542530, 
         longitude: -121.749530,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 0.0052,
+        longitudeDelta: 0.0051,
     })
     const [isLoading, setLoading] = useState(true);
     const [storeArr, setStoreArr] = useState([]);
@@ -36,6 +36,7 @@ export function MainScreen({navigation}) {
     const isFocused = useIsFocused();
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
+    const [userLocation, setUserLocation] = useState();
 
     function setOfflineMode() {
         setStoreArr([{
@@ -50,7 +51,8 @@ export function MainScreen({navigation}) {
     }
 
     function getRecCardFromDB(myRankedCards) {
-        setRecCards(myRankedCards)
+        setRecCards(myRankedCards);
+        console.log(myRankedCards);
     }
 
     // Called when changing store to reload recommended cards
@@ -61,6 +63,7 @@ export function MainScreen({navigation}) {
         if (key !== curStoreKey) {
             setCurStore(value);
             setCurStoreKey(key);
+            setRegion({...region, longitude: storeArr[key].geometry[1], latitude: storeArr[key].geometry[0]});
         }
     }
 
@@ -68,10 +71,6 @@ export function MainScreen({navigation}) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
-        // console.log(found);
-        // console.log(last5placeId);
-        // console.log(event.placeId);
-        // console.log(event.name.slice(0, event.name.indexOf("\n")));
         if (found === undefined) {
             fetch(googlePlaceDetailsURL + 
                 event.placeId + 
@@ -135,6 +134,7 @@ export function MainScreen({navigation}) {
         if (fetchStores.length > 0) {
             setCurStore(fetchStores[0].label);
             setCurStoreKey(fetchStores[0].key);
+            setRegion({...region, longitude: fetchStores[0].geometry[1], latitude: fetchStores[0].geometry[0]});
             recommendCard.getRecCards(fetchStores[0].storeType, getRecCardFromDB);
         }
     };
@@ -185,13 +185,7 @@ export function MainScreen({navigation}) {
 
             try {
                 let location = await Location.getCurrentPositionAsync({});
-                setRegion({
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.0052,
-                    longitudeDelta: 0.0051,
-                })
-
+                setUserLocation(location.coords);
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
                     if (state.isConnected) {
@@ -238,16 +232,30 @@ export function MainScreen({navigation}) {
                     <View style={mapStyles.buttonArea}>
                         <View style={mapStyles.buttonContainer}>
                             <TouchableOpacity
-                                style={{borderBottomWidth: 0.5}}
+                                style={{borderBottomWidth: 0.5, padding: 2}}
                                 onPress={() => console.log("pressed for help")}
                             >
                                 <Ionicons
-                                    name="information-outline"
+                                    name="help-outline"
                                     color={'black'}
                                     size={30}
                                 ></Ionicons>
                             </TouchableOpacity>
                             <TouchableOpacity
+                                style={{borderBottomWidth: 0.5, padding: 5}}
+                                onPress={() => {
+                                    if (userLocation.latitude !== undefined)
+                                        setRegion({...region, longitude: userLocation.longitude, latitude: userLocation.latitude});
+                                    }}
+                            >
+                                <Ionicons
+                                    name="navigate-outline"
+                                    color={'black'}
+                                    size={25}
+                                ></Ionicons>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{padding: 2}}
                                 onPress={() => setModalVisible(true)}
                             >
                                 <Ionicons
@@ -264,6 +272,10 @@ export function MainScreen({navigation}) {
                         style={mapStyles.map}
                         provider= {PROVIDER_GOOGLE}
                         region = {region}
+                        onRegionChangeComplete = {(e)=> {
+                            if (Math.abs(e.longitudeDelta - region.longitudeDelta) > 0.001)
+                                setRegion(e);
+                            }}
                         showsUserLocation={true}
                         onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
                     >
