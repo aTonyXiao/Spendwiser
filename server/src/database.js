@@ -83,20 +83,26 @@ class Database {
                     else res.json(data); // send the data
                 });
             } else if (Object.keys(req.query).length == 1 && typeof req.query.where !== "undefined") {
-                let query = [], operator = "";
-                for (let i = 0; i < query_operators_list.length; i++) {
-                    query = req.query.where.split(query_operators_list[i]);
-                    if (query.length == 2) {
-                        operator = query_operators_list[i];
-                        break;
-                    }
-                    if (i == query_operators_list.length - 1) {
-                        res.sendStatus(400);
-                        return;
+                let rawQuery = [], query = [], operators = [];
+                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where);
+                else rawQuery = req.query.where;
+                for (let i = 0; i < rawQuery.length; i++) {
+                    for (let j = 0; j < query_operators_list.length; j++) {
+                        query[i] = rawQuery[i].split(query_operators_list[j]);
+                        if (query[i].length == 2) {
+                            operators[i] = query_operators_list[j];
+                            break;
+                        }
+                        if (j == query_operators_list.length - 1) {
+                            res.sendStatus(400);
+                            return;
+                        }
                     }
                 }
                 let dbRequest = model.find();
-                dbRequest = query_operators[operator](dbRequest, query);
+                for (let i = 0; i < query.length; i++) {
+                    dbRequest = query_operators[operators[i]](dbRequest, query[i]);
+                }
                 dbRequest.exec((err, data) => {
                     if (err || data == null) res.sendStatus(500); // server err
                     else res.json(data); // send the data
