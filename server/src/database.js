@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
 
+const query_operators = {"<": (req, query) => {
+                            return req.where(query[0]).lt(query[1]);
+                        }, "<=": (req, query) => {
+                            return req.where(query[0]).lte(query[1]);
+                        }, "==": (req, query) => {
+                            return req.where(query[0]).equals(query[1]);
+                        }, ">=": (req, query) => {
+                            return req.where(query[0]).gte(query[1]);
+                        }, ">": (req, query) => {
+                            return req.where(query[0]).gt(query[1]);
+                        }, "!=": (req, query) => {
+                            return req.where(query[0]).ne(query[1]);
+                        }};
+const query_operators_list = Object.keys(query_operators);
+
 // this is a temporary hacky solution to fix user id issues
 // the issue is that firebase User IDs are encoded as 28 characters long
 // mongoDB only accepts 12 char strings or 24 char hex codes as IDs unfortunately 
@@ -61,11 +76,34 @@ class Database {
 
         // get all docs request
         this.app.get(uri, this.auth, (req, res) => {
-            // mongoose: find all for the given model
-            model.find((err, data) => {
-                if (err || data == null) res.sendStatus(500); // server err
-                else res.json(data); // send the data
-            });
+            if (Object.keys(req.query).length == 0) {
+                // mongoose: find all for the given model
+                model.find((err, data) => {
+                    if (err || data == null) res.sendStatus(500); // server err
+                    else res.json(data); // send the data
+                });
+            } else if (Object.keys(req.query).length == 1 && typeof req.query.where !== "undefined") {
+                let query = [], operator = "";
+                for (let i = 0; i < query_operators_list.length; i++) {
+                    query = req.query.where.split(query_operators_list[i]);
+                    if (query.length == 2) {
+                        operator = query_operators_list[i];
+                        break;
+                    }
+                    if (i == query_operators_list.length - 1) {
+                        res.sendStatus(400);
+                        return;
+                    }
+                }
+                let dbRequest = model.find();
+                dbRequest = query_operators[operator](dbRequest, query);
+                dbRequest.exec((err, data) => {
+                    if (err || data == null) res.sendStatus(500); // server err
+                    else res.json(data); // send the data
+                });
+            } else {
+                res.sendStatus(400);
+            }
         })
 
         // get a specific doc by ID
