@@ -1,7 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
+import { 
+    StyleSheet, 
+    View, 
+    Text, 
+    Modal, 
+    TouchableOpacity, 
+    Alert 
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import {appBackend} from '../../network/backend'
+import { appBackend } from '../../network/backend'
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
     function navigateIfAuthorized(navigation, location, errmsg) {
@@ -50,9 +57,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                             onPress={() => {
                                 navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
                             }}
-                            style={modalStyles.modalText}
+                            style={modalStyles.button}
                         >
-                            <Text>By Search</Text>
+                            <Text style={modalStyles.modalText}>By Search</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -60,9 +67,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                                 setModalVisible(!modalVisible);
                                 navigateIfAuthorized(navigation, 'ChooseImage', 'Sign up with an account to use this feature!');
                             }}
-                            style={modalStyles.modalText}
+                            style={modalStyles.button}
                         >
-                            <Text>By Camera</Text>
+                            <Text style={modalStyles.modalText}>By Camera</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -70,9 +77,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                                 setModalVisible(!modalVisible);
                                 navigation.navigate('AddCardManual');
                             }}
-                            style={modalStyles.modalTextBottom}
+                            style={modalStyles.button}
                         >
-                            <Text>Manually</Text>
+                            <Text style={modalStyles.modalText}>Manually</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -107,21 +114,18 @@ const modalStyles = StyleSheet.create({
     modalText: {
         color: 'black',
         margin: 5,
-        backgroundColor: '#28b573',
         padding: 5,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#28b573'
+        fontSize: 16,
     },
-    modalTextBottom: {
-        color: 'black',
-        margin: 5,
-        marginBottom: 15,
+    button: {
+        textAlign: 'center',
         backgroundColor: '#28b573',
-        padding: 5,
+        margin: 10,
+        height: 40, 
         borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#28b573'
+        width: '40%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     modalTitle: {
         fontSize: 24,

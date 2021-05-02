@@ -21,10 +21,7 @@
       "bundleIdentifier": "com.spendwiser",
       "buildNumber": "1.0.9",
       "config": {
-        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ",
-        "googleSignIn": {
-          "reservedClientId": "307958704226-e3etjf7vngbf67j53g8qdotkgnbauhk8.apps.googleusercontent.com"
-        }
+        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
       }
     },
     "android": {
