@@ -56,7 +56,8 @@ export function CategoryModal(
                             {modalVisible === modalType.TIME ? <Text>Time period</Text> : 
                             modalVisible === modalType.CATEGORY ? <Text>Category</Text> : 
                             modalVisible === modalType.TRANSACTIONS ? <Text>Transactions</Text> :
-                            modalVisible === modalType.CARDS ? <Text>Cards</Text> : <Text>Mode</Text>}
+                            modalVisible === modalType.CARDS ? <Text>Cards</Text> :
+                            modalVisible === modalType.MODE ? <Text>Mode</Text> : <Text>Category Limits</Text>}
                             
                         </View>
                         <View style= {{flex: 1}}></View>
