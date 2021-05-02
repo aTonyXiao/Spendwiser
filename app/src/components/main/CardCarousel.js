@@ -71,7 +71,7 @@ export function CardCarousel(
             {
                 ((recCards != null) && (recCards.length > 0)) &&
                 <View>
-                    <Text style={{fontSize: 17, paddingTop: 5}}>Your Recommended Card</Text>
+                    <Text style={carouselStyles.recommendedCardText}>Your Recommended Card</Text>
                     <Carousel
                         layout={"default"}
                         ref={ref}
@@ -147,5 +147,10 @@ const carouselStyles = StyleSheet.create({
     noCardsText: { 
         fontStyle: 'italic',
         margin: 5
+    },
+    recommendedCardText: {
+        fontSize: 17, 
+        paddingTop: 5,
+        alignSelf: 'center'
     }
 });
