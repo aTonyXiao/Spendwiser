@@ -3,10 +3,10 @@ import {
     StyleSheet, 
     View, 
     Text, 
-    Modal, 
     TouchableOpacity, 
     Alert 
 } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { appBackend } from '../../network/backend'
 
@@ -31,13 +31,16 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
     }
     return (
         <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
+            backdropOpacity={0.3}
+            onBackdropPress={() => setModalVisible(false)}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'center',
+                padding: 20,
             }}
+            isVisible={modalVisible}
+            avoidKeyboard={true}
         >
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
@@ -91,11 +94,8 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {
