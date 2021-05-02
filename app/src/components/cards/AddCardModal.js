@@ -119,7 +119,7 @@ const modalStyles = StyleSheet.create({
     },
     button: {
         textAlign: 'center',
-        backgroundColor: '#87CEFA',
+        backgroundColor: '#28b573',
         margin: 10,
         height: 40, 
         borderRadius: 5,

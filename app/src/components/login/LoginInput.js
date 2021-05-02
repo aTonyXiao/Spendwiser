@@ -21,7 +21,7 @@ export const UsernameInput = props => {
         <TextInput
             style={styles.input}
             onChangeText={text => props.onChange(text)}
-            placeholder={' Username'}
+            placeholder={' Email Address'}
             placeholderTextColor={grayRGB}
             textContentType={'emailAddress'}
         />

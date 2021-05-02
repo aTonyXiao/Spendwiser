@@ -18,7 +18,6 @@ function TransactionModal({
     // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
         if (isNaN(parseFloat(input))) { 
-            console.log('hello?')
             return false;
         }
         return !isNaN(input); 
