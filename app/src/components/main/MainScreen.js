@@ -220,18 +220,18 @@ export function MainScreen({navigation}) {
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
-            <View style={{zIndex: 1}}>
-                {/* Modal */}
-                <MainModals
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
-                    reloadRecCard={reloadRecCard}
-                    addManualInput={addManualInput}
-                    storeArr={storeArr}
-                    curStore={curStore}
-                    region={region}
-                />
-                
+            {/* Modal */}
+            <MainModals
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                reloadRecCard={reloadRecCard}
+                addManualInput={addManualInput}
+                storeArr={storeArr}
+                curStore={curStore}
+                region={region}
+                curStoreKey={curStoreKey}
+            />
+            <View style={{zIndex: 1}}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}

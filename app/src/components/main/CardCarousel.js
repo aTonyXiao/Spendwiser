@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
+import { Wave } from 'react-native-animated-spinkit'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -57,13 +58,7 @@ export function CardCarousel(
         <View style={carouselStyles.cardContainer}>
             <Text style={{fontSize: 17, paddingTop: 5}}>Your Recommended Card</Text>
             {recCards == null ?
-                <Image source = {require("../../../assets/load.jpg")}
-                    style = {{ 
-                        width: width * .8,  //its same to '20%' of device width
-                        aspectRatio: 1.5, // <-- this
-                        resizeMode: 'contain', //optional
-                    }}
-                />
+                <Wave size={128} color="#088F8F" />
                 :
                 <View>
                     <Carousel

@@ -120,7 +120,7 @@ export function HeaderAndTabContent(
                     <View style={{flex: 1,flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
                         <Text 
                             style={{color: "blue"}}
-                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.TIME)
+                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.CATEGORY)
                             : mode === modeType.BUDGET ? setModalVisible(modalType.LIMITS)
                             : (setWhichPeriod(2), setPickerVisible(true))}
                             }>

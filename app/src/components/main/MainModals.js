@@ -1,7 +1,8 @@
 import React, { useState} from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import Modal from 'react-native-modal';
+import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 
 export function MainModals(
@@ -13,6 +14,7 @@ export function MainModals(
         storeArr,
         curStore,
         region,
+        curStoreKey,
     }) {
 
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
@@ -54,11 +56,14 @@ export function MainModals(
       };
     return (
         <Modal
-                animationType="slide"
-                transparent={true}
                 backdropOpacity={0.3}
-                statusBarTranslucent={true}
-                visible={modalVisible}
+                isVisible={modalVisible}
+                style={{
+                    margin: 0,
+                    marginHorizontal: 0,
+                    justifyContent: 'center',
+                }}
+                onBackdropPress={()=> {setModalVisible(false); setManualModal(false)}}
             >
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
@@ -90,7 +95,7 @@ export function MainModals(
                         {/* Pick from store list */}
                         {
                             !manualModal &&
-                            <View>
+                            <ScrollView>
                                 {
                                     storeArr.map((store, i) => { 
                                         var storeName = store.value;
@@ -110,7 +115,7 @@ export function MainModals(
                                         )
                                     })
                                 }
-                            </View>
+                            </ScrollView>
                         }
 
                         {/* Manual store input */}
@@ -201,11 +206,9 @@ export function MainModals(
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
+        marginHorizontal: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {
@@ -214,6 +217,7 @@ const modalStyles = StyleSheet.create({
         alignItems: 'stretch',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        maxHeight: Dimensions.get('window').height / 2
     },
     modalHeader: { 
         display: 'flex',

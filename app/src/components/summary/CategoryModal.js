@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
 import { summaryHelper } from './SummaryHelper';
@@ -31,17 +32,21 @@ export function CategoryModal(
 
     useEffect(() => {
         setTmpCatLimits([...categoriesLimit]);
-    }, []);
+    }, [categoriesLimit]);
 
     return (
         <Modal
-            animationType="slide"
-            transparent={true}
             backdropOpacity={0.3}
-            statusBarTranslucent={true}
-            visible={modalVisible !== modalType.DISABLED}
+            onBackdropPress={() => setModalVisible(modalType.DISABLED)}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'flex-end',
+            }}
+            isVisible={modalVisible !== modalType.DISABLED}
+            avoidKeyboard={true}
         >
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={modalStyles.modalBottomView}>
+            <View style={modalStyles.modalBottomView}>
                 <View style={modalStyles.modalView}>
                     {/* Modal header */}
                     <View style={modalStyles.modalHeader}>
@@ -186,6 +191,7 @@ export function CategoryModal(
                         modalVisible === modalType.LIMITS &&
                         <View style={{marginBottom: 50}}>
                             {tmpCatLimits.map((catLimit, index) => { 
+                                console.log(catLimit);
                                 return (
                                     <TouchableOpacity 
                                         key={index}
@@ -221,7 +227,7 @@ export function CategoryModal(
                         </View>
                     }
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         </Modal>
     )
     
@@ -229,10 +235,10 @@ export function CategoryModal(
 
 const modalStyles = StyleSheet.create({
     modalBottomView: {
-        flex: 1,
+        margin: 0,
         justifyContent: 'flex-end',
         alignItems: 'stretch',
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+        backgroundColor: 'rgba(128, 128, 128, 0.5)',
     },
     modalView: {
         backgroundColor: 'white',
