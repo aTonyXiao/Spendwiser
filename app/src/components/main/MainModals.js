@@ -13,8 +13,7 @@ export function MainModals(
         addManualInput,
         storeArr,
         curStore,
-        region,
-        curStoreKey,
+        userLocation,
     }) {
 
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
@@ -22,31 +21,31 @@ export function MainModals(
     const categories = [
         {
             label: 'Dining',
-            value: 'dining',
+            value: 'Dining',
         },
         {
             label: 'Drugstore',
-            value: 'drugstore',
+            value: 'Drugstore',
         },
         {
             label: 'Gas',
-            value: 'gas',
+            value: 'Gas',
         },
         {
             label: 'Grocery',
-            value: 'grocery',
+            value: 'Grocery',
         },
         {
             label: 'Home Improvement',
-            value: 'homeImprovement',
+            value: 'Home Improvement',
         },
         {
             label: 'Others',
-            value: 'others',
+            value: 'Others',
         },
         {
             label: 'Travel',
-            value: 'travel',
+            value: 'Travel',
         },
     ];
     const placeholder = {
@@ -182,7 +181,8 @@ export function MainModals(
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     vicinity: manualInput.vicinity.length === 0 ? "N/A" : manualInput.vicinity,
                                                     storeType: manualInput.storeType,
-                                                    geometry: [region.latitude, region.longitude],
+                                                    geometry: [userLocation.latitude, userLocation.longitude],
+                                                    placeId: "",
                                                     key: Object.keys(storeArr).length,
                                                 }
                                                 addManualInput(manualInputObj);
@@ -242,7 +242,7 @@ const modalStyles = StyleSheet.create({
         borderRadius: 5,
     },
     picker: {
-        height: 40,
+        height: 45,
         borderWidth: 1,
         margin: 15,
         marginTop: 7,

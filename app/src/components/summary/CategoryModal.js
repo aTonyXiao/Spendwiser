@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';

@@ -52,18 +52,17 @@ export function MainScreen({navigation}) {
 
     function getRecCardFromDB(myRankedCards) {
         setRecCards(myRankedCards);
-        console.log(myRankedCards);
     }
 
     // Called when changing store to reload recommended cards
-    function reloadRecCard(value, key, storeType) {
+    function reloadRecCard(value, key, storeType, geometry) {
         // console.log("hihi " + storeType);
         setRecCards(null);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey) {
             setCurStore(value);
             setCurStoreKey(key);
-            setRegion({...region, longitude: storeArr[key].geometry[1], latitude: storeArr[key].geometry[0]});
+            setRegion({...region, longitude: geometry[1], latitude: geometry[0]});
         }
     }
 
@@ -80,14 +79,15 @@ export function MainScreen({navigation}) {
             .catch((error) => console.log(error))
         } else {
             let index = storeArr.indexOf(found);
-            reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType);
+            reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType, storeArr[index].geometry);
         }
     }
 
     function addManualInput(manualInputObj) {
         setStoreArr(storeList => storeList.concat(manualInputObj));
+        console.log(storeArr);
         console.log(manualInputObj);
-        reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType);
+        reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType, manualInputObj.geometry);
     }
 
     function getLocationFromAPI(json) {
@@ -167,7 +167,7 @@ export function MainScreen({navigation}) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
                     console.log("reset rec cards");
-                    reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType);
+                    reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
                 }
             });
@@ -222,8 +222,7 @@ export function MainScreen({navigation}) {
                 addManualInput={addManualInput}
                 storeArr={storeArr}
                 curStore={curStore}
-                region={region}
-                curStoreKey={curStoreKey}
+                userLocation={userLocation}
             />
             <View style={{zIndex: 1}}>                
                 {/* Map Area */}
