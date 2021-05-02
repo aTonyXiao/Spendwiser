@@ -1,13 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, SafeAreaView, Modal, TextInput, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { 
+    Dimensions, 
+    View, 
+    Text, 
+    StyleSheet, 
+    Alert, 
+    TouchableOpacity, 
+    ScrollView, 
+    SafeAreaView, 
+} from 'react-native';
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
-import CachedImage from 'react-native-expo-cached-image';
 import { Ionicons } from '@expo/vector-icons';
 import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
+import { DismissKeyboard } from '../util/DismissKeyboard';
+
+// TODO: need to add reward modal back in here?
 
 /**
  * Display for a single credit card. Shows information about a card's rewards as well
@@ -25,7 +36,6 @@ function DisplayCard({route, navigation}) {
     const origin = route.params.origin;
     const userId = user.getUserId();
     const [cardName, setCardName] = useState("");
-    // const storeInformation = route.params.storeInformation;
     const storeInformation = user.currentStore;
     const [displayTransactions, setDisplayTransactions] = useState(false);
     const [transactions, setTransactions] = useState([]);
@@ -50,8 +60,6 @@ function DisplayCard({route, navigation}) {
             setCurrentTransactionIndex(-1);
             setShowEditTransactionOption(false);
             user.getTransactionsForCard(userId, cardId, (data) => {
-                console.log("Got transaction data");
-                console.log(data);
                 setTransactions((transactions) => { 
                     if (data) {
                         if (Array.isArray(data)) {
@@ -93,155 +101,155 @@ function DisplayCard({route, navigation}) {
         navigation.navigate('YourCards');
     }
 
-    console.log(cardImage.uri)
-
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView 
-                style={styles.container} 
-                contentContainerStyle={styles.scrollviewContainer}
-            >
-                <EditTransactionModal
-                    transaction={currentTransaction}
-                    modalVisible={showEditTransactionModal}
-                    setModalVisible={setShowEditTransactionModal}
-                    setHasConstructed={setHasConstructed}
-                ></EditTransactionModal>
+        <DismissKeyboard>
+            <SafeAreaView style={styles.container}>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={styles.scrollviewContainer}
+                >
+                    <EditTransactionModal
+                        transaction={currentTransaction}
+                        modalVisible={showEditTransactionModal}
+                        setModalVisible={setShowEditTransactionModal}
+                        setHasConstructed={setHasConstructed}
+                    ></EditTransactionModal>
 
-                <TransactionModal
-                    storeInformation={storeInformation}
-                    showTransactionModal={showTransactionModal}
-                    setShowTransactionModal={setShowTransactionModal}
-                    setHasConstructed={setHasConstructed}
-                    cardId={cardId}
-                ></TransactionModal>
+                    <TransactionModal
+                        storeInformation={storeInformation}
+                        showTransactionModal={showTransactionModal}
+                        setShowTransactionModal={setShowTransactionModal}
+                        setHasConstructed={setHasConstructed}
+                        cardId={cardId}
+                    ></TransactionModal>
 
-                {/* TODO: Add reward modal in beta version*/}
+                    {/* TODO: Add reward modal in beta version*/}
 
-                <View style={{justifyContent: 'flex-start'}}>
-                    <Text style={styles.cardTitle}>{cardName}</Text>
+                    <View style={{ justifyContent: 'flex-start' }}>
+                        <Text style={styles.cardTitle}>{cardName}</Text>
 
-                    <CardImage
-                        style={[ styles.card ]}
-                        source={cardImage.uri}
-                        overlay={cardName}
-                        default={cardImage.uri === undefined || cardImage.uri.length == 0}
-                    />
+                        <CardImage
+                            style={[styles.card]}
+                            source={cardImage.uri}
+                            overlay={cardName}
+                            default={cardImage.uri === undefined || cardImage.uri.length == 0}
+                        />
 
-                    {
-                        showEditTransactionOption &&
-                        <View>
-                            <TouchableOpacity onPress={() => setShowEditTransactionModal(true)}>
-                                <Text style={styles.editTransactionText}>Edit this transaction</Text>
+                        {
+                            showEditTransactionOption &&
+                            <View>
+                                <TouchableOpacity onPress={() => setShowEditTransactionModal(true)}>
+                                    <Text style={styles.editTransactionText}>Edit this transaction</Text>
+                                </TouchableOpacity>
+                            </View>
+                        }
+
+                        <View style={styles.sectionTitle}>
+                            <Text style={styles.sectionTitleText}>Transactions</Text>
+                            <TouchableOpacity
+                                onPress={() => setShowTransactionModal(true)}
+                                style={{ margin: 5 }}
+                            >
+                                <Ionicons
+                                    name="add-circle-outline"
+                                    color="white"
+                                    size={22}
+                                ></Ionicons>
                             </TouchableOpacity>
                         </View>
-                    }
+                        {
+                            displayTransactions &&
+                            <View>
+                                {
+                                    transactions.map((transaction, i) => {
+                                        // TODO: I don't know what the best way to fix this is rn
+                                        // The offline storage used an object to represent time and the
+                                        // firebase db used a string....
 
-                    <View style={styles.sectionTitle}>
-                        <Text style={styles.sectionTitleText}>Transactions</Text> 
-                        <TouchableOpacity
-                            onPress={() => setShowTransactionModal(true)}
-                            style={{margin: 5}}
-                        >
-                            <Ionicons
-                                name="add-circle-outline"
-                                color="white"
-                                size={22}
-                            ></Ionicons>
-                        </TouchableOpacity>
-                    </View>
-                    {
-                        displayTransactions &&
-                        <View>
-                            {
-                                transactions.map((transaction, i) => {
-                                    // TODO: I don't know what the best way to fix this is rn
-                                    // The offline storage used an object to represent time and the
-                                    // firebase db used a string....
-
-                                    // [object Object]
-                                    var date = transaction.dateAdded.toString();
-                                    var name = transaction.storeInfo.storeName;
-                                    var dollarAmount = transaction.amountSpent;
-                                    return (
-                                        <TouchableOpacity
-                                            style={
-                                                (currentTransactionIndex == i) ?
-                                                styles.sectionTextSelected :
-                                                styles.sectionText
-                                            } 
-                                            key={i}
-                                            onPress={() => { 
-                                                if (i == currentTransactionIndex) { 
-                                                    setShowEditTransactionOption(false);
-                                                    setCurrentTransactionIndex(-1);
-                                                } else {
-                                                    setCurrentTransactionIndex(i);
-                                                    setShowEditTransactionOption(true);
-                                                    setCurrentTransaction(transaction);
+                                        // [object Object]
+                                        var date = transaction.dateAdded.toString();
+                                        var name = transaction.storeInfo.storeName;
+                                        var dollarAmount = transaction.amountSpent;
+                                        return (
+                                            <TouchableOpacity
+                                                style={
+                                                    (currentTransactionIndex == i) ?
+                                                        styles.sectionTextSelected :
+                                                        styles.sectionText
                                                 }
-                                            }}
-                                        >
-                                            <Text style={styles.transactionTextLeft}>{date}</Text>
-                                            <Text style={styles.transactionTextRight}>{name}: ${dollarAmount}</Text>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-                    }
-                    {
-                        (transactions.length == 0) &&
-                        <View>
-                            <Text style={styles.sectionText}>You currently have no transactions!</Text>
-                        </View>
-                    }
+                                                key={i}
+                                                onPress={() => {
+                                                    if (i == currentTransactionIndex) {
+                                                        setShowEditTransactionOption(false);
+                                                        setCurrentTransactionIndex(-1);
+                                                    } else {
+                                                        setCurrentTransactionIndex(i);
+                                                        setShowEditTransactionOption(true);
+                                                        setCurrentTransaction(transaction);
+                                                    }
+                                                }}
+                                            >
+                                                <Text style={styles.transactionTextLeft}>{date}</Text>
+                                                <Text style={styles.transactionTextRight}>{name}: ${dollarAmount}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                }
+                            </View>
+                        }
+                        {
+                            (transactions.length == 0) &&
+                            <View>
+                                <Text style={styles.sectionText}>You currently have no transactions!</Text>
+                            </View>
+                        }
 
 
-                    <View style={styles.sectionTitle}>
-                        <Text style={styles.sectionTitleText}>Rewards</Text> 
-                        <TouchableOpacity
-                            // onPress={() => setShowTransactionModal(true)}
-                            style={{margin: 5}}
-                        >
-                            <Ionicons
-                                name="add-circle-outline"
-                                color="white"
-                                size={22}
-                            ></Ionicons>
-                        </TouchableOpacity>
+                        <View style={styles.sectionTitle}>
+                            <Text style={styles.sectionTitleText}>Rewards</Text>
+                            <TouchableOpacity
+                                // onPress={() => setShowTransactionModal(true)}
+                                style={{ margin: 5 }}
+                            >
+                                <Ionicons
+                                    name="add-circle-outline"
+                                    color="white"
+                                    size={22}
+                                ></Ionicons>
+                            </TouchableOpacity>
+                        </View>
+                        {
+                            displayRewards &&
+                            rewards.map((reward, i) => {
+                                var category;
+                                var amountCents;
+                                // temporary way to tell if card is a manual addition
+                                if (rewards[0][0] == '0') {
+                                    category = reward[1].type;
+                                    amountCents = reward[1].value;
+                                } else {
+                                    category = reward[0];
+                                    amountCents = reward[1];
+                                }
+
+                                return (
+                                    <View style={styles.sectionText} key={i}>
+                                        <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                        <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                    </View>
+                                )
+                            })
+                        }
                     </View>
                     {
-                        displayRewards && 
-                        rewards.map((reward, i) => {
-                            var category;
-                            var amountCents;
-                            // temporary way to tell if card is a manual addition
-                            if (rewards[0][0] == '0') {
-                                category = reward[1].type;
-                                amountCents = reward[1].value;
-                            } else { 
-                                category = reward[0];
-                                amountCents = reward[1]; 
-                            }
-
-                            return (
-                                <View style={styles.sectionText} key={i}>
-                                    <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                    <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
-                                </View>
-                            )
-                        })
+                        (origin !== "main") &&
+                        <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
+                            <Text style={styles.deleteText}>Delete this card</Text>
+                        </TouchableOpacity>
                     }
-                </View>
-                {
-                    (origin !== "main") &&
-                    <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}> 
-                        <Text style={styles.deleteText}>Delete this card</Text>
-                    </TouchableOpacity>
-                }
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
+        </DismissKeyboard>
     )
 }
 

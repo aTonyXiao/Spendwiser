@@ -70,6 +70,7 @@ export function CardCarousel(
                 </TouchableOpacity>
                 :
                 <View>
+                    <Text style={carouselStyles.recommendedCardText}>Your Recommended Card</Text>
                     <Carousel
                         layout={"default"}
                         ref={ref}
@@ -94,6 +95,14 @@ export function CardCarousel(
                         inactiveDotOpacity={0.4}
                         inactiveDotScale={0.7}
                     />
+                </View>
+            }
+
+            {/* display if user has no cards */}
+            {
+                ((recCards != null) && (recCards.length == 0)) &&
+                <View>
+                    <Text style={carouselStyles.noCardsText}>You currently have no cards. Add some on the next page over to get a recommended card!</Text>
                 </View>
             }
         </View>
@@ -134,4 +143,13 @@ const carouselStyles = StyleSheet.create({
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
     },
+    noCardsText: { 
+        fontStyle: 'italic',
+        margin: 5
+    },
+    recommendedCardText: {
+        fontSize: 17, 
+        paddingTop: 5,
+        alignSelf: 'center'
+    }
 });

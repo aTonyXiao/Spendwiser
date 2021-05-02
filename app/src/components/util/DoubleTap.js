@@ -1,7 +1,11 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-// TODO: add documentation for this!
+/**
+ * Function that detects a double tap for a component. Currently unused
+ * 
+ * @module DoubleTap
+ */
 //https://medium.com/handlebar-labs/instagram-style-double-tap-with-react-native-49e757f68de
 export class DoubleTap extends React.Component {
   static defaultProps = {
