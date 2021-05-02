@@ -56,7 +56,6 @@ export function CardCarousel(
 
     return (
         <View style={carouselStyles.cardContainer}>
-            <Text style={{fontSize: 17, paddingTop: 5}}>{recCards === null || recCards.length > 0 ? "Your Recommended Card" : ""}</Text>
             {recCards === null ?
                 <Wave size={128} color="#088F8F" />
                 :
@@ -66,7 +65,7 @@ export function CardCarousel(
                         storeInformation: storeArr[curStoreKey]
                     })}
                     style={{paddingVertical: 20, paddingHorizontal: 30, backgroundColor: '#5F9EA0', borderRadius: 3, marginTop: 10}}>
-                    <Text style={{textAlign: 'center'}}>User has no cards. {"\n"} Click here to add cards</Text>
+                    <Text style={{textAlign: 'center'}}>You currently have no cards. {"\n"} Click here to get started!</Text>
                 </TouchableOpacity>
                 :
                 <View>
@@ -95,14 +94,6 @@ export function CardCarousel(
                         inactiveDotOpacity={0.4}
                         inactiveDotScale={0.7}
                     />
-                </View>
-            }
-
-            {/* display if user has no cards */}
-            {
-                ((recCards != null) && (recCards.length == 0)) &&
-                <View>
-                    <Text style={carouselStyles.noCardsText}>You currently have no cards. Add some on the next page over to get a recommended card!</Text>
                 </View>
             }
         </View>
