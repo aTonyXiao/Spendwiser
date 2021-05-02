@@ -55,7 +55,6 @@ export function MainScreen({navigation}) {
 
     // Called when changing store to reload recommended cards
     function reloadRecCard(value, key, storeType) {
-        // console.log("hihi " + storeType);
         setRecCards(null);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey) {
@@ -68,10 +67,6 @@ export function MainScreen({navigation}) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
-        // console.log(found);
-        // console.log(last5placeId);
-        // console.log(event.placeId);
-        // console.log(event.name.slice(0, event.name.indexOf("\n")));
         if (found === undefined) {
             fetch(googlePlaceDetailsURL + 
                 event.placeId + 
@@ -87,7 +82,6 @@ export function MainScreen({navigation}) {
 
     function addManualInput(manualInputObj) {
         setStoreArr(storeList => storeList.concat(manualInputObj));
-        console.log(manualInputObj);
         reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType);
     }
 
@@ -152,7 +146,6 @@ export function MainScreen({navigation}) {
             }
             setFooterHeight(height);
         }
-        console.log(isFooter + " " + height);
     }
 
     useEffect(() => {
@@ -166,7 +159,6 @@ export function MainScreen({navigation}) {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
-                    console.log("reset rec cards");
                     reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType);
                     user.setMainNeedsUpdate(false);
                 }

@@ -170,8 +170,6 @@ export function MainModals(
                                             setManualModal(false);
                                             if (manualInput.storeType.length != 0) {
                                                 let storeArrLen = (storeArr.length).toString();
-                                                console.log(storeArrLen);
-                                                console.log(manualInput.storeName, manualInput.vicinity, manualInput.storeType);
                                                 let manualInputObj = {
                                                     label: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,

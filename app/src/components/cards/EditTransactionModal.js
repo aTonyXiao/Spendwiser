@@ -55,8 +55,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
     };
 
     deleteTransaction = () => { 
-        console.log("trying to delete transaction");
-        console.log(docId);
         user.deleteTransaction(userId, docId);
         setModalVisible(false);
         setHasConstructed(false);
