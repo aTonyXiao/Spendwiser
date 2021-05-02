@@ -11,6 +11,14 @@ import { Ionicons } from '@expo/vector-icons';
 import SelectMultiple from 'react-native-select-multiple';
 import * as storage from '../../../local/storage';
 
+/**
+ * Modal that shows help for editing an image
+ * 
+ * @param {{Object}} obj - navigation passed directly to display card
+ * @param {boolean} obj.showHelpModal - boolean to show help modal or not
+ * @param {function} obj.setShowHelpModal - React use state function to set showHelpModal variable
+ * @module HelpModal
+ */
 function HelpModal({showHelpModal, setShowHelpModal}) { 
     const checkboxText = ['Show this automatically'];
     // the component used for this allows multiple checkboxes

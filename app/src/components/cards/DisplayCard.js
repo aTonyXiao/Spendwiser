@@ -158,6 +158,8 @@ function DisplayCard({route, navigation}) {
                                     // TODO: I don't know what the best way to fix this is rn
                                     // The offline storage used an object to represent time and the
                                     // firebase db used a string....
+
+                                    // [object Object]
                                     var date = transaction.dateAdded.toString();
                                     var name = transaction.storeInfo.storeName;
                                     var dollarAmount = transaction.amountSpent;

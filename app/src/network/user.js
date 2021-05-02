@@ -57,6 +57,7 @@ class userClass {
         userId = await userId;
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
+                console.log("User get cards succeeded...");
                 resolve(data);
             })
         })
@@ -139,7 +140,7 @@ class userClass {
                 storeType: storeInfo["storeType"]
             },
             amountSpent: amountSpent,
-            dateAdded: timestamp
+            dateAdded: timestamp 
         }, (id) => { 
             callback(id);
         })
@@ -259,7 +260,11 @@ class userClass {
         userId = await userId;
         appBackend.dbGet("cards." + cardId, (data)=> { 
             // TODO apply diff
-            callback(data.rewards);
+            if (typeof data != 'undefined' && 'rewards' in data) {
+                callback(data.rewards);
+            } else {
+                callback(null);
+            }
         })
     }
 

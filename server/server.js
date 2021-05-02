@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+
+import "./src/config.js"; // weirdness with ES6 imports, so it's own module
 import app from "./src/app.js";
 
 // some server constants
-const mongo_url = "mongodb://mongo-db:27017/test";
+const mongo_url = "mongodb://mongo-db:27017/" + process.env.MONGO_DEFAULT_DB;
 const port = 3000;
 
 // try to connect to mongo using mongoose

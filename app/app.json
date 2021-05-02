@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "app",
+    "name": "Spendwiser",
     "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,11 +19,17 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.spendwiser",
+      "buildNumber": "1.0.9",
       "config": {
-        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
+        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ",
+        "googleSignIn": {
+          "reservedClientId": "307958704226-e3etjf7vngbf67j53g8qdotkgnbauhk8.apps.googleusercontent.com"
+        }
       }
     },
     "android": {
+      "package": "com.spendwiser",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -31,6 +37,21 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "spendwiser",
+            "project": "spendwiser",
+            "authToken": "a54be7cc484441f6b3e437513831dd32bcf49aee3682413ab553f93eca877010"
+          }
+        }
+      ]
+    },
+    "facebookScheme": "fb460373351715327",
+    "facebookAppId": "460373351715327",
+    "facebookDisplayName": "Spendwiser"
   }
 }
