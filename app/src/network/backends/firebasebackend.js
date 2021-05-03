@@ -570,6 +570,24 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
+    async syncLocalDatabase() {
+        this.getUserID((accountName) => {
+            let unsynced_documents = await storage.getUnsyncedDocuments(accountName);
+
+            unsynced_documents.map((document) => {
+                let location = document['location'];
+                let id = document['id'];
+                let data = storage.getLocalDB(accountName, location + id);
+
+                this.dbFirebaseAdd(location, data, (remote_id) => {
+                    storage.modifyDBEntryMetainfo(accountName, location + id, true, id, remote_id, () => {
+                        // TODO: Remove from unsynced documents
+                    });
+                });
+            });
+        });
+    }
+
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -592,6 +610,7 @@ class FirebaseBackend extends BaseBackend {
                 // Add data locally
                 console.log("adding locally");
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    this.syncLocalDatabase();
                     callback(local_query_id);
                     /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {

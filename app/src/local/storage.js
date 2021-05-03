@@ -331,6 +331,21 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
     }
 }
 
+export const getUnsyncedDocuments = async (accountName) => {
+    try {
+        getDB(async (db) => {
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                return db[accountName]['unsynced_documents'];
+            } else {
+                return [];
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return []; 
+    }
+}
+
 export const printLocalDB = async () => {
     try {
         getDB(async (db) => {
