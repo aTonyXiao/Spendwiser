@@ -401,12 +401,14 @@ class FirebaseBackend extends BaseBackend {
                     // Get the data (if any) from the local db
                     storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
                         this.firebaseDbGet(location, ...conditions, async (remote_data) => {
+                            /*
                             console.log("Got data from firebase... consolidating...");
                             if (typeof remote_data == 'object' || typeof local_data == 'object') {
                                 console.log("consolidating from a normal get");
                                 await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             } 
                             console.log("Finished consolidating...");
+                            */
                             callback(remote_data);
                         });
                     })
@@ -451,6 +453,7 @@ class FirebaseBackend extends BaseBackend {
                                 remote_collection.push(currentDoc);
                             })
 
+                            /*
                             console.log("Consolidating local and remote collections from dbGetSubcollections...");
                             console.log("Local collection: ");
                             console.log(local_collection);
@@ -460,6 +463,7 @@ class FirebaseBackend extends BaseBackend {
                             await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
 
                             console.log("finsihed consolidating from dbGetSubcollections");
+                            */
                             if (remote_collection.length == 0) {
                                 callback(local_collection);
                             } else {
@@ -525,7 +529,6 @@ class FirebaseBackend extends BaseBackend {
                 storage.setLocalDB(accountId, location, data, merge, () => {
 
                     // Store on firebase if possible
-                    console.log("Setting remote db")
                     let databaseLocation = getDatabaseLocation(this.database, location);
                     if (state.signed_in && !state.offline) {
                         databaseLocation.set(data, { merge: merge }).catch((err) => {
