@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import DatePicker, { getFormatedDate }from 'react-native-modern-datepicker';
 
@@ -22,32 +23,42 @@ export function HeaderAndTabContent(
         setModalVisible,
         compareTimeframe,
         setNewPeriod,
+        whichPeriod,
         setWhichPeriod,
     }) {
     const [pickerVisible, setPickerVisible] = useState(false);
-
+    const deviceHeight =
+    Platform.OS === 'ios'
+    ? Dimensions.get('window').height
+    : Dimensions.get('screen').height;
+    
     return (
         <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
             {/* Month Picker */}
             {pickerVisible && <Modal
-                animationType="slide"
-                transparent={true}
-                backdropOpacity={0.3}
+               backdropOpacity={0.3}
+                isVisible={pickerVisible}
                 statusBarTranslucent={true}
-                visible={pickerVisible}
+                deviceHeight={deviceHeight}
+                avoidKeyboard={true}
+                style={{
+                    margin: 0,
+                    marginHorizontal: 0,
+                    justifyContent: 'flex-end',
+                }}
+                onBackdropPress={()=> {setPickerVisible(false)}}
             >
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
                         {/* Modal header */}
                         <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity style={{flex: 1}} onPress={() => {setPickerVisible(false)}}>
+                            <TouchableOpacity onPress={() => {setPickerVisible(false)}}>
                                 <Ionicons
                                     name="close-circle-outline"
                                     color="black"
                                     size={26}
                                 ></Ionicons>
                             </TouchableOpacity>
-                            <View style= {{flex: 1}}></View>
                         </View>
                         <DatePicker
                             mode="monthYear"
@@ -65,7 +76,7 @@ export function HeaderAndTabContent(
                     color={'white'}
                     size={30}
                 ></Ionicons>
-                <Text style={styles.header}>Spendings & Transactions</Text>
+                <Text style={styles.header}>Spendings</Text>
                 <Ionicons
                     name="ellipsis-horizontal-circle"
                     color={'black'}
@@ -75,7 +86,16 @@ export function HeaderAndTabContent(
                     }}
                 ></Ionicons>
             </View>
-             <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
+            {/* Current Card */}
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Ionicons
+                    name="card-outline"
+                    color={"black"}
+                    size={15}
+                    style={{paddingRight: 5}}
+                ></Ionicons>
+                <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
+            </View>
             {/* Tabs */}
             <View style={styles.tabContainer}>
                 {/* Tab Headers */}
@@ -120,7 +140,7 @@ export function HeaderAndTabContent(
                     <View style={{flex: 1,flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
                         <Text 
                             style={{color: "blue"}}
-                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.TIME)
+                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.CATEGORY)
                             : mode === modeType.BUDGET ? setModalVisible(modalType.LIMITS)
                             : (setWhichPeriod(2), setPickerVisible(true))}
                             }>
@@ -161,7 +181,6 @@ const styles = StyleSheet.create({
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'stretch',
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
@@ -179,6 +198,7 @@ const modalStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         margin: 8,
-        marginBottom: 0,
+        marginBottom: -20,
+        zIndex: 1,
     },
 });

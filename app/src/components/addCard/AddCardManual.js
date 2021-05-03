@@ -6,6 +6,8 @@ import { cards } from '../../network/cards';
 import { ManualRewardRow } from './ManualRewardRow';
 import mainStyles from '../../styles/mainStyles';
 import { Ionicons } from '@expo/vector-icons';
+import { DismissKeyboard } from '../util/DismissKeyboard';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -13,6 +15,7 @@ export function AddCardManual({navigation}) {
     const inputReward = React.createRef();
     const [rewards, setRewards] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
+    const [rewardType, setRewardType] = useState("Cashback");
 
     const [rewardError, setRewardError] = useState(false);
     const [invalidInputError, setInvalidInputError] = useState(false);
@@ -29,13 +32,24 @@ export function AddCardManual({navigation}) {
         const rewardValue = inputReward.current.state.value;
 
         if (!isNaN(parseFloat(rewardValue))) { 
-            setRewards([
-                ...rewards,
+            let index = rewards.findIndex(e => e.type === rewardType);
+            if (index !== -1) {
+                let tempRewards = [...rewards];
+                tempRewards.splice(index, 1,
                 {
                     type : rewardType,
                     value : rewardValue,
-                }
-            ])
+                });
+                setRewards(tempRewards);
+            } else {
+                setRewards([
+                    ...rewards,
+                    {
+                        type : rewardType,
+                        value : rewardValue,
+                    }
+                ])
+            }
    
             resetRewardInputs();
     
@@ -87,70 +101,94 @@ export function AddCardManual({navigation}) {
         var name = inputName.current.state.text;
         var url = inputUrl.current.state.text;
         var inputsAreValid = validateInputs(name, url);
-
         if (inputsAreValid) { 
-            cards.addCardToDatabase(name, [], rewards, url).then(async (cardId) => {
-                await user.saveCardToUser(userId, cardId, null, null);
-                navigation.navigate('YourCards');
-            });
+            // Convert reward array to map to store in firebase
+            var rewardsMap = {};
+            rewards.map(item => {rewardsMap[item.type] = parseFloat(item.value)})
+            if (rewardsMap["others"] === undefined) {
+                rewardsMap["others"] = 0;
+            }
+            console.log(rewardsMap);
+            // cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
+            //     await user.saveCardToUser(userId, cardId, null, null);
+            //     navigation.navigate('YourCards');
+            // });
         } 
     } 
 
     return (
-        <View style={styles.container}>
-            <Text style={mainStyles.title}>Add a Card Manually</Text>
+        <DismissKeyboard>
+            <View style={styles.container}>
+                <Text style={mainStyles.title}>Add a Card Manually</Text>
 
-            <Text style={styles.inputTitle}>Credit Card Name</Text>
-            <TextBox 
-                style={!nameError ? styles.inputBox : styles.inputBoxError} 
-                ref={inputName} 
-                placeholder={'your credit card title here '}
-            />
-
-            <Text style={styles.inputTitle}>Rewards</Text>    
-            <View style={styles.rewardContainer}>
-                {
-                    displayRewards &&
-                    <View style={styles.rewardText}>
-                        {
-                        rewards.map((reward, i) => {
-                            return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
-                        })
-                        }
+                <Text style={styles.inputTitle}>Credit Card Name</Text>
+                <TextBox
+                    style={!nameError ? styles.inputBox : styles.inputBoxError}
+                    ref={inputName}
+                    placeholder={'Your credit card title here '}
+                />
+                <Text style={styles.inputTitle}>Card Type</Text>
+                    <View>
+                        <DropDownPicker
+                            items={[
+                                { label: 'Cashback', value: 'Cashback' },
+                                { label: 'Points', value: 'Points' },
+                                { label: 'Miles', value: 'Miles' },
+                                { label: 'Unknown', value: 'Unknown' },
+                            ]}
+                            defaultValue={"Cashback"}
+                            onChangeItem={item => setRewardType(item.value)}
+                            containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15}}
+                            style={{ backgroundColor: '#fafafa' }}
+                            itemStyle={{justifyContent: 'flex-start'}}
+                            dropDownStyle={{ backgroundColor: '#fafafa' }}
+                        />
                     </View>
-                }
-                {
-                    rewardError &&
-                    <Text style={{ color: 'red' }}>Please input a number</Text>
-                }
-                <View style={styles.rewardRow}>
-                    <ManualRewardRow ref={inputReward}></ManualRewardRow>
-                    <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
-                        <Ionicons
-                            name="add-outline"
-                            color="black"
-                            size={32}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
-            <View style={styles.bottomContainer}>
-                <Text style={styles.inputTitle}>URL</Text>
-                <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
-
-                <View style={styles.addCardContainer}>
+                <Text style={styles.inputTitle}>Rewards</Text>
+                <View style={styles.rewardContainer}>
                     {
-                        (invalidInputError) &&
-                        <Text style={{color:'red'}}>Please add a name and reward</Text>
+                        displayRewards &&
+                        <View style={styles.rewardText}>
+                            {
+                                rewards.map((reward, i) => {
+                                    return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                                })
+                            }
+                        </View>
                     }
-                    <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
-                        <Text style={styles.addCardText}>Add this card</Text>
-                    </TouchableOpacity>
+                    {
+                        rewardError &&
+                        <Text style={{ color: 'red', marginHorizontal: 15}}>Please input a number</Text>
+                    }
+                    <View style={styles.rewardRow}>
+                        <ManualRewardRow ref={inputReward}></ManualRewardRow>
+                        <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
+                            <Ionicons
+                                name="add-outline"
+                                color="black"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
+                <View style={styles.bottomContainer}>
+                    <Text style={styles.inputTitle}>URL</Text>
+                    <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
+
+                    <View style={styles.addCardContainer}>
+                        {
+                            (invalidInputError) &&
+                            <Text style={{ color: 'red' }}>Please add a name and reward</Text>
+                        }
+                        <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
+                            <Text style={styles.addCardText}>Add this card</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-        </View>
+        </DismissKeyboard>
     );
 }
 
@@ -193,7 +231,6 @@ const styles = StyleSheet.create({
         width: '90%',
         borderColor: 'red',
         borderWidth: 1,
-        // backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
         marginBottom: 8

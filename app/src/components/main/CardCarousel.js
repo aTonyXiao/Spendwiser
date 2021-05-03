@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
+import { Wave } from 'react-native-animated-spinkit'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -55,17 +56,20 @@ export function CardCarousel(
 
     return (
         <View style={carouselStyles.cardContainer}>
-            <Text style={{fontSize: 17, paddingTop: 5}}>Your Recommended Card</Text>
-            {recCards == null ?
-                <Image source = {require("../../../assets/load.jpg")}
-                    style = {{ 
-                        width: width * .8,  //its same to '20%' of device width
-                        aspectRatio: 1.5, // <-- this
-                        resizeMode: 'contain', //optional
-                    }}
-                />
+            {recCards === null ?
+                <Wave size={128} color="#088F8F" />
+                :
+                recCards.length === 0 ?
+                <TouchableOpacity 
+                    onPress={()=>  navigation.navigate('YourCards', { 
+                        storeInformation: storeArr[curStoreKey]
+                    })}
+                    style={{paddingVertical: 20, paddingHorizontal: 30, backgroundColor: '#5F9EA0', borderRadius: 3, marginTop: 10}}>
+                    <Text style={{textAlign: 'center'}}>You currently have no cards. {"\n"} Click here to get started!</Text>
+                </TouchableOpacity>
                 :
                 <View>
+                    <Text style={carouselStyles.recommendedCardText}>Your Recommended Card</Text>
                     <Carousel
                         layout={"default"}
                         ref={ref}
@@ -130,4 +134,13 @@ const carouselStyles = StyleSheet.create({
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius,
     },
+    noCardsText: { 
+        fontStyle: 'italic',
+        margin: 5
+    },
+    recommendedCardText: {
+        fontSize: 17, 
+        paddingTop: 5,
+        alignSelf: 'center'
+    }
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
 import { summaryHelper } from './SummaryHelper';
@@ -28,20 +29,30 @@ export function CategoryModal(
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
     const modes = [modeType.SUMMARY, modeType.COMPARE, modeType.BUDGET];
     const [tmpCatLimits, setTmpCatLimits] = useState([]);
+    const deviceHeight =
+    Platform.OS === 'ios'
+    ? Dimensions.get('window').height
+    : Dimensions.get('screen').height;
 
     useEffect(() => {
         setTmpCatLimits([...categoriesLimit]);
-    }, []);
+    }, [categoriesLimit]);
 
     return (
         <Modal
-            animationType="slide"
-            transparent={true}
             backdropOpacity={0.3}
+            onBackdropPress={() => setModalVisible(modalType.DISABLED)}
             statusBarTranslucent={true}
-            visible={modalVisible !== modalType.DISABLED}
+            deviceHeight={deviceHeight}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'flex-end',
+            }}
+            isVisible={modalVisible !== modalType.DISABLED}
+            avoidKeyboard={true}
         >
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={modalStyles.modalBottomView}>
+            <View style={modalStyles.modalBottomView}>
                 <View style={modalStyles.modalView}>
                     {/* Modal header */}
                     <View style={modalStyles.modalHeader}>
@@ -56,7 +67,8 @@ export function CategoryModal(
                             {modalVisible === modalType.TIME ? <Text>Time period</Text> : 
                             modalVisible === modalType.CATEGORY ? <Text>Category</Text> : 
                             modalVisible === modalType.TRANSACTIONS ? <Text>Transactions</Text> :
-                            modalVisible === modalType.CARDS ? <Text>Cards</Text> : <Text>Mode</Text>}
+                            modalVisible === modalType.CARDS ? <Text>Cards</Text> :
+                            modalVisible === modalType.MODE ? <Text>Mode</Text> : <Text>Category Limits</Text>}
                             
                         </View>
                         <View style= {{flex: 1}}></View>
@@ -185,6 +197,7 @@ export function CategoryModal(
                         modalVisible === modalType.LIMITS &&
                         <View style={{marginBottom: 50}}>
                             {tmpCatLimits.map((catLimit, index) => { 
+                                console.log(catLimit);
                                 return (
                                     <TouchableOpacity 
                                         key={index}
@@ -220,7 +233,7 @@ export function CategoryModal(
                         </View>
                     }
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         </Modal>
     )
     
@@ -228,10 +241,10 @@ export function CategoryModal(
 
 const modalStyles = StyleSheet.create({
     modalBottomView: {
-        flex: 1,
+        margin: 0,
         justifyContent: 'flex-end',
         alignItems: 'stretch',
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+        backgroundColor: 'rgba(128, 128, 128, 0.5)',
     },
     modalView: {
         backgroundColor: 'white',

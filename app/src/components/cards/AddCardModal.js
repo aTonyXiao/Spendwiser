@@ -1,9 +1,22 @@
 import React from 'react';
-import { StyleSheet, View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
+import { 
+    StyleSheet, 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    Alert,
+    Dimensions
+} from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
-import {appBackend} from '../../network/backend'
+import { appBackend } from '../../network/backend'
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
+
     function navigateIfAuthorized(navigation, location, errmsg) {
         appBackend.userAccountType((type) => {
             switch(type) {
@@ -24,35 +37,42 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
     }
     return (
         <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
+            backdropOpacity={0.3}
+            onBackdropPress={() => setModalVisible(false)}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'center',
+                padding: 20,
             }}
+            isVisible={modalVisible}
+            avoidKeyboard={true}
         >
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
                     <View style={modalStyles.modalHeader}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                        <TouchableOpacity style={{flex: 1}} onPress={() => setModalVisible(false)}>
                             <Ionicons
                                 name="close-circle-outline"
                                 color="black"
                                 size={26}
+                                style={{paddingLeft: 15, alignItems: 'center'}}
                             ></Ionicons>
                         </TouchableOpacity>
+                        <Text style={modalStyles.modalTitle}>Add New Card</Text>
+                        <View style={{flex: 1}}/>
                     </View>
 
                     <View style={modalStyles.modalBody}>
-                        <Text style={modalStyles.modalTitle}>Add New Card</Text>
                         <TouchableOpacity
                             onPress={() => {
                                 navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
                             }}
-                            style={modalStyles.modalText}
+                            style={modalStyles.button}
                         >
-                            <Text>By Search</Text>
+                            <Text style={modalStyles.modalText}>By Search</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -60,9 +80,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                                 setModalVisible(!modalVisible);
                                 navigateIfAuthorized(navigation, 'ChooseImage', 'Sign up with an account to use this feature!');
                             }}
-                            style={modalStyles.modalText}
+                            style={modalStyles.button}
                         >
-                            <Text>By Camera</Text>
+                            <Text style={modalStyles.modalText}>By Camera</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -70,9 +90,9 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                                 setModalVisible(!modalVisible);
                                 navigation.navigate('AddCardManual');
                             }}
-                            style={modalStyles.modalTextBottom}
+                            style={modalStyles.button}
                         >
-                            <Text>Manually</Text>
+                            <Text style={modalStyles.modalText}>Manually</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -84,22 +104,22 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+        backgroundColor: 'rgba(128, 128, 128, 0.5)',
+        borderRadius: 50
     },
     modalView: {
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'stretch',
-        borderRadius: 4,
+        borderRadius: 35,
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     modalHeader: {
-        margin: 8
+        marginTop: 16,
+        flexDirection: 'row',
+        
     },
     modalBody: {
         alignItems: 'center'
@@ -107,27 +127,23 @@ const modalStyles = StyleSheet.create({
     modalText: {
         color: 'black',
         margin: 5,
-        backgroundColor: '#28b573',
         padding: 5,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#28b573'
+        fontSize: 16,
     },
-    modalTextBottom: {
-        color: 'black',
-        margin: 5,
-        marginBottom: 15,
+    button: {
+        textAlign: 'center',
         backgroundColor: '#28b573',
-        padding: 5,
+        margin: 10,
+        height: 40, 
         borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#28b573'
+        width: '40%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     modalTitle: {
         fontSize: 24,
         color: 'black',
-        margin: 10,
-        marginTop: -26
+        marginBottom: 10,
     },
 });
 

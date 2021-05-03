@@ -1,7 +1,8 @@
 import React, { useState} from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import Modal from 'react-native-modal';
+import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 
 export function MainModals(
@@ -12,39 +13,42 @@ export function MainModals(
         addManualInput,
         storeArr,
         curStore,
-        region,
+        userLocation,
     }) {
-
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
     const [manualModal, setManualModal] = useState(false);
     const categories = [
         {
             label: 'Dining',
-            value: 'dining',
+            value: 'Dining',
         },
         {
             label: 'Drugstore',
-            value: 'drugstore',
+            value: 'Drugstore',
         },
         {
             label: 'Gas',
-            value: 'gas',
+            value: 'Gas',
         },
         {
             label: 'Grocery',
-            value: 'grocery',
+            value: 'Grocery',
         },
         {
             label: 'Home Improvement',
-            value: 'homeImprovement',
+            value: 'Home Improvement',
         },
         {
             label: 'Others',
-            value: 'others',
+            value: 'Others',
         },
         {
             label: 'Travel',
-            value: 'travel',
+            value: 'Travel',
         },
     ];
     const placeholder = {
@@ -54,11 +58,16 @@ export function MainModals(
       };
     return (
         <Modal
-                animationType="slide"
-                transparent={true}
                 backdropOpacity={0.3}
+                isVisible={modalVisible}
                 statusBarTranslucent={true}
-                visible={modalVisible}
+                deviceHeight={deviceHeight}
+                style={{
+                    margin: 0,
+                    marginHorizontal: 0,
+                    justifyContent: 'center',
+                }}
+                onBackdropPress={()=> {setModalVisible(false); setManualModal(false)}}
             >
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
@@ -90,7 +99,7 @@ export function MainModals(
                         {/* Pick from store list */}
                         {
                             !manualModal &&
-                            <View>
+                            <ScrollView>
                                 {
                                     storeArr.map((store, i) => { 
                                         var storeName = store.value;
@@ -99,9 +108,10 @@ export function MainModals(
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    reloadRecCard(storeName, i, storeArr[i].storeType);
+                                                    reloadRecCard(storeName, i, storeArr[i].storeType, storeArr[i].geometry);
                                                     setModalVisible(false);
                                                 }}
+                                                style={i === 0 ? {borderTopWidth: 0.5, borderBottomWidth: 0.5} : {borderBottomWidth: 0.5}}
                                             >
                                                 <Text style={storeIsSelected ? modalStyles.storeTextSelected : modalStyles.storeText}>
                                                         {storeName}
@@ -110,7 +120,7 @@ export function MainModals(
                                         )
                                     })
                                 }
-                            </View>
+                            </ScrollView>
                         }
 
                         {/* Manual store input */}
@@ -156,7 +166,6 @@ export function MainModals(
                                         }}
                                         value={manualInput.storeType}
                                         useNativeAndroidPickerStyle={false}
-                                        textInputProps={{ underlineColor: 'yellow' }}
                                         Icon={() => {
                                         return <Ionicons name="md-arrow-down" size={24} color="gray" />;
                                         }}
@@ -177,7 +186,8 @@ export function MainModals(
                                                     value: manualInput.storeName.length === 0 ? "Manual Input " + storeArrLen : manualInput.storeName,
                                                     vicinity: manualInput.vicinity.length === 0 ? "N/A" : manualInput.vicinity,
                                                     storeType: manualInput.storeType,
-                                                    geometry: [region.latitude, region.longitude],
+                                                    geometry: [userLocation.latitude, userLocation.longitude],
+                                                    placeId: "",
                                                     key: Object.keys(storeArr).length,
                                                 }
                                                 addManualInput(manualInputObj);
@@ -201,11 +211,9 @@ export function MainModals(
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
+        marginHorizontal: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {
@@ -214,12 +222,14 @@ const modalStyles = StyleSheet.create({
         alignItems: 'stretch',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        maxHeight: Dimensions.get('window').height / 2
     },
     modalHeader: { 
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between', 
-        margin: 8
+        margin: 8,
+        alignItems: 'center'
     },
     manualTitle: { 
         textAlign: 'center',
@@ -238,7 +248,7 @@ const modalStyles = StyleSheet.create({
         borderRadius: 5,
     },
     picker: {
-        height: 40,
+        height: 45,
         borderWidth: 1,
         margin: 15,
         marginTop: 7,
@@ -252,12 +262,13 @@ const modalStyles = StyleSheet.create({
         color: 'dodgerblue'
     }, 
     storeText: { 
-        padding: 5,
-        marginLeft: 10 
+        padding: 10,
+        paddingLeft: 15
     },
     storeTextSelected: { 
-        padding: 15,
-        backgroundColor: '#28b573'
+        padding: 10,
+        paddingLeft: 15,
+        backgroundColor: '#778899'
     },
     setButtonNotAllowed: { 
         color: 'gray',
