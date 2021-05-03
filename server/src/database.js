@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// maps query operators to a filtering function for mongo queries
 const query_operators = {"<=": (req, query) => {
                             return req.where(query[0]).lte(query[1]);
                         }, "<": (req, query) => {
@@ -74,40 +75,46 @@ class Database {
         // the uri for this model
         let uri = prefix + modelName;
 
-        // get all docs request
+        // get all docs request with query support
         this.app.get(uri, this.auth, (req, res) => {
-            if (Object.keys(req.query).length == 0) {
+            if (Object.keys(req.query).length == 0) { // when there is no query arguments (?where doesnt exist)
                 // mongoose: find all for the given model
                 model.find((err, data) => {
                     if (err || data == null) res.sendStatus(500); // server err
                     else res.json(data); // send the data
                 });
             } else if (Object.keys(req.query).length == 1 && typeof req.query.where !== "undefined") {
+                // build the query
                 let rawQuery = [], query = [], operators = [];
-                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where);
-                else rawQuery = req.query.where;
+                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where); // convert to array if not
+                else rawQuery = req.query.where; // just set the array again
+                // go through the raw query array for each query that was in the request
                 for (let i = 0; i < rawQuery.length; i++) {
+                    // try and split each query operator
                     for (let j = 0; j < query_operators_list.length; j++) {
                         query[i] = rawQuery[i].split(query_operators_list[j]);
-                        if (query[i].length == 2) {
+                        if (query[i].length == 2) { // if successful, then set the operator for the query
                             operators[i] = query_operators_list[j];
                             break;
                         }
+                        // if there were not valid query operators, bad request
                         if (j == query_operators_list.length - 1) {
                             res.sendStatus(400);
                             return;
                         }
                     }
                 }
-                let dbRequest = model.find();
+                let dbRequest = model.find(); // start a find for this model
+                // go through each query and filter accordingly
                 for (let i = 0; i < query.length; i++) {
                     dbRequest = query_operators[operators[i]](dbRequest, query[i]);
                 }
+                // execute the find db request
                 dbRequest.exec((err, data) => {
                     if (err || data == null) res.sendStatus(500); // server err
                     else res.json(data); // send the data
                 });
-            } else {
+            } else { // bad request format
                 res.sendStatus(400);
             }
         })
@@ -150,7 +157,7 @@ class Database {
         });
     }
 
-    // add the requests for subdocuments
+    // add the requests for subdocuments with query support
     addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, this.auth, (req, res) => {
@@ -161,38 +168,45 @@ class Database {
                     else res.json(data.get(subdoc)); // then return the subdocuments
                 });
             } else if (Object.keys(req.query).length == 1 && typeof req.query.where !== "undefined") {
+                // build the query
                 let rawQuery = [], query = [], operators = [];
-                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where);
-                else rawQuery = req.query.where;
+                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where); // convert to array if not
+                else rawQuery = req.query.where; // just set the array again
+                // go through the raw query array for each query that was in the request
                 for (let i = 0; i < rawQuery.length; i++) {
+                    // try and split each query operator
                     for (let j = 0; j < query_operators_list.length; j++) {
                         query[i] = rawQuery[i].split(query_operators_list[j]);
-                        if (query[i].length == 2) {
+                        if (query[i].length == 2) { // if successful, then set the operator for the query
                             operators[i] = query_operators_list[j];
                             break;
                         }
+                        // if there were not valid query operators, bad request
                         if (j == query_operators_list.length - 1) {
                             res.sendStatus(400);
                             return;
                         }
                     }
                 }
+                // build a query for the subdocs
                 let selectQuery = new mongoose.Query();
-                for (let i = 0; i < query.length; i++) {
+                for (let i = 0; i < query.length; i++) { // go through each query
+                    // cast the value to compare since mongo doesn't have support for that in aggregate
                     query[i][1] = model.schema.path(subdoc).schema.path(query[i][0]).cast(query[i][1]);
-                    query[i][0] = subdoc + "." + query[i][0];
+                    query[i][0] = subdoc + "." + query[i][0]; // get the value using dot notation for the subdoc
+                    // filter accordingly
                     selectQuery = query_operators[operators[i]](selectQuery, query[i]);
                 }
-                let dbRequest = model.aggregate();
-                dbRequest = dbRequest.match({"_id": mongoose.Types.ObjectId(fixID(req.params.id))});
-                dbRequest = dbRequest.unwind(subdoc);
-                dbRequest = dbRequest.match(selectQuery.getQuery());
-                dbRequest = dbRequest.group({"_id": "$_id", "result": {"$addToSet": "$" + subdoc}});
-                dbRequest.exec((err, data) => {
+                let dbRequest = model.aggregate(); // start a db aggregate request
+                dbRequest = dbRequest.match({"_id": mongoose.Types.ObjectId(fixID(req.params.id))}); // first match with the id
+                dbRequest = dbRequest.unwind(subdoc); // unwind the subdocument array
+                dbRequest = dbRequest.match(selectQuery.getQuery()); // match according to the query built from earlier
+                dbRequest = dbRequest.group({"_id": "$_id", "result": {"$addToSet": "$" + subdoc}}); // build the result
+                dbRequest.exec((err, data) => { // execute the aggregate
                     if (err || data == null) res.sendStatus(500); // server err
                     else res.json(data.length == 0 ? [] : data[0].result); // send the data
                 });
-            } else {
+            } else { // bad request format
                 res.sendStatus(400);
             }
         })
