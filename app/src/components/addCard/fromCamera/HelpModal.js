@@ -3,10 +3,10 @@ import {
     View, 
     StyleSheet, 
     TouchableOpacity,
-    Modal,
     Text,
     Button
 } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import SelectMultiple from 'react-native-select-multiple';
 import * as storage from '../../../local/storage';
@@ -62,10 +62,15 @@ function HelpModal({showHelpModal, setShowHelpModal}) {
 
     return (
         <Modal
-                transparent={true}
-                backdropOpacity={0.3}
-                statusBarTranslucent={true}
-                visible={showHelpModal}
+            backdropOpacity={0.3}
+            isVisible={showHelpModal}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                padding: 20,
+                justifyContent: 'center',
+            }}
+            onBackdropPress={()=> {setShowHelpModal(false)}}
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -143,11 +148,8 @@ function HelpModal({showHelpModal, setShowHelpModal}) {
 
 const styles = StyleSheet.create({
     centeredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {

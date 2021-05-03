@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, FlatList } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import Constants from 'expo-constants';
 import { Footer } from '../util/Footer';
 import { CategoryModal } from './CategoryModal';
 import { PieChartSummary } from './PieChartSummary';
@@ -162,7 +164,8 @@ export function SpendingSummary({navigation}) {
     }, []);
 
     return (
-        <SafeAreaView style={styles.screen}>
+        <View style={styles.screen}>
+            <StatusBar barStyle='dark-content'/>
             <CategoryModal
                 modalType = {modalType}
                 modalVisible = {modalVisible}
@@ -253,7 +256,7 @@ export function SpendingSummary({navigation}) {
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
-        </SafeAreaView>
+        </View>
     )
 };
 
@@ -262,7 +265,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
-        paddingTop: StatusBar.currentHeight,
+        paddingTop: Constants.statusBarHeight,
         alignItems: 'center',
         flexDirection: 'column',
     },
@@ -280,7 +283,6 @@ const styles = StyleSheet.create({
     footerContainer: { 
         width: '100%',
         backgroundColor: 'white',
-        // position: 'absolute', 
         bottom: 0, 
         paddingBottom: 35,
         marginTop: 0
