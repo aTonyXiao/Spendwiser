@@ -154,11 +154,47 @@ class Database {
     addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, this.auth, (req, res) => {
-            // mongoose: find the given id parent document by id
-            model.findById(fixID(req.params.id), (err, data) => {
-                if (err || data == null) res.sendStatus(500); // parent doc does not exist
-                else res.json(data.get(subdoc)); // then return the subdocuments
-            });
+            if (Object.keys(req.query).length == 0) {
+                // mongoose: find the given id parent document by id
+                model.findById(fixID(req.params.id), (err, data) => {
+                    if (err || data == null) res.sendStatus(500); // parent doc does not exist
+                    else res.json(data.get(subdoc)); // then return the subdocuments
+                });
+            } else if (Object.keys(req.query).length == 1 && typeof req.query.where !== "undefined") {
+                let rawQuery = [], query = [], operators = [];
+                if (!Array.isArray(req.query.where)) rawQuery.push(req.query.where);
+                else rawQuery = req.query.where;
+                for (let i = 0; i < rawQuery.length; i++) {
+                    for (let j = 0; j < query_operators_list.length; j++) {
+                        query[i] = rawQuery[i].split(query_operators_list[j]);
+                        if (query[i].length == 2) {
+                            operators[i] = query_operators_list[j];
+                            break;
+                        }
+                        if (j == query_operators_list.length - 1) {
+                            res.sendStatus(400);
+                            return;
+                        }
+                    }
+                }
+                let dbRequest = model.findById(fixID(req.params.id));
+                let selectQuery = new mongoose.Query();
+                selectQuery = selectQuery.elemMatch(subdoc, (elem) => {
+                    for (let i = 0; i < query.length; i++) {
+                        query_operators[operators[i]](elem, query[i]);
+                    }
+                });
+                dbRequest = dbRequest.select(selectQuery.getQuery());
+                console.log(selectQuery.getQuery());
+                dbRequest.exec((err, data) => {
+                    if (err || data == null) res.sendStatus(500); // server err
+                    else res.json(data.get(subdoc)); // send the data
+                    console.log(data);
+                    console.log(typeof data);
+                });
+            } else {
+                res.sendStatus(400);
+            }
         })
 
         // get a specific doc by ID
