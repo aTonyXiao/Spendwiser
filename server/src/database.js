@@ -286,7 +286,8 @@ class Database {
             let requestData = obj;
             requestData.dateAdded = (new Date()).toUTCString();
             collection.create(requestData, (err, resp) => {
-                collection.findByIdAndUpdate(resp._id, {cardId: resp._id.toString()}, (err, data) => console.log("added: " + data._id));
+                if (err) console.log(err);
+                else collection.findByIdAndUpdate(resp._id, {cardId: resp._id.toString()}, (err, data) => console.log("added: " + data._id));
             });
         });
     }
