@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
@@ -119,6 +118,18 @@ export const addLocalDB = async (accountName, location, data, callback) => {
 
             // Insert local_data in location
             let id = Object.values(db[accountName][location]).length
+
+            if ('unsynced_documents' in db[accountName]) {
+                db[accountName]['unsynced_documents'] = [
+                    ...db[accountName]['unsynced_documents'],
+                    {'location': location, 'id': id},
+                ];
+            } else {
+                db[accountName]['unsynced_documents'] = [
+                    {'location': location, 'id': id}
+                ]
+            }
+
             local_data['meta_id'] = id;
             db[accountName][location][id.toString()] = local_data;
 

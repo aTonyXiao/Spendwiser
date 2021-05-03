@@ -409,7 +409,7 @@ class FirebaseBackend extends BaseBackend {
                             } 
                             console.log("Finished consolidating...");
                             */
-                            callback(remote_data);
+                            callback(local_data);
                         });
                     })
 
@@ -590,13 +590,17 @@ class FirebaseBackend extends BaseBackend {
         this.getUserID((accountId) => {
             if (accountId != 'offline') {
                 // Add data locally
+                console.log("adding locally");
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                    callback(local_query_id);
+                    /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
                         // We added data successfully, update our local storage metadata
                         storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id, () => {
                             callback(query_id);
                         });
                     });
+                    */
                 });
 
             } else {

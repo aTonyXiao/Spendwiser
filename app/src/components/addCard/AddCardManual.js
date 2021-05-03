@@ -109,10 +109,10 @@ export function AddCardManual({navigation}) {
                 rewardsMap["others"] = 0;
             }
             console.log(rewardsMap);
-            // cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
-            //     await user.saveCardToUser(userId, cardId, null, null);
-            //     navigation.navigate('YourCards');
-            // });
+            cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
+                await user.saveCardToUser(userId, cardId, null, null);
+                navigation.navigate('YourCards');
+            });
         } 
     } 
 
