@@ -464,11 +464,7 @@ class FirebaseBackend extends BaseBackend {
 
                             console.log("finsihed consolidating from dbGetSubcollections");
                             */
-                            if (remote_collection.length == 0) {
-                                callback(local_collection);
-                            } else {
-                                callback(remote_collection);
-                            }
+                            callback(local_collection);
                         }).catch((err) => {
                             console.log(err);
                         })
@@ -570,20 +566,38 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
-    async syncLocalDatabase() {
-        this.getUserID((accountName) => {
-            let unsynced_documents = await storage.getUnsyncedDocuments(accountName);
-
-            unsynced_documents.map((document) => {
-                let location = document['location'];
-                let id = document['id'];
-                let data = storage.getLocalDB(accountName, location + id);
-
+    async syncDocument(accountName, document) {
+        return new Promise((resolve, reject) => {
+            let location = document['location'];
+            let id = document['id'];
+            let full_location = location + '.' + id;
+            storage.getLocalDB(accountName, full_location, (data) => {
+                console.log("Got local db");
+                /*
                 this.dbFirebaseAdd(location, data, (remote_id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location + id, true, id, remote_id, () => {
-                        // TODO: Remove from unsynced documents
+                    console.log("Added to firebase");
+                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, () => {
+                        console.log("Modified metainfo");
+                        resolve();
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            console.log("Removed from unsynced list");
+                            resolve();
+                        });
+
                     });
                 });
+                */
+
+            });
+        });
+    }
+
+    async syncLocalDatabase() {
+        this.getUserID(async (accountName) => {
+            storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
+                for (let i = 0; i < unsynced_documents.length; i++) {
+                    await this.syncDocument(accountName, unsynced_documents[i]);
+                }
             });
         });
     }

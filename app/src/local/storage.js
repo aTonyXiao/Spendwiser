@@ -331,18 +331,35 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
     }
 }
 
-export const getUnsyncedDocuments = async (accountName) => {
+export const getUnsyncedDocuments = async (accountName, callback) => {
     try {
-        getDB(async (db) => {
+        getDB((db) => {
             if (accountName in db && 'unsynced_documents' in db[accountName]) {
-                return db[accountName]['unsynced_documents'];
+                callback(db[accountName]['unsynced_documents']);
             } else {
-                return [];
+                callback([]);
             }
         });
     } catch (e) {
         console.log(e);
-        return []; 
+        callback([]);
+    }
+}
+
+export const removeDocumentFromUnsyncedList = (accountName, location, id, callback) => {
+    try {
+        getDB((db) => {
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                let unsynced_documents = db[accountName]['unsynced_documents'];
+                db[accountName]['unsynced_documents'] = unsynced_documents.filter((doc) => doc['location'] != location && doc['id'] != id);
+                setDB(db, callback);
+            } else {
+                callback();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        callback();
     }
 }
 
