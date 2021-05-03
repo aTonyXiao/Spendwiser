@@ -6,6 +6,7 @@ import { cards } from '../../network/cards';
 import { ManualRewardRow } from './ManualRewardRow';
 import mainStyles from '../../styles/mainStyles';
 import { Ionicons } from '@expo/vector-icons';
+import { DismissKeyboard } from '../util/DismissKeyboard';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -97,60 +98,62 @@ export function AddCardManual({navigation}) {
     } 
 
     return (
-        <View style={styles.container}>
-            <Text style={mainStyles.title}>Add a Card Manually</Text>
+        <DismissKeyboard>
+            <View style={styles.container}>
+                <Text style={mainStyles.title}>Add a Card Manually</Text>
 
-            <Text style={styles.inputTitle}>Credit Card Name</Text>
-            <TextBox 
-                style={!nameError ? styles.inputBox : styles.inputBoxError} 
-                ref={inputName} 
-                placeholder={'your credit card title here '}
-            />
+                <Text style={styles.inputTitle}>Credit Card Name</Text>
+                <TextBox
+                    style={!nameError ? styles.inputBox : styles.inputBoxError}
+                    ref={inputName}
+                    placeholder={'your credit card title here '}
+                />
 
-            <Text style={styles.inputTitle}>Rewards</Text>    
-            <View style={styles.rewardContainer}>
-                {
-                    displayRewards &&
-                    <View style={styles.rewardText}>
-                        {
-                        rewards.map((reward, i) => {
-                            return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
-                        })
-                        }
-                    </View>
-                }
-                {
-                    rewardError &&
-                    <Text style={{ color: 'red' }}>Please input a number</Text>
-                }
-                <View style={styles.rewardRow}>
-                    <ManualRewardRow ref={inputReward}></ManualRewardRow>
-                    <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
-                        <Ionicons
-                            name="add-outline"
-                            color="black"
-                            size={32}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
-            <View style={styles.bottomContainer}>
-                <Text style={styles.inputTitle}>URL</Text>
-                <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
-
-                <View style={styles.addCardContainer}>
+                <Text style={styles.inputTitle}>Rewards</Text>
+                <View style={styles.rewardContainer}>
                     {
-                        (invalidInputError) &&
-                        <Text style={{color:'red'}}>Please add a name and reward</Text>
+                        displayRewards &&
+                        <View style={styles.rewardText}>
+                            {
+                                rewards.map((reward, i) => {
+                                    return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                                })
+                            }
+                        </View>
                     }
-                    <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
-                        <Text style={styles.addCardText}>Add this card</Text>
-                    </TouchableOpacity>
+                    {
+                        rewardError &&
+                        <Text style={{ color: 'red' }}>Please input a number</Text>
+                    }
+                    <View style={styles.rewardRow}>
+                        <ManualRewardRow ref={inputReward}></ManualRewardRow>
+                        <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
+                            <Ionicons
+                                name="add-outline"
+                                color="black"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
+                <View style={styles.bottomContainer}>
+                    <Text style={styles.inputTitle}>URL</Text>
+                    <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
+
+                    <View style={styles.addCardContainer}>
+                        {
+                            (invalidInputError) &&
+                            <Text style={{ color: 'red' }}>Please add a name and reward</Text>
+                        }
+                        <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
+                            <Text style={styles.addCardText}>Add this card</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-        </View>
+        </DismissKeyboard>
     );
 }
 
@@ -193,7 +196,6 @@ const styles = StyleSheet.create({
         width: '90%',
         borderColor: 'red',
         borderWidth: 1,
-        // backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
         marginBottom: 8

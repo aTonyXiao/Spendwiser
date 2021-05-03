@@ -3,6 +3,7 @@ import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
+import { DismissKeyboard } from '../util/DismissKeyboard';
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
@@ -35,63 +36,65 @@ export const Login = props => {
     }
 
     return (
-        <View style={mainStyles.container}>
-            <Text style={mainStyles.large_title}>SpendWiser</Text>
+        <DismissKeyboard>
+            <View style={mainStyles.container}>
+                <Text style={mainStyles.large_title}>SpendWiser</Text>
 
-            {
-                displayErrorText &&
-                <Text style={{color:'red'}}>Please input a username and a password</Text>
-            }
-            <UsernameInput onChange={setUsername} />
-            <PasswordInput onChange={setPassword} />
-            <TouchableOpacity 
-                style={styles.forgotPasswordButton}
-                onPress={() => props.navigation.navigate('PasswordReset')}>
-                <Text style={styles.forgotPasswordButton}>
-                    Forgot your password?
+                {
+                    displayErrorText &&
+                    <Text style={{ color: 'red' }}>Please input a username and a password</Text>
+                }
+                <UsernameInput onChange={setUsername} />
+                <PasswordInput onChange={setPassword} />
+                <TouchableOpacity
+                    style={styles.forgotPasswordButton}
+                    onPress={() => props.navigation.navigate('PasswordReset')}>
+                    <Text style={styles.forgotPasswordButton}>
+                        Forgot your password?
                 </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.loginWrapper} onPress={signIn}>
-                <Text style={styles.loginButton}>Log In</Text>
-            </TouchableOpacity>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.loginWrapper} onPress={signIn}>
+                    <Text style={styles.loginButton}>Log In</Text>
+                </TouchableOpacity>
 
-            <View style={styles.line}/>
+                <View style={styles.line} />
 
-            <Button
-                color={'dodgerblue'}
-                title="Sign in with Facebook"
-                onPress={() => {
-                    let loginProviders = appBackend.getLoginProviders();
-                    loginProviders.facebook.login();
-                }}
-            ></Button>
-            <Button
-                color={'dodgerblue'}
-                title="Sign in with Google"
-                onPress={() => {
-                    let loginProviders = appBackend.getLoginProviders();
-                    loginProviders.google.login();
-                }}
-            ></Button>
+                <Button
+                    color={'dodgerblue'}
+                    title="Sign in with Facebook"
+                    onPress={() => {
+                        let loginProviders = appBackend.getLoginProviders();
+                        loginProviders.facebook.login();
+                    }}
+                ></Button>
+                <Button
+                    color={'dodgerblue'}
+                    title="Sign in with Google"
+                    onPress={() => {
+                        let loginProviders = appBackend.getLoginProviders();
+                        loginProviders.google.login();
+                    }}
+                ></Button>
 
-            <TouchableOpacity
-                style={styles.signUpWrapper}
-                onPress={() => props.navigation.navigate('CreateAccount')}>
-                <Text style={styles.signUpButton}>
-                    New user? Make an account here
+                <TouchableOpacity
+                    style={styles.signUpWrapper}
+                    onPress={() => props.navigation.navigate('CreateAccount')}>
+                    <Text style={styles.signUpButton}>
+                        New user? Make an account here
                 </Text>
-            </TouchableOpacity>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-                style={styles.offlineAccountWrapper}
-                onPress={() => {
-                    appBackend.signInOffline();
-                }}>
-                <Text style={styles.signUpButton}>
-                    Use an offline account
+                <TouchableOpacity
+                    style={styles.offlineAccountWrapper}
+                    onPress={() => {
+                        appBackend.signInOffline();
+                    }}>
+                    <Text style={styles.signUpButton}>
+                        Use an offline account
                 </Text>
-            </TouchableOpacity>
-        </View>
+                </TouchableOpacity>
+            </View>
+        </DismissKeyboard>
     )
 }
 
