@@ -148,6 +148,7 @@ export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks
 const styles = StyleSheet.create({
     container: { 
         width: '100%',
+        top: 10,
         position: 'absolute',
         zIndex: 999,
         display: 'flex',

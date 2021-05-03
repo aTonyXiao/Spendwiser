@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Alert, StyleSheet, TouchableOpacity, Text, StatusBar, SafeAreaView } from 'react-native';
+import { View, Alert, StyleSheet, Image, TouchableOpacity, Text, StatusBar, SafeAreaView, Dimensions } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { appBackend } from '../../network/backend';
 import { Footer } from '../util/Footer';
@@ -14,11 +14,20 @@ import * as storage from '../../local/storage';
  */
 let Settings = (props) => {
     const navigation = props.navigation;
+    const width = Dimensions.get('window').width;
 
     return(
         <SafeAreaView style={styles.screen}>
             <View style={mainStyles.container}>
-                <Text style={mainStyles.large_title}>SpendWiser</Text>
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Image source = {require("../../../assets/spendwiser_logo.png")}
+                        style = {{ 
+                            width: width * .8,  //its same to '20%' of device width
+                            aspectRatio: 5, // <-- this
+                            resizeMode: 'contain', //optional
+                        }}
+                    />
+                </View>
                 <TouchableOpacity    
                     onPress={() => {
                         Alert.alert(
@@ -37,6 +46,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
 
@@ -49,6 +59,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
 
@@ -61,6 +72,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
 
@@ -73,6 +85,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -84,6 +97,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -106,6 +120,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -129,6 +144,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -142,6 +158,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -155,6 +172,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
             </View>
@@ -179,8 +197,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         width: '100%', 
         padding: 20,
-        paddingTop: 5,
-        paddingBottom: 5,
+        paddingVertical: 5,
     },
     rowContainer: {
         display: 'flex', 
@@ -189,18 +206,17 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         width: '100%', 
         padding: 20,
-        paddingTop: 5,
-        paddingBottom: 5,
+        paddingVertical: 5,
         borderTopWidth: 1,
         borderTopColor: 'lightgray',
     },
-    footerContainer: { 
+    footerContainer: {
         width: '100%',
         backgroundColor: 'white',
         position: 'absolute', 
         bottom: 0, 
         paddingBottom: 35,
-        marginTop: 0
+        zIndex: 10,
     }
 })
 

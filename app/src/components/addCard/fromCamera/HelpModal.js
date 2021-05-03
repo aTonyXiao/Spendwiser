@@ -110,8 +110,8 @@ function HelpModal({showHelpModal, setShowHelpModal}) {
                             </View>
                         }
                     </View>
-
                     {/* Body */}
+                    <View style={{paddingHorizontal: 15}}>
                     {
                         !showHelpText &&
                         <View>
@@ -132,6 +132,7 @@ function HelpModal({showHelpModal, setShowHelpModal}) {
                             <Text style={styles.text}>-Delete the currently selected box by clicking the "X" icon</Text>
                         </View>
                     }
+                    </View>
 
                     {/* Checkbox */}
                     <View>

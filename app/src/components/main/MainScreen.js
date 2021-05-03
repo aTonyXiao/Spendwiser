@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 
 import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
@@ -14,6 +12,7 @@ import { MainModals } from './MainModals';
 import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
+import { MainButtons } from './MainButtons';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -197,7 +196,7 @@ export function MainScreen({navigation}) {
                 setUserLocation(location.coords);
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
-                    if (state.isConnected) {
+                    if (state.isConnected) { 
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
                             googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
@@ -239,43 +238,12 @@ export function MainScreen({navigation}) {
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
-                    <View style={mapStyles.buttonArea}>
-                        <View style={mapStyles.buttonContainer}>
-                            <TouchableOpacity
-                                style={{borderBottomWidth: 0.5, padding: 2}}
-                                onPress={() => console.log("pressed for help")}
-                            >
-                                <Ionicons
-                                    name="help-outline"
-                                    color={'black'}
-                                    size={30}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{borderBottomWidth: 0.5, padding: 5}}
-                                onPress={() => {
-                                    if (userLocation.latitude !== undefined)
-                                        setRegion({...region, longitude: userLocation.longitude, latitude: userLocation.latitude});
-                                    }}
-                            >
-                                <Ionicons
-                                    name="navigate-outline"
-                                    color={'black'}
-                                    size={25}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{padding: 2}}
-                                onPress={() => setModalVisible(true)}
-                            >
-                                <Ionicons
-                                    name="swap-vertical-outline"
-                                    color={'black'}
-                                    size={30}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    <MainButtons
+                        userLocation={userLocation}
+                        region={region}
+                        setRegion={setRegion}
+                        setModalVisible={setModalVisible}
+                    />
 
                     {/* Map (Google) */}
                     <MapView 
@@ -304,7 +272,7 @@ export function MainScreen({navigation}) {
                         {/* Location text */}
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
                             <View style={mapStyles.locationTextContainer}>
-                                <Text>{isLoading ? "Loading" : curStore}</Text>
+                                <Text style={{fontWeight: '500', fontSize: 20}}>{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
                                     {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
@@ -359,23 +327,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStyles = StyleSheet.create({
-    buttonArea: {
-        top: Constants.statusBarHeight,
-        position: 'absolute',
-        zIndex: 1,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    buttonContainer: {
-        flexDirection: 'column',
-        position: 'relative',
-        borderRadius: 5,
-        backgroundColor: 'white',
-        padding: 5,
-        margin: 10,
-        borderWidth: 0.5,
-    },
     mapContainer: {
         alignItems: 'center',
     },
@@ -388,7 +339,7 @@ const mapStyles = StyleSheet.create({
         paddingBottom: 10,
     },
     locationTextContainer: {
-        alignItems: 'center'
+        alignItems: 'center',
     }, 
     changeLocationButton: {
         alignItems: 'center',
