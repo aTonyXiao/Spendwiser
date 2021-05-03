@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform, BackHandler } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
@@ -48,6 +48,14 @@ export function MainScreen({navigation}) {
         }])
         setCurStore("Offline Mode");
         setCurStoreKey(0);
+    }
+
+    const backAction = () => {
+        console.log(navigation.isFocused());
+        if (navigation.isFocused())
+            return true;
+        else
+            return false;
     }
 
     function getRecCardFromDB(myRankedCards) {
@@ -177,6 +185,7 @@ export function MainScreen({navigation}) {
 
     // Called on mount
     useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -207,6 +216,8 @@ export function MainScreen({navigation}) {
                 return;
             }
         })();
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
     }, []);
     
    
