@@ -69,14 +69,15 @@ class Cards {
      * @param {*} rewards 
      * @param {string} url - card url
      */
-    addCardToDatabase(name, benefits, rewards, url) { 
+    addCardToDatabase(name, benefits, rewardType, rewards, url) { 
         var date = new Date();
         return new Promise((resolve, reject) => { 
             appBackend.dbAdd("cards", { 
                 name: name,
                 image: "",
                 benefits: benefits,
-                rewardType: "Unknown",
+                rewardType: rewardType,
+                conversion: 1,
                 rewards: rewards, 
                 url: url,
                 dateAdded : date.toUTCString()

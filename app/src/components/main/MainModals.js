@@ -15,7 +15,10 @@ export function MainModals(
         curStore,
         userLocation,
     }) {
-
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
     const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
     const [manualModal, setManualModal] = useState(false);
     const categories = [
@@ -57,6 +60,8 @@ export function MainModals(
         <Modal
                 backdropOpacity={0.3}
                 isVisible={modalVisible}
+                statusBarTranslucent={true}
+                deviceHeight={deviceHeight}
                 style={{
                     margin: 0,
                     marginHorizontal: 0,
@@ -103,9 +108,10 @@ export function MainModals(
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    reloadRecCard(storeName, i, storeArr[i].storeType);
+                                                    reloadRecCard(storeName, i, storeArr[i].storeType, storeArr[i].geometry);
                                                     setModalVisible(false);
                                                 }}
+                                                style={i === 0 ? {borderTopWidth: 0.5, borderBottomWidth: 0.5} : {borderBottomWidth: 0.5}}
                                             >
                                                 <Text style={storeIsSelected ? modalStyles.storeTextSelected : modalStyles.storeText}>
                                                         {storeName}
@@ -160,7 +166,6 @@ export function MainModals(
                                         }}
                                         value={manualInput.storeType}
                                         useNativeAndroidPickerStyle={false}
-                                        textInputProps={{ underlineColor: 'yellow' }}
                                         Icon={() => {
                                         return <Ionicons name="md-arrow-down" size={24} color="gray" />;
                                         }}
@@ -223,7 +228,8 @@ const modalStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between', 
-        margin: 8
+        margin: 8,
+        alignItems: 'center'
     },
     manualTitle: { 
         textAlign: 'center',
@@ -256,12 +262,13 @@ const modalStyles = StyleSheet.create({
         color: 'dodgerblue'
     }, 
     storeText: { 
-        padding: 5,
-        marginLeft: 10 
+        padding: 10,
+        paddingLeft: 15
     },
     storeTextSelected: { 
-        padding: 15,
-        backgroundColor: '#28b573'
+        padding: 10,
+        paddingLeft: 15,
+        backgroundColor: '#778899'
     },
     setButtonNotAllowed: { 
         color: 'gray',

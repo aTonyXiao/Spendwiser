@@ -4,13 +4,19 @@ import {
     View, 
     Text, 
     TouchableOpacity, 
-    Alert 
+    Alert,
+    Dimensions
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { appBackend } from '../../network/backend'
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
+
     function navigateIfAuthorized(navigation, location, errmsg) {
         appBackend.userAccountType((type) => {
             switch(type) {
@@ -33,6 +39,8 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
         <Modal
             backdropOpacity={0.3}
             onBackdropPress={() => setModalVisible(false)}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
             style={{
                 margin: 0,
                 marginHorizontal: 0,
@@ -45,17 +53,19 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
                     <View style={modalStyles.modalHeader}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                        <TouchableOpacity style={{flex: 1}} onPress={() => setModalVisible(false)}>
                             <Ionicons
                                 name="close-circle-outline"
                                 color="black"
                                 size={26}
+                                style={{paddingLeft: 15, alignItems: 'center'}}
                             ></Ionicons>
                         </TouchableOpacity>
+                        <Text style={modalStyles.modalTitle}>Add New Card</Text>
+                        <View style={{flex: 1}}/>
                     </View>
 
                     <View style={modalStyles.modalBody}>
-                        <Text style={modalStyles.modalTitle}>Add New Card</Text>
                         <TouchableOpacity
                             onPress={() => {
                                 navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
@@ -96,17 +106,20 @@ const modalStyles = StyleSheet.create({
     modalCenteredView: {
         justifyContent: 'center',
         alignItems: 'stretch',
-        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+        backgroundColor: 'rgba(128, 128, 128, 0.5)',
+        borderRadius: 50
     },
     modalView: {
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'stretch',
-        borderRadius: 4,
+        borderRadius: 35,
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     modalHeader: {
-        margin: 8
+        marginTop: 16,
+        flexDirection: 'row',
+        
     },
     modalBody: {
         alignItems: 'center'
@@ -130,8 +143,7 @@ const modalStyles = StyleSheet.create({
     modalTitle: {
         fontSize: 24,
         color: 'black',
-        margin: 10,
-        marginTop: -26
+        marginBottom: 10,
     },
 });
 

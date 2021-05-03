@@ -195,9 +195,10 @@ export function SpendingSummary({navigation}) {
                 modeType={modeType}
                 curCategory={curCategory}
                 setModalVisible={setModalVisible}
-                compareTimeframe = {compareTimeframe}
-                setNewPeriod = {setNewPeriod}
-                setWhichPeriod = {setWhichPeriod}
+                compareTimeframe={compareTimeframe}
+                setNewPeriod={setNewPeriod}
+                whichPeriod={whichPeriod}
+                setWhichPeriod={setWhichPeriod}
             />
             {/* Content */}
             <View style={styles.contentContainer}>

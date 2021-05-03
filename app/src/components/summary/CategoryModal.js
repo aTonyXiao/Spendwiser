@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
@@ -29,6 +29,10 @@ export function CategoryModal(
     const categories = ['All categories', 'Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
     const modes = [modeType.SUMMARY, modeType.COMPARE, modeType.BUDGET];
     const [tmpCatLimits, setTmpCatLimits] = useState([]);
+    const deviceHeight =
+    Platform.OS === 'ios'
+    ? Dimensions.get('window').height
+    : Dimensions.get('screen').height;
 
     useEffect(() => {
         setTmpCatLimits([...categoriesLimit]);
@@ -38,6 +42,8 @@ export function CategoryModal(
         <Modal
             backdropOpacity={0.3}
             onBackdropPress={() => setModalVisible(modalType.DISABLED)}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
             style={{
                 margin: 0,
                 marginHorizontal: 0,
