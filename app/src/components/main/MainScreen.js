@@ -272,7 +272,10 @@ export function MainScreen({navigation}) {
                         {/* Location text */}
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
                             <View style={mapStyles.locationTextContainer}>
-                                <Text style={{fontWeight: '500', fontSize: 20}}>{isLoading ? "Loading" : curStore}</Text>
+                                <Text
+                                    style={{fontWeight: '500', fontSize: 20, textAlign: 'center'}}
+                                    numberOfLines={1}
+                                >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
                                     {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
