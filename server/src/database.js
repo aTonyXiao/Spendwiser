@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const query_operators = {"<": (req, query) => {
-                            return req.where(query[0]).lt(query[1]);
-                        }, "<=": (req, query) => {
+const query_operators = {"<=": (req, query) => {
                             return req.where(query[0]).lte(query[1]);
+                        }, "<": (req, query) => {
+                            return req.where(query[0]).lt(query[1]);
                         }, "==": (req, query) => {
                             return req.where(query[0]).equals(query[1]);
                         }, ">=": (req, query) => {
@@ -177,20 +177,20 @@ class Database {
                         }
                     }
                 }
-                let dbRequest = model.findById(fixID(req.params.id));
                 let selectQuery = new mongoose.Query();
-                selectQuery = selectQuery.elemMatch(subdoc, (elem) => {
-                    for (let i = 0; i < query.length; i++) {
-                        query_operators[operators[i]](elem, query[i]);
-                    }
-                });
-                dbRequest = dbRequest.select(selectQuery.getQuery());
-                console.log(selectQuery.getQuery());
+                for (let i = 0; i < query.length; i++) {
+                    query[i][1] = model.schema.path(subdoc).schema.path(query[i][0]).cast(query[i][1]);
+                    query[i][0] = subdoc + "." + query[i][0];
+                    selectQuery = query_operators[operators[i]](selectQuery, query[i]);
+                }
+                let dbRequest = model.aggregate();
+                dbRequest = dbRequest.match({"_id": mongoose.Types.ObjectId(fixID(req.params.id))});
+                dbRequest = dbRequest.unwind(subdoc);
+                dbRequest = dbRequest.match(selectQuery.getQuery());
+                dbRequest = dbRequest.group({"_id": "$_id", "result": {"$addToSet": "$" + subdoc}});
                 dbRequest.exec((err, data) => {
                     if (err || data == null) res.sendStatus(500); // server err
-                    else res.json(data.get(subdoc)); // send the data
-                    console.log(data);
-                    console.log(typeof data);
+                    else res.json(data.length == 0 ? [] : data[0].result); // send the data
                 });
             } else {
                 res.sendStatus(400);
