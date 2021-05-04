@@ -14,7 +14,7 @@ const CardSchema = new mongoose.Schema({
     rewardType: {type: String, default: ""},
     conversion: {type: Number, default: 0},
     benefits: {type: [String], default: []},
-    rewards: {type: [], default: []},
+    rewards: {type: Map, of: Number, default: {}},
 });
 
 export default CardSchema;
