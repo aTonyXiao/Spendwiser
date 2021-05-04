@@ -57,7 +57,6 @@ class userClass {
         userId = await userId;
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
-                console.log("User get cards succeeded...");
                 resolve(data);
             })
         })

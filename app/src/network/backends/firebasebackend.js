@@ -41,6 +41,23 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
+function dbGetSubCollectionsRemote(database, location, callback) {
+    let dbloc = getDatabaseLocation(database, location);
+
+    let remote_collection = [];
+    dbloc.get().then(async (query) => {
+        query.forEach(doc => {
+            var currentDoc = doc.data();
+            currentDoc["docId"] = doc.id;
+            remote_collection.push(currentDoc);
+        });
+
+        callback(remote_collection);
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
@@ -71,11 +88,19 @@ class FirebaseBackend extends BaseBackend {
             firebase.app(); //if there is, retrieve the default app
         }
         this.database = firebase.firestore(); // set the database to the firestore instance
-
+        let database = this.database;
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+                
+                dbGetSubCollectionsRemote(database, "cards", (data) => {
+                    // Pull down all the cards
+                    console.log(data);
+                        storage.setSubcollectionLocalDB(user.uid, "cards", data, () => {
+
+                        });
+                });
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -88,6 +113,7 @@ class FirebaseBackend extends BaseBackend {
         setInterval(() => {
             this.syncLocalDatabase();
         }, 60000);
+
     }
 
     /**
@@ -266,6 +292,7 @@ class FirebaseBackend extends BaseBackend {
             }
         })
     }
+
 
     /** 
      * Function returns checks if a document exists. 

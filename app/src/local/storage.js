@@ -300,6 +300,37 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
     }
 }
 
+export const setSubcollectionLocalDB = async (accountName, location, dataArr, callback) => {
+    try {
+        getDB(async (db) => {
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Setting Subcollection Locally");
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+
+            if (!(accountName in db)) {
+                db[accountName] = {};
+            }
+
+            if (accountName in db && location in db[accountName]) {
+                db[accountName][location] = [
+                    ...db[accountName][location],
+                    ...dataArr
+                ]
+            } else {
+                db[accountName][location] = dataArr;
+            }
+
+            setDB(JSON.stringify(db), callback);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
