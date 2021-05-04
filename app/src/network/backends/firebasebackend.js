@@ -82,6 +82,12 @@ class FirebaseBackend extends BaseBackend {
                 // in as an offline account
             }
         });
+
+
+        // Sync the local database every minute
+        setInterval(() => {
+            this.syncLocalDatabase();
+        }, 60000);
     }
 
     /**
@@ -642,7 +648,6 @@ class FirebaseBackend extends BaseBackend {
                 // Add data locally
                 console.log("adding locally");
                 storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    this.syncLocalDatabase();
                     callback(local_query_id);
                     /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
