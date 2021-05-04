@@ -531,12 +531,14 @@ class FirebaseBackend extends BaseBackend {
                 storage.setLocalDB(accountId, location, data, merge, () => {
 
                     // Store on firebase if possible
+                    /*
                     let databaseLocation = getDatabaseLocation(this.database, location);
                     if (state.signed_in && !state.offline) {
                         databaseLocation.set(data, { merge: merge }).catch((err) => {
                             console.log(err);
                         });
                     }
+                    */
 
                     callback();
                 });
