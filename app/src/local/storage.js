@@ -349,10 +349,13 @@ export const getUnsyncedDocuments = async (accountName, callback) => {
 export const removeDocumentFromUnsyncedList = (accountName, location, id, callback) => {
     try {
         getDB((db) => {
+            console.log("got the db");
+
             if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                console.log("accountName and unsynced_documents are in the db");
                 let unsynced_documents = db[accountName]['unsynced_documents'];
                 db[accountName]['unsynced_documents'] = unsynced_documents.filter((doc) => doc['location'] != location && doc['id'] != id);
-                setDB(db, callback);
+                setDB(JSON.stringify(db), callback);
             } else {
                 callback();
             }

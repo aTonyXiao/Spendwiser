@@ -566,6 +566,25 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
+    async replaceCardId(accountName, full_location, local_id, remote_id) {
+        // Replace 'cardId' with the correct one
+        // Replace key with 'cardId'
+
+        // Replace card id field in this card
+
+        return new Promise((resolve, reject) => {
+            console.log("Replacing card id field for this card in location: " + full_location + " with " + remote_id);
+            storage.setLocalDB(accountName, full_location, {'cardId': remote_id}, true, () => {
+                // Replace card id field in the user's list of cards
+                let cardInfoLocation = "users." + accountName + ".cards." + local_id;
+                console.log("Replacing card id field for user card in location: " + cardInfoLocation + " with: " + remote_id);
+                storage.setLocalDB(accountName, cardInfoLocation, {'cardId': remote_id}, true, () => {
+                    resolve();
+                });
+            });
+        })
+    }
+
     async syncDocument(accountName, document) {
         return new Promise((resolve, reject) => {
             let location = document['location'];
@@ -576,30 +595,15 @@ class FirebaseBackend extends BaseBackend {
                 this.dbFirebaseAdd(location, data, (remote_id) => {
                     console.log("Added to firebase");
 
+                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
 
-
-                    let old_card_id = data['cardId'];
-                    let cardInfoLocation = "users." + accountName + ".cards." + id;
-
-                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, () => {
                         if (location.includes('cards') && !location.includes("users")) {
-                            // Replace 'cardId' with the correct one
-                            // Replace key with 'cardId'
+                            await this.replaceCardId(accountName, full_location, id, remote_id);
+                        } 
 
-                            // Replace card id field in this card
-                            console.log("Replacing card id field for this card in location: " + full_location + " with " + remote_id);
-                            storage.setLocalDB(accountName, full_location, {'cardId': remote_id}, true, () => {
-
-                                // Replace card id field in the user's list of cards
-                                console.log("Replacing card id field for user card in location: " + cardInfoLocation + " with: " + remote_id);
-                                storage.setLocalDB(accountName, cardInfoLocation, {'cardId': remote_id}, true, () => {
-                                    resolve();
-                                });
-                            });
-                        } else {
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                             resolve();
-                        }
-                        console.log("Removed from unsynced list");
+                        });
                     });
                 });
             });
