@@ -161,7 +161,7 @@ class FirebaseBackend extends BaseBackend {
             let local_data_stripped = storage.stripMetadata(local_data);
             // The remote data does not exist in any form yet.
             // Create it, then update our local data with the correct id
-            console.log("data exists locally but has not been synced AND remote data does not exist...returning");
+            // console.log("data exists locally but has not been synced AND remote data does not exist...returning");
             return new Promise((resolve, reject) => {
                 this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {
                     let [document, old_id] = storage.parseDocAndId(location);
@@ -171,7 +171,7 @@ class FirebaseBackend extends BaseBackend {
                 });
             })
         } else {
-            console.log("no cases met....returning");
+            // console.log("no cases met....returning");
             return new Promise((resolve, reject) => {resolve()});
         }
     }
@@ -212,8 +212,12 @@ class FirebaseBackend extends BaseBackend {
      * @param {Array} local_collection 
      */
     async consolidateLocalCollection(accountName, location, local_collection) {
-        const promises = local_collection.map((item) => {console.log(item); return this.consolidateIndividualItem(accountName, location, item)});
-        console.log(promises);
+        const promises = local_collection.map((item) => {
+            // console.log(item); 
+            return this.consolidateIndividualItem(accountName, location, item)
+        });
+
+        // console.log(promises);
         await Promise.all(promises);
     }
 
@@ -401,12 +405,12 @@ class FirebaseBackend extends BaseBackend {
                     // Get the data (if any) from the local db
                     storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
                         this.firebaseDbGet(location, ...conditions, async (remote_data) => {
-                            console.log("Got data from firebase... consolidating...");
+                            // console.log("Got data from firebase... consolidating...");
                             if (typeof remote_data == 'object' || typeof local_data == 'object') {
-                                console.log("consolidating from a normal get");
+                                // console.log("consolidating from a normal get");
                                 await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
                             } 
-                            console.log("Finished consolidating...");
+                            // console.log("Finished consolidating...");
                             callback(remote_data);
                         });
                     })
@@ -451,15 +455,15 @@ class FirebaseBackend extends BaseBackend {
                                 remote_collection.push(currentDoc);
                             })
 
-                            console.log("Consolidating local and remote collections from dbGetSubcollections...");
-                            console.log("Local collection: ");
-                            console.log(local_collection);
+                            // console.log("Consolidating local and remote collections from dbGetSubcollections...");
+                            // console.log("Local collection: ");
+                            // console.log(local_collection);
 
-                            console.log("Remote collection");
-                            console.log(remote_collection);
+                            // console.log("Remote collection");
+                            // console.log(remote_collection);
                             await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
 
-                            console.log("finsihed consolidating from dbGetSubcollections");
+                            // console.log("finsihed consolidating from dbGetSubcollections");
                             if (remote_collection.length == 0) {
                                 callback(local_collection);
                             } else {

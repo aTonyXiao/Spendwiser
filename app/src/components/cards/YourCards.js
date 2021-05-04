@@ -15,7 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
-import { makeCancelable } from '../util/promise-helper'
+import { makeCancelable } from '../util/promise-helper';
+import { useFocusEffect } from '@react-navigation/native';
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -33,6 +34,7 @@ function YourCards({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
     const focused = useIsFocused();
+    // const [cardsAreUpdated, setCardsAreUpdated] = useState(false);
 
     const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
@@ -45,6 +47,42 @@ function YourCards({ route, navigation }) {
             cancelableGetCards.cancel();
         }
     }, [focused])
+
+    // Added to fix issue of deleted card/added card not being updated on this screen
+    // This function times out after the first 5 seconds of rendering and doesn't get
+    // called again. It just checks for the cards being different and if it is, updates
+    // useEffect(()=> {
+    //     console.log(cardsAreUpdated);
+    //     if (cardsAreUpdated) { 
+    //         return;
+    //     } else { 
+    //         console.log('setting timeout')
+    //         console.log(cards)
+    //         setTimeout(function() { 
+    //             console.log('timeout')
+    //             cancelableGetCards.promise.then(cards => {
+    //                 setCards([]);
+    //                 setCards(cards); 
+    //                 setCardsAreUpdated(true);
+    //                 console.log(cards)
+    //             }).catch(({isCanceled, ...error}) => {});
+        
+    //             return () => {
+    //                 cancelableGetCards.cancel();
+    //             }
+    //         }, 10000);
+    //     }
+    // })
+
+    // set timeout boolean back to false on leave page, since we only want to check for 
+    // new card once, and we need to check every time go to page
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //       return () => {
+    //           setCardsAreUpdated(false);
+    //       };
+    //     }, [])
+    //   );
 
     if (cards.length == 0) {
         return (
