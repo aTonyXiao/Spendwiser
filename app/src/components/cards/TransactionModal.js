@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Modal, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 
@@ -10,7 +11,10 @@ function TransactionModal({
         setHasConstructed,
         cardId,
     }) {
-
+    const deviceHeight =
+    Platform.OS === 'ios'
+    ? Dimensions.get('window').height
+    : Dimensions.get('screen').height;
     const [transactionInput, setTransactionInput] = useState("");
     const userId = user.getUserId();
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
@@ -50,12 +54,19 @@ function TransactionModal({
             }, 2500)
         }
     }
-
     return (
         <Modal
-            transparent={true}
             backdropOpacity={0.3}
-            visible={showTransactionModal}
+                isVisible={showTransactionModal}
+                statusBarTranslucent={true}
+                deviceHeight={deviceHeight}
+                style={{
+                    margin: 0,
+                    marginHorizontal: 0,
+                    justifyContent: 'center',
+                }}
+                avoidKeyboard={true}
+                onBackdropPress={()=> {setShowTransactionModal(false)}}
         >
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
@@ -76,13 +87,23 @@ function TransactionModal({
                         displayErrorText &&
                         <Text style={modalStyles.errorText}>Please input a valid number</Text>
                     }
-                    <TextInput
-                        style={modalStyles.manualTextInput}
-                        onChangeText={(text) => setTransactionInput(text)}
-                        value={transactionInput}
-                        placeholder={"amount in dollars"}
-                        onSubmitEditing={addTransaction}
-                    />
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <TextInput
+                            style={modalStyles.manualTextInput}
+                            onChangeText={(text) => setTransactionInput(text)}
+                            value={transactionInput}
+                            placeholder={"amount in dollars"}
+                            // onSubmitEditing={addTransaction}
+                            keyboardType={"numeric"}
+                        />
+                        <TouchableOpacity onPress={() => {addTransaction(transactionInput)}}>
+                            <Ionicons
+                                name="checkmark-outline"
+                                color="black"
+                                size={26}
+                            ></Ionicons>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -91,11 +112,9 @@ function TransactionModal({
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
+        margin: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {
@@ -127,10 +146,11 @@ const modalStyles = StyleSheet.create({
         margin: 15,
         marginTop: 7,
         marginBottom: 7,
-        width: '90%',
+        width: '80%',
         borderColor: '#F0F0F0',
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
+        paddingHorizontal: 10,
     },
     errorText: { 
         color: 'red', 

@@ -100,29 +100,27 @@ function DisplayCard({route, navigation}) {
         user.deleteCard(userId, cardId, docId);
         navigation.navigate('YourCards');
     }
-
     return (
         <DismissKeyboard>
             <SafeAreaView style={styles.container}>
+                <EditTransactionModal
+                    transaction={currentTransaction}
+                    modalVisible={showEditTransactionModal}
+                    setModalVisible={setShowEditTransactionModal}
+                    setHasConstructed={setHasConstructed}
+                ></EditTransactionModal>
+
+                <TransactionModal
+                    storeInformation={storeInformation}
+                    showTransactionModal={showTransactionModal}
+                    setShowTransactionModal={setShowTransactionModal}
+                    setHasConstructed={setHasConstructed}
+                    cardId={cardId}
+                ></TransactionModal>
                 <ScrollView
                     style={styles.container}
                     contentContainerStyle={styles.scrollviewContainer}
                 >
-                    <EditTransactionModal
-                        transaction={currentTransaction}
-                        modalVisible={showEditTransactionModal}
-                        setModalVisible={setShowEditTransactionModal}
-                        setHasConstructed={setHasConstructed}
-                    ></EditTransactionModal>
-
-                    <TransactionModal
-                        storeInformation={storeInformation}
-                        showTransactionModal={showTransactionModal}
-                        setShowTransactionModal={setShowTransactionModal}
-                        setHasConstructed={setHasConstructed}
-                        cardId={cardId}
-                    ></TransactionModal>
-
                     {/* TODO: Add reward modal in beta version*/}
 
                     <View style={{ justifyContent: 'flex-start' }}>
@@ -145,17 +143,20 @@ function DisplayCard({route, navigation}) {
                         }
 
                         <View style={styles.sectionTitle}>
+                            <View style={{flex: 1}}/>
                             <Text style={styles.sectionTitleText}>Transactions</Text>
-                            <TouchableOpacity
-                                onPress={() => setShowTransactionModal(true)}
-                                style={{ margin: 5 }}
-                            >
-                                <Ionicons
-                                    name="add-circle-outline"
-                                    color="white"
-                                    size={22}
-                                ></Ionicons>
-                            </TouchableOpacity>
+                            <View style={{ flex: 1, margin: 5, alignItems: 'flex-end' }}>
+                                <TouchableOpacity
+                                    onPress={() => setShowTransactionModal(true)}
+                                >
+                                    <Ionicons
+                                        name="add-circle-outline"
+                                        color="white"
+                                        size={22}
+                                        style={{paddingRight: 5}}
+                                    ></Ionicons>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         {
                             displayTransactions &&
@@ -200,23 +201,28 @@ function DisplayCard({route, navigation}) {
                         {
                             (transactions.length == 0) &&
                             <View>
-                                <Text style={styles.sectionText}>You currently have no transactions!</Text>
+                                <View style={styles.sectionText}>
+                                    <Text>You currently have no transactions!</Text>
+                                </View>
                             </View>
                         }
 
 
                         <View style={styles.sectionTitle}>
+                            <View style={{flex: 1}}/>
                             <Text style={styles.sectionTitleText}>Rewards</Text>
-                            <TouchableOpacity
-                                // onPress={() => setShowTransactionModal(true)}
-                                style={{ margin: 5 }}
-                            >
-                                <Ionicons
-                                    name="add-circle-outline"
-                                    color="white"
-                                    size={22}
-                                ></Ionicons>
-                            </TouchableOpacity>
+                            <View style={{ flex: 1, margin: 5, alignItems: 'flex-end' }}>
+                                <TouchableOpacity
+                                    // onPress={() => setShowTransactionModal(true)}
+                                >
+                                    <Ionicons
+                                        name="add-circle-outline"
+                                        color="white"
+                                        size={22}
+                                        style={{paddingRight: 5}}
+                                    ></Ionicons>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         {
                             displayRewards &&
@@ -257,7 +263,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         height: '100%', 
-        // justifyContent: 'space-between',
         flex: 1
     },
     scrollviewContainer: { 
@@ -287,9 +292,11 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     sectionTitleText: {
+        flex: 1,
         padding: 10,
         fontSize: 16,
-        color: 'white'
+        color: 'white',
+        textAlign: 'center'
     },
     sectionTextSelected: {
         display: 'flex',
@@ -305,12 +312,12 @@ const styles = StyleSheet.create({
     sectionText: {
         display: 'flex',
         width: '100%', 
-        height: 35,
+        height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomColor: 'lightgray',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
     },
     transactionTextLeft: { 
         fontWeight : 'bold',

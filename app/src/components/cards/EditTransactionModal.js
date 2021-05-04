@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Modal, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, TouchableOpacity, TextInput, Alert } from 'react-native';
+import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 
 
 function EditTransactionModal({transaction, modalVisible, setModalVisible, setHasConstructed}) {
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
     const [transactionInput, setTransactionInput] = useState("");
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
     const userId = user.getUserId();
@@ -62,12 +67,20 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
 
     return (
         <Modal
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
+            backdropOpacity={0.3}
+            isVisible={modalVisible}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'center',
             }}
+            onBackdropPress={()=> {setModalVisible(false)}}
+            // onRequestClose={() => {
+            //     Alert.alert("Modal has been closed.");
+            //     setModalVisible(!modalVisible);
+            // }}
         >
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>

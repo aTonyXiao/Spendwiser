@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 
 import NetInfo from '@react-native-community/netinfo';
 import { recommendCard } from './RecommendCard';
@@ -14,6 +12,7 @@ import { MainModals } from './MainModals';
 import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
+import { MainButtons } from './MainButtons';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -24,8 +23,8 @@ export function MainScreen({navigation}) {
     const [region, setRegion] = useState({
         latitude: 38.542530, 
         longitude: -121.749530,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 0.0052,
+        longitudeDelta: 0.0051,
     })
     const [isLoading, setLoading] = useState(true);
     const [storeArr, setStoreArr] = useState([]);
@@ -36,6 +35,7 @@ export function MainScreen({navigation}) {
     const isFocused = useIsFocused();
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
+    const [userLocation, setUserLocation] = useState();
 
     function setOfflineMode() {
         setStoreArr([{
@@ -49,17 +49,27 @@ export function MainScreen({navigation}) {
         setCurStoreKey(0);
     }
 
+    const backAction = () => {
+        console.log(navigation.isFocused());
+        if (navigation.isFocused())
+            return true;
+        else
+            return false;
+    }
+
     function getRecCardFromDB(myRankedCards) {
-        setRecCards(myRankedCards)
+        setRecCards(myRankedCards);
     }
 
     // Called when changing store to reload recommended cards
-    function reloadRecCard(value, key, storeType) {
+    function reloadRecCard(value, key, storeType, geometry) {
+        // console.log("hihi " + storeType);
         setRecCards(null);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey) {
             setCurStore(value);
             setCurStoreKey(key);
+            setRegion({...region, longitude: geometry[1], latitude: geometry[0]});
         }
     }
 
@@ -76,13 +86,15 @@ export function MainScreen({navigation}) {
             .catch((error) => console.log(error))
         } else {
             let index = storeArr.indexOf(found);
-            reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType);
+            reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType, storeArr[index].geometry);
         }
     }
 
     function addManualInput(manualInputObj) {
         setStoreArr(storeList => storeList.concat(manualInputObj));
-        reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType);
+        // console.log(storeArr);
+        // console.log(manualInputObj);
+        reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType, manualInputObj.geometry);
     }
 
     function getLocationFromAPI(json) {
@@ -129,6 +141,7 @@ export function MainScreen({navigation}) {
         if (fetchStores.length > 0) {
             setCurStore(fetchStores[0].label);
             setCurStoreKey(fetchStores[0].key);
+            setRegion({...region, longitude: fetchStores[0].geometry[1], latitude: fetchStores[0].geometry[0]});
             recommendCard.getRecCards(fetchStores[0].storeType, getRecCardFromDB);
         }
     };
@@ -159,7 +172,8 @@ export function MainScreen({navigation}) {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
-                    reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType);
+                    // console.log("reset rec cards");
+                    reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
                 }
             });
@@ -169,6 +183,7 @@ export function MainScreen({navigation}) {
 
     // Called on mount
     useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', backAction);
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -177,16 +192,10 @@ export function MainScreen({navigation}) {
 
             try {
                 let location = await Location.getCurrentPositionAsync({});
-                setRegion({
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.0052,
-                    longitudeDelta: 0.0051,
-                })
-
+                setUserLocation(location.coords);
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
-                    if (state.isConnected) {
+                    if (state.isConnected) { 
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
                             googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
@@ -205,6 +214,8 @@ export function MainScreen({navigation}) {
                 return;
             }
         })();
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', backAction);
     }, []);
     
    
@@ -212,50 +223,36 @@ export function MainScreen({navigation}) {
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
-            <View style={{zIndex: 1}}>
-                {/* Modal */}
-                <MainModals
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
-                    reloadRecCard={reloadRecCard}
-                    addManualInput={addManualInput}
-                    storeArr={storeArr}
-                    curStore={curStore}
-                    region={region}
-                />
-                
+            {/* Modal */}
+            <MainModals
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                reloadRecCard={reloadRecCard}
+                addManualInput={addManualInput}
+                storeArr={storeArr}
+                curStore={curStore}
+                userLocation={userLocation}
+            />
+            <View style={{zIndex: 1}}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
-                    <View style={mapStyles.buttonArea}>
-                        <View style={mapStyles.buttonContainer}>
-                            <TouchableOpacity
-                                style={{borderBottomWidth: 0.5}}
-                                onPress={() => console.log("pressed for help")}
-                            >
-                                <Ionicons
-                                    name="information-outline"
-                                    color={'black'}
-                                    size={30}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => setModalVisible(true)}
-                            >
-                                <Ionicons
-                                    name="swap-vertical-outline"
-                                    color={'black'}
-                                    size={30}
-                                ></Ionicons>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    <MainButtons
+                        userLocation={userLocation}
+                        region={region}
+                        setRegion={setRegion}
+                        setModalVisible={setModalVisible}
+                    />
 
                     {/* Map (Google) */}
                     <MapView 
                         style={mapStyles.map}
                         provider= {PROVIDER_GOOGLE}
                         region = {region}
+                        onRegionChangeComplete = {(e)=> {
+                            if (Math.abs(e.longitudeDelta - region.longitudeDelta) > 0.001)
+                                setRegion(e);
+                            }}
                         showsUserLocation={true}
                         onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
                     >
@@ -274,7 +271,7 @@ export function MainScreen({navigation}) {
                         {/* Location text */}
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
                             <View style={mapStyles.locationTextContainer}>
-                                <Text>{isLoading ? "Loading" : curStore}</Text>
+                                <Text style={{fontWeight: '500', fontSize: 20}}>{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
                                     {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
@@ -329,23 +326,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStyles = StyleSheet.create({
-    buttonArea: {
-        top: Constants.statusBarHeight,
-        position: 'absolute',
-        zIndex: 1,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    buttonContainer: {
-        flexDirection: 'column',
-        position: 'relative',
-        borderRadius: 5,
-        backgroundColor: 'white',
-        padding: 5,
-        margin: 10,
-        borderWidth: 0.5,
-    },
     mapContainer: {
         alignItems: 'center',
     },
@@ -358,7 +338,7 @@ const mapStyles = StyleSheet.create({
         paddingBottom: 10,
     },
     locationTextContainer: {
-        alignItems: 'center'
+        alignItems: 'center',
     }, 
     changeLocationButton: {
         alignItems: 'center',

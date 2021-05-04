@@ -5,9 +5,8 @@ import { View, StyleSheet, TextInput } from 'react-native';
 export class ManualRewardRow extends React.Component {
     constructor(props) { 
         super(props);
-
         this.state = {
-            reward : 'cashback', 
+            reward : 'dining', 
             value : ""
         }
     }
@@ -17,15 +16,16 @@ export class ManualRewardRow extends React.Component {
             <View style={styles.rewardContainer}>
                 <DropDownPicker
                     items={[
-                        { label: 'cashback', value: '1', selected: true },
-                        { label: 'travel', value: '2' },
-                        { label: 'gas', value: '3' },
-                        { label: 'grocery', value: '4' },
-                        { label: 'restaurant', value: '5' },
-                        { label: 'other not listed above', value: '6' },
+                        { label: 'Dining', value: 'dining', selected: true },
+                        { label: 'Grocery', value: 'grocery' },
+                        { label: 'Drugstore', value: 'drugstore' },
+                        { label: 'Gas', value: 'gas' },
+                        { label: 'Home Improvement', value: 'homeImprovement' },
+                        { label: 'Travel', value: 'travel' },
+                        { label: 'Others or All', value: 'others' },
                     ]}
                     placeholder={"Select an item"}
-                    onChangeItem={item => this.setState({reward: item.label})}
+                    onChangeItem={item => this.setState({reward: item.value})}
                     containerStyle={styles.dropdown}
                     style={{ backgroundColor: '#fafafa' }}
                     itemStyle={{justifyContent: 'flex-start'}}
@@ -36,6 +36,8 @@ export class ManualRewardRow extends React.Component {
                     onChangeText={(text) => this.setState({value: text})}
                     placeholder={'value in cents'}
                     placeholderTextColor={grayRGB}
+                    value={this.value}
+                    keyboardType={"numeric"}
                 />
             </View>
         )
