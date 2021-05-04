@@ -400,7 +400,7 @@ export const removeDocumentFromUnsyncedList = (accountName, location, id, callba
 export const printLocalDB = async () => {
     try {
         getDB(async (db) => {
-            console.log(db);
+            console.log((db));
         });
     } catch (e) {
         console.log(e);

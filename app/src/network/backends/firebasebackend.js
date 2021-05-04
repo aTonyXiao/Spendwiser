@@ -41,22 +41,6 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
-function dbGetSubCollectionsRemote(database, location, callback) {
-    let dbloc = getDatabaseLocation(database, location);
-
-    let remote_collection = [];
-    dbloc.get().then(async (query) => {
-        query.forEach(doc => {
-            var currentDoc = doc.data();
-            currentDoc["docId"] = doc.id;
-            remote_collection.push(currentDoc);
-        });
-
-        callback(remote_collection);
-    }).catch((err) => {
-        console.log(err);
-    });
-}
 
 /**
  * Firebase Backend designed around the Firebase Web SDK
@@ -94,13 +78,6 @@ class FirebaseBackend extends BaseBackend {
             if (user) {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
                 
-                dbGetSubCollectionsRemote(database, "cards", (data) => {
-                    // Pull down all the cards
-                    console.log(data);
-                        storage.setSubcollectionLocalDB(user.uid, "cards", data, () => {
-
-                        });
-                });
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -291,6 +268,23 @@ class FirebaseBackend extends BaseBackend {
                 });
             }
         })
+    }
+
+    dbGetSubCollectionsRemote(location, callback) {
+        let dbloc = getDatabaseLocation(this.database, location);
+
+        let remote_collection = [];
+        dbloc.get().then(async (query) => {
+            query.forEach(doc => {
+                var currentDoc = doc.data();
+                currentDoc["docId"] = doc.id;
+                remote_collection.push(currentDoc);
+            });
+
+            callback(remote_collection);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
 

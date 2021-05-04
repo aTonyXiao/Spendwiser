@@ -127,7 +127,7 @@ class Cards {
      * @returns {object} - mapping of card name to card id
      */
     getCardNames(callback) { 
-        appBackend.dbGetSubCollections("cards", (data) => { 
+        appBackend.dbGetSubCollectionsRemote("cards", (data) => { 
             var mapping = {};
             for (var i=0 ; i<data.length ; i++) { 
                 var name = data[i]["name"];

@@ -82,7 +82,7 @@ class BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {}
-
+    dbGetSubCollectionsRemote(location, callback) {}
     /** 
      * Function returns checks if a document exists. 
      * 
