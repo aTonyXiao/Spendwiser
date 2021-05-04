@@ -573,21 +573,35 @@ class FirebaseBackend extends BaseBackend {
             let full_location = location + '.' + id;
             storage.getLocalDB(accountName, full_location, (data) => {
                 console.log("Got local db");
-                /*
                 this.dbFirebaseAdd(location, data, (remote_id) => {
                     console.log("Added to firebase");
-                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, () => {
-                        console.log("Modified metainfo");
-                        resolve();
-                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                            console.log("Removed from unsynced list");
-                            resolve();
-                        });
 
+
+
+                    let old_card_id = data['cardId'];
+                    let cardInfoLocation = "users." + accountName + ".cards." + id;
+
+                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, () => {
+                        if (location.includes('cards') && !location.includes("users")) {
+                            // Replace 'cardId' with the correct one
+                            // Replace key with 'cardId'
+
+                            // Replace card id field in this card
+                            console.log("Replacing card id field for this card in location: " + full_location + " with " + remote_id);
+                            storage.setLocalDB(accountName, full_location, {'cardId': remote_id}, true, () => {
+
+                                // Replace card id field in the user's list of cards
+                                console.log("Replacing card id field for user card in location: " + cardInfoLocation + " with: " + remote_id);
+                                storage.setLocalDB(accountName, cardInfoLocation, {'cardId': remote_id}, true, () => {
+                                    resolve();
+                                });
+                            });
+                        } else {
+                            resolve();
+                        }
+                        console.log("Removed from unsynced list");
                     });
                 });
-                */
-
             });
         });
     }
