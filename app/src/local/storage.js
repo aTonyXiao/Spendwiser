@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
@@ -119,6 +118,18 @@ export const addLocalDB = async (accountName, location, data, callback) => {
 
             // Insert local_data in location
             let id = Object.values(db[accountName][location]).length
+
+            if ('unsynced_documents' in db[accountName]) {
+                db[accountName]['unsynced_documents'] = [
+                    ...db[accountName]['unsynced_documents'],
+                    {'location': location, 'id': id},
+                ];
+            } else {
+                db[accountName]['unsynced_documents'] = [
+                    {'location': location, 'id': id}
+                ]
+            }
+
             local_data['meta_id'] = id;
             db[accountName][location][id.toString()] = local_data;
 
@@ -289,6 +300,37 @@ export const getSubcollectionLocalDB = async (accountName, location, callback) =
     }
 }
 
+export const setSubcollectionLocalDB = async (accountName, location, dataArr, callback) => {
+    try {
+        getDB(async (db) => {
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Setting Subcollection Locally");
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+
+            if (!(accountName in db)) {
+                db[accountName] = {};
+            }
+
+            if (accountName in db && location in db[accountName]) {
+                db[accountName][location] = [
+                    ...db[accountName][location],
+                    ...dataArr
+                ]
+            } else {
+                db[accountName][location] = dataArr;
+            }
+
+            setDB(JSON.stringify(db), callback);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
@@ -320,10 +362,45 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
     }
 }
 
+export const getUnsyncedDocuments = async (accountName, callback) => {
+    try {
+        getDB((db) => {
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                callback(db[accountName]['unsynced_documents']);
+            } else {
+                callback([]);
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        callback([]);
+    }
+}
+
+export const removeDocumentFromUnsyncedList = (accountName, location, id, callback) => {
+    try {
+        getDB((db) => {
+            console.log("got the db");
+
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                console.log("accountName and unsynced_documents are in the db");
+                let unsynced_documents = db[accountName]['unsynced_documents'];
+                db[accountName]['unsynced_documents'] = unsynced_documents.filter((doc) => doc['location'] != location && doc['id'] != id);
+                setDB(JSON.stringify(db), callback);
+            } else {
+                callback();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        callback();
+    }
+}
+
 export const printLocalDB = async () => {
     try {
         getDB(async (db) => {
-            console.log(db);
+            console.log((db));
         });
     } catch (e) {
         console.log(e);

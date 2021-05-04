@@ -94,6 +94,17 @@ class ServerBackend extends BaseBackend {
     dbGet(location, ...conditionsWithCallback) {
         let uri = location.replaceAll(".", "/");
         let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+
+        // filter if there are conditions
+        if (conditions.length > 0) {
+            for (let i = 0; i < conditions.length; i++) {
+                let condition = conditions[i];
+                if (i == 0) uri += "?where=" + condition[0] + condition[1] + condition[2];
+                else uri += "&where=" + condition[0] + condition[1] + condition[2];
+            }
+        }
+
         this.getUserToken((user_token) => {
             fetch(this.server_url + uri, {
                 method: 'GET',
