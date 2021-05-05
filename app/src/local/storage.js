@@ -424,6 +424,32 @@ export const getUnsyncedDocuments = async (accountName, callback) => {
     }
 }
 
+export const replaceUnsyncedDocumentsId = async (accountName, location, local_id, remote_id, callback) => {
+    try {
+        getDB((db) => {
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                let u_docs = db[accountName]['unsynced_documents'];
+                for (let i = 0; i < u_docs.length; i++) {
+                    let doc = u_docs[i];
+
+                    if (doc['location'] == location && doc['id'] == local_id) {
+                        doc['id'] = remote_id;
+                    }
+                }
+                jsonValue = JSON.stringify(db);
+                setDB(jsonValue, () => {
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        callback();
+    }
+}
+
 export const removeDocumentFromUnsyncedList = (accountName, location, id, callback) => {
     try {
         getDB((db) => {

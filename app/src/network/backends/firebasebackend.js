@@ -407,6 +407,14 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    async replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
+        return new Promise((resolve, reject) => {
+            storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
+                resolve();
+            });
+        });
+    }
+
     async syncDocument(accountName, document) {
         return new Promise((resolve, reject) => {
             let location = document['location'];
@@ -421,6 +429,7 @@ class FirebaseBackend extends BaseBackend {
                             if (location.includes('cards') && !location.includes("users")) {
                                 await this.replaceCardId(accountName, full_location, id, remote_id);
                             } 
+                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
                             storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                                 resolve();
                             });
