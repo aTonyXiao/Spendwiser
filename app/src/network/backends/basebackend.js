@@ -68,7 +68,7 @@ class BaseBackend {
      * });
      */
     async dbGet (location, ...conditionsWithCallback) {}
-
+    async dbGetRemote(location, ...conditionsWithCallback) {}
     /**
      * This function gets data for each document in a subcollection of a 'document'. 
      * Needed because for a subcollection there is no '.data()'

@@ -90,7 +90,7 @@ export const stripMetadata = (data) => {
     }
 }
 
-export const addLocalDB = async (accountName, location, data, callback) => {
+export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
     let local_data = JSON.parse(JSON.stringify(data));
 
@@ -119,15 +119,17 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             // Insert local_data in location
             let id = Object.values(db[accountName][location]).length
 
-            if ('unsynced_documents' in db[accountName]) {
-                db[accountName]['unsynced_documents'] = [
-                    ...db[accountName]['unsynced_documents'],
-                    {'location': location, 'id': id},
-                ];
-            } else {
-                db[accountName]['unsynced_documents'] = [
-                    {'location': location, 'id': id}
-                ]
+            if (synced == false) {
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': location, 'id': id},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id}
+                    ]
+                }
             }
 
             local_data['meta_id'] = id;

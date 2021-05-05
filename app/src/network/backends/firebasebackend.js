@@ -77,7 +77,7 @@ class FirebaseBackend extends BaseBackend {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
-                
+
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -90,7 +90,6 @@ class FirebaseBackend extends BaseBackend {
         setInterval(() => {
             this.syncLocalDatabase();
         }, 60000);
-
     }
 
     /**
@@ -213,6 +212,22 @@ class FirebaseBackend extends BaseBackend {
                 });
             }
         })
+    }
+
+    async dbGetRemote(location, ...conditionsWithCallback) {
+        this.userAccountType((type) => {
+            let callback = conditionsWithCallback.pop();
+            let conditions = conditionsWithCallback;
+            if (type == 'normal') {
+                this.firebaseDbGet(location, ...conditions, async (remote_data) => {
+                    callback(remote_data);
+                });
+
+            } else {
+                callback(null);
+            }
+        });
+
     }
 
 
@@ -453,7 +468,7 @@ class FirebaseBackend extends BaseBackend {
             if (accountId != 'offline') {
                 // Add data locally
                 console.log("adding locally");
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
                     callback(local_query_id);
                     /*
                     this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
@@ -466,7 +481,7 @@ class FirebaseBackend extends BaseBackend {
                 });
 
             } else {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
+                storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
                     callback(local_query_id);
                 });
             }
