@@ -59,7 +59,10 @@ export function AddCardDB({existingUserCards, navigation}) {
 
             if (!currentCardIds.includes(cardId)) {
                 cards.getCardData(cardId, (data) => {
+                    // Add the card into the user's list of cards
                     user.saveCardToUser(userId, cardId, null, null);
+
+                    // Add the actual card data as well
                     appBackend.dbGetRemote("cards." + cardId, async (cardData) => {
                         let actualUserId = await userId;
                         storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {

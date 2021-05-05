@@ -465,26 +465,9 @@ class FirebaseBackend extends BaseBackend {
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
         this.getUserID((accountId) => {
-            if (accountId != 'offline') {
-                // Add data locally
-                console.log("adding locally");
-                storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
-                    callback(local_query_id);
-                    /*
-                    this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
-                        // We added data successfully, update our local storage metadata
-                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id, () => {
-                            callback(query_id);
-                        });
-                    });
-                    */
-                });
-
-            } else {
-                storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
-                    callback(local_query_id);
-                });
-            }
+            storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
+                callback(local_query_id);
+            });
         });
     }
 
