@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-let storage_debug = false;
+let storage_debug = true;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -93,7 +93,6 @@ export const stripMetadata = (data) => {
 export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
     let local_data = JSON.parse(JSON.stringify(data));
-
     local_data = addOrUpdateMetainfo(local_data);
     try {
         getDB(async (db) => {
@@ -123,11 +122,11 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
                         ...db[accountName]['unsynced_documents'],
-                        {'location': location, 'id': id},
+                        {'location': location, 'id': id, 'type': 'add'},
                     ];
                 } else {
                     db[accountName]['unsynced_documents'] = [
-                        {'location': location, 'id': id}
+                        {'location': location, 'id': id, 'type': 'add'}
                     ]
                 }
             }
@@ -138,6 +137,41 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
                 callback(id.toString());
+            });
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const deleteLocalDB = async (accountName, location) => {
+    try {
+        getDB(async (db) => {
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Deleting Locally");
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+            const [document, id] = parseDocAndId(location);
+            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+                delete db[accountName][document][id];
+
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': document, 'id': id, 'type': 'delete'},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id, 'type': 'delete'}
+                    ]
+                }
+            }
+
+            jsonValue = JSON.stringify(db);
+            setDB(jsonValue, () => {
             });
         });
     } catch (e) {

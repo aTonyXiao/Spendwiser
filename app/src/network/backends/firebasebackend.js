@@ -416,23 +416,25 @@ class FirebaseBackend extends BaseBackend {
         return new Promise((resolve, reject) => {
             let location = document['location'];
             let id = document['id'];
+            let type = document['type'];
             let full_location = location + '.' + id;
+
             storage.getLocalDB(accountName, full_location, (data) => {
-                console.log("Got local db");
-                this.dbFirebaseAdd(location, data, (remote_id) => {
-                    console.log("Added to firebase");
-
-                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
-
-                        if (location.includes('cards') && !location.includes("users")) {
-                            await this.replaceCardId(accountName, full_location, id, remote_id);
-                        } 
-
-                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                            resolve();
+                if (type == 'add') {
+                    this.dbFirebaseAdd(location, data, (remote_id) => {
+                        storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
+                            if (location.includes('cards') && !location.includes("users")) {
+                                await this.replaceCardId(accountName, full_location, id, remote_id);
+                            } 
+                            storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                                resolve();
+                            });
                         });
                     });
-                });
+                } else if (type == 'delete') {
+                    this.dbFirebaseDelete(location + "." + id);
+                    resolve();
+                }
             });
         });
     }
@@ -464,6 +466,7 @@ class FirebaseBackend extends BaseBackend {
      */
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
+        // NOTE: This will get synced at regular intervals with firebase
         this.getUserID((accountId) => {
             storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
                 callback(local_query_id);
@@ -481,6 +484,12 @@ class FirebaseBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
+        this.getUserID((userId) => {
+            storage.deleteLocalDB(userId, location);
+        });
+    }
+
+    dbFirebaseDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
     }
