@@ -342,30 +342,25 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false, callback) {
-        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
             this.getUserID((accountId) => {
                 // Store locally
                 console.log("Setting local db")
                 storage.setLocalDB(accountId, location, data, merge, () => {
-
-                    // Store on firebase if possible
-                    /*
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    if (state.signed_in && !state.offline) {
-                        databaseLocation.set(data, { merge: merge }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-                    */
-
                     callback();
                 });
             });
-
-
-            // TODO: (Nathan W) Store local copy as well
         })
+    }
+
+    dbFirebaseSet(location, data, merge, callback) {
+        // Store on firebase if possible
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        if (state.signed_in && !state.offline) {
+            databaseLocation.set(data, { merge: merge }).catch((err) => {
+                console.log(err);
+            });
+        }
     }
 
     dbFirebaseAdd(location, data, callback) {
@@ -433,7 +428,15 @@ class FirebaseBackend extends BaseBackend {
                     });
                 } else if (type == 'delete') {
                     this.dbFirebaseDelete(location + "." + id);
-                    resolve();
+                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                        resolve();
+                    });
+                } else if (type == 'set') {
+                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            resolve();
+                        });
+                    });
                 }
             });
         });

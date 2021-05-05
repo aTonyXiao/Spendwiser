@@ -209,7 +209,6 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
             }
 
             // NOTE (Nathan W) the document **should** exist
-
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 if (merge) {
                     db[accountName][document][id] = {
@@ -219,6 +218,18 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 } else {
                     db[accountName][document][id] = local_data;
                 }
+
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': document, 'id': id, 'type': 'set', 'merge': merge},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id, 'type': 'set', 'merge': merge}
+                    ]
+                }
+
                 jsonValue = JSON.stringify(db);
                 setDB(jsonValue, () => {
                     callback();
