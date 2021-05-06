@@ -2,15 +2,26 @@
 
 This is the containerized server that utilizes MongoDB and Express to create an API for database and user authentication operations
 
+## Configuration
+
+1. First copy the "config/.env-template" into the root of the server folder, renaming the file to a ".env" file.  
+2. Fill out the file, changing the necessary variables
+
+Notes:
+- When loading a file, uncomment the proper LOAD_FILE line and run once in order to load in data into the database.  Once it runs, stop the server and comment out the line again.
+- For DB_LOCATION, make sure the folder exists before running the server
+
 ## Deployment
 
 Requirements:
 - Docker
 
-First make sure a folder named 'database' and 'cert' is created before running.
-
-Place the necessary keys in the cert folder for proper SSL communication
+First follow the configuration instructions beforehand
 
 To run, first build the container using: `docker compose build`
 
-Then run the server containers using: `docker compose up`
+### For production:
+Run the server containers using: `docker compose up`
+
+### For development:
+Run the server containers using: `docker compose -f docker-compose.yml -f docker-compose.dev.yml up`
