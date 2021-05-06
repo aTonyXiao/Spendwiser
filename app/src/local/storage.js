@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-let storage_debug = false;
+let storage_debug = true;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -90,10 +90,9 @@ export const stripMetadata = (data) => {
     }
 }
 
-export const addLocalDB = async (accountName, location, data, callback) => {
+export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
     let local_data = JSON.parse(JSON.stringify(data));
-
     local_data = addOrUpdateMetainfo(local_data);
     try {
         getDB(async (db) => {
@@ -119,15 +118,17 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             // Insert local_data in location
             let id = Object.values(db[accountName][location]).length
 
-            if ('unsynced_documents' in db[accountName]) {
-                db[accountName]['unsynced_documents'] = [
-                    ...db[accountName]['unsynced_documents'],
-                    {'location': location, 'id': id},
-                ];
-            } else {
-                db[accountName]['unsynced_documents'] = [
-                    {'location': location, 'id': id}
-                ]
+            if (synced == false) {
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': location, 'id': id, 'type': 'add'},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id, 'type': 'add'}
+                    ]
+                }
             }
 
             local_data['meta_id'] = id;
@@ -136,6 +137,41 @@ export const addLocalDB = async (accountName, location, data, callback) => {
             jsonValue = JSON.stringify(db);
             setDB(jsonValue, () => {
                 callback(id.toString());
+            });
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const deleteLocalDB = async (accountName, location) => {
+    try {
+        getDB(async (db) => {
+            if (storage_debug) {
+                console.log("----------------------");
+                console.log("Deleting Locally");
+                console.log("AccountName: " + accountName);
+                console.log("Location: " + location);
+                console.log("----------------------");
+            }
+            const [document, id] = parseDocAndId(location);
+            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+                delete db[accountName][document][id];
+
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': document, 'id': id, 'type': 'delete'},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id, 'type': 'delete'}
+                    ]
+                }
+            }
+
+            jsonValue = JSON.stringify(db);
+            setDB(jsonValue, () => {
             });
         });
     } catch (e) {
@@ -173,7 +209,6 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
             }
 
             // NOTE (Nathan W) the document **should** exist
-
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 if (merge) {
                     db[accountName][document][id] = {
@@ -183,6 +218,18 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 } else {
                     db[accountName][document][id] = local_data;
                 }
+
+                if ('unsynced_documents' in db[accountName]) {
+                    db[accountName]['unsynced_documents'] = [
+                        ...db[accountName]['unsynced_documents'],
+                        {'location': document, 'id': id, 'type': 'set', 'merge': merge},
+                    ];
+                } else {
+                    db[accountName]['unsynced_documents'] = [
+                        {'location': location, 'id': id, 'type': 'set', 'merge': merge}
+                    ]
+                }
+
                 jsonValue = JSON.stringify(db);
                 setDB(jsonValue, () => {
                     callback();
@@ -374,6 +421,32 @@ export const getUnsyncedDocuments = async (accountName, callback) => {
     } catch (e) {
         console.log(e);
         callback([]);
+    }
+}
+
+export const replaceUnsyncedDocumentsId = async (accountName, location, local_id, remote_id, callback) => {
+    try {
+        getDB((db) => {
+            if (accountName in db && 'unsynced_documents' in db[accountName]) {
+                let u_docs = db[accountName]['unsynced_documents'];
+                for (let i = 0; i < u_docs.length; i++) {
+                    let doc = u_docs[i];
+
+                    if (doc['location'] == location && doc['id'] == local_id) {
+                        doc['id'] = remote_id;
+                    }
+                }
+                jsonValue = JSON.stringify(db);
+                setDB(jsonValue, () => {
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        callback();
     }
 }
 

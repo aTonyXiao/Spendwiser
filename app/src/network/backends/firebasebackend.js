@@ -77,7 +77,7 @@ class FirebaseBackend extends BaseBackend {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
-                
+
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
@@ -90,7 +90,6 @@ class FirebaseBackend extends BaseBackend {
         setInterval(() => {
             this.syncLocalDatabase();
         }, 60000);
-
     }
 
     /**
@@ -436,6 +435,22 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    async dbGetRemote(location, ...conditionsWithCallback) {
+        this.userAccountType((type) => {
+            let callback = conditionsWithCallback.pop();
+            let conditions = conditionsWithCallback;
+            if (type == 'normal') {
+                this.firebaseDbGet(location, ...conditions, async (remote_data) => {
+                    callback(remote_data);
+                });
+
+            } else {
+                callback(null);
+            }
+        });
+
+    }
+
 
     // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**
@@ -548,30 +563,25 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false, callback) {
-        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
             this.getUserID((accountId) => {
                 // Store locally
                 console.log("Setting local db")
                 storage.setLocalDB(accountId, location, data, merge, () => {
-
-                    // Store on firebase if possible
-                    /*
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    if (state.signed_in && !state.offline) {
-                        databaseLocation.set(data, { merge: merge }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-                    */
-
                     callback();
                 });
             });
-
-
-            // TODO: (Nathan W) Store local copy as well
         })
+    }
+
+    dbFirebaseSet(location, data, merge, callback) {
+        // Store on firebase if possible
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        if (state.signed_in && !state.offline) {
+            databaseLocation.set(data, { merge: merge }).catch((err) => {
+                console.log(err);
+            });
+        }
     }
 
     dbFirebaseAdd(location, data, callback) {
@@ -618,27 +628,46 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    async replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
+        return new Promise((resolve, reject) => {
+            storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
+                resolve();
+            });
+        });
+    }
+
     async syncDocument(accountName, document) {
         return new Promise((resolve, reject) => {
             let location = document['location'];
             let id = document['id'];
+            let type = document['type'];
             let full_location = location + '.' + id;
+
             storage.getLocalDB(accountName, full_location, (data) => {
-                console.log("Got local db");
-                this.dbFirebaseAdd(location, data, (remote_id) => {
-                    console.log("Added to firebase");
-
-                    storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
-
-                        if (location.includes('cards') && !location.includes("users")) {
-                            await this.replaceCardId(accountName, full_location, id, remote_id);
-                        } 
-
+                if (type == 'add') {
+                    this.dbFirebaseAdd(location, data, (remote_id) => {
+                        storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
+                            if (location.includes('cards') && !location.includes("users")) {
+                                await this.replaceCardId(accountName, full_location, id, remote_id);
+                            } 
+                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                            storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                                resolve();
+                            });
+                        });
+                    });
+                } else if (type == 'delete') {
+                    this.dbFirebaseDelete(location + "." + id);
+                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                        resolve();
+                    });
+                } else if (type == 'set') {
+                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
                         storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                             resolve();
                         });
                     });
-                });
+                }
             });
         });
     }
@@ -670,27 +699,11 @@ class FirebaseBackend extends BaseBackend {
      */
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
+        // NOTE: This will get synced at regular intervals with firebase
         this.getUserID((accountId) => {
-            if (accountId != 'offline') {
-                // Add data locally
-                console.log("adding locally");
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    callback(local_query_id);
-                    /*
-                    this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
-                        // We added data successfully, update our local storage metadata
-                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id, () => {
-                            callback(query_id);
-                        });
-                    });
-                    */
-                });
-
-            } else {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    callback(local_query_id);
-                });
-            }
+            storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
+                callback(local_query_id);
+            });
         });
     }
 
@@ -704,6 +717,12 @@ class FirebaseBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
+        this.getUserID((userId) => {
+            storage.deleteLocalDB(userId, location);
+        });
+    }
+
+    dbFirebaseDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
     }

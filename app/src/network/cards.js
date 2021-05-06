@@ -138,6 +138,18 @@ class Cards {
             callback(mapping);
         })
     }
+
+    getCardData(cardId, callback) {
+        appBackend.dbGetSubCollectionsRemote("cards", (data) => { 
+            var mapping = {};
+            for (var i=0 ; i<data.length ; i++) { 
+                if (data[i]["cardId"] == cardId) {
+                    return callback(data[i]);
+                }
+            }
+            callback(null);
+        })
+    }
 }
 
 export var cards = new Cards();
