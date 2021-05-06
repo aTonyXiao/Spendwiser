@@ -36,7 +36,7 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - "./nginx.conf:/etc/nginx/nginx.conf"
+            - "./config/nginx.conf:/etc/nginx/nginx.conf"
             - "${SSL_CERT}:/etc/nginx/ssl/cert.pem"
             - "${SSL_KEY}:/etc/nginx/ssl/key.pem"
         depends_on:
