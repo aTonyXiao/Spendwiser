@@ -1,6 +1,9 @@
 import express from "express";
 import helmet from "helmet";
 
+// for loading
+import fs from "fs";
+
 import Database from "./database.js";
 import CardSchema from "./schemas/card.js";
 import UserSchema from "./schemas/user.js";
@@ -19,10 +22,11 @@ const db = new Database(app, firebase);
 db.addModel("cards", CardSchema);
 db.addModel("users", UserSchema);
 
-// uncomment and run once to import data from the firebase dump
-// import fs from "fs";
-// let raw = fs.readFileSync("firebase_dump.json");
-// let data = JSON.parse(raw);
-// db.loadData("cards", data);
+// import data from the firebase dump
+if (typeof process.env.LOAD_FILE !== "undefined" && process.env.LOAD_FILE !== "false") {
+    let raw = fs.readFileSync(process.env.LOAD_FILE);
+    let data = JSON.parse(raw);
+    db.loadData("cards", data);
+}
 
 export default app;
