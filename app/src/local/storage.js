@@ -28,11 +28,21 @@ export const getLoginState = async (callback) => {
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
         if (value.startsWith("__date__")) {
-            console.log("Found a date");
-            return new Date(value.substr("__date__(".length, value.length - 1));
+            console.log("Value: " + value);
+            let lastIndex = value.length - 2;
+            console.log("Value lenngth: " + value.length + " Index: " + lastIndex);
+            let datestr = value.substring("__date__(\"".length, lastIndex);
+            console.log("Key: " + key + ", Date string: " + datestr);
+            let date = new Date(datestr);
+            console.log("Converted to date: " + date);
+            console.log("Date type: " + typeof date);
+            return date;
+        } else {
+            return value;
         }
+    } else {
+        return value;
     }
-    return value;
 }
 
 export const getDB = async (callback) => {
@@ -52,9 +62,8 @@ export const getDB = async (callback) => {
 const convertDateToString = (data) => {
     for (let [key, value] of Object.entries(data)) {
         if (value instanceof Date) {
-            data[key] = "__date__(" + value.toString() + ")";
+            data[key] = "__date__(" + JSON.stringify(value) + ")";
         } else if (value instanceof Object) {
-            console.log("Cannot convert object: " + JSON.stringify(data[key]));
             data[key] = convertDateToString(value);
         }
     }
@@ -94,8 +103,7 @@ export const stripMetadata = (data) => {
 
 export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
-    let local_data = JSON.parse(JSON.stringify(data));
-    local_data = addOrUpdateMetainfo(local_data);
+    let local_data = addOrUpdateMetainfo(data);
     try {
         getDB(async (db) => {
             if (storage_debug) {
@@ -280,42 +288,40 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             var comp_op = {
                 '==': function (x, y) { return x == y},
                 '>': function (x, y) { 
-                    console.log("Comparing: " + JSON.stringify(x) + ", " + JSON.stringify(y));
+                    console.log("Comparing: " + JSON.stringify(x) + " > " + JSON.stringify(y));
                     return x > y;
                 },
                 '<': function (x, y) { 
-                    console.log("Comparing: " + JSON.stringify(x) + ", " + JSON.stringify(y));
+                    console.log("Comparing: " + JSON.stringify(x) + " < " + JSON.stringify(y));
                     return x < y;
                 },
             }
 
             let filtered_local_data = [];
+
             for (let i = 0; i < conditions.length; i++) {
                 let condition = conditions[i];
                 let key = condition[0];
                 let op = condition[1];
                 let value = condition[2];
 
+                let conditions_met = true;
                 for (let j = 0; j < local_data.length; j++) {
                     let d = local_data[j];
                     const local_dataval = d[key];
 
-                    // Convert to date objects if possible
-                    if (typeof local_dataval == 'string') {
-                        let local_dataval_date = Date.parse(local_dataval);
-                        if (local_dataval_date) {
-                            local_dataval = local_dataval_date;
-                        }
-                    }
-                    if (typeof value == 'string') {
-                        let value_date = Date.parse(value);
-                        if (value_date) {
-                            value = value_date;
-                        }
-                    }
+                    console.log("Transaction date: " + local_dataval);
+                    console.log("Key" + key + " DB type: " + typeof local_dataval);
                         
-                    if (comp_op[op](local_dataval, value)) {
-                        filtered_local_data.push(d); 
+                    if (!comp_op[op](local_dataval, value)) {
+                        conditions_met = false;
+                        console.log("Failed comparison")
+                    } else {
+                        console.log("Successful comparison")
+                    }
+
+                    if (conditions_met) {
+                        filtered_local_data.push(d);
                     }
                 }
             }
