@@ -6,8 +6,6 @@ services:
         restart: unless-stopped
         expose:
             - "3000"
-        volumes:
-            - .:/usr/src/server
         depends_on:
             - database
         networks:
