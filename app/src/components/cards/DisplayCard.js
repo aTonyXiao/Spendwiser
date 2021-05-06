@@ -16,7 +16,6 @@ import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
-import { DismissKeyboard } from '../util/DismissKeyboard';
 
 // TODO: need to add reward modal back in here?
 

@@ -55,7 +55,7 @@ function TransactionModal({
             }, 2500)
         }
     }
-    
+
     return (
         <DismissKeyboard>
             <Modal

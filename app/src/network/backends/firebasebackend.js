@@ -466,7 +466,6 @@ class FirebaseBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
-        // TODO (Nathan W): Check local storage first before going to the firebase db
         this.userAccountType((type) => {
             if (type == 'normal') {
                 this.getUserID((accountId) => {
@@ -481,17 +480,6 @@ class FirebaseBackend extends BaseBackend {
                                 remote_collection.push(currentDoc);
                             })
 
-                            /*
-                            console.log("Consolidating local and remote collections from dbGetSubcollections...");
-                            console.log("Local collection: ");
-                            console.log(local_collection);
-
-                            // console.log("Remote collection");
-                            // console.log(remote_collection);
-                            await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
-
-                            console.log("finsihed consolidating from dbGetSubcollections");
-                            */
                             callback(local_collection);
                         }).catch((err) => {
                             console.log(err);
@@ -521,6 +509,41 @@ class FirebaseBackend extends BaseBackend {
         }).catch((err) => {
             console.log(err);
         });
+    }
+
+    idk(location, callback) { 
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
+                        let dbloc = getDatabaseLocation(this.database, location);
+
+                        let remote_collection = [];
+                        dbloc.get().then(async (query) => {
+                            query.forEach(doc => {
+                                var currentDoc = doc.data();
+                                currentDoc["docId"] = doc.id;
+                                remote_collection.push(currentDoc);
+                            })
+
+                            await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
+
+                            if (remote_collection.length == 0) {
+                                callback(local_collection);
+                            } else {
+                                callback(remote_collection);
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    });
+                });
+            } else {
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, callback);
+                });
+            }
+        })
     }
 
 
