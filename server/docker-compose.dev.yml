@@ -4,8 +4,10 @@ services:
         image: spendwiser-server
         container_name: spendwiser-server
         restart: unless-stopped
-        expose:
-            - "3000"
+        volumes:
+            - ".:/usr/src/server"
+        ports:
+            - "3000:3000"
         depends_on:
             - database
         networks:
@@ -30,7 +32,6 @@ services:
     nginx:
         image: nginx
         container_name: nginx
-        restart: unless-stopped
         ports:
             - "80:80"
             - "443:443"
