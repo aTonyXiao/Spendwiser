@@ -21,3 +21,6 @@ database/
 
 #ssl
 cert/
+
+#node
+package-lock.json

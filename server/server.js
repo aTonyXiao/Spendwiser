@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-import "./src/config.js"; // weirdness with ES6 imports, so it's own module
 import app from "./src/app.js";
 
 // some server constants
