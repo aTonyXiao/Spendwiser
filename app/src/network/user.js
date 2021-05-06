@@ -288,7 +288,7 @@ class userClass {
      * firebase and local collection on startup 
      * @param {string} userId - user id of user
      */
-    initializeCards(userId) {
+    async initializeCards(userId) {
         // get remote collection
         userId = await userId;
         return new Promise((resolve, reject) => { 
