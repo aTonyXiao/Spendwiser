@@ -80,7 +80,7 @@ class Cards {
                 conversion: 1,
                 rewards: rewards, 
                 url: url,
-                dateAdded : date.toUTCString()
+                dateAdded : date
             }, async (id) => {
                 console.log('added card to database with id: ' + id);
                 appBackend.dbSet("cards." + id, { // need to set the cardId as well
@@ -109,7 +109,7 @@ class Cards {
                 rewardType: card.rewardType,
                 rewards: card.rewards, 
                 url: card.url,
-                dateAdded : date.toUTCString()
+                dateAdded : date
             }, (id) => {
                 appBackend.dbSet("cards." + id, {
                     cardId: id

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-let storage_debug = true;
+let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -28,18 +28,29 @@ export const getLoginState = async (callback) => {
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
         if (value.startsWith("__date__")) {
-            return new Date(value.substr("__date__(".length, value.length - 1));
+            console.log("Value: " + value);
+            let lastIndex = value.length - 2;
+            console.log("Value lenngth: " + value.length + " Index: " + lastIndex);
+            let datestr = value.substring("__date__(\"".length, lastIndex);
+            console.log("Key: " + key + ", Date string: " + datestr);
+            let date = new Date(datestr);
+            console.log("Converted to date: " + date);
+            console.log("Date type: " + typeof date);
+            return date;
+        } else {
+            return value;
         }
+    } else {
+        return value;
     }
-    return value;
 }
 
 export const getDB = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('@db');
         if (jsonValue != null) {
-            var cards = JSON.parse(jsonValue, dateTimeReviver);
-            callback(cards);
+            var db = JSON.parse(jsonValue, dateTimeReviver);
+            callback(db);
         } else {
             callback({});
         }
@@ -50,9 +61,9 @@ export const getDB = async (callback) => {
 
 const convertDateToString = (data) => {
     for (let [key, value] of Object.entries(data)) {
-        if (typeof value == 'Date') {
-            data[key] = "__date__(" + value.toString() + ")";
-        } else if (typeof value == 'object') {
+        if (value instanceof Date) {
+            data[key] = "__date__(" + JSON.stringify(value) + ")";
+        } else if (value instanceof Object) {
             data[key] = convertDateToString(value);
         }
     }
@@ -61,7 +72,7 @@ const convertDateToString = (data) => {
 }
 const setDB = async (data, callback) => {
     data = convertDateToString(data);
-    await AsyncStorage.setItem('@db', data);
+    await AsyncStorage.setItem('@db', JSON.stringify(data));
     callback();
 }
 
@@ -92,8 +103,7 @@ export const stripMetadata = (data) => {
 
 export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
-    let local_data = JSON.parse(JSON.stringify(data));
-    local_data = addOrUpdateMetainfo(local_data);
+    let local_data = addOrUpdateMetainfo(data);
     try {
         getDB(async (db) => {
             if (storage_debug) {
@@ -134,8 +144,7 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
             local_data['meta_id'] = id;
             db[accountName][location][id.toString()] = local_data;
 
-            jsonValue = JSON.stringify(db);
-            setDB(jsonValue, () => {
+            setDB(db, () => {
                 callback(id.toString());
             });
         });
@@ -170,8 +179,7 @@ export const deleteLocalDB = async (accountName, location) => {
                 }
             }
 
-            jsonValue = JSON.stringify(db);
-            setDB(jsonValue, () => {
+            setDB(db, () => {
             });
         });
     } catch (e) {
@@ -230,8 +238,7 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                     ]
                 }
 
-                jsonValue = JSON.stringify(db);
-                setDB(jsonValue, () => {
+                setDB(db, () => {
                     callback();
                 });
             }  else {
@@ -263,6 +270,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("Location: " + location);
                 console.log("Document: " + document);
                 console.log("Id: " + id);
+                console.log("Conditions: " + JSON.stringify(conditions));
                 console.log("----------------------");
             }
 
@@ -279,41 +287,68 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
 
             var comp_op = {
                 '==': function (x, y) { return x == y},
-                '>': function (x, y) { return x > y},
-                '<': function (x, y) { return x < y},
+                '>': function (x, y) { 
+                    console.log("Comparing: " + JSON.stringify(x) + " > " + JSON.stringify(y));
+                    return x > y;
+                },
+                '<': function (x, y) { 
+                    console.log("Comparing: " + JSON.stringify(x) + " < " + JSON.stringify(y));
+                    return x < y;
+                },
             }
 
             let filtered_local_data = [];
+
+            for (let j = 0; j < local_data.length; j++) {
+                let item = local_data[j];
+
+                let conditions_met = true;
+                for (let i = 0; i < conditions.length; i++) {
+                    let condition = conditions[i];
+                    let key = condition[0];
+                    let op = condition[1];
+                    let value = condition[2];
+                    var db_value = item[key];
+
+                    if (!comp_op[op](db_value, value)) {
+                        conditions_met = false; 
+                    }
+                }
+
+                if (conditions_met) {
+                    filtered_local_data.push(item);
+                }
+            }
+
+            /*
             for (let i = 0; i < conditions.length; i++) {
                 let condition = conditions[i];
                 let key = condition[0];
                 let op = condition[1];
                 let value = condition[2];
 
+                let conditions_met = true;
                 for (let j = 0; j < local_data.length; j++) {
                     let d = local_data[j];
                     const local_dataval = d[key];
 
-                    // Convert to date objects if possible
-                    if (typeof local_dataval == 'string') {
-                        let local_dataval_date = Date.parse(local_dataval);
-                        if (local_dataval_date) {
-                            local_dataval = local_dataval_date;
-                        }
-                    }
-                    if (typeof value == 'string') {
-                        let value_date = Date.parse(value);
-                        if (value_date) {
-                            value = value_date;
-                        }
-                    }
+                    console.log("Transaction date: " + local_dataval);
+                    console.log("Key" + key + " DB type: " + typeof local_dataval);
                         
-                    if (comp_op[op](local_dataval, value)) {
-                        filtered_local_data.push(d); 
+                    if (!comp_op[op](local_dataval, value)) {
+                        conditions_met = false;
+                        console.log("Failed comparison")
+                    } else {
+                        console.log("Successful comparison")
+                    }
+
+                    if (conditions_met) {
+                        filtered_local_data.push(d);
                     }
                 }
             }
 
+            */
             if (filtered_local_data.length > 0) {
                 callback(filtered_local_data);
             } else {
@@ -371,7 +406,7 @@ export const setSubcollectionLocalDB = async (accountName, location, dataArr, ca
                 db[accountName][location] = dataArr;
             }
 
-            setDB(JSON.stringify(db), callback);
+            setDB(db, callback);
         });
     } catch (e) {
         console.log(e);
@@ -399,8 +434,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
             }
 
-            jsonValue = JSON.stringify(db);
-            setDB(jsonValue, () => {
+            setDB(db, () => {
                 callback();
             });
         });
@@ -436,8 +470,7 @@ export const replaceUnsyncedDocumentsId = async (accountName, location, local_id
                         doc['id'] = remote_id;
                     }
                 }
-                jsonValue = JSON.stringify(db);
-                setDB(jsonValue, () => {
+                setDB(db, () => {
                     callback();
                 });
             } else {
@@ -459,7 +492,7 @@ export const removeDocumentFromUnsyncedList = (accountName, location, id, callba
                 console.log("accountName and unsynced_documents are in the db");
                 let unsynced_documents = db[accountName]['unsynced_documents'];
                 db[accountName]['unsynced_documents'] = unsynced_documents.filter((doc) => doc['location'] != location && doc['id'] != id);
-                setDB(JSON.stringify(db), callback);
+                setDB(db, callback);
             } else {
                 callback();
             }

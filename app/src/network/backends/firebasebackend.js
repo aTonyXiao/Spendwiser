@@ -600,11 +600,14 @@ class FirebaseBackend extends BaseBackend {
     dbFirebaseSet(location, data, merge, callback) {
         // Store on firebase if possible
         let databaseLocation = getDatabaseLocation(this.database, location);
-        if (state.signed_in && !state.offline) {
-            databaseLocation.set(data, { merge: merge }).catch((err) => {
-                console.log(err);
-            });
-        }
+        storage.getLoginState((state) => {
+            if (state.signed_in && !state.offline) {
+                databaseLocation.set(data, { merge: merge }).catch((err) => {
+                    console.log(err);
+                });
+                callback();
+            }
+        });
     }
 
     dbFirebaseAdd(location, data, callback) {
@@ -651,6 +654,16 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    async replaceTransactionDocId(accountName, local_id, remote_id) {
+        return new Promise((resolve, reject) => {
+            let docLocation = "users." + accountName + ".transactions." + remote_id;
+            console.log("Replacing doc id field for user transaction in location: " + docLocation + " with: " + remote_id);
+            storage.setLocalDB(accountName, docLocation, {'docId': remote_id}, true, () => {
+                resolve();
+            });
+        });
+    }
+
     async replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
         return new Promise((resolve, reject) => {
             storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
@@ -672,7 +685,10 @@ class FirebaseBackend extends BaseBackend {
                         storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
                             if (location.includes('cards') && !location.includes("users")) {
                                 await this.replaceCardId(accountName, full_location, id, remote_id);
-                            } 
+                            }  
+                            else if (location.includes('transactions')) {
+                                await this.replaceTransactionDocId(accountName, id, remote_id);
+                            }
                             await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
                             storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                                 resolve();
