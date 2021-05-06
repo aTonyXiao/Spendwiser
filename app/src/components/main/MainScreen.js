@@ -13,6 +13,7 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
+import { MainHelpModal } from './MainHelpModal';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -35,7 +36,8 @@ export function MainScreen({navigation}) {
     const isFocused = useIsFocused();
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
-    const [userLocation, setUserLocation] = useState();
+    const [userLocation, setUserLocation] = useState(null);
+    const [helpModalVisible, setHelpModalVisible] = useState(false);
 
     function setOfflineMode() {
         setStoreArr([{
@@ -234,15 +236,21 @@ export function MainScreen({navigation}) {
                 curStore={curStore}
                 userLocation={userLocation}
             />
+            <MainHelpModal
+                helpModalVisible={helpModalVisible}
+                setHelpModalVisible={setHelpModalVisible}
+            />
             <View style={{zIndex: 1}}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
                     <MainButtons
                         userLocation={userLocation}
+                        setUserLocation={setUserLocation}
                         region={region}
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
+                        setHelpModalVisible={setHelpModalVisible}
                     />
 
                     {/* Map (Google) */}

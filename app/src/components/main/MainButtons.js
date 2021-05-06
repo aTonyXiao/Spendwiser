@@ -2,20 +2,30 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import * as Location from 'expo-location';
 
 export function MainButtons(
     {
         userLocation,
+        setUserLocation,
         region,
         setRegion,
         setModalVisible,
+        setHelpModalVisible,
     }) {
+    async function getUserLocation() {
+        let location = await Location.getCurrentPositionAsync({});
+        if (location.coords !== undefined) 
+            setRegion({...region, longitude: location.coords.longitude, latitude: location.coords.latitude});
+        setUserLocation(location.coords);
+    }
+    
     return (
         <View style={styles.buttonArea}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={{borderBottomWidth: 0.5, padding: 2}}
-                    onPress={() => console.log("pressed for help")}
+                    onPress={() => setHelpModalVisible(true)}
                 >
                     <Ionicons
                         name="help-circle-outline"
@@ -25,10 +35,7 @@ export function MainButtons(
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{borderBottomWidth: 0.5, padding: 2}}
-                    onPress={() => {
-                        if (userLocation.latitude !== undefined)
-                            setRegion({...region, longitude: userLocation.longitude, latitude: userLocation.latitude});
-                        }}
+                    onPress={() => getUserLocation()}
                 >
                     <Ionicons
                         name="navigate-circle-outline"
