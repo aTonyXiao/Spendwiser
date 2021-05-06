@@ -198,6 +198,8 @@ class userClass {
             ["dateAdded", ">", startTimeframe],
             ["dateAdded", "<", endTimeframe],
             (data) => { 
+            console.log("time frame transactions:")
+            console.log(data);
             callback(data);
         })
     }

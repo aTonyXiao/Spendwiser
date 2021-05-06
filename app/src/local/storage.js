@@ -299,6 +299,28 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
 
             let filtered_local_data = [];
 
+            for (let j = 0; j < local_data.length; j++) {
+                let item = local_data[j];
+
+                let conditions_met = true;
+                for (let i = 0; i < conditions.length; i++) {
+                    let condition = conditions[i];
+                    let key = condition[0];
+                    let op = condition[1];
+                    let value = condition[2];
+                    var db_value = item[key];
+
+                    if (!comp_op[op](db_value, value)) {
+                        conditions_met = false; 
+                    }
+                }
+
+                if (conditions_met) {
+                    filtered_local_data.push(item);
+                }
+            }
+
+            /*
             for (let i = 0; i < conditions.length; i++) {
                 let condition = conditions[i];
                 let key = condition[0];
@@ -326,6 +348,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 }
             }
 
+            */
             if (filtered_local_data.length > 0) {
                 callback(filtered_local_data);
             } else {
