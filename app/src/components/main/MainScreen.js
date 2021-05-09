@@ -281,7 +281,7 @@ export function MainScreen({navigation}) {
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
                             <View style={mapStyles.locationTextContainer}>
                                 <Text
-                                    style={{fontWeight: '500', fontSize: 20, textAlign: 'center'}}
+                                    style={{fontWeight: '500', fontSize: 20, textAlign: 'center', marginBottom: 10}}
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
