@@ -4,7 +4,7 @@ import fs from "fs";
 import admin from "firebase-admin";
 
 // must provide the firebase-admin json key to utilize this middleware
-let rawData = fs.readFileSync("firebase_admin.json");
+let rawData = fs.readFileSync(process.env.ADMIN_JSON);
 let firebaseKey = JSON.parse(rawData);
 
 // initialize with the provided credentials
