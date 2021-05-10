@@ -37,7 +37,7 @@ export const Login = props => {
 
     return (
         <DismissKeyboard>
-            <View style={mainStyles.container}>
+            <View style={styles.container}>
                 <Text style={mainStyles.large_title}>SpendWiser</Text>
 
                 {
@@ -99,6 +99,12 @@ export const Login = props => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     loginWrapper : {
         margin: 15,
         height: 40,
