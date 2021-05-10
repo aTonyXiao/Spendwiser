@@ -124,9 +124,20 @@ function YourCards({ route, navigation }) {
                                 storeInformation: storeInformation,
                                 origin: "yourcards"
                             }
-                            return <Card key={i.toString()} props={props} />
+
+                            // render divider bar for all cards except for last card
+                            if (i == cards.length-1) { 
+                                <Card key={i.toString()} props={props}/>
+                            } else {
+                                return (
+                                    <View>
+                                        <Card key={i.toString()} props={props}/>
+                                        <View style={styles.divider}></View>
+                                    </View>
+                                )
+                            }
                         })}
-                    </View>
+                   </View>
 
                     {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
                     <View style={{ height: 100 }}></View>
@@ -174,6 +185,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         paddingBottom: 35,
+    },
+    divider: { 
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'lightgray'
     }
 });
 
