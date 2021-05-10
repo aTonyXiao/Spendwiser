@@ -219,9 +219,7 @@ class userClass {
      */
     async getTransactionsForCard(userId, cardId, callback) { 
         userId = await userId;
-        appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], (data) => { 
-            callback(data);
-        })
+        appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], callback);
     }
 
     /**

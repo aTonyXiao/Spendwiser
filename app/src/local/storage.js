@@ -290,8 +290,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             let returned_filtered_data = false;
             for (let j = 0; j < local_data.length; j++) {
                 let item = local_data[j];
-
-                let conditions_met = true;
+                let conditions_met = false;
                 for (let i = 0; i < conditions.length; i++) {
                     let condition = conditions[i];
                     let key = condition[0];
@@ -299,8 +298,10 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                     let value = condition[2];
                     var db_value = item[key];
 
-                    if (!comp_op[op](db_value, value)) {
-                        callback(db_value);
+                    if (comp_op[op](db_value, value)) {
+                        conditions_met = true;
+                    } else {
+                        conditions_met = false;
                     }
                 }
 
@@ -309,6 +310,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                     callback(item);
                 }
             }
+
             if (!returned_filtered_data) {
                 callback(local_data);
             }
