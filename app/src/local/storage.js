@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-let storage_debug = true;
+let storage_debug = false;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -28,14 +28,9 @@ export const getLoginState = async (callback) => {
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
         if (value.startsWith("__date__")) {
-            console.log("Value: " + value);
             let lastIndex = value.length - 2;
-            console.log("Value lenngth: " + value.length + " Index: " + lastIndex);
             let datestr = value.substring("__date__(\"".length, lastIndex);
-            console.log("Key: " + key + ", Date string: " + datestr);
             let date = new Date(datestr);
-            console.log("Converted to date: " + date);
-            console.log("Date type: " + typeof date);
             return date;
         } else {
             return value;
@@ -284,11 +279,9 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             var comp_op = {
                 '==': function (x, y) { return x == y},
                 '>': function (x, y) { 
-                    console.log("Comparing: " + JSON.stringify(x) + " > " + JSON.stringify(y));
                     return x > y;
                 },
                 '<': function (x, y) { 
-                    console.log("Comparing: " + JSON.stringify(x) + " < " + JSON.stringify(y));
                     return x < y;
                 },
             }
@@ -316,36 +309,6 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                     callback(item);
                 }
             }
-
-            /*
-            for (let i = 0; i < conditions.length; i++) {
-                let condition = conditions[i];
-                let key = condition[0];
-                let op = condition[1];
-                let value = condition[2];
-
-                let conditions_met = true;
-                for (let j = 0; j < local_data.length; j++) {
-                    let d = local_data[j];
-                    const local_dataval = d[key];
-
-                    console.log("Transaction date: " + local_dataval);
-                    console.log("Key" + key + " DB type: " + typeof local_dataval);
-                        
-                    if (!comp_op[op](local_dataval, value)) {
-                        conditions_met = false;
-                        console.log("Failed comparison")
-                    } else {
-                        console.log("Successful comparison")
-                    }
-
-                    if (conditions_met) {
-                        filtered_local_data.push(d);
-                    }
-                }
-            }
-
-            */
             if (!returned_filtered_data) {
                 callback(local_data);
             }
