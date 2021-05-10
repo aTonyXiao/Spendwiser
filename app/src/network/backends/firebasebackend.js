@@ -518,23 +518,55 @@ class FirebaseBackend extends BaseBackend {
                     storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
                         let dbloc = getDatabaseLocation(this.database, location);
 
-                        let remote_collection = [];
-                        dbloc.get().then(async (query) => {
-                            query.forEach(doc => {
-                                var currentDoc = doc.data();
-                                currentDoc["docId"] = doc.id;
-                                remote_collection.push(currentDoc);
+                        // get local collection names to check for matching ids later
+                        let localIds = [];
+                        local_collection.forEach(doc => { 
+                            localIds.push(doc.cardId);
+                        })
+
+                        // check firebase documents by matching id
+                        dbloc.get().then((query) => {
+                            var checkForFirebaseCards = new Promise((resolve, reject) => {
+                                var querySize = query.size; // firebase .get() isn't of array type so get length this way
+                                var index = 0;
+                                query.forEach(doc => {
+                                    var currentDoc = doc.data();
+                                    currentDoc["docId"] = doc.id;
+               
+                                    // add to local db if list of local ids doesn't contain the current firebase id
+                                    if (!localIds.includes(doc.id)) { 
+                                        local_collection.push(currentDoc);
+
+                                        // get card information from firebase to add to local card database
+                                        let cardLocation = getDatabaseLocation(this.database, "cards." + currentDoc.cardId);
+                                        cardLocation.get().then((query) => {
+                                            // add card to cards local
+                                            // TODO This part doesn't seem to be working??
+                                            storage.addLocalDB(accountId, "cards", query.data(), true, (local_query_id) => {
+                                                storage.modifyDBEntryMetainfo(accountId, "cards", true, local_query_id, doc.id, () => {
+                                                    if (index === querySize-1) {
+                                                        resolve();
+                                                    }
+                
+                                                    index += 1
+                                                })
+                                            })
+                                        })
+                                    }
+                                })
                             })
 
-                            await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
-
-                            if (remote_collection.length == 0) {
-                                callback(local_collection);
-                            } else {
-                                callback(remote_collection);
-                            }
-                        }).catch((err) => {
-                            console.log(err);
+                            // wait for storage to add cards to local database to finish before executing callback
+                            checkForFirebaseCards.then(() => {
+                                // add card to user local
+                                // storage.addLocalDB(accountId, ".cards" ,"data", true, (local_query_id) => {
+                                //     console.log(local_query_id);
+                                // })
+                               
+                                // At this point the card isn't correctly in the user cards in the local database, 
+                                // so the reference from the callback below throws an error
+                                // callback(local_collection);
+                            })
                         })
                     });
                 });
@@ -545,7 +577,6 @@ class FirebaseBackend extends BaseBackend {
             }
         })
     }
-
 
     /** 
      * Function returns checks if a document exists. 

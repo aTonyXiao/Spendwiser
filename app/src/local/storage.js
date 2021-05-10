@@ -28,14 +28,9 @@ export const getLoginState = async (callback) => {
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
         if (value.startsWith("__date__")) {
-            console.log("Value: " + value);
             let lastIndex = value.length - 2;
-            console.log("Value lenngth: " + value.length + " Index: " + lastIndex);
             let datestr = value.substring("__date__(\"".length, lastIndex);
-            console.log("Key: " + key + ", Date string: " + datestr);
             let date = new Date(datestr);
-            console.log("Converted to date: " + date);
-            console.log("Date type: " + typeof date);
             return date;
         } else {
             return value;
