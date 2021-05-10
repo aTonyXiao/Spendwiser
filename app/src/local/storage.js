@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-let storage_debug = false;
+let storage_debug = true;
 
 export const storeLoginState = async (login_info) => {
     try {
@@ -274,11 +274,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("----------------------");
             }
 
-            if (!(accountName in db && document in db[accountName])) {
-                callback([]);
-            }
-
-            let local_data = [];
+            let local_data = null;
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 local_data = db[accountName][document][id];
             } else if (accountName in db && location in db[accountName]) {
@@ -297,8 +293,8 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 },
             }
 
-            let filtered_local_data = [];
 
+            let returned_filtered_data = false;
             for (let j = 0; j < local_data.length; j++) {
                 let item = local_data[j];
 
@@ -311,12 +307,13 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                     var db_value = item[key];
 
                     if (!comp_op[op](db_value, value)) {
-                        conditions_met = false; 
+                        callback(db_value);
                     }
                 }
 
                 if (conditions_met) {
-                    filtered_local_data.push(item);
+                    returned_filtered_data = true;
+                    callback(item);
                 }
             }
 
@@ -349,9 +346,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             }
 
             */
-            if (filtered_local_data.length > 0) {
-                callback(filtered_local_data);
-            } else {
+            if (!returned_filtered_data) {
                 callback(local_data);
             }
         });
