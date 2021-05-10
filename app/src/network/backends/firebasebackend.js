@@ -180,38 +180,11 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     async dbGet(location, ...conditionsWithCallback) {
-        // TODO (Nathan W): Check local storage first before going to the firebase db
-
-        this.userAccountType((type) => {
-            let callback = conditionsWithCallback.pop();
-            let conditions = conditionsWithCallback;
-            if (type == 'normal') {
-                this.getUserID((accountId) => {
-                    // Get the data from firebase
-
-                    // Get the data (if any) from the local db
-                    storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
-                        this.firebaseDbGet(location, ...conditions, async (remote_data) => {
-                            /*
-                            console.log("Got data from firebase... consolidating...");
-                            if (typeof remote_data == 'object' || typeof local_data == 'object') {
-                                console.log("consolidating from a normal get");
-                                await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
-                            } 
-                            console.log("Finished consolidating...");
-                            */
-                            callback(local_data);
-                        });
-                    })
-
-
-                });
-            } else {
-                this.getUserID((accountId) => {
-                    storage.getLocalDB(accountId, location, ...conditions, callback);
-                });
-            }
-        })
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+        this.getUserID((accountId) => {
+            storage.getLocalDB(accountId, location, ...conditions, callback);
+        });
     }
 
     async dbGetRemote(location, ...conditionsWithCallback) {

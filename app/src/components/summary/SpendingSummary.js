@@ -170,6 +170,21 @@ export function SpendingSummary({navigation}) {
         });
     }, []);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            summaryHelper.getDbCards(getCardFromDB);
+            let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
+            let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
+            setCompareTimeframe([thisMonth, startTimeFrame]);
+            getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
+            storage.getCategoriesLimit((val) => {
+                if (val !== null)
+                    setCategoriesLimit(val);
+            });
+        });
+        return unsubscribe; 
+    }, [navigation]);
+
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
