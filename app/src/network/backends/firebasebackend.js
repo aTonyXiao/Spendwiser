@@ -410,6 +410,7 @@ class FirebaseBackend extends BaseBackend {
 
             storage.getLocalDB(accountName, full_location, (data) => {
                 if (type == 'add') {
+                    console.log("Firebase add");
                     this.dbFirebaseAdd(location, data, (remote_id) => {
                         storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
                             if (location.includes('cards') && !location.includes("users")) {
@@ -425,11 +426,13 @@ class FirebaseBackend extends BaseBackend {
                         });
                     });
                 } else if (type == 'delete') {
+                    console.log("Firebase delete");
                     this.dbFirebaseDelete(location + "." + id);
                     storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                         resolve();
                     });
                 } else if (type == 'set') {
+                    console.log("Firebase set");
                     this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
                         storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                             resolve();
@@ -443,6 +446,8 @@ class FirebaseBackend extends BaseBackend {
     async syncLocalDatabase() {
         this.getUserID(async (accountName) => {
             storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
+                console.log("Got unsynced documents: ");
+                console.log(unsynced_documents);
                 for (let i = 0; i < unsynced_documents.length; i++) {
                     await this.syncDocument(accountName, unsynced_documents[i]);
                 }

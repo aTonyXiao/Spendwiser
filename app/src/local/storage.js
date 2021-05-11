@@ -160,7 +160,6 @@ export const deleteLocalDB = async (accountName, location) => {
             }
             const [document, id] = parseDocAndId(location);
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
-                delete db[accountName][document][id];
 
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
@@ -172,6 +171,30 @@ export const deleteLocalDB = async (accountName, location) => {
                         {'location': location, 'id': id, 'type': 'delete'}
                     ]
                 }
+
+                // Remove any unsynced documents that relate to the location being deleted
+                db[accountName]['unsynced_documents'] = 
+                db[accountName]['unsynced_documents'].filter((doc, index, arr) => {
+                    if (doc['location'] == document && doc['id'] == id) {
+                        if (doc['type'] == 'delete') {
+                            let item = db[accountName][document][id];
+                            console.log("Item at: " + doc['location'] + "." + doc['id'])
+                            console.log(item);
+
+                            if (item['meta_synced'] == false) {
+                                return false; // Since this item was not synced, we can just delete it
+                            } else {
+                                return true; // Item WAS synced, need to perform the action remotely as well
+                            }
+                        } else {
+                            return false; // Remove any extraneous unsynced actions on the item being deleted
+                        }
+                    } else {
+                        return true;
+                    }
+                });
+
+                delete db[accountName][document][id];
             }
 
             setDB(db, () => {
