@@ -116,8 +116,9 @@ class userClass {
             transactions: transactions,
             diff: diff
         }, (id) => { 
-            mainNeedsUpdate = true;
-            console.log("successfully saved card to user");
+            appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
+                mainNeedsUpdate = true;
+            });
         })
     }
 
