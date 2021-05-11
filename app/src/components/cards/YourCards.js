@@ -54,6 +54,8 @@ function YourCards({ route, navigation }) {
         // get cards from firebase and local 
         } else {
             cancelableInitCards.promise.then(cards => { 
+                console.log('\n\ngot cards:')
+                console.log(cards);
                 setCards([])
                 setCards(cards);
             }).catch(({ isCanceled, ...error }) => { });
