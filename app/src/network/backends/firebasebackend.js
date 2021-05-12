@@ -505,6 +505,8 @@ class FirebaseBackend extends BaseBackend {
                                 console.log('QUERY SIZE')
                                 console.log(querySize);
                                 var index = 0;
+
+                                if (querySize == 0) resolve();
                                 query.forEach(doc => {
                                     var currentDoc = doc.data();
                                     currentDoc["docId"] = doc.id;
