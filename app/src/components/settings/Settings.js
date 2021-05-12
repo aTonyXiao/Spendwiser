@@ -46,6 +46,7 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={32}
+                            iconStyle={{margin: 0}}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
