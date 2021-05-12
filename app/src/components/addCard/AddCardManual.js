@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity,
+    TextInput
+} from 'react-native';
 import { TextBox } from '../util/TextBox';
 import { user } from '../../network/user';
-import { cards } from '../../network/cards';
-import { ManualRewardRow } from './ManualRewardRow';
 import mainStyles from '../../styles/mainStyles';
-import { Ionicons } from '@expo/vector-icons';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
     const inputUrl = React.createRef();
-    const inputReward = React.createRef();
     const [rewards, setRewards] = useState([]);
     const [displayRewards, setDisplayRewards] = useState(false);
     const [rewardType, setRewardType] = useState("Cashback");
@@ -22,22 +24,17 @@ export function AddCardManual({navigation}) {
     const [nameError, setNameError] = useState(false);
     const [urlError, setUrlError] = useState(false);
 
-
-    resetRewardInputs = () => { 
-        inputReward.current.state.value = "";
-    }
+    const [rewardValue, setRewardValue] = useState("");
+    const [monetaryType, setMonetaryType] = useState("dining");
 
     addReward = () => { 
-        const rewardType = inputReward.current.state.reward;
-        const rewardValue = inputReward.current.state.value;
-
         if (!isNaN(parseFloat(rewardValue))) { 
-            let index = rewards.findIndex(e => e.type === rewardType);
+            let index = rewards.findIndex(e => e.type === monetaryType);
             if (index !== -1) {
                 let tempRewards = [...rewards];
                 tempRewards.splice(index, 1,
                 {
-                    type : rewardType,
+                    type : monetaryType,
                     value : rewardValue,
                 });
                 setRewards(tempRewards);
@@ -45,14 +42,12 @@ export function AddCardManual({navigation}) {
                 setRewards([
                     ...rewards,
                     {
-                        type : rewardType,
+                        type : monetaryType,
                         value : rewardValue,
                     }
                 ])
             }
-   
-            resetRewardInputs();
-    
+  
             setDisplayRewards(true);
         } else { 
             setRewardError(true);
@@ -108,7 +103,6 @@ export function AddCardManual({navigation}) {
             if (rewardsMap["others"] === undefined) {
                 rewardsMap["others"] = 0;
             }
-            console.log(rewardsMap);
             // cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
             //     await user.saveCardToUser(userId, cardId, null, null);
             //     navigation.navigate('YourCards');
@@ -127,25 +121,26 @@ export function AddCardManual({navigation}) {
                     ref={inputName}
                     placeholder={'Your credit card title here '}
                 />
+
                 <Text style={styles.inputTitle}>Card Type</Text>
-                    <View>
-                        <DropDownPicker
-                            items={[
-                                { label: 'Cashback', value: 'Cashback' },
-                                { label: 'Points', value: 'Points' },
-                                { label: 'Miles', value: 'Miles' },
-                                { label: 'Unknown', value: 'Unknown' },
-                            ]}
-                            defaultValue={"Cashback"}
-                            onChangeItem={item => setRewardType(item.value)}
-                            containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15}}
-                            style={{ backgroundColor: '#fafafa' }}
-                            itemStyle={{justifyContent: 'flex-start'}}
-                            dropDownStyle={{ backgroundColor: '#fafafa' }}
-                        />
-                    </View>
+                <DropDownPicker
+                    items={[
+                        { label: 'Cashback', value: 'Cashback' },
+                        { label: 'Points', value: 'Points' },
+                        { label: 'Miles', value: 'Miles' },
+                        { label: 'Unknown', value: 'Unknown' },
+                    ]}
+                    defaultValue={"Cashback"}
+                    onChangeItem={item => setRewardType(item.value)}
+                    containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15 }}
+                    style={{ backgroundColor: '#fafafa' }}
+                    itemStyle={{ justifyContent: 'flex-start' }}
+                    dropDownStyle={{ backgroundColor: '#fafafa' }}
+                />
+
                 <Text style={styles.inputTitle}>Rewards</Text>
                 <View style={styles.rewardContainer}>
+                    {/* Already added rewards */}
                     {
                         displayRewards &&
                         <View style={styles.rewardText}>
@@ -156,19 +151,46 @@ export function AddCardManual({navigation}) {
                             }
                         </View>
                     }
+
+                    {/* reward error */}
                     {
                         rewardError &&
-                        <Text style={{ color: 'red', marginHorizontal: 15}}>Please input a number</Text>
+                        <Text style={{ color: 'red', marginHorizontal: 15 }}>Please input a number</Text>
                     }
+
+                    {/* options to add reward */}
                     <View style={styles.rewardRow}>
-                        <ManualRewardRow ref={inputReward}></ManualRewardRow>
-                        <TouchableOpacity style={styles.plusIcon} onPress={addReward}>
-                            <Ionicons
-                                name="add-outline"
-                                color="black"
-                                size={32}
-                            ></Ionicons>
-                        </TouchableOpacity>
+                        <View style={styles.rewardRowContainer}>
+                            <DropDownPicker
+                                items={[
+                                    { label: 'Dining', value: 'dining', selected: true },
+                                    { label: 'Grocery', value: 'grocery' },
+                                    { label: 'Drugstore', value: 'drugstore' },
+                                    { label: 'Gas', value: 'gas' },
+                                    { label: 'Home Improvement', value: 'homeImprovement' },
+                                    { label: 'Travel', value: 'travel' },
+                                    { label: 'Others or All', value: 'others' },
+                                ]}
+                                placeholder={"Select an item"}
+                                onChangeItem={item => setMonetaryType(item.value)}
+                                containerStyle={styles.dropdown}
+                                style={{ backgroundColor: '#fafafa' }}
+                                itemStyle={{ justifyContent: 'flex-start' }}
+                                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                            />
+                            <TextInput
+                                style={styles.rewardInput}
+                                onChangeText={(text) => setRewardValue(text)}
+                                placeholder={'value in cents'}
+                                placeholderTextColor={grayRGB}
+                                value={rewardValue}
+                                keyboardType={"number-pad"}
+                                onEndEditing={() => {
+                                    addReward();
+                                    setRewardValue("");
+                                }}
+                            />
+                        </View>
                     </View>
                 </View>
 
@@ -200,6 +222,11 @@ const styles = StyleSheet.create({
     rewardContainer: { 
         display: 'flex',
         flexDirection: 'column',
+    },
+    rewardRowContainer: { 
+        display: 'flex',
+        flexDirection: 'row', 
+        minHeight: 10
     },
     rewardRow : {
         display: 'flex',
@@ -262,5 +289,23 @@ const styles = StyleSheet.create({
     }, 
     addCardText : { 
         color: 'white'
-    }
+    },
+    dropdown: {
+        height: 40, 
+        width: '45%',
+        margin: 8,
+        marginLeft: 15,
+    }, 
+    rewardInput: { 
+        height: 40, 
+        width: '45%',
+        margin: 5,
+        borderWidth: 1,
+        borderColor: '#F0F0F0',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
 });
+const grayRGB = 'rgb(211, 211, 211)';
