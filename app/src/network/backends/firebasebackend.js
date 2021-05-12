@@ -443,20 +443,7 @@ class FirebaseBackend extends BaseBackend {
             if (type == 'normal') {
                 this.getUserID((accountId) => {
                     storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
-                        let dbloc = getDatabaseLocation(this.database, location);
-
-                        let remote_collection = [];
-                        dbloc.get().then(async (query) => {
-                            query.forEach(doc => {
-                                var currentDoc = doc.data();
-                                currentDoc["docId"] = doc.id;
-                                remote_collection.push(currentDoc);
-                            })
-
-                            callback(local_collection);
-                        }).catch((err) => {
-                            console.log(err);
-                        })
+                        callback(local_collection);
                     });
                 });
             } else {
@@ -484,54 +471,59 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
-    idk(location, callback) { 
+    idk(location, callback) {
         console.log("called idk")
-        this.userAccountType((type) => {
-            if (type == 'normal') {
-                this.getUserID((accountId) => {
+        this.getUserID((accountId) => {
+            this.userAccountType((type) => {
+                if (type == 'normal') {
                     storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
-                        let dbloc = getDatabaseLocation(this.database, location);
-
                         // get local collection names to check for matching ids later
                         let localIds = [];
-                        local_collection.forEach(doc => { 
+                        local_collection.forEach(doc => {
                             localIds.push(doc.cardId);
                         })
 
+                        // console.log('local ids')
+                        // console.log(localIds);
+
+                        let dbloc = getDatabaseLocation(this.database, location);
                         // check firebase documents by matching id
                         dbloc.get().then((query) => {
                             var checkForFirebaseCards = new Promise((resolve, reject) => {
                                 var querySize = query.size; // firebase .get() isn't of array type so get length this way
-                                console.log('QUERY SIZE')
-                                console.log(querySize);
                                 var index = 0;
 
                                 if (querySize == 0) resolve();
                                 query.forEach(doc => {
                                     var currentDoc = doc.data();
                                     currentDoc["docId"] = doc.id;
-               
+
                                     // add to local db if list of local ids doesn't contain the current firebase id
-                                    if (!localIds.includes(doc.id)) { 
-                                        console.log('adding ' + doc.id) 
+                                    if (!localIds.includes(doc.id)) {
+                                        local_collection.push(currentDoc);
+
+                                        // console.log('adding ' + doc.id)
                                         // get card information from firebase to add to local card database
-                                        let cardLocation = getDatabaseLocation(this.database, "cards." + currentDoc.cardId);
+                                        const cardLocation = getDatabaseLocation(this.database, "cards." + currentDoc.cardId);
                                         cardLocation.get().then((cardData) => {
                                             // add card to cards local
                                             storage.addLocalDB(accountId, "cards", cardData.data(), true, (local_query_id) => {
                                                 storage.modifyDBEntryMetainfo(accountId, "cards", true, local_query_id, doc.id, () => {
                                                     // add card to user cards list
                                                     storage.addLocalDB(accountId, "users." + accountId + ".cards", currentDoc, true, () => {
-                                                            if (index == querySize-1) {
-                                                                console.log('resolving')
-                                                                resolve();
-                                                            }
-                                                            index += 1;
+                                                        // console.log('added ' + doc.id);
+                                                        index += 1;
+                                                        if (index == querySize) {
+                                                            // console.log('resolving')
+                                                            resolve();
+                                                        }
+                                                        // console.log('indexed, now at ' + index)
+                                                        // storage.printLocalDB();
                                                     })
                                                 })
                                             })
                                         })
-                                    } else { 
+                                    } else {
                                         index += 1;
                                     }
                                 })
@@ -539,19 +531,25 @@ class FirebaseBackend extends BaseBackend {
 
                             // wait for storage to add cards to local database to finish before executing callback
                             checkForFirebaseCards.then(() => {
-                                console.log('RESOLVED')
-                                console.log(local_collection);
+                                console.log('RESOLVED');
+
+                                // console.log('local collection: ')
+                                // console.log(local_collection)
+
+                                // console.log('storage')
+                                // storage.printLocalDB();
                                 
+
                                 callback(local_collection);
                             })
                         })
                     });
-                });
-            } else {
-                this.getUserID((accountId) => {
+
+                // offline mode
+                } else {
                     storage.getSubcollectionLocalDB(accountId, location, callback);
-                });
-            }
+                }
+            })
         })
     }
 

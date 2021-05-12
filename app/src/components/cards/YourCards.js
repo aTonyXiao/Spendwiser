@@ -35,38 +35,60 @@ function YourCards({ route, navigation }) {
     const focused = useIsFocused();
 
     const cancelableGetCards = makeCancelable(user.getCards(userId));
-    const cancelableInitCards = makeCancelable(user.initializeCards(userId));
+    useEffect(() => {
+        cancelableGetCards.promise.then(cards => {
+            setCards([]);
+            setCards(cards); 
+        }).catch(({isCanceled, ...error}) => {});
 
-    // Initialize cards by rectifying firebase and local collection on startup, 
-    // and after initialization, gets local cards
-    const [cardsAreUpdated, setCardsAreUpdated] = useState(false);
-    useEffect(()=> {
-        // cards only from local
-        if (cardsAreUpdated) {
-            cancelableGetCards.promise.then(cards => {
-                setCards([]);
-                setCards(cards);
-            }).catch(({ isCanceled, ...error }) => { });
-
-            return () => {
-                cancelableGetCards.cancel();
-            }
-        // get cards from firebase and local 
-        } else {
-            cancelableInitCards.promise.then(cards => { 
-                console.log('\n\ngot cards:')
-                console.log(cards);
-                setCards([])
-                setCards(cards);
-            }).catch(({ isCanceled, ...error }) => { });
-
-            setCardsAreUpdated(true);
-
-            return () => {
-                cancelableGetCards.cancel();
-            }
+        return () => {
+            cancelableGetCards.cancel();
         }
     }, [focused])
+
+
+
+    // const focused = useIsFocused();
+
+    // // const cancelableGetCards = makeCancelable(user.getCards(userId));
+    // // const cancelableInitCards = makeCancelable(user.initializeCards(userId));
+
+    // // Initialize cards by rectifying firebase and local collection on startup, 
+    // // and after initialization, gets local cards
+    // const [cardsAreUpdated, setCardsAreUpdated] = useState(false);
+    // useEffect(()=> {
+    //     // console.log(cardsAreUpdated);
+    //     // cards only from local
+    //     // if (cardsAreUpdated) {
+    //         cancelableGetCards.promise.then(cards => {
+    //             setCards([]);
+    //             setCards(cards);
+    //         }).catch(({ isCanceled, ...error }) => { });
+
+    //         // return () => {
+    //             // cancelableGetCards.cancel();
+    //         // }
+    //     // get cards from firebase and local 
+    //     // } else {   
+    //         // console.log('line 57') 
+    //         // setCardsAreUpdated(true);
+
+    //         // user.initializeCards(userId);
+
+    //         // cancelableInitCards.promise.then(cards => { 
+    //         //     console.log('got cards:')
+    //         //     console.log(cards);
+    //         //     console.log('\n\n')
+
+    //         //     setCards([])
+    //         //     setCards(cards);
+    //         // }).catch(({ isCanceled, ...error }) => { });
+
+    //         // return () => {
+    //         //     cancelableInitCards.cancel();
+    //         // }
+    //     // }
+    // }, [focused])
 
     // TODO: need to add loading screen 
 

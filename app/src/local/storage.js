@@ -106,7 +106,7 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
                 console.log("Adding Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log("Data: ");
+                console.log("Data: " + data);
                 console.log("----------------------");
             }
 

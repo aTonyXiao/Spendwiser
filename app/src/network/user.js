@@ -290,10 +290,13 @@ class userClass {
      * @param {string} userId - user id of user
      */
     async initializeCards(userId) {
+        console.log('line 293')
+
         // get remote collection
         userId = await userId;
         return new Promise((resolve, reject) => { 
             appBackend.idk("users." + userId + ".cards", (data) => {
+                console.log("in user")
                 resolve(data);
             })
         })
