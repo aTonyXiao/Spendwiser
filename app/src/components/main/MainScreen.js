@@ -92,8 +92,8 @@ export function MainScreen({navigation}) {
 
     function addManualInput(manualInputObj) {
         setStoreArr(storeList => storeList.concat(manualInputObj));
-        console.log(storeArr);
-        console.log(manualInputObj);
+        // console.log(storeArr);
+        // console.log(manualInputObj);
         reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType, manualInputObj.geometry);
     }
 
@@ -159,7 +159,6 @@ export function MainScreen({navigation}) {
             }
             setFooterHeight(height);
         }
-        console.log(isFooter + " " + height);
     }
 
     useEffect(() => {
@@ -173,7 +172,7 @@ export function MainScreen({navigation}) {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
                     setRecCards(null);
-                    console.log("reset rec cards");
+                    // console.log("reset rec cards");
                     reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
                 }

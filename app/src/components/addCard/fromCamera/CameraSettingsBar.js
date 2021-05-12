@@ -29,7 +29,6 @@ export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks
     // TODO: need to add some code for checking if no box is currently selected, OR
     //  only show this option when a box is selected
     const deleteBox = () => {
-        console.log('delete box')
         let newBlocks = moveableBlocks;
         newBlocks.pop();
         setMoveableBlocks(newBlocks);
@@ -37,7 +36,6 @@ export function CameraSettingsBar({navigation, moveableBlocks, setMoveableBlocks
     }
 
     const addBlock = () => {
-        console.log('add box');
         let newBlocks = moveableBlocks;
         for (let j=0 ; j<newBlocks.length; j++) { 
             newBlocks[j] = false;

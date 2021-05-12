@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
-import { makeCancelable } from '../util/promise-helper'
+import { makeCancelable } from '../util/promise-helper';
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -35,16 +35,40 @@ function YourCards({ route, navigation }) {
     const focused = useIsFocused();
 
     const cancelableGetCards = makeCancelable(user.getCards(userId));
-    useEffect(() => {
-        cancelableGetCards.promise.then(cards => {
-            setCards([]);
-            setCards(cards); 
-        }).catch(({isCanceled, ...error}) => {});
+    const cancelableInitCards = makeCancelable(user.initializeCards(userId));
 
-        return () => {
-            cancelableGetCards.cancel();
+    // Initialize cards by rectifying firebase and local collection on startup, 
+    // and after initialization, gets local cards
+    const [cardsAreUpdated, setCardsAreUpdated] = useState(false);
+    useEffect(()=> {
+        // cards only from local
+        if (cardsAreUpdated) {
+            cancelableGetCards.promise.then(cards => {
+                setCards([]);
+                setCards(cards);
+            }).catch(({ isCanceled, ...error }) => { });
+
+            return () => {
+                cancelableGetCards.cancel();
+            }
+        // get cards from firebase and local 
+        } else {
+            cancelableInitCards.promise.then(cards => { 
+                console.log('\n\ngot cards:')
+                console.log(cards);
+                setCards([])
+                setCards(cards);
+            }).catch(({ isCanceled, ...error }) => { });
+
+            setCardsAreUpdated(true);
+
+            return () => {
+                cancelableGetCards.cancel();
+            }
         }
     }, [focused])
+
+    // TODO: need to add loading screen 
 
     if (cards.length == 0) {
         return (
@@ -102,9 +126,20 @@ function YourCards({ route, navigation }) {
                                 storeInformation: storeInformation,
                                 origin: "yourcards"
                             }
-                            return <Card key={i.toString()} props={props} />
+
+                            // render divider bar for all cards except for last card
+                            if (i == cards.length-1) { 
+                                <Card key={i.toString()} props={props}/>
+                            } else {
+                                return (
+                                    <View>
+                                        <Card key={i.toString()} props={props}/>
+                                        <View style={styles.divider}></View>
+                                    </View>
+                                )
+                            }
                         })}
-                    </View>
+                   </View>
 
                     {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
                     <View style={{ height: 100 }}></View>
@@ -152,6 +187,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         paddingBottom: 35,
+    },
+    divider: { 
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'lightgray'
     }
 });
 

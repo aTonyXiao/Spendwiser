@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.spendwiser",
-      "buildNumber": "1.0.9",
+      "buildNumber": "1.0.11",
       "config": {
         "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
       }

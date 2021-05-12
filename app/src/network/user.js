@@ -283,6 +283,21 @@ class userClass {
     setMainNeedsUpdate(flag) {
         mainNeedsUpdate = flag;
     }
+
+    /**
+     * Since firebase updates occur asynchronously, this function will try to rectify 
+     * firebase and local collection on startup 
+     * @param {string} userId - user id of user
+     */
+    async initializeCards(userId) {
+        // get remote collection
+        userId = await userId;
+        return new Promise((resolve, reject) => { 
+            appBackend.idk("users." + userId + ".cards", (data) => {
+                resolve(data);
+            })
+        })
+    }
 }
 
 export var user = new userClass();
