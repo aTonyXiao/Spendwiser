@@ -170,12 +170,9 @@ export function MainScreen({navigation}) {
         console.log(isFooter + " " + height);
     }
 
-    useEffect(() => {
-        user.currentStore = storeArr[curStoreKey];
-    });
-
     // Called to refresh recommended cards if new cards added
     useEffect(() => {
+        user.currentStore = storeArr[curStoreKey];
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
                 if (user.getMainNeedsUpdate()) {

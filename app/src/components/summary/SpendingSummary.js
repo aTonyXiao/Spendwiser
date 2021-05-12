@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
@@ -13,6 +13,7 @@ import { HeaderAndTabContent } from './HeaderAndTabContent';
 import { ChartCompare } from './ChartCompare';
 import { ChartBudget } from './ChartBudget';
 import * as storage from '../../local/storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const modalType = {
     DISABLED: 0,
@@ -122,6 +123,35 @@ export function SpendingSummary({navigation}) {
         storage.storeCategoriesLimit(newCategoriesLimit);
     }
 
+    // Check if any new transactions added when screen is focused
+    useFocusEffect(
+        useCallback(() => {
+            console.log("hiiii " + compareTimeframe);
+            if (compareTimeframe.length !== 0) {
+                let check = new Date();
+                while (user.newTransactions.length > 0) {
+                    let trans = user.newTransactions.pop();
+                    // If new transaction not in transaction array list then add it in
+                    if (!(transactions.some(e => e.id === trans.id))) {
+                        setTransactions(oldData => [...oldData, trans]);
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (!(compareTransPeriod1.some(e => e.id === trans.id))) {
+                            setCompareTransPeriod1(oldData => [...oldData, trans]);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (!(compareTransPeriod2.some(e => e.id === trans.id))) {
+                            setCompareTransPeriod2(oldData => [...oldData, trans]);
+                        }
+                    }
+                }
+            } else {
+                user.newTransactions = [];
+            }
+        })
+    )
+
     // process each transaction retrieved from db after timeframe change
     useEffect(() => {
         if (transactions.length == 0) {
@@ -129,6 +159,7 @@ export function SpendingSummary({navigation}) {
         }
         let tmpValues = values;
         let transaction = transactions[transactions.length - 1];
+        console.log(transaction);
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
             tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
         setValues(tmpValues);
