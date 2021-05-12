@@ -20,6 +20,12 @@ const googlePlaceSearchRadius = "&radius=100&key=";
 const googlePlaceDetailsURL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
 const googlePlaceDetailsFields = "&fields=geometry,name,types,formatted_address,place_id&key=";
 
+/**
+ * Display main screen with Google maps, nearby stores, and recommended cards based on selected stores
+ * 
+ * @param {Object} navigation - navigation object used to move between different pages
+ * @module MainScreen
+ */
 export function MainScreen({navigation}) {
     const [region, setRegion] = useState({
         latitude: 38.542530, 
