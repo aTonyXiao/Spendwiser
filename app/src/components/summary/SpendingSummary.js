@@ -96,19 +96,20 @@ export function SpendingSummary({navigation}) {
         getCompareTimeframeTransactions(newCompare)
     }
     
-    // Initialize transactions for compare mode
+    // Get transactions for compare mode
     function getCompareTimeframeTransactions(newCompareTimeframe) {
         if (newCompareTimeframe.length === 0) {
             return;
         }
         if (whichPeriod === 1 || whichPeriod === 0) {
-            let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0);
+            // end time frame is the last day of the month
+            let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
                 setCompareTransPeriod1(oldData => [...oldData, data]);
             });
         }
         if (whichPeriod === 2 || whichPeriod === 0) {
-            let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0);
+            let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
                 setCompareTransPeriod2(oldData => [...oldData, data]);
             });
