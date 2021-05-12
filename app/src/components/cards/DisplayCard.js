@@ -166,7 +166,7 @@ function DisplayCard({route, navigation}) {
                                         // firebase db used a string....
 
                                         // [object Object]
-                                        var date = transaction.dateAdded.toString();
+                                        var date = transaction.dateAdded.toDateString();
                                         var name = transaction.storeInfo.storeName;
                                         var dollarAmount = transaction.amountSpent;
                                         return (
@@ -188,8 +188,15 @@ function DisplayCard({route, navigation}) {
                                                     }
                                                 }}
                                             >
-                                                <Text style={styles.transactionTextLeft}>{date}</Text>
-                                                <Text style={styles.transactionTextRight}>{name}: ${dollarAmount}</Text>
+                                                <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
+                                                    <View style={{flexDirection: 'column'}}>
+                                                        <Text style={styles.transactionTextLeft}>{name}</Text>
+                                                        <Text>{date}</Text>
+                                                    </View>
+                                                    <View style={{justifyContent: 'center'}}>
+                                                        <Text>${dollarAmount}</Text>
+                                                    </View>
+                                                </View>
                                             </TouchableOpacity>
                                         )
                                     })
@@ -315,11 +322,8 @@ const styles = StyleSheet.create({
     },
     transactionTextLeft: { 
         fontWeight : 'bold',
-        marginLeft: 8
     },
     transactionTextRight: {
-        marginLeft: 5,
-        marginRight: 8,
         flex: 1,
         flexWrap: 'wrap',
         textAlign: 'right'
