@@ -68,7 +68,7 @@ class BaseBackend {
      * });
      */
     async dbGet (location, ...conditionsWithCallback) {}
-
+    async dbGetRemote(location, ...conditionsWithCallback) {}
     /**
      * This function gets data for each document in a subcollection of a 'document'. 
      * Needed because for a subcollection there is no '.data()'
@@ -82,7 +82,7 @@ class BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {}
-
+    dbGetSubCollectionsRemote(location, callback) {}
     /** 
      * Function returns checks if a document exists. 
      * 

@@ -65,7 +65,7 @@ function DisplayCard({route, navigation}) {
                         if (Array.isArray(data)) {
                             return [...transactions, ...data];
                         } else {
-                            return [...transactions, data];
+                            return [... new Set([...transactions, data])];
                         }
                     }
                     else {

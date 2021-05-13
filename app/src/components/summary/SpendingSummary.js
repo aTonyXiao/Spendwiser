@@ -106,13 +106,20 @@ export function SpendingSummary({navigation}) {
             // end time frame is the last day of the month
             let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
-                setCompareTransPeriod1(oldData => [...oldData, data]);
+                setCompareTransPeriod1(oldData => {
+                    console.log("Old data: ");
+                    console.log(oldData);
+
+                    console.log("New data: ");
+                    console.log([... new Set([...oldData, data])]);
+                    return [... new Set([...oldData, data])]
+                });
             });
         }
         if (whichPeriod === 2 || whichPeriod === 0) {
             let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
-                setCompareTransPeriod2(oldData => [...oldData, data]);
+                setCompareTransPeriod2(oldData => {return [... new Set([...oldData, data])]});
             });
         }
     };
@@ -177,7 +184,7 @@ export function SpendingSummary({navigation}) {
         });
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
-            setTransactions(oldData => [...oldData, data]);
+            setTransactions(oldData => [... new Set([...oldData, data])]);
         });
     }, [curTimeframe]);
 
@@ -193,6 +200,21 @@ export function SpendingSummary({navigation}) {
                 setCategoriesLimit(val);
         });
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            summaryHelper.getDbCards(getCardFromDB);
+            let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
+            let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
+            setCompareTimeframe([thisMonth, startTimeFrame]);
+            getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
+            storage.getCategoriesLimit((val) => {
+                if (val !== null)
+                    setCategoriesLimit(val);
+            });
+        });
+        return unsubscribe; 
+    }, [navigation]);
 
     return (
         <View style={styles.screen}>
