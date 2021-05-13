@@ -106,20 +106,24 @@ export function SpendingSummary({navigation}) {
             // end time frame is the last day of the month
             let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
-                setCompareTransPeriod1(oldData => {
-                    console.log("Old data: ");
-                    console.log(oldData);
-
-                    console.log("New data: ");
-                    console.log([... new Set([...oldData, data])]);
-                    return [... new Set([...oldData, data])]
-                });
+                if (data !== null) {
+                    setCompareTransPeriod1(oldData => {
+                        console.log("Old data: ");
+                        console.log(oldData);
+    
+                        console.log("New data: ");
+                        console.log([... new Set([...oldData, data])]);
+                        return [... new Set([...oldData, data])]
+                    });
+                }
             });
         }
         if (whichPeriod === 2 || whichPeriod === 0) {
             let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
-                setCompareTransPeriod2(oldData => {return [... new Set([...oldData, data])]});
+                if (data !== null) {
+                    setCompareTransPeriod2(oldData => {return [... new Set([...oldData, data])]});
+                }
             });
         }
     };
@@ -184,7 +188,8 @@ export function SpendingSummary({navigation}) {
         });
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
-            setTransactions(oldData => [... new Set([...oldData, data])]);
+            if (data !== null)
+                setTransactions(oldData => [... new Set([...oldData, data])]);
         });
     }, [curTimeframe]);
 
