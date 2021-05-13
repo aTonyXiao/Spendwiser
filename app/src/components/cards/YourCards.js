@@ -149,7 +149,7 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <View style={{borderBottomWidth: 1}}>
+                                <View>
                                     <Card key={i.toString()} props={props} />
                                     <View style={styles.divider}></View>
                                 </View>
