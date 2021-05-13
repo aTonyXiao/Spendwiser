@@ -126,7 +126,7 @@ const modalStyles = StyleSheet.create({
         marginBottom: 6
     },
     modalText: {
-        color: 'black',
+        color: 'white',
         margin: 5,
         padding: 5,
         fontSize: 16,

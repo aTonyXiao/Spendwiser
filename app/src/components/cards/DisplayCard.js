@@ -151,7 +151,7 @@ function DisplayCard({route, navigation}) {
                                     <Ionicons
                                         name="add-circle-outline"
                                         color="white"
-                                        size={22}
+                                        size={25}
                                     ></Ionicons>
                                 </TouchableOpacity>
                             </View>
@@ -218,7 +218,7 @@ function DisplayCard({route, navigation}) {
                                     <Ionicons
                                         name="add-circle-outline"
                                         color="white"
-                                        size={22}
+                                        size={25}
                                     ></Ionicons>
                                 </TouchableOpacity>
                             </View>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     sectionTextSelected: {
         display: 'flex',
         width: '100%', 
-        height: 35,
+        height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
