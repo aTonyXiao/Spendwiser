@@ -129,7 +129,8 @@ export function CategoryModal(
                                             return (
                                                 <ModalSlot
                                                     key={index}
-                                                    textString={transaction['storeInfo']['storeName']}
+                                                    textString={transaction['storeInfo']['storeName']
+                                                        + "\n" + transaction['dateAdded'].toDateString()}
                                                     selected={null}
                                                     setSelected={null}
                                                     setModalVisible={setModalVisible}

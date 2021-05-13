@@ -126,7 +126,6 @@ export function SpendingSummary({navigation}) {
     // Check if any new transactions added when screen is focused
     useFocusEffect(
         useCallback(() => {
-            console.log("hiiii " + compareTimeframe);
             if (compareTimeframe.length !== 0) {
                 let check = new Date();
                 while (user.newTransactions.length > 0) {

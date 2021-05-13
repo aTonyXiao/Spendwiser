@@ -13,7 +13,7 @@ export function ModalSlot(
     }) {
     return (
         <TouchableOpacity 
-            style={styles.slot}
+            style={amountSpent !== null ? styles.transactionSlot : styles.slot}
             onPress={() => {isValid && setSelected(textString), (isValid && setModalVisible !== null) && setModalVisible(0)}}
         >
             <Text style={amountSpent !== null || isValid ? styles.textValid : styles.textInvalid}>{textString}</Text>
@@ -38,7 +38,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 15,
-        borderBottomWidth: 0.5
+        borderBottomWidth: 0.4
+    },
+    transactionSlot: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 15,
+        borderBottomWidth: 0.4
     },
     textValid: {
         color: 'black'

@@ -46,7 +46,7 @@ export function MainHelpModal(
                             <Text style={styles.text}>Navigation button to re-center your location</Text>
                             <Text style={styles.text}>Search button to select a store from a list of nearby stores</Text>
                             <Text style={styles.text}>Click an icon on Google Maps to select that particular store</Text>
-                            <Text style={styles.text}>Swipe the bottom panel up to view recommended cards</Text>
+                            <Text style={styles.text}>Swipe the bottom panel up to view your recommended cards</Text>
                     </View>
                 </View>
             </View>
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     centeredView: {
         justifyContent: 'center',
         alignItems: 'stretch',
+        borderRadius: 10,
         backgroundColor: 'rgba(128, 128, 128, 0.5)',
         marginHorizontal: 15,
     },
@@ -65,8 +66,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'stretch',
-        borderRadius: 4,
+        borderRadius: 10,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        paddingBottom: 15,
     },
     header: {
         display: 'flex',
