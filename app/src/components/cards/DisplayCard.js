@@ -16,7 +16,6 @@ import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
-import { DismissKeyboard } from '../util/DismissKeyboard';
 
 // TODO: need to add reward modal back in here?
 
@@ -101,7 +100,7 @@ function DisplayCard({route, navigation}) {
         navigation.navigate('YourCards');
     }
     return (
-        <DismissKeyboard>
+        // <DismissKeyboard>
             <SafeAreaView style={styles.container}>
                 <EditTransactionModal
                     transaction={currentTransaction}
@@ -117,11 +116,12 @@ function DisplayCard({route, navigation}) {
                     setHasConstructed={setHasConstructed}
                     cardId={cardId}
                 ></TransactionModal>
+
                 <ScrollView
                     style={styles.container}
                     contentContainerStyle={styles.scrollviewContainer}
                 >
-                    {/* TODO: Add reward modal in beta version*/}
+                    {/* TODO: Add reward modal?*/}
 
                     <View style={{ justifyContent: 'flex-start' }}>
                         <Text style={styles.cardTitle}>{cardName}</Text>
@@ -161,12 +161,8 @@ function DisplayCard({route, navigation}) {
                             <View>
                                 {
                                     transactions.map((transaction, i) => {
-                                        // TODO: I don't know what the best way to fix this is rn
-                                        // The offline storage used an object to represent time and the
-                                        // firebase db used a string....
-
-                                        // [object Object]
-                                        var date = transaction.dateAdded.toDateString();
+                                        console.log("rendering transact");
+                                        var date = transaction.dateAdded.toString();
                                         var name = transaction.storeInfo.storeName;
                                         var dollarAmount = transaction.amountSpent;
                                         return (
@@ -260,7 +256,7 @@ function DisplayCard({route, navigation}) {
                     }
                 </ScrollView>
             </SafeAreaView>
-        </DismissKeyboard>
+        // </DismissKeyboard>
     )
 }
 

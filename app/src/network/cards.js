@@ -26,6 +26,9 @@ class Cards {
     async getCardReward(cardId, category) {
         return new Promise((resolve, reject) => { 
             appBackend.dbGet("cards." + cardId, (data) => {
+                console.log('\n\n');
+                console.log(data)
+
                 if (typeof data != 'unidefined') {
                     let unconvertedReward = data.rewards[category];
                     if (isNaN(unconvertedReward)) {
