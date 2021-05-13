@@ -4,6 +4,10 @@ import { user } from '../../network/user';
 import { cards } from '../../network/cards';
 
 class SummaryHelper {
+    /**
+     * Gets the category of the transaction from the store type as retrieved from database.
+     * @param {object} transaction - transaction to categorize
+     */
     matchTransactionToCategory(transaction) {
         let catIdx = null;
         if (dining.includes(transaction['storeInfo']['storeType'])) {
@@ -24,6 +28,10 @@ class SummaryHelper {
         return catIdx;
     }
 
+    /**
+     * Gets the user's cards from database and accumulate them into an array
+     * @param {function} callback - a callback function to handle the user cards array
+     */
     async getDbCards(callback) {
         const userId = user.getUserId();
         let dbCards = await user.getCards(userId);
@@ -42,6 +50,10 @@ class SummaryHelper {
         callback(myCards);
     }
 
+    /**
+     * Gets the start and end timeframes used to query databse for transactions
+     * @param {string} curTimeframe - a string to denote which timeframe to be used
+     */
     getTimeFrame(curTimeframe) {
         let endTimeFrame, startTimeFrame;
         let month, date, year;
@@ -52,20 +64,21 @@ class SummaryHelper {
         endTimeFrame = new Date();
         switch (curTimeframe) {                
             case "Last month":
-                endTimeFrame = new Date(month - 1 !== -1 ? year : year - 1, (month - 1) % 12, 0);
-                startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
+                endTimeFrame = new Date(year, month - 1, 0, 23, 59, 59, 59);
+                startTimeFrame = new Date(year, month - 2);
                 break;
             case "Last 3 months":
-                startTimeFrame = new Date(month - 3 >= 0 ? year : year - 1, month - 3 % 12);
+                startTimeFrame = new Date(year, month - 3);
                 break;
             case "Last 2 months":
-                startTimeFrame = new Date(month - 2 !== -1 ? year : year - 1, (month - 2) % 12);
+                startTimeFrame = new Date(year, month - 2);
                 break;
             default: 
                 /* This Month */
                 startTimeFrame = new Date(year, month - 1);
                 break;
         }
+        console.log(startTimeFrame + " " + endTimeFrame);
         return [startTimeFrame, endTimeFrame];
     }
 }

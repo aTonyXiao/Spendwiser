@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
@@ -120,7 +120,7 @@ export function CategoryModal(
                     {/* Display transactions */}
                     {
                         modalVisible === modalType.TRANSACTIONS &&
-                        <View style={{marginBottom: 50}}>
+                        <ScrollView style={{marginBottom: 50}}>
                             {
                                 transactions.map((transaction, index) => {
                                     let curCatIdx = categories.indexOf(curCategory.label);
@@ -141,7 +141,7 @@ export function CategoryModal(
                                        
                                 })
                             }
-                        </View>
+                        </ScrollView>
                     }
                     {/* Display card menu */}
                     {
@@ -245,6 +245,7 @@ const modalStyles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'stretch',
         backgroundColor: 'rgba(128, 128, 128, 0.5)',
+        maxHeight: "60%",
     },
     modalView: {
         backgroundColor: 'white',
