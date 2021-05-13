@@ -39,7 +39,6 @@ class RecommendCard {
         let dbCards = await user.getCards(userId);
         // For each card, get the category reward value
         let i = 0;
-        console.log("google category: " + googleCategory);
         for (i = 0; i < dbCards.length; i++) {
             tmpCardId = dbCards[i].cardId;
             tmpCardInfo = await cards.getCardReward(tmpCardId, category);

@@ -11,6 +11,7 @@ import { user } from '../../network/user';
 import mainStyles from '../../styles/mainStyles';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { cards } from '../../network/cards';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -103,10 +104,10 @@ export function AddCardManual({navigation}) {
             if (rewardsMap["others"] === undefined) {
                 rewardsMap["others"] = 0;
             }
-            // cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
-            //     await user.saveCardToUser(userId, cardId, null, null);
-            //     navigation.navigate('YourCards');
-            // });
+            cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
+                await user.saveCardToUser(userId, cardId, null, null);
+                navigation.navigate('YourCards');
+            });
         } 
     } 
 
