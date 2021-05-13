@@ -58,7 +58,6 @@ class userClass {
         userId = await userId;
         return new Promise((resolve, reject) => { 
             appBackend.dbGetSubCollections("users." + userId + ".cards", (data) => {
-                console.log("User get cards succeeded...");
                 resolve(data);
             })
         })
@@ -118,8 +117,9 @@ class userClass {
             transactions: transactions,
             diff: diff
         }, (id) => { 
-            mainNeedsUpdate = true;
-            console.log("successfully saved card to user");
+            appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
+                mainNeedsUpdate = true;
+            });
         })
     }
 
@@ -211,6 +211,8 @@ class userClass {
             ["dateAdded", ">", startTimeframe],
             ["dateAdded", "<", endTimeframe],
             (data) => { 
+            console.log("time frame transactions:")
+            console.log(data);
             callback(data);
         })
     }
@@ -230,9 +232,7 @@ class userClass {
      */
     async getTransactionsForCard(userId, cardId, callback) { 
         userId = await userId;
-        appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], (data) => { 
-            callback(data);
-        })
+        appBackend.dbGet("users." + userId + ".transactions", ["cardId", "==", cardId], callback);
     }
 
     /**

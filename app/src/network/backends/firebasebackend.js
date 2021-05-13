@@ -41,6 +41,7 @@ function filterDatabaseCollection(collection, conditions) {
     return filteredCollection;
 }
 
+
 /**
  * Firebase Backend designed around the Firebase Web SDK
  * Database functions are designed around the Firestore Collection/Document style
@@ -71,17 +72,24 @@ class FirebaseBackend extends BaseBackend {
             firebase.app(); //if there is, retrieve the default app
         }
         this.database = firebase.firestore(); // set the database to the firestore instance
-
+        let database = this.database;
         // https://firebase.google.com/docs/auth/web/manage-users
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 storage.storeLoginState({ 'signed_in': true, 'account_type': 'normal' });
+
             } else {
                 // NOTE: (Nathan W) Don't overwrite login state here.
                 // There may be pre-existing state where a user is logged
                 // in as an offline account
             }
         });
+
+
+        // Sync the local database every minute
+        setInterval(() => {
+            this.syncLocalDatabase();
+        }, 60000);
     }
 
     /**
@@ -105,223 +113,6 @@ class FirebaseBackend extends BaseBackend {
         } catch (err) {
             console.log(err);
         }
-    }
-
-    /**
-     * Look at the remote and local objects queried with a get request and attempts 
-     * to consolidate both pieces of information into a single object that will be 
-     * stored on both the local database and the remote database
-     * @param {string} accountName 
-     * @param {string} location 
-     * @param {object} remote_data 
-     * @param {object} local_data 
-     */
-    async consolidateLocalAndRemoteData(accountName, location, remote_data, local_data) {
-
-        // Check if there are no changes b/w the two pieces of data
-        if (remote_data == local_data) {
-            console.log("no changes need to be made....returning");
-            return new Promise((resolve, reject) => {resolve()});
-        }
-        
-        // Check if the data exists locally at all
-        else if ((typeof local_data == 'array' && local_data.isEmpty()) ||
-                (Object.keys(local_data).length === 0)) {
-            let [document, id] = storage.parseDocAndId(location);
-
-            console.log("data does not exist locally...returning");
-            return new Promise((resolve, reject) => {
-                storage.addLocalDB(accountName, document, remote_data, (assigned_id) => {
-                    storage.modifyDBEntryMetainfo(accountName, document, true, assigned_id, id, () => {
-                        resolve();
-                    });
-                })
-            });
-        }
-
-        // Check if the data locally exists, but has not been synced
-        else if (local_data['meta_synced'] == false && remote_data) {
-            let local_data_stripped = storage.stripMetadata(local_data);
-            // The data exists locally AND remotely, but changes to the local version have
-            // not been synced with the remote version
-
-            // Update the remote data with our local changes
-            console.log("data exists locally but has not been synced...returning");
-            return new Promise((resolve, reject) => {
-                this.dbSet(location, JSON.stringify(local_data_stripped), true, () => {
-                    console.log("successful db set from consolidate");
-                    let [document, old_id] = storage.parseDocAndId(location);
-                    storage.modifyDBEntryMetainfo(accountName, document, true, old_id, old_id, () => {
-                        console.log("resolving...");
-                        resolve();
-                    });
-                });
-            });
-        } else if (local_data['meta_synced'] == false) {
-            let local_data_stripped = storage.stripMetadata(local_data);
-            // The remote data does not exist in any form yet.
-            // Create it, then update our local data with the correct id
-            console.log("data exists locally but has not been synced AND remote data does not exist...returning");
-            return new Promise((resolve, reject) => {
-                this.dbAdd(location, JSON.stringify(local_data_stripped), (id) => {
-                    let [document, old_id] = storage.parseDocAndId(location);
-                    storage.modifyDBEntryMetainfo(accountName, document, true, old_id, id, () => {
-                        resolve();
-                    });
-                });
-            })
-        } else {
-            console.log("no cases met....returning");
-            return new Promise((resolve, reject) => {resolve()});
-        }
-    }
-
-
-    async consolidateIndividualItem(accountName, location, local_item) {
-        if (local_item['meta_synced'] == false && !syncing_items.includes(sync_id)) {
-            let sync_id = JSON.stringify(local_item);
-            try {
-                var local_data_stripped = storage.stripMetadata(local_item);
-            } catch (e) {
-                console.log(e);
-            }
-
-            // Basically put a lock on the data we are syncing
-            syncing_items.push(sync_id);
-
-            return new Promise((resolve, reject) => {
-                this.dbFirebaseAddWithMetadata(location, local_data_stripped, async (id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location, true, local_item['meta_id'], id, () => {
-                        syncing_items = syncing_items.filter(item => item !== sync_id);
-                        resolve();
-                    });
-                });
-            });
-        } else {
-            return new Promise((resolve, reject) => {resolve()});
-        }
-    }
-
-    /**
-     * Consolidates a local collection with the firebase remote database by looking through
-     * each item in the database, checking if it has been synced, and uploading unsynced items
-     * to firebase
-     * 
-     * @param {string} accountName 
-     * @param {string} location 
-     * @param {Array} local_collection 
-     */
-    async consolidateLocalCollection(accountName, location, local_collection) {
-        const promises = local_collection.map((item) => {console.log(item); return this.consolidateIndividualItem(accountName, location, item)});
-        console.log(promises);
-        await Promise.all(promises);
-    }
-
-
-    async consolidateRemoteCollectionDateModified(accountName, location, remote_item, local_item, remote_modified, local_modified) {
-        // let sync_id = location + local_collection[j]['meta_id'];
-        let sync_id = JSON.stringify(local_item);
-
-        // If the remote item has been modified more recently AND we are not already trying to
-        // sync our changes
-        if (remote_modified > local_modified && !syncing_items.includes(sync_id)) {
-
-            // Basically put a lock on the data we are syncing
-            syncing_items.push(sync_id);
-
-            return new Promise((resolve, reject) => {
-                storage.setLocalDB(accountName,
-                                location + "." + local_item['meta_id'],
-                                remote_modified, true, () => {
-                    // Unlock on the data we synced
-                    syncing_items = syncing_items.filter(item => item !== sync_id);
-                    storage.modifyDBEntryMetainfo(accountName, location,
-                        true, local_item['meta_id'], remote_item['id'], () => {
-                            resolve(true);
-                        });
-                });
-            });
-        } else {
-            return new Promise((resolve, reject) => {
-                storage.modifyDBEntryMetainfo(accountName, location,
-                        true, local_item['meta_id'], remote_item['id'], () => {
-                            
-                        resolve(true);
-                });
-            });
-        }
-    }
-
-    async consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, local_item) {
-        if (remote_item['id'] == local_item['meta_id']) {
-            // Note (Nathan W): Compare the remote collection item with a stripped version
-            // of the local collection because we don't want to use the local item's metadata
-            // in our comparison check
-            // let local_data_stripped = storage.stripMetadata(local_item);
-
-            // Note (Nathan W): Need to convert the remote string date to a date object
-            // for comparison
-            let remote_modified = new Date(remote_item['modified']);
-            let local_modified = local_item['meta_modified'];
-
-            return this.consolidateRemoteCollectionDateModified(accountName, location, 
-                remote_item, local_item, remote_modified, local_modified);
-        } else {
-            return new Promise((resolve, reject) => {resolve(true)});
-        }
-    }
-
-    async consolidateRemoteCollectionHelper(accountName, location, remote_item, local_collection) {
-        if (local_collection.length == 0) {
-            return new Promise((resolve, reject) => {
-                storage.addLocalDB(accountName, location, remote_item, (local_id) => {
-                    storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id'], () => {
-                        resolve();
-                    });
-                });
-            });
-        } else {
-            const promises = local_collection.map((item) => {
-                return this.consolidateRemoteCollectionHelperHelper(accountName, location, remote_item, item)
-            });
-
-            let values = await Promise.all(promises);
-            if (values.includes('true') || values.length == 0) {
-                // Note (Nathan W): Item does not exist in our local database so we
-                // need to add it and set the query id accordingly
-                return new Promise((resolve, reject) => {
-                    storage.addLocalDB(accountName, location, remote_item, (local_id) => {
-                        storage.modifyDBEntryMetainfo(accountName, location, true, local_id, remote_item['id'], () => {
-                            resolve();
-                        });
-                    });
-                });
-            } else {
-                return new Promise((resolve, reject) => {resolve()});
-            }
-        }
-    }
-
-    /**
-     * Consolidates a remote collection with a local collection, making
-     * changes to the local collection to match any additions/changes that occurred remotely 
-     * 
-     * @param {string} accountName the name of the user's account
-     * @param {string} location the location/document that data can be found at
-     * @param {Array} remote_collection the data retrieved from the location/document remotely from firebase
-     * @param {Array} local_collection the data retrieved from the location/document locally
-     */
-    async consolidateRemoteCollection(accountName, location, remote_collection, local_collection) {
-        // Note (Nathan W): This is very brute force, but I don't know if that's actually a problem
-        const promises = remote_collection.map((item) => {
-            return this.consolidateRemoteCollectionHelper(accountName, location, item, local_collection);
-        });
-        await Promise.all(promises);
-    }
-
-    async consolidateLocalAndRemoteCollections(accountName, location, remote_collection, local_collection) {
-        await this.consolidateLocalCollection(accountName, location, local_collection);
-        // await this.consolidateRemoteCollection(accountName, location, remote_collection, local_collection);
     }
 
     // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
@@ -389,36 +180,27 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     async dbGet(location, ...conditionsWithCallback) {
-        // TODO (Nathan W): Check local storage first before going to the firebase db
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+        this.getUserID((accountId) => {
+            storage.getLocalDB(accountId, location, ...conditions, callback);
+        });
+    }
 
+    async dbGetRemote(location, ...conditionsWithCallback) {
         this.userAccountType((type) => {
             let callback = conditionsWithCallback.pop();
             let conditions = conditionsWithCallback;
             if (type == 'normal') {
-                this.getUserID((accountId) => {
-                    // Get the data from firebase
-
-                    // Get the data (if any) from the local db
-                    storage.getLocalDB(accountId, location, ...conditions, (local_data) => {
-                        this.firebaseDbGet(location, ...conditions, async (remote_data) => {
-                            console.log("Got data from firebase... consolidating...");
-                            if (typeof remote_data == 'object' || typeof local_data == 'object') {
-                                console.log("consolidating from a normal get");
-                                await this.consolidateLocalAndRemoteData(accountId, location, remote_data, local_data);
-                            } 
-                            console.log("Finished consolidating...");
-                            callback(remote_data);
-                        });
-                    })
-
-
+                this.firebaseDbGet(location, ...conditions, async (remote_data) => {
+                    callback(remote_data);
                 });
+
             } else {
-                this.getUserID((accountId) => {
-                    storage.getLocalDB(accountId, location, ...conditions, callback);
-                });
+                callback(null);
             }
-        })
+        });
+
     }
 
 
@@ -451,6 +233,7 @@ class FirebaseBackend extends BaseBackend {
                                 remote_collection.push(currentDoc);
                             })
 
+                            /*
                             console.log("Consolidating local and remote collections from dbGetSubcollections...");
                             console.log("Local collection: ");
                             console.log(local_collection);
@@ -460,11 +243,8 @@ class FirebaseBackend extends BaseBackend {
                             await this.consolidateLocalAndRemoteCollections(accountId, location, remote_collection, local_collection)
 
                             console.log("finsihed consolidating from dbGetSubcollections");
-                            if (remote_collection.length == 0) {
-                                callback(local_collection);
-                            } else {
-                                callback(remote_collection);
-                            }
+                            */
+                            callback(local_collection);
                         }).catch((err) => {
                             console.log(err);
                         })
@@ -477,6 +257,24 @@ class FirebaseBackend extends BaseBackend {
             }
         })
     }
+
+    dbGetSubCollectionsRemote(location, callback) {
+        let dbloc = getDatabaseLocation(this.database, location);
+
+        let remote_collection = [];
+        dbloc.get().then(async (query) => {
+            query.forEach(doc => {
+                var currentDoc = doc.data();
+                currentDoc["docId"] = doc.id;
+                remote_collection.push(currentDoc);
+            });
+
+            callback(remote_collection);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
 
     /** 
      * Function returns checks if a document exists. 
@@ -517,29 +315,28 @@ class FirebaseBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false, callback) {
-        // TODO (Nathan W): How to handle differences in local ID and firebase ID?
         storage.getLoginState((state) => {
             this.getUserID((accountId) => {
                 // Store locally
                 console.log("Setting local db")
                 storage.setLocalDB(accountId, location, data, merge, () => {
-
-                    // Store on firebase if possible
-                    console.log("Setting remote db")
-                    let databaseLocation = getDatabaseLocation(this.database, location);
-                    if (state.signed_in && !state.offline) {
-                        databaseLocation.set(data, { merge: merge }).catch((err) => {
-                            console.log(err);
-                        });
-                    }
-
                     callback();
                 });
             });
-
-
-            // TODO: (Nathan W) Store local copy as well
         })
+    }
+
+    dbFirebaseSet(location, data, merge, callback) {
+        // Store on firebase if possible
+        let databaseLocation = getDatabaseLocation(this.database, location);
+        storage.getLoginState((state) => {
+            if (state.signed_in && !state.offline) {
+                databaseLocation.set(data, { merge: merge }).catch((err) => {
+                    console.log(err);
+                });
+                callback();
+            }
+        });
     }
 
     dbFirebaseAdd(location, data, callback) {
@@ -567,6 +364,110 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
+    async replaceCardId(accountName, full_location, local_id, remote_id) {
+        // Replace 'cardId' with the correct one
+        // Replace key with 'cardId'
+
+        // Replace card id field in this card
+
+        return new Promise((resolve, reject) => {
+            console.log("Replacing card id field for this card in location: " + full_location + " with " + remote_id);
+            storage.setLocalDB(accountName, full_location, {'cardId': remote_id}, true, () => {
+                // Replace card id field in the user's list of cards
+                let cardInfoLocation = "users." + accountName + ".cards." + local_id;
+                console.log("Replacing card id field for user card in location: " + cardInfoLocation + " with: " + remote_id);
+                storage.setLocalDB(accountName, cardInfoLocation, {'cardId': remote_id}, true, () => {
+                    resolve();
+                });
+            });
+        })
+    }
+
+    async replaceTransactionDocId(accountName, local_id, remote_id) {
+        return new Promise((resolve, reject) => {
+            let docLocation = "users." + accountName + ".transactions." + remote_id;
+            console.log("Replacing doc id field for user transaction in location: " + docLocation + " with: " + remote_id);
+            storage.setLocalDB(accountName, docLocation, {'docId': remote_id}, true, () => {
+                resolve();
+            });
+        });
+    }
+
+    async replaceCardDocId(accountName, remote_id) {
+        return new Promise((resolve, reject) => {
+            let docLocation = "users." + accountName + ".cards." + remote_id;
+            console.log("Replacing doc id field for user card in location: " + docLocation + " with: " + remote_id);
+            storage.setLocalDB(accountName, docLocation, {'docId': remote_id}, true, () => {
+                resolve();
+            });
+        });
+    }
+
+    async replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
+        return new Promise((resolve, reject) => {
+            storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
+                resolve();
+            });
+        });
+    }
+
+    async syncDocument(accountName, document) {
+        return new Promise((resolve, reject) => {
+            let location = document['location'];
+            let id = document['id'];
+            let type = document['type'];
+            let full_location = location + '.' + id;
+
+            storage.getLocalDB(accountName, full_location, (data) => {
+                if (type == 'add') {
+                    console.log("Firebase add");
+                    this.dbFirebaseAdd(location, data, (remote_id) => {
+                        storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
+                            if (location.includes('cards') && !location.includes("users")) {
+                                await this.replaceCardId(accountName, full_location, id, remote_id);
+                            }  
+                            else if (location.includes('transactions')) {
+                                await this.replaceTransactionDocId(accountName, id, remote_id);
+                            }
+                            else if (location.includes('cards')) {
+                                await this.replaceCardDocId(accountName, remote_id);
+                            }
+                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                            storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                                resolve();
+                            });
+                        });
+                    });
+                } else if (type == 'delete') {
+                    console.log("Firebase delete");
+                    this.dbFirebaseDelete(location + "." + id);
+                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                        resolve();
+                    });
+                } else if (type == 'set') {
+                    console.log("Firebase set");
+                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            resolve();
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    async syncLocalDatabase() {
+        this.getUserID(async (accountName) => {
+            storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
+                console.log("Got unsynced documents: ");
+                console.log(unsynced_documents);
+                for (let i = 0; i < unsynced_documents.length; i++) {
+                    await this.syncDocument(accountName, unsynced_documents[i]);
+                }
+            });
+        });
+    }
+
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -584,23 +485,11 @@ class FirebaseBackend extends BaseBackend {
      */
     dbAdd(location, data, callback) {
         // Add card data to our internal storage
+        // NOTE: This will get synced at regular intervals with firebase
         this.getUserID((accountId) => {
-            if (accountId != 'offline') {
-                // Add data locally
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    this.dbFirebaseAddWithMetadata(location, data, (query_id) => {
-                        // We added data successfully, update our local storage metadata
-                        storage.modifyDBEntryMetainfo(accountId, location, true, local_query_id, query_id, () => {
-                            callback(query_id);
-                        });
-                    });
-                });
-
-            } else {
-                storage.addLocalDB(accountId, location, data, (local_query_id) => {
-                    callback(local_query_id);
-                });
-            }
+            storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
+                callback(local_query_id);
+            });
         });
     }
 
@@ -614,6 +503,12 @@ class FirebaseBackend extends BaseBackend {
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
     dbDelete(location) {
+        this.getUserID((userId) => {
+            storage.deleteLocalDB(userId, location);
+        });
+    }
+
+    dbFirebaseDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
     }

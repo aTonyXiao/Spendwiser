@@ -80,7 +80,7 @@ class Cards {
                 conversion: 1,
                 rewards: rewards, 
                 url: url,
-                dateAdded : date.toUTCString()
+                dateAdded : date
             }, async (id) => {
                 console.log('added card to database with id: ' + id);
                 appBackend.dbSet("cards." + id, { // need to set the cardId as well
@@ -109,7 +109,7 @@ class Cards {
                 rewardType: card.rewardType,
                 rewards: card.rewards, 
                 url: card.url,
-                dateAdded : date.toUTCString()
+                dateAdded : date
             }, (id) => {
                 appBackend.dbSet("cards." + id, {
                     cardId: id
@@ -127,7 +127,7 @@ class Cards {
      * @returns {object} - mapping of card name to card id
      */
     getCardNames(callback) { 
-        appBackend.dbGetSubCollections("cards", (data) => { 
+        appBackend.dbGetSubCollectionsRemote("cards", (data) => { 
             var mapping = {};
             for (var i=0 ; i<data.length ; i++) { 
                 var name = data[i]["name"];
@@ -136,6 +136,18 @@ class Cards {
                 mapping[name] = id;
             }
             callback(mapping);
+        })
+    }
+
+    getCardData(cardId, callback) {
+        appBackend.dbGetSubCollectionsRemote("cards", (data) => { 
+            var mapping = {};
+            for (var i=0 ; i<data.length ; i++) { 
+                if (data[i]["cardId"] == cardId) {
+                    return callback(data[i]);
+                }
+            }
+            callback(null);
         })
     }
 }

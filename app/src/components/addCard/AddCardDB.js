@@ -7,6 +7,9 @@ import Autocomplete from 'react-native-autocomplete-input';
 import { Ionicons } from '@expo/vector-icons';
 import mainStyles from '../../styles/mainStyles';
 import { DismissKeyboard } from '../util/DismissKeyboard';
+import * as storage from '../../local/storage';
+import { appBackend } from '../../network/backend';
+
 
 export function AddCardDB({existingUserCards, navigation}) {
     const userId = user.getUserId();
@@ -55,7 +58,20 @@ export function AddCardDB({existingUserCards, navigation}) {
             }
 
             if (!currentCardIds.includes(cardId)) {
-                user.saveCardToUser(userId, cardId, null, null);
+                cards.getCardData(cardId, (data) => {
+                    // Add the card into the user's list of cards
+                    user.saveCardToUser(userId, cardId, null, null);
+
+                    // Add the actual card data as well
+                    appBackend.dbGetRemote("cards." + cardId, async (cardData) => {
+                        let actualUserId = await userId;
+                        storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
+                            storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {
+                                navigation.navigate('YourCards');
+                            });
+                        });
+                    });
+                });
             } else {
                 Alert.alert("Already have this card",
                             "You've attempted to add a card that has already been added to your account",
@@ -63,9 +79,8 @@ export function AddCardDB({existingUserCards, navigation}) {
                                 {text: "Ok"}
                             ],
                             { cancelable: false });
+                navigation.navigate('YourCards')
             }
-
-            navigation.navigate('YourCards')
         }
     }
 
