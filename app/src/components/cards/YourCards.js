@@ -149,17 +149,12 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
 
-                            // render divider bar for all cards except for last card
-                            if (i == cards.length-1) { 
-                                <Card key={i.toString()} props={props}/>
-                            } else {
-                                return (
-                                    <View>
-                                        <Card key={i.toString()} props={props}/>
-                                        <View style={styles.divider}></View>
-                                    </View>
-                                )
-                            }
+                            return (
+                                <View>
+                                    <Card key={i.toString()} props={props} />
+                                    <View style={styles.divider}></View>
+                                </View>
+                            )
                         })}
                    </View>
 
