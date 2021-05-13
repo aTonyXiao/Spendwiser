@@ -106,7 +106,7 @@ export function AddCardManual({navigation}) {
             }
             cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
                 await user.saveCardToUser(userId, cardId, null, null);
-                navigation.navigate('YourCards');
+                navigation.navigate('YourCards', { forceLoad: true });
             });
         } 
     } 

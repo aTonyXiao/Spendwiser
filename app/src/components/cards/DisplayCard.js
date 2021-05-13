@@ -97,7 +97,7 @@ function DisplayCard({route, navigation}) {
 
     deleteCard = () => {
         user.deleteCard(userId, cardId, docId);
-        navigation.navigate('YourCards');
+        navigation.navigate('YourCards', { forceLoad: true });
     }
     return (
         // <DismissKeyboard>

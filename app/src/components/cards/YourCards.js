@@ -29,20 +29,27 @@ import { makeCancelable } from '../util/promise-helper';
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
+    const [isLoaded, setLoaded] = useState(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
+    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
     const focused = useIsFocused();
 
-    const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
-        cancelableGetCards.promise.then(cards => {
-            setCards([]);
-            setCards(cards); 
-        }).catch(({isCanceled, ...error}) => {});
+        if (isLoaded === false || forceLoad === true) {
+            const cancelableGetCards = makeCancelable(user.getCards(userId));
+            cancelableGetCards.promise.then(cards => {
+                setCards([]);
+                setCards(cards); 
+            }).catch(({isCanceled, ...error}) => {});
+    
+            setLoaded(true);
+            route.params.forceLoad = false; // hacky
 
-        return () => {
-            cancelableGetCards.cancel();
+            return () => {
+                cancelableGetCards.cancel();
+            }
         }
     }, [focused])
 

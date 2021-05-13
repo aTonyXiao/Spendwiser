@@ -1,6 +1,6 @@
 import React from 'react';
 import { cards } from '../../network/cards';
-import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import CardImage from './CardImage';
 import {makeCancelable} from '../util/promise-helper'
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     card: {
         resizeMode: "contain",
         width: "100%",
-        height: 230, // hard coded for now
+        height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
         marginBottom: 10
     }, 
     cardTitle: {
