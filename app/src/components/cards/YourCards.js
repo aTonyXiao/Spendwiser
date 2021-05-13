@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
-import { makeCancelable } from '../util/promise-helper'
+import { makeCancelable } from '../util/promise-helper';
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -29,22 +29,75 @@ import { makeCancelable } from '../util/promise-helper'
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
+    const [isLoaded, setLoaded] = useState(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
+    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
     const focused = useIsFocused();
 
-    const cancelableGetCards = makeCancelable(user.getCards(userId));
     useEffect(() => {
-        cancelableGetCards.promise.then(cards => {
-            setCards([]);
-            setCards(cards); 
-        }).catch(({isCanceled, ...error}) => {});
+        if (isLoaded === false || forceLoad === true) {
+            const cancelableGetCards = makeCancelable(user.getCards(userId));
+            cancelableGetCards.promise.then(cards => {
+                setCards([]);
+                setCards(cards); 
+            }).catch(({isCanceled, ...error}) => {});
+    
+            setLoaded(true);
+            route.params.forceLoad = false; // hacky
 
-        return () => {
-            cancelableGetCards.cancel();
+            return () => {
+                cancelableGetCards.cancel();
+            }
         }
     }, [focused])
+
+
+
+    // const focused = useIsFocused();
+
+    // // const cancelableGetCards = makeCancelable(user.getCards(userId));
+    // // const cancelableInitCards = makeCancelable(user.initializeCards(userId));
+
+    // // Initialize cards by rectifying firebase and local collection on startup, 
+    // // and after initialization, gets local cards
+    // const [cardsAreUpdated, setCardsAreUpdated] = useState(false);
+    // useEffect(()=> {
+    //     // console.log(cardsAreUpdated);
+    //     // cards only from local
+    //     // if (cardsAreUpdated) {
+    //         cancelableGetCards.promise.then(cards => {
+    //             setCards([]);
+    //             setCards(cards);
+    //         }).catch(({ isCanceled, ...error }) => { });
+
+    //         // return () => {
+    //             // cancelableGetCards.cancel();
+    //         // }
+    //     // get cards from firebase and local 
+    //     // } else {   
+    //         // console.log('line 57') 
+    //         // setCardsAreUpdated(true);
+
+    //         // user.initializeCards(userId);
+
+    //         // cancelableInitCards.promise.then(cards => { 
+    //         //     console.log('got cards:')
+    //         //     console.log(cards);
+    //         //     console.log('\n\n')
+
+    //         //     setCards([])
+    //         //     setCards(cards);
+    //         // }).catch(({ isCanceled, ...error }) => { });
+
+    //         // return () => {
+    //         //     cancelableInitCards.cancel();
+    //         // }
+    //     // }
+    // }, [focused])
+
+    // TODO: need to add loading screen 
 
     if (cards.length == 0) {
         return (
@@ -103,12 +156,13 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <View style={{borderBottomWidth: 1}}>
+                                <View>
                                     <Card key={i.toString()} props={props} />
+                                    <View style={styles.divider}></View>
                                 </View>
                             )
                         })}
-                    </View>
+                   </View>
 
                     {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
                     <View style={{ height: 100 }}></View>
@@ -156,6 +210,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         paddingBottom: 35,
+    },
+    divider: { 
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'lightgray'
     }
 });
 

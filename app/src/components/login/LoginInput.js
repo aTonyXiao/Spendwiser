@@ -1,34 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
 
-export const UsernameInput = props => {
+export const UsernameInput = (props) => {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
         <TextInput
-            style={styles.input}
+            style={isFocused ? styles.focusedInput : styles.unfocusedInput}
             onChangeText={text => props.onChange(text)}
             placeholder={' Email Address'}
             placeholderTextColor={grayRGB}
             textContentType={'emailAddress'}
+            onFocus={() => setIsFocused(true)}
+            onEndEditing={() => setIsFocused(false)}
         />
     );
 }
 
 export const PasswordInput = props => {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
         <TextInput
-            style={styles.input}
+            style={isFocused ? styles.focusedInput : styles.unfocusedInput}
             onChangeText={text => props.onChange(text)}
             placeholder={' Password'}
             placeholderTextColor={grayRGB}
             textContentType={'newPassword'}
             secureTextEntry={true}
+            onFocus={() => setIsFocused(true)}
+            onEndEditing={() => setIsFocused(false)}
         />
     );
 }
 
 const styles = StyleSheet.create({
-    input: {
+    focusedInput: {
+        margin: 15,
+        height: 40,
+        width: '80%',
+        borderColor: 'blue',
+        borderWidth: 1,
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8
+    },
+    unfocusedInput: {
         margin: 15,
         height: 40,
         width: '80%',
@@ -37,7 +56,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8 
+        marginBottom: 8
     },
 });
 const grayRGB = 'rgb(192, 192, 192)';

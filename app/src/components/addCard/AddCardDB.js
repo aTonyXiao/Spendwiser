@@ -67,7 +67,7 @@ export function AddCardDB({existingUserCards, navigation}) {
                         let actualUserId = await userId;
                         storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
                             storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {
-                                navigation.navigate('YourCards');
+                                navigation.navigate('YourCards', { forceLoad: true });
                             });
                         });
                     });

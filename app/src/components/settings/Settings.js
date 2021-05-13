@@ -45,7 +45,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             iconStyle={{margin: 0}}
                             style={{marginRight: -8}}
                     ></Ionicons>
@@ -59,7 +59,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -72,7 +72,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -85,7 +85,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -97,7 +97,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -120,7 +120,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -144,11 +144,11 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
                         storage.clearLocalDB();
                     }}
@@ -158,7 +158,7 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
@@ -172,10 +172,10 @@ let Settings = (props) => {
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
-                            size={32}
+                            size={24}
                             style={{marginRight: -8}}
                     ></Ionicons>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />

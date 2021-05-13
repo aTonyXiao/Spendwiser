@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { Alert, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { 
+    Alert, 
+    ScrollView, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Button,
+    View
+} from 'react-native';
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
@@ -93,19 +101,43 @@ export function CardSelectImage({route, navigation}) {
 
     return (
         <ScrollView style={styles.container}>
-
-            <Text style={styles.title}>Here's a list of possible cards we found: </Text>
-
-            {/* List of cards */}
-            {/* TODO: styling */}
+            {/* No cards found */}
             {
-                filteredCardNames.map((cardName, i) => { 
-                    return (
-                        <TouchableOpacity key={i} onPress={()=> {setChosenCard(cardName)}}>
-                            <Text style={styles.body}>{cardName}</Text>
-                        </TouchableOpacity>
-                    )
-                })
+                filteredCardNames.length == 0 &&
+                <View>
+                    <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
+
+                    <Button
+                        title="Try another image"
+                        onPress={() => {navigation.navigate('ChooseImage')}}
+                    >
+                    </Button>
+
+                    <Button
+                        title="Go back to your cards"
+                        onPress={() => {navigation.navigate('YourCards')}}
+                    >
+                    </Button>
+                </View>
+            }
+
+            {/* Found cards */}
+            {
+                filteredCardNames.length > 0 &&
+                <View>
+                    <Text style={styles.title}>Here's a list of possible cards we found: </Text>
+
+                    {/* List of cards */}
+                    {
+                        filteredCardNames.map((cardName, i) => {
+                            return (
+                                <TouchableOpacity key={i} onPress={() => { setChosenCard(cardName) }}>
+                                    <Text style={styles.body}>{cardName}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
             }
         </ScrollView>
     )
@@ -123,6 +155,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textDecorationLine: 'underline'
     }, 
+    noCards: {
+        marginTop: 100,
+        alignSelf: 'center', 
+        fontSize: 18,
+        marginBottom: 10,
+    },
     body: {
         margin: 5
     }

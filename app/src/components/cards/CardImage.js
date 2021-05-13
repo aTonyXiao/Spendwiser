@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Image, Text, StyleSheet, Animated, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
-import { useIsFocused } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
     innerImage: {
@@ -65,53 +64,24 @@ function generateColor(string) {
  *      
  */
 function CardImage (props) {
-    const cardOpacity = useRef(new Animated.Value(0));
-    var cardLoaded = useRef(false);
-    var isFocused = useIsFocused();
-
-
-    useEffect(() => {
-        return () => {
-            Animated.timing(cardOpacity.current).stop();
-        }
-    }, []);
-
-
-    /**
-     * Starts any animations that are necessary after a card image has been loaded
-     */
-    let onCardLoad = () => {
-        cardLoaded.current = true;
-        if (isFocused) {
-            Animated.timing(cardOpacity.current, {
-                toValue: 1,
-                duration: 1000,
-                useNativeDriver: true,
-            }).start();
-        }
-    }
-
-
-    const AnimatedCachedImage = Animated.createAnimatedComponent(CachedImage);
-
     if (props.default) {
         let generatedColor = generateColor(props.overlay);
         return (
-            <Animated.View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
+            <View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
               <ImageBackground style={styles.innerImage}
                                source={require('../../../assets/cards/blank.png')}
                                imageStyle={props.overlay.length == 0 ? {} : {tintColor: generatedColor, resizeMode: "contain"}}>
                 <Text style={[{color: contrastRGB(generatedColor)}, styles.overlay]}>{props.overlay}</Text>
               </ImageBackground>
-            </Animated.View>
+            </View>
           );
     } else {
         return (
-        <AnimatedCachedImage
-            style={[{justifyContent: 'center', alignItems: 'center'}, props.style, { opacity: cardOpacity.current}]}
-            onLoad={() => onCardLoad()}
+        <CachedImage
+            style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}
             source={{uri: props.source}}
-        />);
+        />
+        );
     }
 }
 
