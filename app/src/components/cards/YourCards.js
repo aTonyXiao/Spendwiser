@@ -107,7 +107,11 @@ function YourCards({ route, navigation }) {
                                 storeInformation: storeInformation,
                                 origin: "yourcards"
                             }
-                            return <Card key={i.toString()} props={props} />
+                            return (
+                                <View style={{borderBottomWidth: 1}}>
+                                    <Card key={i.toString()} props={props} />
+                                </View>
+                            )
                         })}
                     </View>
 
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     scrollView: {
-        width: "95%"
+        width: "90%"
     },
     addButton: {
         borderRadius: 100,

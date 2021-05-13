@@ -69,7 +69,7 @@ export function CardCarousel(
                 </TouchableOpacity>
                 :
                 <View>
-                    <Text style={carouselStyles.recommendedCardText}>Your Recommended Card</Text>
+                    <Text style={carouselStyles.recommendedCardText}>Your Recommended Cards</Text>
                     <Carousel
                         layout={"default"}
                         ref={ref}
@@ -105,7 +105,7 @@ const carouselStyles = StyleSheet.create({
     cardContainer: {
         flex: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     slider: {
         marginTop: 5,
@@ -140,7 +140,6 @@ const carouselStyles = StyleSheet.create({
     },
     recommendedCardText: {
         fontSize: 17, 
-        paddingTop: 5,
         alignSelf: 'center'
     }
 });

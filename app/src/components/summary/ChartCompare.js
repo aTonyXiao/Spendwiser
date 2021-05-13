@@ -31,13 +31,13 @@ export function ChartCompare(
         const Labels = ({  x, y, bandwidth, data }) => {
             return (
                 data[0]["data"].map((valueObj, index) => {
-                    let value = valueObj["value"];
-                    let value2 = data[1]["data"][index]["value"];
+                    let value = valueObj["value"].toFixed(2);
+                    let value2 = data[1]["data"][index]["value"].toFixed(2);
                     return(
                         <SvgText
                         key={ index }
                         style={{flexDirection:'column'}}>
-                            {value !== 0 ? <SvgText
+                            {value != 0 ? <SvgText
                                 x={ value + value.toString().length * 8 >= cutOff ? x(value) - value.toString().length * 8 - 10 : x(value) + 5 }
                                 y={ y(index) + (bandwidth / 2) - 12}
                                 fontSize={ 14 }
@@ -48,7 +48,7 @@ export function ChartCompare(
                             </SvgText>
                             : <SvgText/>
                             }
-                            {value2 !== 0 ?
+                            {value2 != 0 ?
                             <SvgText
                                 x={ value2 + value2.toString().length * 8 >= cutOff ? x(value2) - value2.toString().length * 8 - 10 : x(value2) + 5 }
                                 y={ y(index) + (bandwidth / 2) + 12}
