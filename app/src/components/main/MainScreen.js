@@ -13,12 +13,19 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
+import { MainHelpModal } from './MainHelpModal';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
 const googlePlaceDetailsURL = "https://maps.googleapis.com/maps/api/place/details/json?place_id=";
 const googlePlaceDetailsFields = "&fields=geometry,name,types,formatted_address,place_id&key=";
 
+/**
+ * Display main screen with Google maps, nearby stores, and recommended cards based on selected stores
+ * 
+ * @param {Object} navigation - navigation object used to move between different pages
+ * @module MainScreen
+ */
 export function MainScreen({navigation}) {
     const [region, setRegion] = useState({
         latitude: 38.542530, 
@@ -35,7 +42,8 @@ export function MainScreen({navigation}) {
     const isFocused = useIsFocused();
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
-    const [userLocation, setUserLocation] = useState();
+    const [userLocation, setUserLocation] = useState(null);
+    const [helpModalVisible, setHelpModalVisible] = useState(false);
 
     function setOfflineMode() {
         setStoreArr([{
@@ -161,12 +169,9 @@ export function MainScreen({navigation}) {
         }
     }
 
-    useEffect(() => {
-        user.currentStore = storeArr[curStoreKey];
-    });
-
     // Called to refresh recommended cards if new cards added
     useEffect(() => {
+        user.currentStore = storeArr[curStoreKey];
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
                 if (user.getMainNeedsUpdate()) {
@@ -233,15 +238,21 @@ export function MainScreen({navigation}) {
                 curStore={curStore}
                 userLocation={userLocation}
             />
+            <MainHelpModal
+                helpModalVisible={helpModalVisible}
+                setHelpModalVisible={setHelpModalVisible}
+            />
             <View style={{zIndex: 1}}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
                     <MainButtons
                         userLocation={userLocation}
+                        setUserLocation={setUserLocation}
                         region={region}
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
+                        setHelpModalVisible={setHelpModalVisible}
                     />
 
                     {/* Map (Google) */}
@@ -271,7 +282,10 @@ export function MainScreen({navigation}) {
                         {/* Location text */}
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
                             <View style={mapStyles.locationTextContainer}>
-                                <Text style={{fontWeight: '500', fontSize: 20}}>{isLoading ? "Loading" : curStore}</Text>
+                                <Text
+                                    style={{fontWeight: '500', fontSize: 20, textAlign: 'center', marginBottom: 10}}
+                                    numberOfLines={1}
+                                >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
                                     {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>

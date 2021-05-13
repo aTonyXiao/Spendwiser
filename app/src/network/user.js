@@ -9,7 +9,8 @@ let mainNeedsUpdate = false;
 class userClass { 
 
     currentStore = null;
-    
+    newTransactions = [];
+
     /**
      * Checks if the user is currently in the "users" database. If not  
      * in the database, registers the user. Returns the user id
@@ -143,6 +144,17 @@ class userClass {
             dateAdded: timestamp 
         }, (id) => { 
             callback(id);
+            this.newTransactions.push({
+                cardId: cardId,
+                storeInfo: {
+                    storeName: storeInfo["storeName"],
+                    address: storeInfo["address"],
+                    storeType: storeInfo["storeType"]
+                },
+                amountSpent: amountSpent,
+                dateAdded: timestamp,
+                id: id
+            });
         })
     }
 

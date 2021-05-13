@@ -122,7 +122,8 @@ const modalStyles = StyleSheet.create({
         
     },
     modalBody: {
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 6
     },
     modalText: {
         color: 'black',

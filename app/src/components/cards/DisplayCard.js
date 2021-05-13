@@ -143,9 +143,8 @@ function DisplayCard({route, navigation}) {
                         }
 
                         <View style={styles.sectionTitle}>
-                            <View style={{flex: 1}}/>
-                            <Text style={styles.sectionTitleText}>Transactions</Text>
-                            <View style={{ flex: 1, margin: 5, alignItems: 'flex-end' }}>
+                            <View style={{width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                                <Text style={styles.sectionTitleText}>Transactions</Text>
                                 <TouchableOpacity
                                     onPress={() => setShowTransactionModal(true)}
                                 >
@@ -153,7 +152,6 @@ function DisplayCard({route, navigation}) {
                                         name="add-circle-outline"
                                         color="white"
                                         size={22}
-                                        style={{paddingRight: 5}}
                                     ></Ionicons>
                                 </TouchableOpacity>
                             </View>
@@ -186,8 +184,15 @@ function DisplayCard({route, navigation}) {
                                                     }
                                                 }}
                                             >
-                                                <Text style={styles.transactionTextLeft}>{date}</Text>
-                                                <Text style={styles.transactionTextRight}>{name}: ${dollarAmount}</Text>
+                                                <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
+                                                    <View style={{flexDirection: 'column'}}>
+                                                        <Text style={styles.transactionTextLeft}>{name}</Text>
+                                                        <Text>{date}</Text>
+                                                    </View>
+                                                    <View style={{justifyContent: 'center'}}>
+                                                        <Text>${dollarAmount}</Text>
+                                                    </View>
+                                                </View>
                                             </TouchableOpacity>
                                         )
                                     })
@@ -205,9 +210,8 @@ function DisplayCard({route, navigation}) {
 
 
                         <View style={styles.sectionTitle}>
-                            <View style={{flex: 1}}/>
-                            <Text style={styles.sectionTitleText}>Rewards</Text>
-                            <View style={{ flex: 1, margin: 5, alignItems: 'flex-end' }}>
+                            <View style={{width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                                <Text style={styles.sectionTitleText}>Rewards</Text>
                                 <TouchableOpacity
                                     // onPress={() => setShowTransactionModal(true)}
                                 >
@@ -215,7 +219,6 @@ function DisplayCard({route, navigation}) {
                                         name="add-circle-outline"
                                         color="white"
                                         size={22}
-                                        style={{paddingRight: 5}}
                                     ></Ionicons>
                                 </TouchableOpacity>
                             </View>
@@ -236,8 +239,10 @@ function DisplayCard({route, navigation}) {
 
                                 return (
                                     <View style={styles.sectionText} key={i}>
-                                        <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                        <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                        <View style={{flexDirection: 'row', width: '90%'}}>
+                                            <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                            <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                        </View>
                                     </View>
                                 )
                             })
@@ -274,22 +279,19 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width * .9,  //its same to '20%' of device width
         aspectRatio: 1.5, // <-- this
         resizeMode: "contain",
-        height: 230, // hard coded for now
+        // height: 230, // hard coded for now
         marginBottom: 10,
-        alignSelf: 'center'
+        alignSelf: 'center',
     }, 
     sectionTitle: { 
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
         height: 35,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         backgroundColor: '#28b573',
         alignItems: 'center'
     },
     sectionTitleText: {
-        flex: 1,
-        padding: 10,
         fontSize: 16,
         color: 'white',
         textAlign: 'center'
@@ -307,7 +309,6 @@ const styles = StyleSheet.create({
     },
     sectionText: {
         display: 'flex',
-        width: '100%', 
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -317,11 +318,8 @@ const styles = StyleSheet.create({
     },
     transactionTextLeft: { 
         fontWeight : 'bold',
-        marginLeft: 8
     },
     transactionTextRight: {
-        marginLeft: 5,
-        marginRight: 8,
         flex: 1,
         flexWrap: 'wrap',
         textAlign: 'right'

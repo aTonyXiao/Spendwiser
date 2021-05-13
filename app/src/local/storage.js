@@ -311,8 +311,10 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
 
 
             let returned_filtered_data = false;
-            if (typeof local_data == 'Array') {
+            // NOTE (Nathan W): This was originally typeof. It stopped working???
+            if (local_data instanceof Array) {
                 for (let j = 0; j < local_data.length; j++) {
+                    console.log(item);
                     let item = local_data[j];
                     let conditions_met = false;
                     for (let i = 0; i < conditions.length; i++) {
