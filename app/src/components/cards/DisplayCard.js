@@ -55,20 +55,22 @@ function DisplayCard({route, navigation}) {
 
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
-                setTransactions((transactions) => { 
-                    data["key"] = transactions.length;
-                    if (data) {
-                        if (Array.isArray(data)) {
-                            return [...data, ...transactions];
-                        } else {
-                            return [... new Set([data, ...transactions])];
+                if (data !== null) {
+                    setTransactions((transactions) => { 
+                        data["key"] = transactions.length;
+                        if (data) {
+                            if (Array.isArray(data)) {
+                                return [...data, ...transactions];
+                            } else {
+                                return [... new Set([data, ...transactions])];
+                            }
                         }
-                    }
-                    else {
-                        return transactions;
-                    }
-                })
-                setDisplayTransactions(true);
+                        else {
+                            return transactions;
+                        }
+                    })
+                    setDisplayTransactions(true);
+                }
             })
 
             user.getRewards(userId, cardId, (data) => { 

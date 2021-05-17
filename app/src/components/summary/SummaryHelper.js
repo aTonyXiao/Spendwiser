@@ -9,6 +9,9 @@ class SummaryHelper {
      * @param {object} transaction - transaction to categorize
      */
     matchTransactionToCategory(transaction) {
+        // console.log("arghhh");
+        // console.log(transaction);
+        // console.log(transaction['storeInfo']);
         let catIdx = null;
         if (dining.includes(transaction['storeInfo']['storeType'])) {
             catIdx = 0;

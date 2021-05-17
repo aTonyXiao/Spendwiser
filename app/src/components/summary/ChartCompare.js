@@ -68,13 +68,14 @@ export function ChartCompare(
 
         useEffect(() => {
             for (var i = 0; i < compareTransPeriod1.length; i++) {
-                if (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"]) {
+                if (compareTransPeriod1[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"])) {
                     periodData1[summaryHelper.matchTransactionToCategory(compareTransPeriod1[i])]
                     += parseFloat(compareTransPeriod1[i]['amountSpent']);
                 }
             }
             for (var i = 0; i < compareTransPeriod2.length; i++) {
-                if (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"]) {
+                console.log(compareTransPeriod2);
+                if (compareTransPeriod2[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"])) {
                     periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
                     += parseFloat(compareTransPeriod2[i]['amountSpent']);
                 }
