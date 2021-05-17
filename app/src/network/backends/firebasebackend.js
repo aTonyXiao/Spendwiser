@@ -490,6 +490,13 @@ class FirebaseBackend extends BaseBackend {
                                 }
                                 else if (location.includes('cards')) {
                                     await this.replaceCardDocId(accountName, remote_id);
+
+                                    // Replace the docId variable ON FIREBASE
+                                    await new Promise((resolve, reject) => {
+                                        this.dbFirebaseSet(location + "." + remote_id, {"docId": remote_id}, true, () => {
+                                            resolve();
+                                        });
+                                    })
                                 }
                                 await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
                                 storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
