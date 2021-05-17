@@ -20,14 +20,14 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
     }
 
     // TODO: this should also probably account for whitespace, etc.
-    isInputValid = (input) => { 
+    const isInputValid = (input) => { 
         if (isNaN(parseFloat(input))) { 
             return false;
         }
         return !isNaN(input); 
     }
 
-    editTransaction = () => {
+    const editTransaction = () => {
         const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) {
             user.editTransaction(
@@ -48,23 +48,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
                 setDisplayErrorText(false);
             }, 2000)
         }
-    }
-
-    confirmDeleteTransaction = () => {
-        Alert.alert(
-            'Are you sure you would like to delete this transaction from your profile?',
-            'please select one',
-            [
-              {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
-              {text: 'YES', onPress: () => deleteTransaction()},
-            ]
-          );
-    };
-
-    deleteTransaction = () => { 
-        user.deleteTransaction(userId, docId);
-        setModalVisible(false);
-        setHasConstructed(false);
     }
     return (
         <Modal
@@ -118,13 +101,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
                                 ></Ionicons>
                             </TouchableOpacity>
                         </View>
-                        
-
-                        <TouchableOpacity
-                            onPress={confirmDeleteTransaction}
-                        >
-                            <Text style={modalStyles.deleteText}>Delete this transaction</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -165,11 +141,6 @@ const modalStyles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         paddingHorizontal: 10,
-    },
-    deleteText: { 
-        marginTop: 25,
-        marginBottom: 5,
-        color: 'red'
     },
     errorText: { 
         color: 'red', 
