@@ -475,38 +475,42 @@ class FirebaseBackend extends BaseBackend {
             let full_location = location + '.' + id;
 
             storage.getLocalDB(accountName, full_location, (data) => {
-                if (type == 'add') {
-                    console.log("Firebase add");
-                    this.dbFirebaseAdd(location, data, (remote_id) => {
-                        storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
-                            if (location.includes('cards') && !location.includes("users")) {
-                                await this.replaceCardId(accountName, full_location, id, remote_id);
-                            }  
-                            else if (location.includes('transactions')) {
-                                await this.replaceTransactionDocId(accountName, id, remote_id);
-                            }
-                            else if (location.includes('cards')) {
-                                await this.replaceCardDocId(accountName, remote_id);
-                            }
-                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                if (data == null) {
+                    resolve();
+                } else {
+                    if (type == 'add') {
+                        console.log("Firebase add");
+                        this.dbFirebaseAdd(location, data, (remote_id) => {
+                            storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
+                                if (location.includes('cards') && !location.includes("users")) {
+                                    await this.replaceCardId(accountName, full_location, id, remote_id);
+                                }  
+                                else if (location.includes('transactions')) {
+                                    await this.replaceTransactionDocId(accountName, id, remote_id);
+                                }
+                                else if (location.includes('cards')) {
+                                    await this.replaceCardDocId(accountName, remote_id);
+                                }
+                                await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                                storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                                    resolve();
+                                });
+                            });
+                        });
+                    } else if (type == 'delete') {
+                        console.log("Firebase delete");
+                        this.dbFirebaseDelete(location + "." + id);
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            resolve();
+                        });
+                    } else if (type == 'set') {
+                        console.log("Firebase set");
+                        this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
                             storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                                 resolve();
                             });
                         });
-                    });
-                } else if (type == 'delete') {
-                    console.log("Firebase delete");
-                    this.dbFirebaseDelete(location + "." + id);
-                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                        resolve();
-                    });
-                } else if (type == 'set') {
-                    console.log("Firebase set");
-                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
-                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                            resolve();
-                        });
-                    });
+                    }
                 }
             });
         });
