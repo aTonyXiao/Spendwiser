@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
@@ -382,6 +383,7 @@ class ServerBackend extends BaseBackend {
         return {
             google: new GoogleLogin(),
             facebook: new FacebookLogin(),
+            apple: new AppleLogin()
         };
     }
 

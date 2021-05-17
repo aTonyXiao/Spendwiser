@@ -84,7 +84,21 @@ export const Login = props => {
                     >
                         <Ionicons
                             name="logo-google"
-                            color="dodgerblue"
+                            color="#DB4437"
+                            size={32}
+                        ></Ionicons>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            let loginProviders = appBackend.getLoginProviders();
+                            loginProviders.apple.login();
+                        }}
+                        style={styles.logo}
+                    >
+                        <Ionicons
+                            name="logo-apple"
+                            color="black"
                             size={32}
                         ></Ionicons>
                     </TouchableOpacity>
