@@ -106,6 +106,7 @@ export function SpendingSummary({navigation}) {
             // end time frame is the last day of the month
             let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
+                console.log(data);
                 setCompareTransPeriod1(oldData => [...oldData, data]);
             });
         }
@@ -127,12 +128,12 @@ export function SpendingSummary({navigation}) {
     function processTransaction(transaction) {
         // console.log(transaction);        
         let tmpValues = values;
-        console.log("hi");
-        console.log(tmpValues);
+        // console.log("hi");
+        // console.log(tmpValues);
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
             tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
         setValues(tmpValues);
-        console.log(tmpValues);
+        // console.log(tmpValues);
         setCurCategory((prevState) => {
             return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
         });

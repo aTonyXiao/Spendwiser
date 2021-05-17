@@ -314,9 +314,9 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             // NOTE (Nathan W): This was originally typeof. It stopped working???
             if (local_data instanceof Array) {
                 for (let j = 0; j < local_data.length; j++) {
-                    console.log(item);
+                    // console.log(item);
                     let item = local_data[j];
-                    let conditions_met = false;
+                    let conditions_met = true;
                     for (let i = 0; i < conditions.length; i++) {
                         let condition = conditions[i];
                         let key = condition[0];
@@ -325,13 +325,14 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                         var db_value = item[key];
 
                         if (comp_op[op](db_value, value)) {
-                            conditions_met = true;
+                            conditions_met = true && conditions_met;
                         } else {
                             conditions_met = false;
                         }
                     }
 
                     if (conditions_met) {
+                        console.log(conditions_met);
                         returned_filtered_data = true;
                         callback(item);
                     }
