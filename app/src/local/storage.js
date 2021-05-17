@@ -338,7 +338,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 }
             }
 
-            if (!returned_filtered_data) {
+            if (conditions.length == 0) {
                 callback(local_data);
             }
         });
