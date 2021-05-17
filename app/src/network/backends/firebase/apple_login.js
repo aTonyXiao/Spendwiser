@@ -23,8 +23,6 @@ class AppleLogin extends LoginAuthorizer {
             // generate nonce
             const nonce = generateNonce(10);
             const hashedNonce = sha256(nonce).toString();
-            console.log(nonce);
-            console.log(hashedNonce);
 
             // NOTE: can generate a nonce and state to prevent replay attacks
             // ref: https://docs.expo.io/versions/latest/sdk/apple-authentication/
@@ -38,14 +36,14 @@ class AppleLogin extends LoginAuthorizer {
             
             // Firebase sign in
             // ref: https://firebase.google.com/docs/auth/web/apple#configure-sign-in-with-apple
-            const provider = firebase.auth.OAuthProvider("apple.com");
+            const provider = new firebase.auth.OAuthProvider("apple.com");
             const credential = provider.credential({ idToken: identityToken, rawNonce: nonce });
-            firebase.auth().signInWidthCredential(credential).catch(err => {
+            firebase.auth().signInWithCredential(credential).catch(err => {
                 console.log("Apple login error...");
                 console.log(err);
             });
         } catch (e) {
-            console.log(e.code === "ERR_CANCELED" ? "Apple login canceled" : "Failed to sign in with apple");
+            console.log(e.code === "ERR_CANCELED" ? "Apple login canceled" : "Failed to sign in with apple, error: " + e);
         }
     }
 }
