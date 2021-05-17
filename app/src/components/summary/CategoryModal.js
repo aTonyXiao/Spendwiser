@@ -12,6 +12,7 @@ export function CategoryModal(
         setModalVisible,
         curTimeframe,
         setCurTimeframe,
+        setValues,
         curCategory,
         changeCategory,
         values,
@@ -86,7 +87,10 @@ export function CategoryModal(
                                         key={frame}
                                         textString={frame}
                                         selected={curTimeframe === frame}
-                                        setSelected={setCurTimeframe}
+                                        setSelected={(textString)=> {
+                                            setCurTimeframe(textString),
+                                            setValues(Array(7).fill(0))
+                                        }}
                                         setModalVisible={setModalVisible}
                                         isValid = {true}
                                         amountSpent ={null}

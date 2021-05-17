@@ -203,8 +203,8 @@ class userClass {
      */
     async getTimeFrameTransactions(userId, startTimeframe, endTimeframe, callback) {
         userId = await userId;
-        console.log(startTimeframe);
-        console.log(endTimeframe);
+        // console.log(startTimeframe);
+        // console.log(endTimeframe);
         appBackend.dbGet("users." + userId + ".transactions",
             ["dateAdded", ">", startTimeframe],
             ["dateAdded", "<", endTimeframe],
