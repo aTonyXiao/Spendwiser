@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
+import { isAvailableAsync } from "expo-apple-authentication";
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [isAppleAvail, setAppleAvail] = React.useState(null);
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
     
     async function signIn() {
@@ -35,6 +37,16 @@ export const Login = props => {
             });
         }
     }
+
+    
+
+    useEffect(() => {
+        async function getAppleLoginAvailability () {
+            const isAppleLoginAvailable = await isAvailableAsync();
+            setAppleAvail(isAppleLoginAvailable);
+        }
+        if (isAppleAvail === null) getAppleLoginAvailability();
+    }, []);
 
     return (
         <DismissKeyboard>
@@ -89,7 +101,7 @@ export const Login = props => {
                         ></Ionicons>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    {isAppleAvail === true ? (<TouchableOpacity
                         onPress={() => {
                             let loginProviders = appBackend.getLoginProviders();
                             loginProviders.apple.login();
@@ -101,7 +113,7 @@ export const Login = props => {
                             color="black"
                             size={32}
                         ></Ionicons>
-                    </TouchableOpacity>
+                    </TouchableOpacity>) : null}
                 </View>
 
                 <TouchableOpacity
