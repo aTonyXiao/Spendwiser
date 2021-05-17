@@ -162,6 +162,14 @@ function DisplayCard({route, navigation}) {
                         </View>
                     </View>
                     {
+                        (transactions.length == 0) &&
+                        <View>
+                            <View style={{alignItems: 'center', paddingTop: 10}}>
+                                <Text>You currently have no transactions!</Text>
+                            </View>
+                        </View>
+                    }
+                    {
                         displayTransactions &&
                         <View style={{flex:1}}>
                             {
@@ -221,14 +229,6 @@ function DisplayCard({route, navigation}) {
                                     disableRightSwipe={true}
                                 />
                             }
-                        </View>
-                    }
-                    {
-                        (transactions.length == 0) &&
-                        <View>
-                            <View style={styles.sectionText}>
-                                <Text>You currently have no transactions!</Text>
-                            </View>
                         </View>
                     }
                 </View>
