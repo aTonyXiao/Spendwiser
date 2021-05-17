@@ -67,6 +67,7 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.1.0",
     "react-native-svg-charts": "^5.4.0",
+    "react-native-swipe-list-view": "^3.2.7",
     "react-native-switch-selector": "^2.1.4",
     "react-native-unimodules": "~0.13.3",
     "react-native-vector-icons": "^8.0.0",

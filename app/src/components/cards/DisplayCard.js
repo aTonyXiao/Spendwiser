@@ -16,7 +16,7 @@ import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
-
+import { SwipeListView } from 'react-native-swipe-list-view';
 // TODO: need to add reward modal back in here?
 
 /**
@@ -51,6 +51,7 @@ function DisplayCard({route, navigation}) {
         if (hasConstructed) { 
             return;
         } else {
+            console.log("hello");
             cards.getCardName(cardId).then((name) => { 
                 setCardName(name);
             });
@@ -60,11 +61,12 @@ function DisplayCard({route, navigation}) {
             setShowEditTransactionOption(false);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 setTransactions((transactions) => { 
+                    data["key"] = transactions.length;
                     if (data) {
                         if (Array.isArray(data)) {
-                            return [...transactions, ...data];
+                            return [...data, ...transactions];
                         } else {
-                            return [... new Set([...transactions, data])];
+                            return [... new Set([data, ...transactions])];
                         }
                     }
                     else {
@@ -106,7 +108,8 @@ function DisplayCard({route, navigation}) {
                     transaction={currentTransaction}
                     modalVisible={showEditTransactionModal}
                     setModalVisible={setShowEditTransactionModal}
-                    setHasConstructed={setHasConstructed}
+                    transactions={transactions}
+                    setTransactions={setTransactions}
                 ></EditTransactionModal>
 
                 <TransactionModal
@@ -160,30 +163,14 @@ function DisplayCard({route, navigation}) {
                             displayTransactions &&
                             <View>
                                 {
-                                    transactions.map((transaction, i) => {
-                                        console.log("rendering transact");
-                                        var date = transaction.dateAdded.toString();
-                                        var name = transaction.storeInfo.storeName;
-                                        var dollarAmount = transaction.amountSpent;
-                                        return (
-                                            <TouchableOpacity
-                                                style={
-                                                    (currentTransactionIndex == i) ?
-                                                        styles.sectionTextSelected :
-                                                        styles.sectionText
-                                                }
-                                                key={i}
-                                                onPress={() => {
-                                                    if (i == currentTransactionIndex) {
-                                                        setShowEditTransactionOption(false);
-                                                        setCurrentTransactionIndex(-1);
-                                                    } else {
-                                                        setCurrentTransactionIndex(i);
-                                                        setShowEditTransactionOption(true);
-                                                        setCurrentTransaction(transaction);
-                                                    }
-                                                }}
-                                            >
+                                    <SwipeListView
+                                        data={transactions}
+                                        renderItem={ (data, rowMap) => {
+                                            var date = data.item.dateAdded.toString().substring(0,24);
+                                            var name = data.item.storeInfo.storeName;
+                                            var dollarAmount = data.item.amountSpent;
+                                            return (
+                                            <View style={styles.rowFront}>
                                                 <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
                                                     <View style={{flexDirection: 'column'}}>
                                                         <Text style={styles.transactionTextLeft}>{name}</Text>
@@ -193,9 +180,40 @@ function DisplayCard({route, navigation}) {
                                                         <Text>${dollarAmount}</Text>
                                                     </View>
                                                 </View>
-                                            </TouchableOpacity>
-                                        )
-                                    })
+                                            </View>
+                                        )}}
+                                        renderHiddenItem={ (data, rowMap) => (
+                                            <View style={styles.rowBack}>
+                                                <Text>Left</Text>
+                                                <TouchableOpacity
+                                                    style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                                                    onPress={() => {
+                                                        setCurrentTransaction(data.item),
+                                                        setShowEditTransactionModal(true),
+                                                        rowMap[data.item.key].closeRow();
+                                                        }}
+                                                >
+                                                    <Ionicons
+                                                        name="eyedrop-outline"
+                                                        color="white"
+                                                        size={25}
+                                                    ></Ionicons>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[styles.backRightBtn, styles.backRightBtnRight]}
+                                                    onPress={() => console.log("delete pressed")}
+                                                >
+                                                    <Ionicons
+                                                        name="trash-outline"
+                                                        color="white"
+                                                        size={25}
+                                                    ></Ionicons>
+                                                </TouchableOpacity>
+                                            </View>
+                                        )}
+                                        rightOpenValue={-150}
+                                        disableRightSwipe={true}
+                                    />
                                 }
                             </View>
                         }
@@ -348,7 +366,39 @@ const styles = StyleSheet.create({
     deleteText: {
         fontSize: 16,
         color: 'red',
-    }
+    },
+    rowFront: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1,
+        justifyContent: 'center',
+        height: 50,
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    backRightBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+    },
+    backRightBtnLeft: {
+        backgroundColor: 'blue',
+        right: 75,
+    },
+    backRightBtnRight: {
+        backgroundColor: 'red',
+        right: 0,
+    },
 });
 
 export { DisplayCard };

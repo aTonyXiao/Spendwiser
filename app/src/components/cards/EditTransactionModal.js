@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 
 
-function EditTransactionModal({transaction, modalVisible, setModalVisible, setHasConstructed}) {
+function EditTransactionModal({transaction, modalVisible, setModalVisible, transactions, setTransactions}) {
     const deviceHeight =
         Platform.OS === 'ios'
         ? Dimensions.get('window').height
@@ -38,7 +38,9 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
                 }
             )
             setModalVisible(false);
-            setHasConstructed(false);
+            let newTransactions = [...transactions];
+            newTransactions[newTransactions.length - 1 - transaction.key].amountSpent = transactionInput;
+            setTransactions(newTransactions);
         } else {
             setDisplayErrorText(true);
 
@@ -64,7 +66,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
         setModalVisible(false);
         setHasConstructed(false);
     }
-
     return (
         <Modal
             backdropOpacity={0.3}
@@ -77,11 +78,9 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
                 justifyContent: 'center',
             }}
             onBackdropPress={()=> {setModalVisible(false)}}
-            // onRequestClose={() => {
-            //     Alert.alert("Modal has been closed.");
-            //     setModalVisible(!modalVisible);
-            // }}
+            avoidKeyboard={true}
         >
+            { transaction !== null &&
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
                     <View style={modalStyles.modalHeader}>
@@ -95,18 +94,31 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
                     </View>
 
                     <View style={modalStyles.modalBody}>
+                        <Text style={{fontWeight: 'bold', fontSize: 16}}>{transaction.storeInfo.storeName}</Text>
+                        <Text>{transaction.dateAdded.toString().substring(0,24)}</Text>
+                        <Text>${transaction.amountSpent + "\n"}</Text>
                         <Text>Amount wrong? Input a new amount</Text>
                         {
                             displayErrorText &&
                             <Text style={modalStyles.errorText}>Please input a valid number</Text>
                         }
-                        <TextInput
-                            style={modalStyles.manualTextInput}
-                            onChangeText={(text) => setTransactionInput(text)}
-                            value={transactionInput}
-                            placeholder={"amount in dollars"}
-                            onSubmitEditing={editTransaction}
-                        />
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TextInput
+                                style={modalStyles.manualTextInput}
+                                onChangeText={(text) => setTransactionInput(text)}
+                                value={transactionInput}
+                                placeholder={"amount in dollars"}
+                                keyboardType={"numeric"}
+                            />
+                            <TouchableOpacity onPress={() => { editTransaction(transactionInput), setTransactionInput("") }}>
+                                <Ionicons
+                                    name="checkmark-outline"
+                                    color="black"
+                                    size={26}
+                                ></Ionicons>
+                            </TouchableOpacity>
+                        </View>
+                        
 
                         <TouchableOpacity
                             onPress={confirmDeleteTransaction}
@@ -116,17 +128,16 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, setHa
                     </View>
                 </View>
             </View>
+            }
         </Modal>
     )
 }
 
 const modalStyles = StyleSheet.create({
     modalCenteredView: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
-        marginTop: 22,
-        padding: 22,
+        margin: 22,
         backgroundColor: 'rgba(128, 128, 128, 0.5)'
     },
     modalView: {
@@ -146,13 +157,14 @@ const modalStyles = StyleSheet.create({
     manualTextInput: {
         height: 40,
         borderWidth: 1,
-        margin: 15,
+        marginRight: 15,
         marginTop: 7,
         marginBottom: 7,
-        width: '90%',
+        width: '80%',
         borderColor: '#F0F0F0',
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
+        paddingHorizontal: 10,
     },
     deleteText: { 
         marginTop: 25,
