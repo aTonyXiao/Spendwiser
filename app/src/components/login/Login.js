@@ -5,7 +5,7 @@ import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-n
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
-import { isAvailableAsync, AppleAuthenticationButton, AppleAuthenticationButtonType, AppleAuthenticationButtonStyle } from "expo-apple-authentication";
+import { isAvailableAsync } from "expo-apple-authentication";
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
