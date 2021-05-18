@@ -21,6 +21,7 @@
     "crypto-js": "^3.3.0",
     "domutils": "^2.6.0",
     "expo": "^41.0.0",
+    "expo-apple-authentication": "~3.1.0",
     "expo-camera": "~11.0.2",
     "expo-facebook": "~11.0.5",
     "expo-file-system": "~11.0.2",
@@ -74,8 +75,7 @@
     "react-native-view-shot": "3.1.2",
     "react-native-web": "~0.13.12",
     "sentry-expo": "^3.1.0",
-    "unimodules-permissions-interface": "~6.1.0",
-    "expo-apple-authentication": "~3.1.0"
+    "unimodules-permissions-interface": "~6.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
