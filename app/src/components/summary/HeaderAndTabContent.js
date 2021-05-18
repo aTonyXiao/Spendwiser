@@ -33,7 +33,7 @@ export function HeaderAndTabContent(
     : Dimensions.get('screen').height;
     
     return (
-        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '100%', borderBottomWidth: 0.5}}>
             {/* Month Picker */}
             {pickerVisible && <Modal
                backdropOpacity={0.3}
@@ -70,7 +70,7 @@ export function HeaderAndTabContent(
             </Modal>
             }
             {/* Header */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: 10}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '95%', padding: 10}}>
                 <Ionicons
                     name="ellipsis-horizontal-circle"
                     color={'white'}
@@ -165,11 +165,10 @@ const styles = StyleSheet.create({
     },
     tabContainer: {
         marginTop: 10,
-        width: '100%',
+        width: '90%',
         flexDirection: 'column',
         justifyContent: 'space-between',
         paddingBottom: 10,
-        borderBottomWidth: 0.5,
     },
     tab: {
         flexDirection: 'row',

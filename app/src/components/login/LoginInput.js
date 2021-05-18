@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10
     },
     unfocusedInput: {
         margin: 15,
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10
     },
 });
 const grayRGB = 'rgb(192, 192, 192)';
