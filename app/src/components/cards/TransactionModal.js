@@ -45,7 +45,6 @@ function TransactionModal({
                     setHasConstructed(false);
                 }
             );
-    
             setShowTransactionModal(false);
         } else {
             setDisplayErrorText(true);
