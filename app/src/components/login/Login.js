@@ -5,7 +5,7 @@ import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-n
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
-import { isAvailableAsync } from "expo-apple-authentication";
+import { isAvailableAsync, AppleAuthenticationButton, AppleAuthenticationButtonType, AppleAuthenticationButtonStyle } from "expo-apple-authentication";
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
@@ -101,17 +101,18 @@ export const Login = props => {
                         ></Ionicons>
                     </TouchableOpacity>
 
-                    {isAppleAvail === true ? (<TouchableOpacity
+                    {isAppleAvail === true ? (
+                    <TouchableOpacity
                         onPress={() => {
                             let loginProviders = appBackend.getLoginProviders();
                             loginProviders.apple.login();
                         }}
-                        style={styles.logo}
+                        style={styles.logoApple}
                     >
                         <Ionicons
                             name="logo-apple"
-                            color="black"
-                            size={32}
+                            color="white"
+                            size={16}
                         ></Ionicons>
                     </TouchableOpacity>) : null}
                 </View>
@@ -151,7 +152,20 @@ const styles = StyleSheet.create({
     },
     logo: {
         margin: 15,
-        marginTop: 0
+        marginTop: 0,
+    },
+    logoApple: {
+        // normal stuff
+        margin: 15,
+        marginTop: 0,
+        // button design stuff
+        width: 32,
+        height: 32,
+        paddingBottom: 1,
+        borderRadius: 100,
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor: "black"
     },
     loginWrapper : {
         margin: 15,
