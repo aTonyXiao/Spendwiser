@@ -72,7 +72,6 @@ export function MainScreen({navigation}) {
     // Called when changing store to reload recommended cards
     function reloadRecCard(value, key, storeType, geometry) {
         // console.log("hihi " + storeType);
-        setRecCards(null);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey) {
             setCurStore(value);
@@ -176,7 +175,6 @@ export function MainScreen({navigation}) {
             const unsubscribe = navigation.addListener('focus', () => {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
-                    setRecCards(null);
                     // console.log("reset rec cards");
                     reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
@@ -196,7 +194,7 @@ export function MainScreen({navigation}) {
             }
 
             try {
-                let location = await Location.getCurrentPositionAsync({});
+                let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
                 setUserLocation(location.coords);
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode

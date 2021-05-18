@@ -10,6 +10,8 @@ class userClass {
 
     currentStore = null;
     newTransactions = [];
+    editedTransactions = [];
+    newOrDeletedCards = false;
 
     /**
      * Checks if the user is currently in the "users" database. If not  
@@ -99,6 +101,7 @@ class userClass {
                 }
             }
             mainNeedsUpdate = true;
+            this.newOrDeletedCards = true;
         })
     }
 
@@ -119,6 +122,7 @@ class userClass {
         }, (id) => { 
             appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
                 mainNeedsUpdate = true;
+                this.newOrDeletedCards = true;
             });
         })
     }
@@ -153,7 +157,7 @@ class userClass {
                 },
                 amountSpent: amountSpent,
                 dateAdded: timestamp,
-                id: id
+                docId: id
             });
         })
     }
@@ -203,8 +207,8 @@ class userClass {
      */
     async getTimeFrameTransactions(userId, startTimeframe, endTimeframe, callback) {
         userId = await userId;
-        console.log(startTimeframe);
-        console.log(endTimeframe);
+        // console.log(startTimeframe);
+        // console.log(endTimeframe);
         appBackend.dbGet("users." + userId + ".transactions",
             ["dateAdded", ">", startTimeframe],
             ["dateAdded", "<", endTimeframe],
@@ -240,7 +244,11 @@ class userClass {
     async editTransaction(userId, docId, data) { 
         userId = await userId;
         appBackend.dbSet("users." + userId + ".transactions." + docId, data, true, () => {
-            // TODO: Introduce callback?
+            // Update editedTransactions array to sync spendingsummary if exist in navigation stack
+            this.editedTransactions.push({
+                docId: docId,
+                amountSpent: data.amountSpent,
+            });
         });
     }
 
@@ -252,6 +260,11 @@ class userClass {
     async deleteTransaction(userId, docId) {
         userId = await userId;
         appBackend.dbDelete("users." + userId + ".transactions." + docId);
+        // Update editedTransactions array to sync spendingsummary if exist in navigation stack
+        this.editedTransactions.push({
+            docId: docId,
+            amountSpent: null,
+        });
     }
 
     /**

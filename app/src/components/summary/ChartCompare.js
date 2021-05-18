@@ -74,7 +74,6 @@ export function ChartCompare(
                 }
             }
             for (var i = 0; i < compareTransPeriod2.length; i++) {
-                console.log(compareTransPeriod2);
                 if (compareTransPeriod2[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"])) {
                     periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
                     += parseFloat(compareTransPeriod2[i]['amountSpent']);

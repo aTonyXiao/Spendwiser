@@ -58,11 +58,12 @@ export function PieChartSummary({
               position: 'absolute',
               left: deviceWidth / 2 - labelWidth / 2,
               textAlign: 'center',
-            }}>
+            }}
+            onPress={() => {setModalVisible(3)}}
+          >
             {`${label} \n $${value.toFixed(2)} \n`}
             <Text 
                 style={{color: 'blue'}}
-                onPress={() => {setModalVisible(3)}}
             >Show Transactions</Text>
             <Ionicons
                 name="chevron-forward"

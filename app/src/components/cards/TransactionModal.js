@@ -29,16 +29,16 @@ function TransactionModal({
     }
 
     addTransaction = () => {
-        if (!storeInformation) {
-            Alert.alert("Store location not found!",
-                        "Please wait until we can find your location before you add a transaction",
-                        [
-                            {text: "Ok"}
-                        ],
-                        { cancelable: false });
-        } else {
-            const inputIsValid = isInputValid(transactionInput);
-            if (inputIsValid) { 
+        const inputIsValid = isInputValid(transactionInput);
+        if (inputIsValid) { 
+            if (!storeInformation) {
+                Alert.alert("Store location not found!",
+                            "Please wait until we can find your location before you add a transaction",
+                            [
+                                {text: "Ok"}
+                            ],
+                            { cancelable: false });
+            } else {
                 user.saveTransaction(
                     userId, 
                     cardId, 
@@ -53,9 +53,9 @@ function TransactionModal({
                         setHasConstructed(false);
                     }
                 );
-        
-                setShowTransactionModal(false);
-            } else {
+            }
+            setShowTransactionModal(false);
+        } else {
                 setDisplayErrorText(true);
 
                 setTimeout(function () {
@@ -108,7 +108,7 @@ function TransactionModal({
                                 // onSubmitEditing={addTransaction}
                                 keyboardType={"numeric"}
                             />
-                            <TouchableOpacity onPress={() => { addTransaction(transactionInput) }}>
+                            <TouchableOpacity onPress={() => { addTransaction(transactionInput), setTransactionInput("") }}>
                                 <Ionicons
                                     name="checkmark-outline"
                                     color="black"

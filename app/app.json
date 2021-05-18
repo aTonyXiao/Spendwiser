@@ -20,6 +20,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.spendwiser",
       "buildNumber": "1.0.12",
+      "usesAppleSignIn": true,
       "config": {
         "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
       }

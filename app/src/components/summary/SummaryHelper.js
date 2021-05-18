@@ -81,8 +81,31 @@ class SummaryHelper {
                 startTimeFrame = new Date(year, month - 1);
                 break;
         }
-        console.log(startTimeFrame + " " + endTimeFrame);
+        // console.log(startTimeFrame + " " + endTimeFrame);
         return [startTimeFrame, endTimeFrame];
+    }
+
+    /**
+     * Returns new transactions array with new transaction added based on its date
+     * @param {array} transactions - current transactions array
+     * @param {object} newTrans - new transaction to be added
+     */
+    addSortedNewTransaction(transactions, newTrans) {
+        // console.log(newTrans);
+        let tmpTrans = [...transactions];
+        if (tmpTrans.length === 0) {
+            return [newTrans];
+        } else {
+            let idx = tmpTrans.findIndex((element) => element.dateAdded < newTrans.dateAdded)
+            // console.log("index la");
+            // console.log(idx);
+            if (idx === -1) {
+                return [...tmpTrans, newTrans];
+            } else {
+                tmpTrans.splice(idx, 0, newTrans);
+                return tmpTrans;
+            }
+        }
     }
 }
 

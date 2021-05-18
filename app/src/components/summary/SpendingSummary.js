@@ -13,7 +13,7 @@ import { HeaderAndTabContent } from './HeaderAndTabContent';
 import { ChartCompare } from './ChartCompare';
 import { ChartBudget } from './ChartBudget';
 import * as storage from '../../local/storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { StackActions, useFocusEffect } from '@react-navigation/native';
 
 const modalType = {
     DISABLED: 0,
@@ -41,7 +41,7 @@ export function SpendingSummary({navigation}) {
     });
     const [curTimeframe, setCurTimeframe] = useState('This month');
     const [transactions, setTransactions] = useState([]);
-    const [values, setValues] = useState([]);
+    const [values, setValues] = useState(Array(7).fill(0));
     const [listViewEnabled, setListViewEnabled] = useState(false);
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
@@ -113,7 +113,6 @@ export function SpendingSummary({navigation}) {
         if (whichPeriod === 2 || whichPeriod === 0) {
             let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
-                console.log(data);
                 setCompareTransPeriod2(oldData => [...oldData, data]);
             });
         }
@@ -125,52 +124,127 @@ export function SpendingSummary({navigation}) {
         storage.storeCategoriesLimit(newCategoriesLimit);
     }
 
-     // Check if any new transactions added when screen is focused
-     useFocusEffect(
-        useCallback(() => {
-            if (compareTimeframe.length !== 0) {
-                let check = new Date();
-                while (user.newTransactions.length > 0) {
-                    let trans = user.newTransactions.pop();
-                    // If new transaction not in transaction array list then add it in
-                    if (!(transactions.some(e => e.id === trans.id))) {
-                        setTransactions(oldData => [...oldData, trans]);
-                    }
-                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
-                        if (!(compareTransPeriod1.some(e => e.id === trans.id))) {
-                            setCompareTransPeriod1(oldData => [...oldData, trans]);
-                        }
-                    }
-                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
-                        if (!(compareTransPeriod2.some(e => e.id === trans.id))) {
-                            setCompareTransPeriod2(oldData => [...oldData, trans]);
-                        }
-                    }
-                }
-            } else {
-                user.newTransactions = [];
-            }
-        })
-    )
-
     // process each transaction retrieved from db after timeframe change
-    useEffect(() => {
-        if (transactions.length == 0) {
-            return;
-        }
+    function processTransaction(transaction) {
+        // console.log(transaction);        
         let tmpValues = values;
-        let transaction = transactions[transactions.length - 1];
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
             tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
         setValues(tmpValues);
         setCurCategory((prevState) => {
             return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
         });
-    }, [transactions]);
+    };
+
+     // Check if any new transactions added when screen is focused
+     useFocusEffect(
+        useCallback(() => {
+            if (compareTimeframe.length !== 0) {
+                if (user.newOrDeletedCards) {
+                    user.newTransactions = [];
+                    user.editedTransactions = [];
+                    user.newOrDeletedCards = false;
+                    navigation.dispatch(
+                        StackActions.replace('SpendingSummary')
+                    )
+                }
+                if (user.newTransactions.length > 0 || user.editedTransactions.length > 0)
+                    setMode(modeType.SUMMARY);
+                let check = new Date();
+                while (user.newTransactions.length > 0) {
+                    let trans = user.newTransactions.pop();
+                    // If new transaction not in transaction array list then add it in
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (!(transactions.some(e => e.docId === trans.docId))) {
+                            setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, trans));
+                            processTransaction(trans);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (!(compareTransPeriod1.some(e => e.docId === trans.docId))) {
+                            setCompareTransPeriod1(oldData => [...oldData, trans]);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (!(compareTransPeriod2.some(e => e.docId === trans.docId))) {
+                            setCompareTransPeriod2(oldData => [...oldData, trans]);
+                        }
+                    }
+                }
+                while (user.editedTransactions.length > 0) {
+                    let trans = user.editedTransactions.pop();
+                    // If edited/ deleted transaction not synced
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (transactions.some(e => e.docId === trans.docId)) {
+                            console.log(trans);
+                            let tmpTransactions = [...transactions];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            let prevAmount = editedTrans.amountSpent;
+                            // console.log(idx);
+                            // console.log(tmpTransactions);
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            let tmpValues = values;
+                            if (curCard === null || transaction["cardId"] === curCard["cardId"]) {
+                                if (trans.amountSpent !== null)
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] += 
+                                        parseFloat(editedTrans['amountSpent'])- parseFloat(prevAmount);
+                                else
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] -= parseFloat(prevAmount);
+                                setValues(tmpValues);
+                                if (curCategory.label === "All categories")
+                                    setCurCategory((prevState) => {
+                                        return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+                                    });
+                                }
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (compareTransPeriod1.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod1];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod1(tmpTransactions);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (compareTransPeriod2.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod2];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod2(tmpTransactions);
+                        }
+                    }
+                }
+            } else {
+                user.newTransactions = [];
+                user.editedTransactions = [];
+            }
+        })
+    )
 
     // Get transactions from db when timeframe change
     useEffect(() => {
-        setValues(Array(7).fill(0));
         setTransactions([]);
         setCurCategory({
             label: 'All categories',
@@ -178,7 +252,10 @@ export function SpendingSummary({navigation}) {
         });
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
-            setTransactions(oldData => [...oldData, data]);
+            if (data !== null) {
+                setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, data));
+                processTransaction(data);
+            }
         });
     }, [curTimeframe]);
 
@@ -204,6 +281,7 @@ export function SpendingSummary({navigation}) {
                 setModalVisible = {setModalVisible}
                 curTimeframe = {curTimeframe}
                 setCurTimeframe = {setCurTimeframe}
+                setValues = {setValues}
                 curCategory = {curCategory}
                 changeCategory = {changeCategory}
                 values = {values}

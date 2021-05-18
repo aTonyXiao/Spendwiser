@@ -17,6 +17,7 @@ import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { summaryHelper } from '../summary/SummaryHelper';
 // TODO: need to add reward modal back in here?
 
 /**
@@ -44,6 +45,7 @@ function DisplayCard({route, navigation}) {
     const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [currentTransaction, setCurrentTransaction] = useState(null);
     const [showEditTransactionModal, setShowEditTransactionModal] = useState(false);
+    const [showTransactionsList, setShowTransactionsList] = useState(origin !== "main" ? true : false);
 
     const constructor = () => { 
         if (hasConstructed) { 
@@ -56,13 +58,15 @@ function DisplayCard({route, navigation}) {
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 if (data !== null) {
+                    console.log(data);
                     setTransactions((transactions) => { 
-                        data["key"] = transactions.length;
+                        data["key"] = transactions.length.toString();
                         if (data) {
                             if (Array.isArray(data)) {
                                 return [...data, ...transactions];
                             } else {
-                                return [... new Set([data, ...transactions])];
+                                return summaryHelper.addSortedNewTransaction(transactions, data);
+                                // return [... new Set([data, ...transactions])];
                             }
                         }
                         else {
@@ -105,7 +109,7 @@ function DisplayCard({route, navigation}) {
             'Are you sure you would like to delete this transaction?',
             trans.storeInfo.storeName + '\n' + trans.dateAdded.toString().substring(0,24) + '\n$' + trans.amountSpent,
             [
-              {text: 'YES', onPress: () => deleteTransaction(trans.docId, trans.key)},
+              {text: 'YES', onPress: () => deleteTransaction(trans.docId, parseInt(trans.key))},
               {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
             ]
           );
@@ -137,7 +141,7 @@ function DisplayCard({route, navigation}) {
                     cardId={cardId}
                 ></TransactionModal>
 
-                <View style={{ justifyContent: 'flex-start', flex: 1.4 }}>
+                <View style={{ justifyContent: 'flex-start'}}>
                     <Text style={styles.cardTitle}>{cardName}</Text>
 
                     <CardImage
@@ -148,33 +152,45 @@ function DisplayCard({route, navigation}) {
                     />
                 </View>
 
-                <View style={{flex: 1}}>
+                <View style={{flex: 2}}>
                     <View style={styles.sectionTitle}>
                         <View style={{width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <Text style={styles.sectionTitleText}>Transactions</Text>
-                            <TouchableOpacity
+                            <View style={{flexDirection: 'row'}}>
+                                <Text
+                                    style={showTransactionsList ? styles.sectionTitleText : styles.sectionTitleTextUnselected}
+                                    onPress={() => {if(!showTransactionsList) setShowTransactionsList(true)}}
+                                >
+                                    Transactions
+                                </Text>
+                                <View style={{borderRightWidth: 1, marginHorizontal: 10, borderColor: 'white'}}/>
+                                <Text
+                                    style={!showTransactionsList ? styles.sectionTitleText : styles.sectionTitleTextUnselected}
+                                    onPress={() => {if(showTransactionsList) setShowTransactionsList(false)}}
+                                >
+                                    Rewards
+                                </Text>
+                            </View>
+                           <TouchableOpacity
                                 onPress={() => setShowTransactionModal(true)}
+                                style={{marginRight: -5}}
                             >
                                 <Ionicons
                                     name="add-circle-outline"
                                     color="white"
-                                    size={25}
+                                    size={30}
                                 ></Ionicons>
                             </TouchableOpacity>
                         </View>
                     </View>
                     {
-                        (transactions.length == 0) &&
-                        <View>
-                            <View style={{alignItems: 'center', paddingTop: 10}}>
-                                <Text>You currently have no transactions!</Text>
-                            </View>
-                        </View>
-                    }
-                    {
-                        displayTransactions &&
+                        showTransactionsList ?
                         <View style={{flex:1}}>
                             {
+                                ((transactions.length == 0) || !displayTransactions) ?
+                                <View style={{alignItems: 'center', paddingTop: 10}}>
+                                    <Text>You currently have no transactions!</Text>
+                                </View>
+                                :
                                 <SwipeListView
                                     data={transactions}
                                     renderItem={ (data, rowMap) => {
@@ -232,53 +248,38 @@ function DisplayCard({route, navigation}) {
                                 />
                             }
                         </View>
-                    }
-                </View>
-                    
-                <View style={{flex: 1, borderBottomWidth: 0.3}}>
-                    <View style={styles.sectionTitle}>
-                        <View style={{width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <Text style={styles.sectionTitleText}>Rewards</Text>
-                            <TouchableOpacity
-                                // onPress={() => setShowTransactionModal(true)}
-                            >
-                                {/* <Ionicons
-                                    name="add-circle-outline"
-                                    color="white"
-                                    size={25}
-                                ></Ionicons> */}
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <ScrollView>
-                    {
-                        displayRewards &&
-                        rewards.map((reward, i) => {
-                            var category;
-                            var amountCents;
-                            // temporary way to tell if card is a manual addition
-                            if (rewards[0][0] == '0') {
-                                category = reward[1].type;
-                                amountCents = reward[1].value;
-                            } else {
-                                category = reward[0];
-                                amountCents = reward[1];
-                            }
+                        :
+                        <ScrollView>
+                        {
+                            displayRewards &&
+                            rewards.map((reward, i) => {
+                                var category;
+                                var amountCents;
+                                // temporary way to tell if card is a manual addition
+                                if (rewards[0][0] == '0') {
+                                    category = reward[1].type;
+                                    amountCents = reward[1].value;
+                                } else {
+                                    category = reward[0];
+                                    amountCents = reward[1];
+                                }
 
-                            return (
-                                <View style={styles.sectionText} key={i}>
-                                    <View style={{flexDirection: 'row', width: '90%'}}>
-                                        <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                        <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                return (
+                                    <View style={styles.sectionText} key={i}>
+                                        <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
+                                            <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                            <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                        </View>
                                     </View>
-                                </View>
-                            )
-                        })
+                                )
+                            })
+                        }
+                        </ScrollView>
                     }
-                    </ScrollView>
-                </View>
                     
-                <View style={{flex: 0.2}}>
+                </View>
+
+                <View>
                     {
                         (origin !== "main") &&
                         <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     sectionTitle: { 
         display: 'flex',
         flexDirection: 'row',
-        height: 35,
+        height: 45,
         justifyContent: 'center',
         backgroundColor: '#28b573',
         alignItems: 'center'
@@ -321,6 +322,12 @@ const styles = StyleSheet.create({
     sectionTitleText: {
         fontSize: 16,
         color: 'white',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    sectionTitleTextUnselected: {
+        fontSize: 16,
+        color: 'lightgray',
         textAlign: 'center'
     },
     sectionTextSelected: {

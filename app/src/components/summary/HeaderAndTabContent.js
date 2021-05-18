@@ -33,7 +33,7 @@ export function HeaderAndTabContent(
     : Dimensions.get('screen').height;
     
     return (
-        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+        <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '100%', borderBottomWidth: 0.5}}>
             {/* Month Picker */}
             {pickerVisible && <Modal
                backdropOpacity={0.3}
@@ -70,7 +70,7 @@ export function HeaderAndTabContent(
             </Modal>
             }
             {/* Header */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: 10}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '95%', padding: 10}}>
                 <Ionicons
                     name="ellipsis-horizontal-circle"
                     color={'white'}
@@ -98,62 +98,60 @@ export function HeaderAndTabContent(
             </View>
             {/* Tabs */}
             <View style={styles.tabContainer}>
-                {/* Tab Headers */}
+                {/* Tabs */}
                 <View style={styles.tab}>
-                    <View style={{flex: 1, alignItems: 'center'}}>
+                    <TouchableOpacity
+                        style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}
+                        onPress={() => {mode === modeType.SUMMARY ?
+                                    setModalVisible(modalType.TIME) : (setWhichPeriod(1), setPickerVisible(true))}}
+                    >
                         <Text>{mode !== modeType.COMPARE ? "Time Period" : "1st period"}</Text>
-                    </View>
-                    <View style={{flex: 1, alignItems: 'center'}}><Text>Mode</Text></View>
-                    <View style={{flex: 1, alignItems: 'center'}}>
+                        <View style={{flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
+                            <Text style={{color: 'blue'}}>
+                                {mode === modeType.SUMMARY ? curTimeframe
+                                : `${months[compareTimeframe[0].getMonth()]} ${compareTimeframe[0].getFullYear()}`}
+                            </Text>
+                            <Ionicons
+                                name="chevron-down"
+                                color={mode === modeType.SUMMARY ? "blue" : "darkgrey"}
+                                size={15}
+                            ></Ionicons>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}
+                        onPress={() => {setModalVisible(modalType.MODE)}}
+                    >
+                        <Text>Mode</Text>
+                        <View style={{flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
+                            <Text style={{color: 'blue'}}>{mode}</Text>
+                            <Ionicons
+                                name="chevron-down"
+                                color="blue"
+                                size={15}
+                            ></Ionicons>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{flex: 1, alignItems: 'center', flexDirection: 'column'}}
+                        onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.CATEGORY)
+                                : mode === modeType.BUDGET ? setModalVisible(modalType.LIMITS)
+                                : (setWhichPeriod(2), setPickerVisible(true))}}
+                    >
                         <Text>{mode !== modeType.COMPARE ? "Category" : "2nd period"}</Text>
-                    </View>
-                </View>
-                {/* Tab Content */}
-                <View style={styles.tab}>
-                    <View style={{flex: 1, flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
-                        <Text 
-                            style={{color: 'blue'}}
-                            onPress={() => {mode === modeType.SUMMARY ?
-                                setModalVisible(modalType.TIME) : (setWhichPeriod(1), setPickerVisible(true))}
-                            }>
-                            {mode === modeType.SUMMARY ? curTimeframe
-                            : `${months[compareTimeframe[0].getMonth()]} ${compareTimeframe[0].getFullYear()}`}
-                        </Text>
-                        <Ionicons
-                            name="chevron-down"
-                            color={mode === modeType.SUMMARY ? "blue" : "darkgrey"}
-                            size={15}
-                        ></Ionicons>
-                    </View>
-                    <View style={{flex: 1, flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
-
-                        <Text 
-                            style={{color: 'blue'}}
-                            onPress={() => {setModalVisible(modalType.MODE)}}
-                        >{mode}</Text>
-                        <Ionicons
-                            name="chevron-down"
-                            color="blue"
-                            size={15}
-                        ></Ionicons>
-                    </View>
-                    <View style={{flex: 1,flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
-                        <Text 
-                            style={{color: "blue"}}
-                            onPress={() => {mode === modeType.SUMMARY ? setModalVisible(modalType.CATEGORY)
-                            : mode === modeType.BUDGET ? setModalVisible(modalType.LIMITS)
-                            : (setWhichPeriod(2), setPickerVisible(true))}
-                            }>
-                            {mode === modeType.SUMMARY ? curCategory.label
-                            : mode === modeType.BUDGET ? "Limits"
-                            : `${months[compareTimeframe[1].getMonth()]} ${compareTimeframe[1].getFullYear()}`}
-                        </Text>
-                        <Ionicons
-                            name="chevron-down"
-                            color={"blue"}
-                            size={15}
-                        ></Ionicons>
-                    </View>
+                        <View style={{flexDirection:'row', alignItems: 'flex-end', justifyContent: 'center'}}>
+                            <Text style={{color: "blue"}}>
+                                {mode === modeType.SUMMARY ? curCategory.label
+                                : mode === modeType.BUDGET ? "Limits"
+                                : `${months[compareTimeframe[1].getMonth()]} ${compareTimeframe[1].getFullYear()}`}
+                            </Text>
+                            <Ionicons
+                                name="chevron-down"
+                                color={"blue"}
+                                size={15}
+                            ></Ionicons>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>     
         </View>
@@ -167,11 +165,10 @@ const styles = StyleSheet.create({
     },
     tabContainer: {
         marginTop: 10,
-        width: '100%',
+        width: '90%',
         flexDirection: 'column',
         justifyContent: 'space-between',
         paddingBottom: 10,
-        borderBottomWidth: 0.5,
     },
     tab: {
         flexDirection: 'row',
