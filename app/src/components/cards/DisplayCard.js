@@ -266,7 +266,7 @@ function DisplayCard({route, navigation}) {
 
                                 return (
                                     <View style={styles.sectionText} key={i}>
-                                        <View style={{flexDirection: 'row', width: '90%'}}>
+                                        <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
                                             <Text style={{ fontWeight: 'bold' }}>{category}</Text>
                                             <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
                                         </View>
