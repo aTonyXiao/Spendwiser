@@ -128,12 +128,9 @@ export function SpendingSummary({navigation}) {
     function processTransaction(transaction) {
         // console.log(transaction);        
         let tmpValues = values;
-        // console.log("hi");
-        // console.log(tmpValues);
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
             tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
         setValues(tmpValues);
-        // console.log(tmpValues);
         setCurCategory((prevState) => {
             return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
         });
