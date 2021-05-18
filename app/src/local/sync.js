@@ -1,5 +1,5 @@
 import {appBackend} from "../network/backend"
-import {storage} from "./storage"
+import * as storage from './storage'
 
 async function replaceCardId(accountName, full_location, local_id, remote_id) {
     return new Promise((resolve, reject) => {
@@ -55,40 +55,38 @@ async function syncDocument(accountName, document) {
                 resolve();
             } else {
                 if (type == 'add') {
-                    console.log("Firebase add");
-                    this.dbFirebaseAdd(location, data, (remote_id) => {
+                    appBackend.remoteDBAdd(location, data, (remote_id) => {
                         storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
                             if (location.includes('cards') && !location.includes("users")) {
-                                await this.replaceCardId(accountName, full_location, id, remote_id);
+                                await replaceCardId(accountName, full_location, id, remote_id);
                             }  
                             else if (location.includes('transactions')) {
-                                await this.replaceTransactionDocId(accountName, id, remote_id);
+                                await replaceTransactionDocId(accountName, id, remote_id);
                             }
                             else if (location.includes('cards')) {
-                                await this.replaceCardDocId(accountName, remote_id);
+                                await replaceCardDocId(accountName, remote_id);
 
                                 // Replace the docId variable ON FIREBASE
                                 await new Promise((resolve, reject) => {
-                                    this.dbFirebaseSet(location + "." + remote_id, {"docId": remote_id}, true, () => {
+                                    appBackend.remoteDBSet(location + "." + remote_id, {"docId": remote_id}, true, () => {
                                         resolve();
                                     });
                                 })
                             }
-                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                            await replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
                             storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                                 resolve();
                             });
                         });
                     });
                 } else if (type == 'delete') {
-                    console.log("Firebase delete");
-                    this.dbFirebaseDelete(location + "." + id);
-                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                        resolve();
+                    appBackend.remoteDBDelete(location + "." + id, () => {
+                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            resolve();
+                        });
                     });
                 } else if (type == 'set') {
-                    console.log("Firebase set");
-                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
+                    appBackend.remoteDBSet(location + "." + id, data, document['merge'], () => {
                         storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                             resolve();
                         });
@@ -99,7 +97,7 @@ async function syncDocument(accountName, document) {
     });
 }
 
-export async function syncLocalDatabase() {
+async function syncLocalDatabase() {
     appBackend.getUserID(async (accountName) => {
         storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
             console.log("Got unsynced documents: ");
@@ -109,4 +107,8 @@ export async function syncLocalDatabase() {
             }
         });
     });
+}
+
+export {
+    syncLocalDatabase,
 }
