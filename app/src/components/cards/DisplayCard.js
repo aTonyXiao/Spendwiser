@@ -170,18 +170,16 @@ function DisplayCard({route, navigation}) {
                                     Rewards
                                 </Text>
                             </View>
-                            {
-                                showTransactionsList && <TouchableOpacity
-                                    onPress={() => setShowTransactionModal(true)}
-                                    style={{marginRight: -5}}
-                                >
-                                    <Ionicons
-                                        name="add-circle-outline"
-                                        color="white"
-                                        size={30}
-                                    ></Ionicons>
-                                </TouchableOpacity>
-                            }
+                           <TouchableOpacity
+                                onPress={() => setShowTransactionModal(true)}
+                                style={{marginRight: -5}}
+                            >
+                                <Ionicons
+                                    name="add-circle-outline"
+                                    color="white"
+                                    size={30}
+                                ></Ionicons>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     {
