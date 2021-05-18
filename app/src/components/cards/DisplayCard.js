@@ -44,7 +44,7 @@ function DisplayCard({route, navigation}) {
     const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [currentTransaction, setCurrentTransaction] = useState(null);
     const [showEditTransactionModal, setShowEditTransactionModal] = useState(false);
-    const [showTransactionsList, setShowTransactionsList] = useState(true);
+    const [showTransactionsList, setShowTransactionsList] = useState(origin !== "main" ? true : false);
 
     const constructor = () => { 
         if (hasConstructed) { 
@@ -185,7 +185,11 @@ function DisplayCard({route, navigation}) {
                         showTransactionsList ?
                         <View style={{flex:1}}>
                             {
-                                displayTransactions &&
+                                ((transactions.length == 0) || !displayTransactions) ?
+                                <View style={{alignItems: 'center', paddingTop: 10}}>
+                                    <Text>You currently have no transactions!</Text>
+                                </View>
+                                :
                                 <SwipeListView
                                     data={transactions}
                                     renderItem={ (data, rowMap) => {
