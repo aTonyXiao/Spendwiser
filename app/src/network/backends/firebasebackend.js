@@ -66,6 +66,7 @@ class FirebaseBackend extends BaseBackend {
             appId: process.env.REACT_NATIVE_APP_ID,
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
+        console.log(firebaseConfig);
 
         // check if there is a Firebase 'App' already initialized
         if (firebase.apps.length == 0) {
@@ -90,7 +91,8 @@ class FirebaseBackend extends BaseBackend {
 
         // Sync the local database every minute
         setInterval(() => {
-            syncLocalDatabase();
+            //await syncRemoteDatabase();
+            //await syncLocalDatabase();
         }, 60000);
     }
 

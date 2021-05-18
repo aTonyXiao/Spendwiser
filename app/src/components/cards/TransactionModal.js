@@ -60,8 +60,7 @@ function TransactionModal({
 
                 setTimeout(function () {
                     setDisplayErrorText(false);
-                }, 2500)
-            }
+            }, 2500)
         }
     }
 
