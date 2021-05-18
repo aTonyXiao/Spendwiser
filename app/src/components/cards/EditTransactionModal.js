@@ -39,7 +39,7 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
             )
             setModalVisible(false);
             let newTransactions = [...transactions];
-            newTransactions[newTransactions.length - 1 - transaction.key].amountSpent = transactionInput;
+            newTransactions[newTransactions.length - 1 - parseInt(transaction.key)].amountSpent = transactionInput;
             setTransactions(newTransactions);
         } else {
             setDisplayErrorText(true);
