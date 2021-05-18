@@ -138,7 +138,7 @@ function DisplayCard({route, navigation}) {
                     cardId={cardId}
                 ></TransactionModal>
 
-                <View style={{ justifyContent: 'flex-start', flex: 1.5 }}>
+                <View style={{ justifyContent: 'flex-start'}}>
                     <Text style={styles.cardTitle}>{cardName}</Text>
 
                     <CardImage
@@ -278,7 +278,7 @@ function DisplayCard({route, navigation}) {
                     
                 </View>
 
-                <View style={{flex: 0.2}}>
+                <View>
                     {
                         (origin !== "main") &&
                         <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>

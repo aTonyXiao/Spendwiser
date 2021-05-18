@@ -146,7 +146,7 @@ function YourCards({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView>
+                <ScrollView style={{width: "100%"}}>
                     <View style={styles.cardScroll}>
                         {cards.map((card, i) => {
                             var props = {
