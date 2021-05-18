@@ -13,7 +13,7 @@ import { HeaderAndTabContent } from './HeaderAndTabContent';
 import { ChartCompare } from './ChartCompare';
 import { ChartBudget } from './ChartBudget';
 import * as storage from '../../local/storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { StackActions, useFocusEffect } from '@react-navigation/native';
 
 const modalType = {
     DISABLED: 0,
@@ -140,6 +140,14 @@ export function SpendingSummary({navigation}) {
      useFocusEffect(
         useCallback(() => {
             if (compareTimeframe.length !== 0) {
+                if (user.newOrDeletedCards) {
+                    user.newTransactions = [];
+                    user.editedTransactions = [];
+                    user.newOrDeletedCards = false;
+                    navigation.dispatch(
+                        StackActions.replace('SpendingSummary')
+                    )
+                }
                 if (user.newTransactions.length > 0 || user.editedTransactions.length > 0)
                     setMode(modeType.SUMMARY);
                 let check = new Date();

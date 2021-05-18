@@ -11,6 +11,7 @@ class userClass {
     currentStore = null;
     newTransactions = [];
     editedTransactions = [];
+    newOrDeletedCards = false;
 
     /**
      * Checks if the user is currently in the "users" database. If not  
@@ -100,6 +101,7 @@ class userClass {
                 }
             }
             mainNeedsUpdate = true;
+            this.newOrDeletedCards = true;
         })
     }
 
@@ -120,6 +122,7 @@ class userClass {
         }, (id) => { 
             appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
                 mainNeedsUpdate = true;
+                this.newOrDeletedCards = true;
             });
         })
     }
