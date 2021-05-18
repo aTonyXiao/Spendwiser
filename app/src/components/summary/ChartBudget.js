@@ -67,7 +67,7 @@ export function ChartBudget(
 
         useEffect(() => {
             for (var i = 0; i < compareTransPeriod1.length; i++) {
-                if (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"]) {
+                if (compareTransPeriod1[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"])) {
                     periodData1[summaryHelper.matchTransactionToCategory(compareTransPeriod1[i])]
                     += parseFloat(compareTransPeriod1[i]['amountSpent']);
                 }

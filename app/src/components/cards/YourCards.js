@@ -156,7 +156,7 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <View>
+                                <View key={i}>
                                     <Card key={i.toString()} props={props} />
                                     <View style={styles.divider}></View>
                                 </View>
