@@ -41,7 +41,7 @@ export function SpendingSummary({navigation}) {
     });
     const [curTimeframe, setCurTimeframe] = useState('This month');
     const [transactions, setTransactions] = useState([]);
-    const [values, setValues] = useState([]);
+    const [values, setValues] = useState(Array(7).fill(0));
     const [listViewEnabled, setListViewEnabled] = useState(false);
     const [cards, setCards] = useState([]);
     const [curCard, setCurCard] = useState(null);
@@ -106,24 +106,14 @@ export function SpendingSummary({navigation}) {
             // end time frame is the last day of the month
             let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
-                if (data !== null) {
-                    setCompareTransPeriod1(oldData => {
-                        console.log("Old data: ");
-                        console.log(oldData);
-    
-                        console.log("New data: ");
-                        console.log([... new Set([...oldData, data])]);
-                        return [... new Set([...oldData, data])]
-                    });
-                }
+                console.log(data);
+                setCompareTransPeriod1(oldData => [...oldData, data]);
             });
         }
         if (whichPeriod === 2 || whichPeriod === 0) {
             let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
-                if (data !== null) {
-                    setCompareTransPeriod2(oldData => {return [... new Set([...oldData, data])]});
-                }
+                setCompareTransPeriod2(oldData => [...oldData, data]);
             });
         }
     };
@@ -134,8 +124,20 @@ export function SpendingSummary({navigation}) {
         storage.storeCategoriesLimit(newCategoriesLimit);
     }
 
-    // Check if any new transactions added when screen is focused
-    useFocusEffect(
+    // process each transaction retrieved from db after timeframe change
+    function processTransaction(transaction) {
+        // console.log(transaction);        
+        let tmpValues = values;
+        if (curCard === null || transaction["cardId"] === curCard["cardId"])
+            tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
+        setValues(tmpValues);
+        setCurCategory((prevState) => {
+            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+        });
+    };
+
+     // Check if any new transactions added when screen is focused
+     useFocusEffect(
         useCallback(() => {
             if (compareTimeframe.length !== 0) {
                 let check = new Date();
@@ -143,7 +145,9 @@ export function SpendingSummary({navigation}) {
                     let trans = user.newTransactions.pop();
                     // If new transaction not in transaction array list then add it in
                     if (!(transactions.some(e => e.id === trans.id))) {
-                        setTransactions(oldData => [...oldData, trans]);
+                        console.log(trans);
+                        setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, trans));
+                        processTransaction(trans);
                     }
                     if (check.getMonth() == compareTimeframe[0].getMonth()) {
                         if (!(compareTransPeriod1.some(e => e.id === trans.id))) {
@@ -162,25 +166,8 @@ export function SpendingSummary({navigation}) {
         })
     )
 
-    // process each transaction retrieved from db after timeframe change
-    useEffect(() => {
-        if (transactions.length == 0) {
-            return;
-        }
-        let tmpValues = values;
-        let transaction = transactions[transactions.length - 1];
-        console.log(transaction);
-        if (curCard === null || transaction["cardId"] === curCard["cardId"])
-            tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
-        setValues(tmpValues);
-        setCurCategory((prevState) => {
-            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
-        });
-    }, [transactions]);
-
     // Get transactions from db when timeframe change
     useEffect(() => {
-        setValues(Array(7).fill(0));
         setTransactions([]);
         setCurCategory({
             label: 'All categories',
@@ -188,8 +175,10 @@ export function SpendingSummary({navigation}) {
         });
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
         user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
-            if (data !== null)
-                setTransactions(oldData => [... new Set([...oldData, data])]);
+            if (data !== null) {
+                setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, data));
+                processTransaction(data);
+            }
         });
     }, [curTimeframe]);
 
@@ -206,21 +195,6 @@ export function SpendingSummary({navigation}) {
         });
     }, []);
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            summaryHelper.getDbCards(getCardFromDB);
-            let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
-            let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
-            setCompareTimeframe([thisMonth, startTimeFrame]);
-            getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
-            storage.getCategoriesLimit((val) => {
-                if (val !== null)
-                    setCategoriesLimit(val);
-            });
-        });
-        return unsubscribe; 
-    }, [navigation]);
-
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
@@ -230,6 +204,7 @@ export function SpendingSummary({navigation}) {
                 setModalVisible = {setModalVisible}
                 curTimeframe = {curTimeframe}
                 setCurTimeframe = {setCurTimeframe}
+                setValues = {setValues}
                 curCategory = {curCategory}
                 changeCategory = {changeCategory}
                 values = {values}

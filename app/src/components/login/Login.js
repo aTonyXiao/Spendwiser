@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
+import { isAvailableAsync } from "expo-apple-authentication";
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [isAppleAvail, setAppleAvail] = React.useState(null);
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
     
     async function signIn() {
@@ -35,6 +37,16 @@ export const Login = props => {
             });
         }
     }
+
+    
+
+    useEffect(() => {
+        async function getAppleLoginAvailability () {
+            const isAppleLoginAvailable = await isAvailableAsync();
+            setAppleAvail(isAppleLoginAvailable);
+        }
+        if (isAppleAvail === null) getAppleLoginAvailability();
+    }, []);
 
     return (
         <DismissKeyboard>
@@ -84,10 +96,25 @@ export const Login = props => {
                     >
                         <Ionicons
                             name="logo-google"
-                            color="dodgerblue"
+                            color="#DB4437"
                             size={32}
                         ></Ionicons>
                     </TouchableOpacity>
+
+                    {isAppleAvail === true ? (
+                    <TouchableOpacity
+                        onPress={() => {
+                            let loginProviders = appBackend.getLoginProviders();
+                            loginProviders.apple.login();
+                        }}
+                        style={styles.logoApple}
+                    >
+                        <Ionicons
+                            name="logo-apple"
+                            color="white"
+                            size={16}
+                        ></Ionicons>
+                    </TouchableOpacity>) : null}
                 </View>
 
                 <TouchableOpacity
@@ -125,7 +152,20 @@ const styles = StyleSheet.create({
     },
     logo: {
         margin: 15,
-        marginTop: 0
+        marginTop: 0,
+    },
+    logoApple: {
+        // normal stuff
+        margin: 15,
+        marginTop: 0,
+        // button design stuff
+        width: 32,
+        height: 32,
+        paddingBottom: 1,
+        borderRadius: 100,
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor: "black"
     },
     loginWrapper : {
         margin: 15,

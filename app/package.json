@@ -67,13 +67,15 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "12.1.0",
     "react-native-svg-charts": "^5.4.0",
+    "react-native-swipe-list-view": "^3.2.7",
     "react-native-switch-selector": "^2.1.4",
     "react-native-unimodules": "~0.13.3",
     "react-native-vector-icons": "^8.0.0",
     "react-native-view-shot": "3.1.2",
     "react-native-web": "~0.13.12",
     "sentry-expo": "^3.1.0",
-    "unimodules-permissions-interface": "~6.1.0"
+    "unimodules-permissions-interface": "~6.1.0",
+    "expo-apple-authentication": "~3.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
