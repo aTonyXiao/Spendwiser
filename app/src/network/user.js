@@ -10,6 +10,7 @@ class userClass {
 
     currentStore = null;
     newTransactions = [];
+    editedTransactions = [];
 
     /**
      * Checks if the user is currently in the "users" database. If not  
@@ -153,7 +154,7 @@ class userClass {
                 },
                 amountSpent: amountSpent,
                 dateAdded: timestamp,
-                id: id
+                docId: id
             });
         })
     }
@@ -240,7 +241,11 @@ class userClass {
     async editTransaction(userId, docId, data) { 
         userId = await userId;
         appBackend.dbSet("users." + userId + ".transactions." + docId, data, true, () => {
-            // TODO: Introduce callback?
+            // Update editedTransactions array to sync spendingsummary if exist in navigation stack
+            this.editedTransactions.push({
+                docId: docId,
+                amountSpent: data.amountSpent,
+            });
         });
     }
 
@@ -252,6 +257,11 @@ class userClass {
     async deleteTransaction(userId, docId) {
         userId = await userId;
         appBackend.dbDelete("users." + userId + ".transactions." + docId);
+        // Update editedTransactions array to sync spendingsummary if exist in navigation stack
+        this.editedTransactions.push({
+            docId: docId,
+            amountSpent: null,
+        });
     }
 
     /**
