@@ -17,6 +17,7 @@ import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { summaryHelper } from '../summary/SummaryHelper';
 // TODO: need to add reward modal back in here?
 
 /**
@@ -57,13 +58,15 @@ function DisplayCard({route, navigation}) {
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 if (data !== null) {
+                    console.log(data);
                     setTransactions((transactions) => { 
                         data["key"] = transactions.length.toString();
                         if (data) {
                             if (Array.isArray(data)) {
                                 return [...data, ...transactions];
                             } else {
-                                return [... new Set([data, ...transactions])];
+                                return summaryHelper.addSortedNewTransaction(transactions, data);
+                                // return [... new Set([data, ...transactions])];
                             }
                         }
                         else {
