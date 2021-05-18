@@ -99,7 +99,7 @@ function TransactionModal({
                                 // onSubmitEditing={addTransaction}
                                 keyboardType={"numeric"}
                             />
-                            <TouchableOpacity onPress={() => { addTransaction(transactionInput) }}>
+                            <TouchableOpacity onPress={() => { addTransaction(transactionInput), setTransactionInput("") }}>
                                 <Ionicons
                                     name="checkmark-outline"
                                     color="black"

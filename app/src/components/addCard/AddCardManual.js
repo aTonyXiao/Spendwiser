@@ -12,6 +12,7 @@ import mainStyles from '../../styles/mainStyles';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { cards } from '../../network/cards';
+import { Ionicons } from '@expo/vector-icons';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -147,7 +148,8 @@ export function AddCardManual({navigation}) {
                         <View style={styles.rewardText}>
                             {
                                 rewards.map((reward, i) => {
-                                    return <Text style={{ margin: 5 }} key={i}>Reward: {reward.type}, {reward.value} cents</Text>
+                                    let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
+                                    return <Text style={{ margin: 5 }} key={i}>{type}: {reward.value} cents</Text>
                                 })
                             }
                         </View>
@@ -186,11 +188,21 @@ export function AddCardManual({navigation}) {
                                 placeholderTextColor={grayRGB}
                                 value={rewardValue}
                                 keyboardType={"number-pad"}
-                                onEndEditing={() => {
-                                    addReward();
-                                    setRewardValue("");
-                                }}
+                                // onEndEditing={() => {
+                                //     addReward();
+                                //     setRewardValue("");
+                                // }}
                             />
+                            <TouchableOpacity
+                                style={{width: '10%', justifyContent: 'center'}}
+                                onPress={() => { addReward(), setRewardValue("") }}
+                            >
+                                <Ionicons
+                                    name="checkmark-outline"
+                                    color="black"
+                                    size={26}
+                                ></Ionicons>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -251,7 +263,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10
     },
     inputBoxError : {
         margin: 15,
@@ -261,7 +274,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10
     },
     inputTitle : { 
         margin: 15,
@@ -293,20 +307,21 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         height: 40, 
-        width: '45%',
+        width: '40%',
         margin: 8,
         marginLeft: 15,
     }, 
     rewardInput: { 
         height: 40, 
-        width: '45%',
+        width: '40%',
         margin: 5,
         borderWidth: 1,
         borderColor: '#F0F0F0',
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10
     },
 });
 const grayRGB = 'rgb(211, 211, 211)';

@@ -146,8 +146,8 @@ function YourCards({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView style={styles.scrollView}>
-                    <View>
+                <ScrollView>
+                    <View style={styles.cardScroll}>
                         {cards.map((card, i) => {
                             var props = {
                                 navigation: navigation,
@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    scrollView: {
-        width: "90%"
+    cardScroll: {
+        paddingHorizontal: '5%',
     },
     addButton: {
         borderRadius: 100,
