@@ -122,6 +122,7 @@ async function addItemToLocalDB(accountName, document, id, data) {
 async function addCardInfoToDB(accountName, cardId) {
     return new Promise((resolve, reject) => {
         appBackend.remoteDBGet("cards", ['cardId', '==', cardId], (cardData) => {
+            console.log("Got past this");
             storage.addLocalDB(accountName, "cards", cardData, true, (local_id) => {
                 storage.modifyDBEntryMetainfo(accountName, "cards", true, local_id, cardId, () => {
                     resolve();
@@ -142,11 +143,13 @@ async function syncRemoteSubcollection(location) {
                 localDocIds.push(doc.docId);
             });
 
-            appBackend.dbGetSubCollectionsRemote(location, async (remote_collection) => {
+            appBackend.dbGetSubCollectionsRemote(full_location, async (remote_collection) => {
                 for (let i = 0; i < remote_collection.length; i++) {
                     let remote_item = remote_collection[i];
 
-                    if (localDocIds.includes(remote_item['docId'])) {
+                    if (!localDocIds.includes(remote_item['docId'])) {
+                        console.log("Found an item that doesn't exist locally");
+
                         if (location == "cards") {
                             // ALSO pull down the actual card info
                             let users_card = remote_item;

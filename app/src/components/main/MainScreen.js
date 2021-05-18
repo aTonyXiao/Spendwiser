@@ -285,7 +285,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading ? "N/A" : storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}

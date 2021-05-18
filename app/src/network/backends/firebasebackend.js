@@ -6,7 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
-import { syncLocalDatabase } from '../../local/sync'
+import { syncLocalDatabase, syncRemoteDatabase } from '../../local/sync'
 import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
@@ -90,10 +90,10 @@ class FirebaseBackend extends BaseBackend {
 
 
         // Sync the local database every minute
-        setInterval(() => {
-            //await syncRemoteDatabase();
-            //await syncLocalDatabase();
-        }, 60000);
+        setInterval(async () => {
+            await syncRemoteDatabase();
+            await syncLocalDatabase();
+        }, 30000);
     }
 
     /**
@@ -133,7 +133,7 @@ class FirebaseBackend extends BaseBackend {
         return data;
     }
 
-    firebaseDbGet(location, ...conditionsWithCallback) {
+    remoteDBGet(location, ...conditionsWithCallback) {
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
 
