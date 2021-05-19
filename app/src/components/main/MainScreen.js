@@ -44,17 +44,37 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [helpModalVisible, setHelpModalVisible] = useState(false);
+    const [hasInternet, setHasInternet] = useState(true);
 
     function setOfflineMode() {
         setStoreArr([{
-            label: "Offline Mode",
-            value: "Offline Mode",
-            vicinity: "N/A",
+            label: "No internet connection",
+            value: "No internet connection",
+            vicinity: "Restart the application after connecting to the internet",
+            placeId: "",
+            geometry: [38.542530, -121.749530,],
             storeType: "N/A", 
             key: 0,
         }])
         setCurStore("Offline Mode");
         setCurStoreKey(0);
+        setHasInternet(false);
+    }
+
+    function setLocationDisabledMode() {
+        setStoreArr([{
+            label: "Location Permissions Denied",
+            value: "Location Permissions Denied",
+            vicinity: "Click help button for more info",
+            placeId: "",
+            geometry: [38.542530, -121.749530,],
+            storeType: "N/A", 
+            key: 0,
+        }])
+        setCurStore("Location Permissions Denied");
+        setCurStoreKey(0);
+        setUserLocation({ latitude: 38.542530, longitude: -121.749530});
+        setLoading(false);
     }
 
     const backAction = () => {
@@ -73,7 +93,7 @@ export function MainScreen({navigation}) {
     function reloadRecCard(value, key, storeType, geometry) {
         // console.log("hihi " + storeType);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
-        if (key !== curStoreKey) {
+        if (key !== curStoreKey || curStore !== value) {
             setCurStore(value);
             setCurStoreKey(key);
             setRegion({...region, longitude: geometry[1], latitude: geometry[0]});
@@ -98,9 +118,17 @@ export function MainScreen({navigation}) {
     }
 
     function addManualInput(manualInputObj) {
-        setStoreArr(storeList => storeList.concat(manualInputObj));
-        // console.log(storeArr);
-        // console.log(manualInputObj);
+        if (storeArr[0].value === 'Location Permissions Denied') {
+            if (manualInputObj.value === 'Manual Input 1') {
+                manualInputObj.value = 'Manual Input 0';
+                manualInputObj.label = 'Manual Input 0';
+            }
+            manualInputObj.key = 0;
+            console.log(manualInputObj);
+            setStoreArr([manualInputObj]);
+        }
+        else
+            setStoreArr(storeList => storeList.concat(manualInputObj));
         reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType, manualInputObj.geometry);
     }
 
@@ -111,6 +139,8 @@ export function MainScreen({navigation}) {
             return;
         }
         let addCount = storeArr.length - 1 === -1 ? 0 : storeArr.length;
+        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied')
+            addCount = 0;
         let fetchResultLen = Object.keys(fetchResult).length;
 
         for (let i = 0; i < fetchResultLen; i++) {
@@ -144,7 +174,12 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        setStoreArr(prevStores => [...prevStores, ...fetchStores]);
+        // Remove location permissions denied info if clicking POI manually
+        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied') {
+            setStoreArr(fetchStores);
+        }
+        else
+            setStoreArr(prevStores => [...prevStores, ...fetchStores]);
         if (fetchStores.length > 0) {
             setCurStore(fetchStores[0].label);
             setCurStoreKey(fetchStores[0].key);
@@ -175,7 +210,7 @@ export function MainScreen({navigation}) {
             const unsubscribe = navigation.addListener('focus', () => {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
-                    // console.log("reset rec cards");
+                    console.log("reset rec cards");
                     reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
                 }
@@ -190,32 +225,31 @@ export function MainScreen({navigation}) {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                return;
-            }
-
-            try {
-                let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
-                setUserLocation(location.coords);
-                NetInfo.fetch().then(state => {
-                    // If connected to internet, query API for nearby stores. Else: set offline mode
-                    if (state.isConnected) { 
-                        fetch(googlePlaceSearchURL + 
-                            location.coords.latitude + "," + location.coords.longitude + 
-                            googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
-                        .then((response) => response.json())
-                        .then((json) => {getLocationFromAPI(json)})
-                        .catch((error) => console.log(error))
-                        .finally(() => setLoading(false));
-                    } else {
-                        setOfflineMode();
-                        setLoading(false);
-                    }
-                    });
-            } catch(e) {
-                setOfflineMode();
-                setLoading(false);
-                return;
-            }
+                setLocationDisabledMode();
+            } else {
+                try {
+                    let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
+                    setUserLocation(location.coords);
+                    NetInfo.fetch().then(state => {
+                        // If connected to internet, query API for nearby stores. Else: set offline mode
+                        if (state.isConnected) {
+                            console.log("Got in here");
+                            fetch(googlePlaceSearchURL + 
+                                location.coords.latitude + "," + location.coords.longitude + 
+                                googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                            .then((response) => response.json())
+                            .then((json) => {getLocationFromAPI(json)})
+                            .catch((error) => console.log(error))
+                            .finally(() => setLoading(false));
+                        } else {
+                            setOfflineMode();
+                            setLoading(false);
+                        }
+                        });
+                } catch(e) {
+                    setLocationDisabledMode();
+                }
+            } 
         })();
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', backAction);
@@ -245,7 +279,7 @@ export function MainScreen({navigation}) {
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
                     <MainButtons
-                        userLocation={userLocation}
+                        navigation={navigation}
                         setUserLocation={setUserLocation}
                         region={region}
                         setRegion={setRegion}
@@ -288,7 +322,8 @@ export function MainScreen({navigation}) {
                                     {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
-                                    {"Category: " + (isLoading ? "" : storeArr[curStoreKey].storeType)}
+                                    {(isLoading || curStore === 'Location Permissions Denied')
+                                        ? "" : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
                         </View>

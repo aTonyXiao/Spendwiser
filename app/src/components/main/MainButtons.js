@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 
 export function MainButtons(
     {
-        userLocation,
+        navigation,
         setUserLocation,
         region,
         setRegion,
@@ -14,10 +14,26 @@ export function MainButtons(
         setHelpModalVisible,
     }) {
     async function getUserLocation() {
-        let location = await Location.getCurrentPositionAsync({});
-        if (location.coords !== undefined) 
-            setRegion({...region, longitude: location.coords.longitude, latitude: location.coords.latitude});
-        setUserLocation(location.coords);
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert(
+                'Permission Denied \n Unable to retrieve location!',
+                'You will not be able to re-center your location until you enable permissions',
+                [
+                    { text: "Dismiss" },
+                    {
+                        text: "Enable Permissions",
+                        onPress: () => navigation.navigate('Permissions'),
+                    }
+                ],
+                { cancelable: false }
+            );
+        } else {
+            let location = await Location.getCurrentPositionAsync({});
+            if (location.coords !== undefined) 
+                setRegion({...region, longitude: location.coords.longitude, latitude: location.coords.latitude});
+            setUserLocation(location.coords);
+        }
     }
     
     return (
