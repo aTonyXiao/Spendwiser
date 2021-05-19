@@ -109,10 +109,10 @@ async function syncLocalDatabase() {
     });
 }
 
-async function addItemToLocalDB(accountName, document, id, data) {
+async function addItemToLocalDB(accountName, location, id, data) {
     return new Promise((resolve, reject) => {
-        storage.addLocalDB(accountName, document + "." + id, data, (local_id) => {
-            storage.modifyDBEntryMetainfo(accountName, document, true, local_id, id, () => {
+        storage.addLocalDB(accountName, location, data, true, (local_id) => {
+            storage.modifyDBEntryMetainfo(accountName, location, true, local_id, id, () => {
                 resolve();
             })
         });
