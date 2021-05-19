@@ -21,6 +21,7 @@ import { SpendingSummary } from './src/components/summary/SpendingSummary';
 import { EditImage } from './src/components/addCard/fromCamera/EditImage';
 import { ChooseImage } from './src/components/addCard/fromCamera/ChooseImage';
 import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectImage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
@@ -41,93 +42,95 @@ export default function App() {
   initializeAppBackend("firebase");
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={
-          {
-            headerShown: false,
-            swipeEnabled: false,
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={
+            {
+              headerShown: false,
+              swipeEnabled: false,
+            }
           }
-        }
-      >
-        <Stack.Screen
-          name="Home"
-          component={LoadingScreen}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-        />
-        <Stack.Screen
-          name="CreateAccount"
-          component={CreateAccount}
-        />
-        <Stack.Screen
-          name="Main"
-          component={MainScreen}
+        >
+          <Stack.Screen
+            name="Home"
+            component={LoadingScreen}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+          />
+          <Stack.Screen
+            name="CreateAccount"
+            component={CreateAccount}
+          />
+          <Stack.Screen
+            name="Main"
+            component={MainScreen}
+            options={{animationEnabled: false}}
+          />
+          <Stack.Screen
+            name="YourCards"
+            component={YourCards}
+            options={{animationEnabled: false}}
+          />
+          <Stack.Screen
+            name="CardInfo"
+            component={DisplayCard}
+          />
+          <Stack.Screen
+            name="SpendingSummary"
+            component={SpendingSummary}
+            options={{animationEnabled: false}}
+          />
+          <Stack.Screen
+          name="Settings"
+          component={Settings}
           options={{animationEnabled: false}}
-        />
-        <Stack.Screen
-          name="YourCards"
-          component={YourCards}
-          options={{animationEnabled: false}}
-        />
-        <Stack.Screen
-          name="CardInfo"
-          component={DisplayCard}
-        />
-        <Stack.Screen
-          name="SpendingSummary"
-          component={SpendingSummary}
-          options={{animationEnabled: false}}
-        />
-        <Stack.Screen
-        name="Settings"
-        component={Settings}
-        options={{animationEnabled: false}}
-        />
-        <Stack.Screen
-          name="AddCardManual"
-          component={AddCardManual}
-        />
-        <Stack.Screen
-          name="EditImage"
-          component={EditImage}
-        />
-        <Stack.Screen
-          name="ChooseImage"
-          component={ChooseImage}
-        />
-        <Stack.Screen
-          name="CardSelectImage"
-          component={CardSelectImage}
-        />
-        <Stack.Screen
-          name="PasswordReset"
-          component={PasswordReset}
-        />
-        <Stack.Screen
-          name="AddCardDB"
-          component={AddCardDB}
-        />
-        <Stack.Screen
-          name="Permissions"
-          component={AppPermissions}
-        />
-        <Stack.Screen
-          name="PrivacyPolicy"
-          component={PrivacyPolicy}
-        />
-        <Stack.Screen
-          name="About"
-          component={About}
-        />
-        <Stack.Screen
-          name="Account"
-          component={Account}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          />
+          <Stack.Screen
+            name="AddCardManual"
+            component={AddCardManual}
+          />
+          <Stack.Screen
+            name="EditImage"
+            component={EditImage}
+          />
+          <Stack.Screen
+            name="ChooseImage"
+            component={ChooseImage}
+          />
+          <Stack.Screen
+            name="CardSelectImage"
+            component={CardSelectImage}
+          />
+          <Stack.Screen
+            name="PasswordReset"
+            component={PasswordReset}
+          />
+          <Stack.Screen
+            name="AddCardDB"
+            component={AddCardDB}
+          />
+          <Stack.Screen
+            name="Permissions"
+            component={AppPermissions}
+          />
+          <Stack.Screen
+            name="PrivacyPolicy"
+            component={PrivacyPolicy}
+          />
+          <Stack.Screen
+            name="About"
+            component={About}
+          />
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

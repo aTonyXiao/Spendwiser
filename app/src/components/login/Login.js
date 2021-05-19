@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
-import { View, StyleSheet, Button, Alert, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text, Image, Dimensions } from 'react-native';
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
 import { isAvailableAsync } from "expo-apple-authentication";
+import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
@@ -50,71 +51,82 @@ export const Login = props => {
 
     return (
         <DismissKeyboard>
-            <View style={styles.container}>
-                <Text style={mainStyles.large_title}>SpendWiser</Text>
-
-                {
-                    displayErrorText &&
-                    <Text style={{ color: 'red' }}>Please input a username and a password</Text>
-                }
-                <UsernameInput onChange={setUsername} />
-                <PasswordInput onChange={setPassword} />
-                <TouchableOpacity
-                    style={styles.forgotPasswordButton}
-                    onPress={() => props.navigation.navigate('PasswordReset')}>
-                    <Text style={styles.forgotPasswordButton}>
-                        Forgot your password?
-                </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.loginWrapper} onPress={signIn}>
-                    <Text style={styles.loginButton}>Log In</Text>
-                </TouchableOpacity>
-
-                <View style={styles.line} />
-
-                <View style={styles.logosContainer}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            let loginProviders = appBackend.getLoginProviders();
-                            loginProviders.facebook.login();
+            <SafeAreaView style={styles.screen}>
+                <View style={{marginTop: "25%"}}>
+                    <Image source = {require("../../../assets/spendwiser_logo.png")}
+                        style = {{ 
+                            width: Dimensions.get('window').width * .8,  //its same to '20%' of device width
+                            aspectRatio: 5, // <-- this
+                            resizeMode: 'contain', //optional
                         }}
-                        style={styles.logo}
-                    >
-                        <Ionicons
-                            name="logo-facebook"
-                            color="dodgerblue"
-                            size={32}
-                        ></Ionicons>
+                    />
+                </View>
+
+                <View style={styles.loginContainer}>
+                    {
+                        displayErrorText ?
+                        (<Text style={{ color: 'red' }}>Please input a username and a password</Text>) :
+                        (<Text> </Text>)
+                    }
+                    <UsernameInput onChange={setUsername} />
+                    <PasswordInput onChange={setPassword} />
+                    <TouchableOpacity
+                        style={styles.forgotPasswordButton}
+                        onPress={() => props.navigation.navigate('PasswordReset')}>
+                        <Text style={styles.forgotPasswordButton}>
+                            Forgot your password?
+                    </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.loginWrapper} onPress={signIn}>
+                        <Text style={styles.loginButton}>Log In</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => {
-                            let loginProviders = appBackend.getLoginProviders();
-                            loginProviders.google.login();
-                        }}
-                        style={styles.logo}
-                    >
-                        <Ionicons
-                            name="logo-google"
-                            color="#DB4437"
-                            size={32}
-                        ></Ionicons>
-                    </TouchableOpacity>
+                    <View style={styles.line} />
 
-                    {isAppleAvail === true ? (
-                    <TouchableOpacity
-                        onPress={() => {
-                            let loginProviders = appBackend.getLoginProviders();
-                            loginProviders.apple.login();
-                        }}
-                        style={styles.logoApple}
-                    >
-                        <Ionicons
-                            name="logo-apple"
-                            color="white"
-                            size={16}
-                        ></Ionicons>
-                    </TouchableOpacity>) : null}
+                    <View style={styles.logosContainer}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                let loginProviders = appBackend.getLoginProviders();
+                                loginProviders.facebook.login();
+                            }}
+                            style={styles.logo}
+                        >
+                            <Ionicons
+                                name="logo-facebook"
+                                color="dodgerblue"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                let loginProviders = appBackend.getLoginProviders();
+                                loginProviders.google.login();
+                            }}
+                            style={styles.logo}
+                        >
+                            <Ionicons
+                                name="logo-google"
+                                color="#DB4437"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+
+                        {isAppleAvail === true ? (
+                        <TouchableOpacity
+                            onPress={() => {
+                                let loginProviders = appBackend.getLoginProviders();
+                                loginProviders.apple.login();
+                            }}
+                            style={styles.logoApple}
+                        >
+                            <Ionicons
+                                name="logo-apple"
+                                color="white"
+                                size={16}
+                            ></Ionicons>
+                        </TouchableOpacity>) : null}
+                    </View>
                 </View>
 
                 <TouchableOpacity
@@ -131,20 +143,27 @@ export const Login = props => {
                         appBackend.signInOffline();
                     }}>
                     <Text style={styles.signUpButton}>
-                        Use an offline account
+                        Use without logging in
                 </Text>
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
         </DismissKeyboard>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    screen: {
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        height: "100%"
+    },
+    loginContainer: {
+        flex: 1,
+        alignItems: 'center',
         justifyContent: 'center',
+        width: "100%",
     },
     logosContainer: {
         display: 'flex', 
@@ -194,12 +213,11 @@ const styles = StyleSheet.create({
     signUpButton: { 
         color: 'dodgerblue'
     }, 
-    signUpWrapper: { 
-        position: 'absolute',
-        bottom: 45,
+    signUpWrapper: {
+        marginTop: "25%",
+        bottom: 25,
     },
     offlineAccountWrapper: {
-        position: 'absolute',
         bottom: 20,
     }
 })
