@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -44,21 +44,22 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [helpModalVisible, setHelpModalVisible] = useState(false);
-    const [hasInternet, setHasInternet] = useState(true);
+    const internetState = useRef(true)
 
     function setOfflineMode() {
         setStoreArr([{
             label: "No internet connection",
             value: "No internet connection",
-            vicinity: "Restart the application after connecting to the internet",
+            vicinity: "Internet access required to use the app",
             placeId: "",
             geometry: [38.542530, -121.749530,],
             storeType: "N/A", 
             key: 0,
         }])
-        setCurStore("Offline Mode");
+        setCurStore("No internet connection");
         setCurStoreKey(0);
-        setHasInternet(false);
+        setRecCards(null);
+        setLoading(false);
     }
 
     function setLocationDisabledMode() {
@@ -83,6 +84,15 @@ export function MainScreen({navigation}) {
             return true;
         else
             return false;
+    }
+
+    const handleInternetStateChange = (nextState) => {
+        if ((internetState.current === false && nextState.isConnected === true) || 
+            (internetState.current === true && nextState.isConnected === false)) {
+            navigation.dispatch(
+                StackActions.replace('SpendingSummary')
+            );
+        }
     }
 
     function getRecCardFromDB(myRankedCards) {
@@ -188,6 +198,36 @@ export function MainScreen({navigation}) {
         }
     };
 
+    async function tryToGetStoresFromLocation() {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setLocationDisabledMode();
+        } else {
+            try {
+                let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
+                setUserLocation(location.coords);
+                NetInfo.fetch().then(state => {
+                    // If connected to internet, query API for nearby stores. Else: set offline mode
+                    if (state.isConnected) {
+                        console.log("Got in here");
+                        fetch(googlePlaceSearchURL + 
+                            location.coords.latitude + "," + location.coords.longitude + 
+                            googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                        .then((response) => response.json())
+                        .then((json) => {getLocationFromAPI(json)})
+                        .catch((error) => console.log(error))
+                        .finally(() => setLoading(false));
+                    } else {
+                        // Use case: Have location and no internet
+                        setOfflineMode();
+                    }
+                    });
+            } catch(e) {
+                console.log("Error in getting location or stores");
+            }
+        } 
+    }
+
     function onBottomSheetLayout(event, isFooter) {
         let {width, height} = event.nativeEvent.layout;
         if (!isFooter) {
@@ -222,37 +262,19 @@ export function MainScreen({navigation}) {
     // Called on mount
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
+        NetInfo.addEventListener('connectionChange', state => handleInternetStateChange(state));
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 setLocationDisabledMode();
             } else {
-                try {
-                    let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
-                    setUserLocation(location.coords);
-                    NetInfo.fetch().then(state => {
-                        // If connected to internet, query API for nearby stores. Else: set offline mode
-                        if (state.isConnected) {
-                            console.log("Got in here");
-                            fetch(googlePlaceSearchURL + 
-                                location.coords.latitude + "," + location.coords.longitude + 
-                                googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
-                            .then((response) => response.json())
-                            .then((json) => {getLocationFromAPI(json)})
-                            .catch((error) => console.log(error))
-                            .finally(() => setLoading(false));
-                        } else {
-                            setOfflineMode();
-                            setLoading(false);
-                        }
-                        });
-                } catch(e) {
-                    setLocationDisabledMode();
-                }
+                tryToGetStoresFromLocation();
             } 
         })();
-        return () =>
+        return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
+            NetInfo.removeEventListener('connectionChange', state => handleInternetStateChange(state));
+        }
     }, []);
     
    
@@ -285,6 +307,8 @@ export function MainScreen({navigation}) {
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
                         setHelpModalVisible={setHelpModalVisible}
+                        internetState={internetState}
+                        tryToGetStoresFromLocation= {tryToGetStoresFromLocation}
                     />
 
                     {/* Map (Google) */}
@@ -299,10 +323,12 @@ export function MainScreen({navigation}) {
                         showsUserLocation={true}
                         onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
                     >
-                        <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
-                            { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
-                            { latitude: region.latitude, longitude: region.longitude }
-                        )} />
+                        {
+                            internetState.current === true && <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
+                                { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
+                                { latitude: region.latitude, longitude: region.longitude }
+                            )} />
+                        }
                     </MapView>
                 </View>
                 <View>
