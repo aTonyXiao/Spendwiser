@@ -93,7 +93,7 @@ class FirebaseBackend extends BaseBackend {
         setInterval(async () => {
             await syncRemoteDatabase();
             await syncLocalDatabase();
-        }, 10000);
+        }, 30000);
     }
 
     /**
@@ -133,7 +133,7 @@ class FirebaseBackend extends BaseBackend {
         return data;
     }
 
-    firebaseDbGet(location, ...conditionsWithCallback) {
+    remoteDBGet(location, ...conditionsWithCallback) {
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
 
