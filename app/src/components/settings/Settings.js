@@ -55,7 +55,7 @@ let Settings = (props) => {
                     onPress={() => { props.navigation.navigate('Permissions') }}
                     style={styles.rowContainer}
                 >
-                    <Text>Notifications</Text>
+                    <Text>Permissions</Text>
                     <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         width: '100%', 
         padding: 20,
-        paddingVertical: 5,
+        paddingVertical: 10,
         borderTopWidth: 1,
         borderTopColor: 'lightgray',
     },
