@@ -111,6 +111,20 @@ class BaseBackend {
      * });
      */
     dbSet (location, data, merge = false, callback) {}
+    remoteDBSet (location, data, merge = false, callback) {}
+
+    /**
+     * Deletes a document at the given location
+     * NOTE: this won't delete subcollections
+     * 
+     * @param {string} location - The document location to delete
+     * 
+     * @example
+     * appBackend.dbDelete("users." + userId + ".cards." + docId);
+     */
+    dbDelete(location) {}
+    remoteDBDelete(location, callback) {}
+
 
     /**
      * This function adds a new 'document' to a 'collection'
@@ -127,6 +141,7 @@ class BaseBackend {
      * });
      */
     dbAdd (location, data, callback) {}
+    remoteDBAdd (location, data, callback) {}
 
     /**
      * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection

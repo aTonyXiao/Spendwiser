@@ -17,6 +17,7 @@ import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { summaryHelper } from '../summary/SummaryHelper';
 // TODO: need to add reward modal back in here?
 
 /**
@@ -57,13 +58,15 @@ function DisplayCard({route, navigation}) {
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 if (data !== null) {
+                    console.log(data);
                     setTransactions((transactions) => { 
                         data["key"] = transactions.length.toString();
                         if (data) {
                             if (Array.isArray(data)) {
                                 return [...data, ...transactions];
                             } else {
-                                return [... new Set([data, ...transactions])];
+                                return summaryHelper.addSortedNewTransaction(transactions, data);
+                                // return [... new Set([data, ...transactions])];
                             }
                         }
                         else {
@@ -138,7 +141,7 @@ function DisplayCard({route, navigation}) {
                     cardId={cardId}
                 ></TransactionModal>
 
-                <View style={{ justifyContent: 'flex-start', flex: 1.5 }}>
+                <View style={{ justifyContent: 'flex-start'}}>
                     <Text style={styles.cardTitle}>{cardName}</Text>
 
                     <CardImage
@@ -167,18 +170,16 @@ function DisplayCard({route, navigation}) {
                                     Rewards
                                 </Text>
                             </View>
-                            {
-                                showTransactionsList && <TouchableOpacity
-                                    onPress={() => setShowTransactionModal(true)}
-                                    style={{marginRight: -5}}
-                                >
-                                    <Ionicons
-                                        name="add-circle-outline"
-                                        color="white"
-                                        size={30}
-                                    ></Ionicons>
-                                </TouchableOpacity>
-                            }
+                           <TouchableOpacity
+                                onPress={() => setShowTransactionModal(true)}
+                                style={{marginRight: -5}}
+                            >
+                                <Ionicons
+                                    name="add-circle-outline"
+                                    color="white"
+                                    size={30}
+                                ></Ionicons>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     {
@@ -265,7 +266,7 @@ function DisplayCard({route, navigation}) {
 
                                 return (
                                     <View style={styles.sectionText} key={i}>
-                                        <View style={{flexDirection: 'row', width: '90%'}}>
+                                        <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
                                             <Text style={{ fontWeight: 'bold' }}>{category}</Text>
                                             <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
                                         </View>
@@ -278,7 +279,7 @@ function DisplayCard({route, navigation}) {
                     
                 </View>
 
-                <View style={{flex: 0.2}}>
+                <View>
                     {
                         (origin !== "main") &&
                         <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>

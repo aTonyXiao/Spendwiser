@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     }, 
     autocompleteList : { 
         borderColor: 'white',
+        maxHeight: Dimensions.get('window').height - 200,
     },
     autocompleteListText : {
         margin: 5

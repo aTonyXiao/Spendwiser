@@ -13,7 +13,7 @@ import { HeaderAndTabContent } from './HeaderAndTabContent';
 import { ChartCompare } from './ChartCompare';
 import { ChartBudget } from './ChartBudget';
 import * as storage from '../../local/storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { StackActions, useFocusEffect } from '@react-navigation/native';
 
 const modalType = {
     DISABLED: 0,
@@ -140,28 +140,105 @@ export function SpendingSummary({navigation}) {
      useFocusEffect(
         useCallback(() => {
             if (compareTimeframe.length !== 0) {
+                if (user.newOrDeletedCards) {
+                    user.newTransactions = [];
+                    user.editedTransactions = [];
+                    user.newOrDeletedCards = false;
+                    navigation.dispatch(
+                        StackActions.replace('SpendingSummary')
+                    )
+                }
+                if (user.newTransactions.length > 0 || user.editedTransactions.length > 0)
+                    setMode(modeType.SUMMARY);
                 let check = new Date();
                 while (user.newTransactions.length > 0) {
                     let trans = user.newTransactions.pop();
                     // If new transaction not in transaction array list then add it in
-                    if (!(transactions.some(e => e.id === trans.id))) {
-                        console.log(trans);
-                        setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, trans));
-                        processTransaction(trans);
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (!(transactions.some(e => e.docId === trans.docId))) {
+                            setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, trans));
+                            processTransaction(trans);
+                        }
                     }
                     if (check.getMonth() == compareTimeframe[0].getMonth()) {
-                        if (!(compareTransPeriod1.some(e => e.id === trans.id))) {
+                        if (!(compareTransPeriod1.some(e => e.docId === trans.docId))) {
                             setCompareTransPeriod1(oldData => [...oldData, trans]);
                         }
                     }
                     if (check.getMonth() == compareTimeframe[1].getMonth()) {
-                        if (!(compareTransPeriod2.some(e => e.id === trans.id))) {
+                        if (!(compareTransPeriod2.some(e => e.docId === trans.docId))) {
                             setCompareTransPeriod2(oldData => [...oldData, trans]);
+                        }
+                    }
+                }
+                while (user.editedTransactions.length > 0) {
+                    let trans = user.editedTransactions.pop();
+                    // If edited/ deleted transaction not synced
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (transactions.some(e => e.docId === trans.docId)) {
+                            console.log(trans);
+                            let tmpTransactions = [...transactions];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            let prevAmount = editedTrans.amountSpent;
+                            // console.log(idx);
+                            // console.log(tmpTransactions);
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            let tmpValues = values;
+                            if (curCard === null || transaction["cardId"] === curCard["cardId"]) {
+                                if (trans.amountSpent !== null)
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] += 
+                                        parseFloat(editedTrans['amountSpent'])- parseFloat(prevAmount);
+                                else
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] -= parseFloat(prevAmount);
+                                setValues(tmpValues);
+                                if (curCategory.label === "All categories")
+                                    setCurCategory((prevState) => {
+                                        return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+                                    });
+                                }
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (compareTransPeriod1.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod1];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod1(tmpTransactions);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (compareTransPeriod2.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod2];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod2(tmpTransactions);
                         }
                     }
                 }
             } else {
                 user.newTransactions = [];
+                user.editedTransactions = [];
             }
         })
     )

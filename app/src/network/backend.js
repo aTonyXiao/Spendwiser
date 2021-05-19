@@ -1,7 +1,3 @@
-import BaseBackend from './backends/basebackend'
-import FirebaseBackend from './backends/firebasebackend';
-import ServerBackend from './backends/serverbackend';
-
 /**
  * The wrapped backend that the app will interface with.  Functions
  * inherited from 'BaseBackend' can be invoked from this object to
@@ -9,33 +5,8 @@ import ServerBackend from './backends/serverbackend';
  */
 export var appBackend;
 
-/**
- * Set the app backend to a new instance of a supported type.
- * Modify this to add new supported backends
- */
-function setAppBackend (type) {
-    switch (type) {
-        case "firebase":
-            appBackend = new FirebaseBackend();
-            break;
-        case "server":
-            appBackend = new ServerBackend();
-            break;
-        default:
-            appBackend = new BaseBackend();
-    }
-}
-
-/**
- * Initializes the current backend to the given type denoted by a string.
- * 
- * Currently supported backends:
- *   - 'firebase'
- * 
- * @param {string} type - The backend type to initialize
- */
-export function initializeAppBackend (type) {
-    setAppBackend(type);
+export function setAppBackendVar(backend) {
+    appBackend = backend;
     appBackend.initializeApp();
     appBackend.enableDatabaseCaching();
 }

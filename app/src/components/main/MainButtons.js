@@ -24,7 +24,7 @@ export function MainButtons(
         <View style={styles.buttonArea}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    style={{borderBottomWidth: 0.5, padding: 2}}
+                    style={{borderBottomWidth: 0.5, padding: 3}}
                     onPress={() => setHelpModalVisible(true)}
                 >
                     <Ionicons
@@ -34,17 +34,17 @@ export function MainButtons(
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={{borderBottomWidth: 0.5, padding: 2}}
+                    style={{borderBottomWidth: 0.5, padding: 3}}
                     onPress={() => getUserLocation()}
                 >
                     <Ionicons
-                        name="navigate-circle-outline"
+                        name="person-circle-outline"
                         color={'black'}
-                        size={30}
+                        size={28}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={{padding: 2}}
+                    style={{padding: 3}}
                     onPress={() => setModalVisible(true)}
                 >
                     <Ionicons
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
         position: 'relative',
         borderRadius: 5,
         backgroundColor: 'white',
-        padding: 5,
         margin: 10,
+        paddingHorizontal: 5,
         borderWidth: 0.5,
     },
 });

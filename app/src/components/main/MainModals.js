@@ -244,6 +244,7 @@ const modalStyles = StyleSheet.create({
         borderColor: '#F0F0F0',
         backgroundColor: '#F0F0F0',
         borderRadius: 5,
+        padding: 10
     },
     picker: {
         height: 45,
