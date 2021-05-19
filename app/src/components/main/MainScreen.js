@@ -321,7 +321,7 @@ export function MainScreen({navigation}) {
                                 setRegion(e);
                             }}
                         showsUserLocation={true}
-                        onPoiClick={e => switchStoresFromPOI(e.nativeEvent)}
+                        onPoiClick={e => {if (internetState.current) switchStoresFromPOI(e.nativeEvent)}}
                     >
                         {
                             internetState.current === true && <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
