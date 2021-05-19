@@ -122,12 +122,14 @@ class FirebaseBackend extends BaseBackend {
     // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
     // to Date objects
     convertTimestampToDate = (data) => {
-        for (let [key, value] of Object.entries(data)) {
-            if (value instanceof firebase.firestore.Timestamp) {
-                console.log("Found a timestamp");
-                data[key] = value.toDate();
-            } else if (typeof value == 'object') {
-                data[key] = this.convertTimestampToDate(value);
+        if (data instanceof Object) {
+            for (let [key, value] of Object.entries(data)) {
+                if (value instanceof firebase.firestore.Timestamp) {
+                    console.log("Found a timestamp");
+                    data[key] = value.toDate();
+                } else if (typeof value == 'object') {
+                    data[key] = this.convertTimestampToDate(value);
+                }
             }
         }
         return data;
@@ -245,7 +247,7 @@ class FirebaseBackend extends BaseBackend {
             query.forEach(doc => {
                 var currentDoc = doc.data();
                 currentDoc["docId"] = doc.id;
-                remote_collection.push(currentDoc);
+                remote_collection.push(this.convertTimestampToDate(currentDoc));
             });
 
             callback(remote_collection);
