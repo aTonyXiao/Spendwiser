@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     }, 
     signUpWrapper: {
         marginTop: "25%",
-        bottom: 25,
+        bottom: 30,
     },
     offlineAccountWrapper: {
         bottom: 20,
