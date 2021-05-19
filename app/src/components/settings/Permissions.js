@@ -1,93 +1,119 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, Switch, StyleSheet } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, Alert, Switch, StyleSheet, Linking, AppState } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
-import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import * as IntentLauncher from 'expo-intent-launcher';
 
-export function AppPermissions() {
-    const [hasConstructed, setHasConstructed] = useState(false);
-
-    const [notificationPermissions, askForNotificationPermission] =
-          Permissions.usePermissions(Permissions.NOTIFICATIONS, {ask: false});
+export function AppPermissions({}) {
+    const [notificationPermissions, setNotifiationPermission] = useState(false);
     const [photoPermissions, setPhotoPermissions] = useState(false);
     const [cameraRollPermissions, setCameraRollPermissions] = useState(false);
+    const [locationPermissions, setLocationPermissions] = useState(false);
+    const appState = useRef(AppState.currentState);
 
+    const handleAppStateChange = (nextAppState) => {
+        if (
+            appState.current.match(/background/) &&
+            nextAppState === 'active'
+          ) {
+            console.log("Refreshing...");
+            getCameraRollPermissions();
+            getPhotoPermissions();
+            getLocationPermissions();
+            getNotificationPermissions();
+          }
+      
+          appState.current = nextAppState;
+    }
+
+    const openAppSettings = () => {
+        if(Platform.OS=='ios'){
+            Linking.openURL('app-settings:')
+        } else{
+            IntentLauncher.startActivityAsync(
+            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+            );
+        }
+    }
 
     // gets photo permissions
-    getPhotoPermissions = async () => { 
-        let permissions = await ImagePicker.getCameraPermissionsAsync();
-        setPhotoPermissions(permissions.granted);
-    }
-    // function for toggle button
-    const togglePhotoPermissions = () => {
-        if (photoPermissions) {
-            Alert.alert("Turn this off from the settings application");
+    const getPhotoPermissions = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status === 'granted') {
+            setPhotoPermissions(true);
         } else {
-            getPhotoPermissions();
+            setPhotoPermissions(false);
         }
     }
-
-    getCameraRollPermissions = async () => { 
-        let permissions = await ImagePicker.getCameraPermissionsAsync();
-        setCameraRollPermissions(permissions.granted);
-    }
-    const toggleCameraRollPermissions = () => {
-        if (cameraRollPermissions) {
-            Alert.alert("Turn this off from the settings application");
+    const getCameraRollPermissions = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status === 'granted') {
+            setCameraRollPermissions(true);
         } else {
-            getCameraRollPermissions();
+            setCameraRollPermissions(false);
         }
     }
-
-    const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-    const toggleNotifications = () => { 
-        if (notificationsEnabled) { 
-            Alert.alert("Notifications cannot be turned off");
-        } else { 
-            askForNotificationPermission();
-            setNotificationsEnabled(true);
-        }
-    }
-
-    // simulate constructor
-    const constructor = () => { 
-        if (hasConstructed) { 
-            return;
+    const getLocationPermissions = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status === 'granted') {
+            setLocationPermissions(true);
         } else {
-            if (notificationPermissions != undefined) { 
-                setNotificationsEnabled(notificationPermissions.granted 
-                    || notificationPermissions.status == 'granted');
-
-                getCameraRollPermissions();
-                getPhotoPermissions();
-
-                setHasConstructed(true);
-            }
+            setLocationPermissions(false);
         }
     }
-    constructor();
+
+    const getNotificationPermissions = async () => {
+        const settings = await Notifications.getPermissionsAsync({
+            ios: {
+                allowAlert: true,
+                allowBadge: true,
+                allowSound: true,
+                allowAnnouncements: true,
+              },
+        });
+        if (settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL) {
+            setNotifiationPermission(true);
+        } else {
+            setNotifiationPermission(false);
+        }
+    }
+
+    
+
+    useEffect(() => {
+        AppState.addEventListener('change', handleAppStateChange);
+        getCameraRollPermissions();
+        getPhotoPermissions();
+        getLocationPermissions();
+        getNotificationPermissions();
+        return () => {
+          AppState.removeEventListener('change', handleAppStateChange);
+        };
+      }, []);
 
     return (
         <View style={styles.container}>
-            <Text style={mainStyles.large_title}>Notifications</Text>
+            <Text style={mainStyles.large_title}>Permissions</Text>
 
             <View style={styles.rowContainerTop}>
                 <Text>Notifications</Text>
                 <Switch
                     trackColor={{false: "#767577", true: "#81b0ff"}}
-                    thumbColor={notificationsEnabled ? "#f4f3f4" : "#f4f3f4"}
-                    onValueChange={toggleNotifications}
-                    value={notificationsEnabled}
+                    thumbColor={notificationPermissions ? "#f4f3f4" : "#f4f3f4"}
+                    onValueChange={openAppSettings}
+                    value={notificationPermissions}
                 />
             </View>
 
             <View style={styles.rowContainerTop}>
-                <Text>Camera Roll</Text>
+                <Text>Location</Text>
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={cameraRollPermissions ? "#f4f3f4" : "#f4f3f4"}
-                    onValueChange={toggleCameraRollPermissions}
-                    value={cameraRollPermissions}
+                    thumbColor={locationPermissions ? "#f4f3f4" : "#f4f3f4"}
+                    onValueChange={openAppSettings}
+                    value={locationPermissions}
                 />
             </View>
 
@@ -96,8 +122,18 @@ export function AppPermissions() {
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
                     thumbColor={photoPermissions ? "#f4f3f4" : "#f4f3f4"}
-                    onValueChange={togglePhotoPermissions}
+                    onValueChange={openAppSettings}
                     value={photoPermissions}
+                />
+            </View>
+
+            <View style={styles.rowContainerTop}>
+                <Text>Camera Roll</Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={cameraRollPermissions ? "#f4f3f4" : "#f4f3f4"}
+                    onValueChange={openAppSettings}
+                    value={cameraRollPermissions}
                 />
             </View>
         </View>

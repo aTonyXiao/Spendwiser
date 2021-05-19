@@ -19,7 +19,7 @@ export function MainModals(
         Platform.OS === 'ios'
         ? Dimensions.get('window').height
         : Dimensions.get('screen').height;
-    const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: "dining"});
+    const [manualInput, setManualInput] = useState({storeName: "", vicinity: "", storeType: ""});
     const [manualModal, setManualModal] = useState(false);
     const categories = [
         {
@@ -68,6 +68,7 @@ export function MainModals(
                     justifyContent: 'center',
                 }}
                 onBackdropPress={()=> {setModalVisible(false); setManualModal(false)}}
+                avoidKeyboard={true}
             >
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
@@ -108,8 +109,10 @@ export function MainModals(
                                             <TouchableOpacity 
                                                 key={i}
                                                 onPress={()=> {
-                                                    reloadRecCard(storeName, i, storeArr[i].storeType, storeArr[i].geometry);
-                                                    setModalVisible(false);
+                                                    if (!storeIsSelected) {
+                                                        reloadRecCard(storeName, i, storeArr[i].storeType, storeArr[i].geometry);
+                                                        setModalVisible(false);
+                                                    }     
                                                 }}
                                                 style={i === 0 ? {borderTopWidth: 0.5, borderBottomWidth: 0.5} : {borderBottomWidth: 0.5}}
                                             >
@@ -190,6 +193,7 @@ export function MainModals(
                                                 }
                                                 addManualInput(manualInputObj);
                                             }
+                                            setManualInput({storeName: "", vicinity: "", storeType: ""});
                                         }}
                                         title="Set"
                                         style={{ margin: 10 }}
