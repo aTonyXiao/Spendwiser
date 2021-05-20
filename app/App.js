@@ -59,6 +59,7 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
+            options={{animationEnabled: true, gestureEnabled: false}}
           />
           <Stack.Screen
             name="CreateAccount"
