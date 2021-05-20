@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { View, StyleSheet, Alert, TouchableOpacity, Text, Image, Dimensions } from 'react-native';
 import { appBackend } from '../../network/backend';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { Ionicons } from '@expo/vector-icons'
 import { isAvailableAsync } from "expo-apple-authentication";
-import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const Login = props => {
     const [username, setUsername] = React.useState('');
