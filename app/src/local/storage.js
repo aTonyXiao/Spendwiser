@@ -292,6 +292,10 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("----------------------");
             }
 
+            if (!(accountName in db)) {
+                db[accountName] = {};
+            }
+
             let local_data = null;
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 local_data = db[accountName][document][id];

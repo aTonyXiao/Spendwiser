@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-import { initializeAppBackend } from './src/network/backend';
+import { initializeAppBackend } from './src/network/backend_setter';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoadingScreen } from './src/components/LoadingScreen';

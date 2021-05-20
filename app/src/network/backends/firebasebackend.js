@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import { syncLocalDatabase, syncRemoteDatabase } from '../../local/sync'
 import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
@@ -65,6 +66,7 @@ class FirebaseBackend extends BaseBackend {
             appId: process.env.REACT_NATIVE_APP_ID,
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
+        console.log(firebaseConfig);
 
         // check if there is a Firebase 'App' already initialized
         if (firebase.apps.length == 0) {
@@ -88,9 +90,10 @@ class FirebaseBackend extends BaseBackend {
 
 
         // Sync the local database every minute
-        setInterval(() => {
-            this.syncLocalDatabase();
-        }, 60000);
+        setInterval(async () => {
+            await syncLocalDatabase();
+            await syncRemoteDatabase();
+        }, 30000);
     }
 
     /**
@@ -119,18 +122,20 @@ class FirebaseBackend extends BaseBackend {
     // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
     // to Date objects
     convertTimestampToDate = (data) => {
-        for (let [key, value] of Object.entries(data)) {
-            if (value instanceof firebase.firestore.Timestamp) {
-                console.log("Found a timestamp");
-                data[key] = value.toDate();
-            } else if (typeof value == 'object') {
-                data[key] = this.convertTimestampToDate(value);
+        if (data instanceof Object) {
+            for (let [key, value] of Object.entries(data)) {
+                if (value instanceof firebase.firestore.Timestamp) {
+                    console.log("Found a timestamp");
+                    data[key] = value.toDate();
+                } else if (typeof value == 'object') {
+                    data[key] = this.convertTimestampToDate(value);
+                }
             }
         }
         return data;
     }
 
-    firebaseDbGet(location, ...conditionsWithCallback) {
+    remoteDBGet(location, ...conditionsWithCallback) {
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
 
@@ -242,7 +247,7 @@ class FirebaseBackend extends BaseBackend {
             query.forEach(doc => {
                 var currentDoc = doc.data();
                 currentDoc["docId"] = doc.id;
-                remote_collection.push(currentDoc);
+                remote_collection.push(this.convertTimestampToDate(currentDoc));
             });
 
             callback(remote_collection);
@@ -383,7 +388,7 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
-    dbFirebaseSet(location, data, merge, callback) {
+    remoteDBSet(location, data, merge, callback) {
         // Store on firebase if possible
         let databaseLocation = getDatabaseLocation(this.database, location);
         storage.getLoginState((state) => {
@@ -396,7 +401,7 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
-    dbFirebaseAdd(location, data, callback) {
+    remoteDBAdd(location, data, callback) {
         // Add data to our firebase storage
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.add(data).then((query) => {
@@ -419,110 +424,6 @@ class FirebaseBackend extends BaseBackend {
                 });
             });
         }
-    }
-
-    async replaceCardId(accountName, full_location, local_id, remote_id) {
-        // Replace 'cardId' with the correct one
-        // Replace key with 'cardId'
-
-        // Replace card id field in this card
-
-        return new Promise((resolve, reject) => {
-            console.log("Replacing card id field for this card in location: " + full_location + " with " + remote_id);
-            storage.setLocalDB(accountName, full_location, {'cardId': remote_id}, true, () => {
-                // Replace card id field in the user's list of cards
-                let cardInfoLocation = "users." + accountName + ".cards." + local_id;
-                console.log("Replacing card id field for user card in location: " + cardInfoLocation + " with: " + remote_id);
-                storage.setLocalDB(accountName, cardInfoLocation, {'cardId': remote_id}, true, () => {
-                    resolve();
-                });
-            });
-        })
-    }
-
-    async replaceTransactionDocId(accountName, local_id, remote_id) {
-        return new Promise((resolve, reject) => {
-            let docLocation = "users." + accountName + ".transactions." + remote_id;
-            console.log("Replacing doc id field for user transaction in location: " + docLocation + " with: " + remote_id);
-            storage.setLocalDB(accountName, docLocation, {'docId': remote_id}, true, () => {
-                resolve();
-            });
-        });
-    }
-
-    async replaceCardDocId(accountName, remote_id) {
-        return new Promise((resolve, reject) => {
-            let docLocation = "users." + accountName + ".cards." + remote_id;
-            console.log("Replacing doc id field for user card in location: " + docLocation + " with: " + remote_id);
-            storage.setLocalDB(accountName, docLocation, {'docId': remote_id}, true, () => {
-                resolve();
-            });
-        });
-    }
-
-    async replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
-        return new Promise((resolve, reject) => {
-            storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
-                resolve();
-            });
-        });
-    }
-
-    async syncDocument(accountName, document) {
-        return new Promise((resolve, reject) => {
-            let location = document['location'];
-            let id = document['id'];
-            let type = document['type'];
-            let full_location = location + '.' + id;
-
-            storage.getLocalDB(accountName, full_location, (data) => {
-                if (type == 'add') {
-                    console.log("Firebase add");
-                    this.dbFirebaseAdd(location, data, (remote_id) => {
-                        storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
-                            if (location.includes('cards') && !location.includes("users")) {
-                                await this.replaceCardId(accountName, full_location, id, remote_id);
-                            }  
-                            else if (location.includes('transactions')) {
-                                await this.replaceTransactionDocId(accountName, id, remote_id);
-                            }
-                            else if (location.includes('cards')) {
-                                await this.replaceCardDocId(accountName, remote_id);
-                            }
-                            await this.replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
-                            storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                                resolve();
-                            });
-                        });
-                    });
-                } else if (type == 'delete') {
-                    console.log("Firebase delete");
-                    this.dbFirebaseDelete(location + "." + id);
-                    storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                        resolve();
-                    });
-                } else if (type == 'set') {
-                    console.log("Firebase set");
-                    this.dbFirebaseSet(location + "." + id, data, document['merge'], () => {
-                        storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
-                            resolve();
-                        });
-                    });
-                }
-            });
-        });
-    }
-
-    async syncLocalDatabase() {
-        this.getUserID(async (accountName) => {
-            storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
-                console.log("Got unsynced documents: ");
-                console.log(unsynced_documents);
-                for (let i = 0; i < unsynced_documents.length; i++) {
-                    await this.syncDocument(accountName, unsynced_documents[i]);
-                }
-            });
-        });
     }
 
     /**
@@ -565,7 +466,7 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
-    dbFirebaseDelete(location) {
+    remoteDBDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
     }

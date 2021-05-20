@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
@@ -31,26 +31,35 @@ function TransactionModal({
     addTransaction = () => {
         const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) { 
-            user.saveTransaction(
-                userId, 
-                cardId, 
-                {
-                    storeName: storeInformation["label"],
-                    address: storeInformation["vicinity"],
-                    storeType: storeInformation["storeType"]
-                },
-                transactionInput, 
-                (docId) => { 
-                    user.addTransactionId(userId, docId);
-                    setHasConstructed(false);
-                }
-            );
+            if (!storeInformation) {
+                Alert.alert("Store location not found!",
+                            "Please wait until we can find your location before you add a transaction",
+                            [
+                                {text: "Ok"}
+                            ],
+                            { cancelable: false });
+            } else {
+                user.saveTransaction(
+                    userId, 
+                    cardId, 
+                    {
+                        storeName: storeInformation["label"],
+                        address: storeInformation["vicinity"],
+                        storeType: storeInformation["storeType"]
+                    },
+                    transactionInput, 
+                    (docId) => { 
+                        user.addTransactionId(userId, docId);
+                        setHasConstructed(false);
+                    }
+                );
+            }
             setShowTransactionModal(false);
         } else {
-            setDisplayErrorText(true);
+                setDisplayErrorText(true);
 
-            setTimeout(function () {
-                setDisplayErrorText(false);
+                setTimeout(function () {
+                    setDisplayErrorText(false);
             }, 2500)
         }
     }
