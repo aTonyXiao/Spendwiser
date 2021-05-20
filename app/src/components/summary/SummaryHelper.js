@@ -97,8 +97,6 @@ class SummaryHelper {
             return [newTrans];
         } else {
             let idx = tmpTrans.findIndex((element) => element.dateAdded < newTrans.dateAdded)
-            // console.log("index la");
-            // console.log(idx);
             if (idx === -1) {
                 return [...tmpTrans, newTrans];
             } else {
