@@ -143,7 +143,7 @@ export const Login = props => {
                         appBackend.signInOffline();
                     }}>
                     <Text style={styles.signUpButton}>
-                        Use without logging in
+                        Continue without logging in
                 </Text>
                 </TouchableOpacity>
             </SafeAreaView>
