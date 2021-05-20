@@ -5,11 +5,15 @@ import {
     Alert, 
     TouchableOpacity, 
     Text,
-    TextInput
+    TextInput,
+    Image,
+    Dimensions
 } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { appBackend } from '../../network/backend'
+import { DismissKeyboard } from '../util/DismissKeyboard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const CreateAccount = props => {
     const [username, setUsername] = useState('');
@@ -38,33 +42,53 @@ export const CreateAccount = props => {
     }
 
     return (
-        <View style={mainStyles.container}>
-            <Text style={styles.title}>SpendWiser</Text>
-            <UsernameInput onChange={setUsername} />
-            {
-                showPasswordsDontMatch &&
-                <Text style={styles.errorText}>Passwords must match</Text>
-            }
-            <PasswordInput onChange={setPassword} />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => setSecondPassword(text)}
-                placeholder={' Password'}
-                placeholderTextColor={grayRGB}
-            />
-            <TouchableOpacity style={styles.signUpWrapper} onPress={signUp}>
-                <Text style={styles.signUpButton}>Sign Up</Text>
-            </TouchableOpacity>
-        </View>
+        <DismissKeyboard>
+            <SafeAreaView style={styles.screen}>
+                <View style={{marginTop: "25%"}}>
+                    <Image source = {require("../../../assets/spendwiser_logo.png")}
+                        style = {{ 
+                            width: Dimensions.get('window').width * .8,  //its same to '20%' of device width
+                            aspectRatio: 5, // <-- this
+                            resizeMode: 'contain', //optional
+                        }}
+                    />
+                </View>
+                <View style={styles.registerContainer}>
+                    <UsernameInput onChange={setUsername} />
+                    {
+                        showPasswordsDontMatch &&
+                        <Text style={styles.errorText}>Passwords must match</Text>
+                    }
+                    <PasswordInput onChange={setPassword} />
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => setSecondPassword(text)}
+                        placeholder={' Password'}
+                        placeholderTextColor={grayRGB}
+                    />
+                    <TouchableOpacity style={styles.signUpWrapper} onPress={signUp}>
+                        <Text style={styles.signUpButton}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        </DismissKeyboard>
     );
 }
 
 const styles = StyleSheet.create({
-    title : { 
-        fontSize: 40,
-        color: '#28b573',
-        position: 'absolute',
-        top: 130
+    screen: {
+        flex: 1,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: "100%"
+    },
+    registerContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "100%",
+        marginBottom: "25%"
     },
     signUpWrapper : {
         margin: 15,
