@@ -254,21 +254,21 @@ function DisplayCard({route, navigation}) {
                             displayRewards &&
                             rewards.map((reward, i) => {
                                 var category;
-                                var amountCents;
+                                var rewardPercentage;
                                 // temporary way to tell if card is a manual addition
                                 if (rewards[0][0] == '0') {
                                     category = reward[1].type;
-                                    amountCents = reward[1].value;
+                                    rewardPercentage = reward[1].value;
                                 } else {
                                     category = reward[0];
-                                    amountCents = reward[1];
+                                    rewardPercentage = reward[1];
                                 }
 
                                 return (
                                     <View style={styles.sectionText} key={i}>
                                         <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
                                             <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                            <Text style={{ marginLeft: 5 }}>{amountCents} cents</Text>
+                                            <Text style={{ marginLeft: 5 }}>{rewardPercentage}%</Text>
                                         </View>
                                     </View>
                                 )
