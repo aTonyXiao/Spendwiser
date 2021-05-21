@@ -125,7 +125,6 @@ class FirebaseBackend extends BaseBackend {
         if (data instanceof Object) {
             for (let [key, value] of Object.entries(data)) {
                 if (value instanceof firebase.firestore.Timestamp) {
-                    console.log("Found a timestamp");
                     data[key] = value.toDate();
                 } else if (typeof value == 'object') {
                     data[key] = this.convertTimestampToDate(value);
@@ -136,6 +135,7 @@ class FirebaseBackend extends BaseBackend {
     }
 
     remoteDBGet(location, ...conditionsWithCallback) {
+        console.log("Gettting from remote db");
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
 
@@ -192,23 +192,6 @@ class FirebaseBackend extends BaseBackend {
             storage.getLocalDB(accountId, location, ...conditions, callback);
         });
     }
-
-    async dbGetRemote(location, ...conditionsWithCallback) {
-        this.userAccountType((type) => {
-            let callback = conditionsWithCallback.pop();
-            let conditions = conditionsWithCallback;
-            if (type == 'normal') {
-                this.firebaseDbGet(location, ...conditions, async (remote_data) => {
-                    callback(remote_data);
-                });
-
-            } else {
-                callback(null);
-            }
-        });
-
-    }
-
 
     // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**

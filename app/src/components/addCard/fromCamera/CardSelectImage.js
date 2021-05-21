@@ -76,7 +76,7 @@ export function CardSelectImage({route, navigation}) {
         }
     })
 
-    const addCard = () => {
+    const addCard = async () => {
         // TODO: this should be navigate to add card confirm
         var cardId = cardMap[chosenCard];
         var currentCardIds = [];
@@ -86,7 +86,7 @@ export function CardSelectImage({route, navigation}) {
 
         // check for user trying to add card they already have
         if (!currentCardIds.includes(cardId)) {
-            user.saveCardToUser(userId, cardId, null, null);
+            await user.saveCardToUser(userId, cardId, null, null);
         } else {
             Alert.alert("Already have this card",
                 "You've attempted to add a card that has already been added to your account",

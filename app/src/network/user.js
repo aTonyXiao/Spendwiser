@@ -115,15 +115,18 @@ class userClass {
      */
     async saveCardToUser(userId, cardId, transactions, diff) { 
         userId = await userId;
-        appBackend.dbAdd("users." + userId + ".cards", {
-            cardId: cardId, 
-            transactions: transactions,
-            diff: diff
-        }, (id) => { 
-            appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
-                mainNeedsUpdate = true;
-                this.newOrDeletedCards = true;
-            });
+        return new Promise((resolve, reject) => {
+            appBackend.dbAdd("users." + userId + ".cards", {
+                cardId: cardId, 
+                transactions: transactions,
+                diff: diff
+            }, (id) => { 
+                appBackend.dbSet("users." + userId + ".cards." + id, {'docId': id}, true, () => {
+                    mainNeedsUpdate = true;
+                    this.newOrDeletedCards = true;
+                    resolve();
+                });
+            })
         })
     }
 
