@@ -81,7 +81,7 @@ async function syncDocument(accountName, document) {
                                 })
                             }
                             await replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
-                            storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
+                            storage.removeDocumentFromUnsyncedList(accountName, location, remote_id, () => {
                                 resolve();
                             });
                         });
@@ -105,13 +105,16 @@ async function syncDocument(accountName, document) {
 }
 
 async function syncLocalDatabase() {
-    appBackend.getUserID(async (accountName) => {
-        storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
-            console.log("Got unsynced documents: ");
-            console.log(unsynced_documents);
-            for (let i = 0; i < unsynced_documents.length; i++) {
-                await syncDocument(accountName, unsynced_documents[i]);
-            }
+    return new Promise((resolve, reject) => {
+        appBackend.getUserID(async (accountName) => {
+            storage.getUnsyncedDocuments(accountName, async (unsynced_documents) => {
+                console.log("Got unsynced documents: ");
+                console.log(unsynced_documents);
+                for (let i = 0; i < unsynced_documents.length; i++) {
+                    await syncDocument(accountName, unsynced_documents[i]);
+                }
+                resolve();
+            });
         });
     });
 }
@@ -174,13 +177,16 @@ async function syncRemoteSubcollection(location) {
 }
 
 async function syncRemoteDatabase() {
-    appBackend.userAccountType((type) => {
-        if (type == 'normal') {
-            syncRemoteSubcollection("cards");
-            syncRemoteSubcollection("transactions");
-        } else {
-            // Do nothing
-        }
+    return new Promise((resolve, reject) => {
+        appBackend.userAccountType(async (type) => {
+            if (type == 'normal') {
+                await syncRemoteSubcollection("cards");
+                await syncRemoteSubcollection("transactions");
+            } else {
+                // Do nothing
+            }
+            resolve();
+        });
     });
 }
 
