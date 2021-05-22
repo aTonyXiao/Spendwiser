@@ -18,16 +18,16 @@ let Settings = (props) => {
 
     return(
         <SafeAreaView style={styles.screen}>
-            <View style={mainStyles.container}>
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                    <Image source = {require("../../../assets/spendwiser_logo.png")}
-                        style = {{ 
-                            width: width * .8,  //its same to '20%' of device width
-                            aspectRatio: 5, // <-- this
-                            resizeMode: 'contain', //optional
-                        }}
-                    />
-                </View>
+            <View style={{alignItems: 'center', justifyContent: 'center', marginTop: "15%"}}>
+                <Image source = {require("../../../assets/spendwiser_logo.png")}
+                    style = {{ 
+                        width: width * .8,  //its same to '20%' of device width
+                        aspectRatio: 5, // <-- this
+                        resizeMode: 'contain', //optional
+                    }}
+                />
+            </View>
+            <View style={styles.settingsContainer}>
                 <TouchableOpacity    
                     onPress={() => {
                         Alert.alert(
@@ -190,6 +190,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: '100%',
         paddingTop: StatusBar.currentHeight
+    },
+    settingsContainer: {
+        flex: 1,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        paddingTop: "15%",
+        marginBottom: 40,
     },
     rowContainerTop: {
         display: 'flex', 
