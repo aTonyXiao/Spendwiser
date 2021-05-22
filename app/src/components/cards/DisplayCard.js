@@ -88,7 +88,6 @@ function DisplayCard({route, navigation}) {
     constructor();
 
     const deleteCard = () => {
-        console.log('deleting card')
         user.deleteCard(userId, cardId, docId);
         navigation.navigate('YourCards', { forceLoad: true });
     }

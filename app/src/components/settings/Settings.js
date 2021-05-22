@@ -28,34 +28,6 @@ let Settings = (props) => {
                 />
             </View>
             <View style={styles.settingsContainer}>
-                <TouchableOpacity
-                    onPress={() => {
-                        storage.clearLocalDB();
-                    }}
-                    style={styles.rowContainer}
-                >
-                    <Text>DEBUG delete local storage</Text>
-                    <Ionicons
-                        name="chevron-forward-outline"
-                        color="gray"
-                        size={24}
-                        style={{ marginRight: -8 }}
-                    ></Ionicons>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        storage.printLocalDB();
-                    }}
-                    style={styles.rowContainer}
-                >
-                    <Text>DEBUG print local storage</Text>
-                    <Ionicons
-                        name="chevron-forward-outline"
-                        color="gray"
-                        size={24}
-                        style={{ marginRight: -8 }}
-                    ></Ionicons>
-                </TouchableOpacity>
                 <TouchableOpacity    
                     onPress={() => {
                         Alert.alert(
@@ -174,6 +146,34 @@ let Settings = (props) => {
                             color="gray"
                             size={24}
                             style={{marginRight: -8}}
+                    ></Ionicons>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        storage.clearLocalDB();
+                    }}
+                    style={styles.rowContainer}
+                >
+                    <Text>DEBUG delete local storage</Text>
+                    <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={24}
+                        style={{ marginRight: -8 }}
+                    ></Ionicons>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        storage.printLocalDB();
+                    }}
+                    style={styles.rowContainer}
+                >
+                    <Text>DEBUG print local storage</Text>
+                    <Ionicons
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={24}
+                        style={{ marginRight: -8 }}
                     ></Ionicons>
                 </TouchableOpacity>
             </View>

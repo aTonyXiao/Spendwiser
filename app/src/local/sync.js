@@ -177,7 +177,6 @@ async function syncRemoteSubcollection(location) {
 }
 
 async function syncRemoteDatabase() {
-    console.log("!!!!!!!!!IN SYNC REMOTE")
     return new Promise((resolve, reject) => {
         appBackend.userAccountType(async (type) => {
             if (type == 'normal') {
