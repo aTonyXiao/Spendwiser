@@ -16,6 +16,7 @@ import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
 import { makeCancelable } from '../util/promise-helper';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
@@ -41,7 +42,10 @@ function YourCards({ route, navigation }) {
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
-                setCards(cards); 
+                cards.forEach(element => {
+                    element["key"] = element["docId"];
+                });
+                setCards(cards);
             }).catch(({isCanceled, ...error}) => {});
     
             setLoaded(true);
@@ -148,20 +152,31 @@ function YourCards({ route, navigation }) {
 
                 <ScrollView style={{width: "100%"}}>
                     <View style={styles.cardScroll}>
-                        {cards.map((card, i) => {
-                            var props = {
-                                navigation: navigation,
-                                card: card,
-                                storeInformation: storeInformation,
-                                origin: "yourcards"
-                            }
-                            return (
-                                <View key={i}>
-                                    <Card key={i.toString()} props={props} />
-                                    <View style={styles.divider}></View>
+                        <SwipeListView
+                            data={cards}
+                            renderItem={(data, rowMap) => {
+                                var props = {
+                                    navigation: navigation,
+                                    card: data.item,
+                                    storeInformation: storeInformation,
+                                    origin: "yourcards"
+                                }
+                                return (
+                                    <View key={data.key}>
+                                        <Card key={data.key} props={props} />
+                                        <View style={styles.divider}></View>
+                                    </View>
+                                )
+                            }}
+                            renderHiddenItem={(data, rowMap) => (
+                                <View style={styles.rowBack}>
+                                    <Text>Left</Text>
+                                    <Text>Right</Text>
                                 </View>
-                            )
-                        })}
+                            )}
+                            rightOpenValue={-150}
+                            disableRightSwipe={true}
+                        />
                    </View>
 
                     {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
@@ -215,7 +230,15 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 1,
         borderColor: 'lightgray'
-    }
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
 });
 
 export { YourCards };
