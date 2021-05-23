@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: (Dimensions.get('window').width * 0.9),
         height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
-        marginBottom: 10
+        marginBottom: 10,
+        zIndex: -1
     }, 
     cardTitle: {
         textAlign: 'center',

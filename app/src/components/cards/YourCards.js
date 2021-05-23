@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
     SafeAreaView, 
-    ScrollView, 
     StyleSheet, 
     View, 
     Text, 
@@ -13,7 +12,7 @@ import {
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal'
@@ -34,7 +33,10 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
     const [swipeWidths, setSwipeWidths] = useState([]);
+    const [swipePaddings, setSwipePaddings] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
+    const animationRunning = useRef(false);
+    const deleteOpen = useRef(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
@@ -44,10 +46,13 @@ function YourCards({ route, navigation }) {
     const resetSwipeWidth = key => {
         if (typeof swipeWidths[key] === "undefined") {
             swipeWidths[key] = new Animated.Value(0);
+            swipePaddings[key] = new Animated.Value(0);
         } else {
             swipeWidths[key].setValue(0);
+            swipePaddings[key].setValue(0);
         }
         setSwipeWidths(swipeWidths);
+        setSwipePaddings(swipePaddings);
     };
 
     useEffect(() => {
@@ -74,6 +79,9 @@ function YourCards({ route, navigation }) {
     const deleteCard = (card, index) => {
         user.deleteCard(userId, card.cardId, card.docId);
         let newCards = [...cards];
+        for (let i = index; i < newCards.length; i++) { // recalculate keys
+            newCards[i]["key"]--;
+        }
         newCards.splice(index, 1);
         setCards(newCards);
         resetSwipeWidth(index);
@@ -168,9 +176,53 @@ function YourCards({ route, navigation }) {
     const deleteThreshold = Dimensions.get('window').width * -0.5; 
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        if (value < deleteThreshold) swipeWidths[key].setValue(Dimensions.get('window').width);
-        else swipeWidths[key].setValue(Math.abs(value));
+        if (value < deleteThreshold) {
+            if (!animationRunning.current && !deleteOpen.current) {
+                Animated.timing(swipePaddings[key], {
+                    toValue: Dimensions.get('window').width * 0.8,
+                    duration: 150,
+                    useNativeDriver: false,
+                }).start();
+                Animated.timing(swipeWidths[key], {
+                    toValue: Dimensions.get('window').width * 0.9,
+                    duration: 150,
+                    useNativeDriver: false,
+                }).start(() => {
+                    animationRunning.current = false;
+                    deleteOpen.current = true;
+                    swipePaddings[key].setValue(Dimensions.get('window').width * 0.8);
+                });
+                animationRunning.current = true;
+            }
+        } else {
+            if (!animationRunning.current && deleteOpen.current) {
+                Animated.timing(swipePaddings[key], {
+                    toValue: 0,
+                    duration: 150,
+                    useNativeDriver: false,
+                }).start();
+                Animated.timing(swipeWidths[key], {
+                    toValue: Math.abs(value),
+                    duration: 150,
+                    useNativeDriver: false,
+                }).start(() => {
+                    animationRunning.current = false;
+                    deleteOpen.current = false;
+                    swipePaddings[key].setValue(0);
+                });
+                animationRunning.current = true;
+            } else if (!animationRunning.current) {
+                swipeWidths[key].setValue(Math.abs(value));
+            }
+        }
         setSwipeWidths(swipeWidths);
+        setSwipePaddings(swipePaddings);
+    };
+
+    const swipeGestureEnded = (key, data) => {
+        if (data.translateX < deleteThreshold) {
+            deleteCard(cards[key], key);
+        }
     };
 
     return (
@@ -202,10 +254,10 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <View key={data.item.docId}>
+                                <Animated.View key={data.item.docId} style={{ paddingRight: swipePaddings[data.item.key] }}>
                                     <Card key={data.item.docId} props={props} />
                                     <View style={styles.divider}></View>
-                                </View>
+                                </Animated.View>
                             )
                         }}
                         renderHiddenItem={(data, rowMap) => (
@@ -222,7 +274,8 @@ function YourCards({ route, navigation }) {
                         rightOpenValue={-100}
                         disableRightSwipe={true}
                         onSwipeValueChange={onSwipeValueChange}
-                        useNativeDriver={true}
+                        swipeGestureEnded={swipeGestureEnded}
+                        useNativeDriver={false}
                     />
                 </View>                
             </View>
@@ -281,7 +334,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginTop: 40,
         marginRight: (Dimensions.get('window').width * 0.05),
-        marginBottom: 5,
+        marginBottom: 5
     },
     cardDelete: {
         backgroundColor: 'red',
@@ -289,7 +342,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: "100%",
         borderRadius: 15,
-        zIndex: 10
     }
 });
 
