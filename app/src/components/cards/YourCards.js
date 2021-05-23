@@ -8,7 +8,8 @@ import {
     TouchableOpacity, 
     StatusBar,
     Alert,
-    Animated
+    Animated,
+    Dimensions
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -153,7 +154,9 @@ function YourCards({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
+                    <View style={styles.emptyBodyContainer}>
+                    <   Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
+                    </View>
                 </View>
                 <View style={styles.footerContainer}>
                     <Footer navigation={navigation} />
@@ -162,9 +165,11 @@ function YourCards({ route, navigation }) {
         )
     }
 
+    const deleteThreshold = Dimensions.get('window').width * -0.5; 
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        swipeWidths[key].setValue(Math.abs(value));
+        if (value < deleteThreshold) swipeWidths[key].setValue(Dimensions.get('window').width);
+        else swipeWidths[key].setValue(Math.abs(value));
         setSwipeWidths(swipeWidths);
     };
 
@@ -186,7 +191,7 @@ function YourCards({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.cardScroll}>
+                <View style={{height: "100%"}}>
                     <SwipeListView
                         data={cards}
                         renderItem={(data, rowMap) => {
@@ -219,8 +224,6 @@ function YourCards({ route, navigation }) {
                         onSwipeValueChange={onSwipeValueChange}
                         useNativeDriver={true}
                     />
-                    {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
-                    <View style={{ height: 100 }}></View>
                 </View>                
             </View>
             <View style={styles.footerContainer}>
@@ -245,12 +248,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         paddingTop: StatusBar.currentHeight,
     },
-    bodyContainer: {
-        alignItems: 'center',
-        height: "100%"
+    emptyBodyContainer: {
+        height: "100%",
+        alignItems: "center"
     },
-    cardScroll: {
-        paddingHorizontal: '5%',
+    bodyContainer: {
+        height: "100%",
+        paddingBottom: 100
     },
     addButton: {
         borderRadius: 100,
@@ -276,6 +280,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         marginTop: 40,
+        marginRight: (Dimensions.get('window').width * 0.05),
         marginBottom: 5,
     },
     cardDelete: {
@@ -283,7 +288,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: "100%",
-        borderRadius: 15
+        borderRadius: 15,
+        zIndex: 10
     }
 });
 

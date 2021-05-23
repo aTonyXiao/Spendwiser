@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     },
     card: {
         resizeMode: "contain",
-        width: "100%",
+        alignSelf: "center",
+        width: (Dimensions.get('window').width * 0.9),
         height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
         marginBottom: 10
     }, 
