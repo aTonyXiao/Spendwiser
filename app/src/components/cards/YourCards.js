@@ -21,6 +21,8 @@ import { useIsFocused } from '@react-navigation/native'
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
+const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
+
 /**
  * Display all of the credit cards associated with a user's account in a scrollable and selectable view. 
  * Shows each credit card's name and a picture of the card. If not card image is found, a gradient/colorized
@@ -34,6 +36,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
     const [swipeWidths, setSwipeWidths] = useState([]);
+    const [swipeHeights, setSwipeHeights] = useState([]);
     const [swipeOpacities, setSwipeOpacities] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
@@ -44,15 +47,18 @@ function YourCards({ route, navigation }) {
     const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
     const focused = useIsFocused();
 
-    const resetSwipeWidth = key => {
+    const resetAnimationValues = key => {
         if (typeof swipeWidths[key] === "undefined") {
             swipeWidths[key] = new Animated.Value(0);
+            swipeHeights[key] = new Animated.Value(CARD_HEIGHT + styles.cardBack.paddingTop);
             swipeOpacities[key] = new Animated.Value(1.0);
         } else {
             swipeWidths[key].setValue(0);
+            swipeHeights[key].setValue(CARD_HEIGHT + styles.cardBack.paddingTop);
             swipeOpacities[key].setValue(1.0);
         }
         setSwipeWidths(swipeWidths);
+        setSwipeHeights(swipeHeights);
         setSwipeOpacities(swipeOpacities);
     };
 
@@ -63,7 +69,7 @@ function YourCards({ route, navigation }) {
                 setCards([]);
                 cards.forEach(element => {
                     element["key"] = cards.indexOf(element);
-                    resetSwipeWidth(element["key"]);
+                    resetAnimationValues(element["key"]);
                 });
                 setCards(cards);
             }).catch(({isCanceled, ...error}) => {});
@@ -80,13 +86,19 @@ function YourCards({ route, navigation }) {
     const deleteCard = (rowMap, card, index) => {
         if (rowMap !== null) rowMap[index].closeRow();
         user.deleteCard(userId, card.cardId, card.docId);
-        let newCards = [...cards];
-        for (let i = index; i < newCards.length; i++) { // recalculate keys
-            newCards[i]["key"]--;
-        }
-        newCards.splice(index, 1);
-        setCards(newCards);
-        resetSwipeWidth(index);
+        Animated.timing(swipeHeights[index], {
+            toValue: 0,
+            duration: 150,
+            useNativeDriver: false
+        }).start(() => {
+            let newCards = [...cards];
+            for (let i = index; i < newCards.length; i++) { // recalculate keys
+                newCards[i]["key"]--;
+            }
+            newCards.splice(index, 1);
+            setCards(newCards);
+            resetAnimationValues(index);
+        });
     }
     
     const confirmDelete = (rowMap, card, index) => {
@@ -260,22 +272,24 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key] }}>
+                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                     <Card key={data.item.docId} props={props} />
                                     <View style={styles.divider}></View>
                                 </Animated.View>
                             )
                         }}
                         renderHiddenItem={(data, rowMap) => (
-                            <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(rowMap, data.item, cards.indexOf(data.item))}>
-                                <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
-                                    <Ionicons
-                                        name="trash-outline"
-                                        color="white"
-                                        size={25}
-                                    ></Ionicons>
-                                </Animated.View>
-                            </TouchableOpacity>
+                            <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
+                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(rowMap, data.item, cards.indexOf(data.item))}>
+                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
+                                        <Ionicons
+                                            name="trash-outline"
+                                            color="white"
+                                            size={25}
+                                        ></Ionicons>
+                                    </Animated.View>
+                                </TouchableOpacity>
+                            </Animated.View>
                         )}
                         rightOpenValue={-100}
                         disableRightSwipe={true}
@@ -347,7 +361,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        height: (Dimensions.get('window').width * 0.9) / 1.586
+        height: CARD_HEIGHT
     }
 });
 
