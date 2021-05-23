@@ -50,11 +50,11 @@ function YourCards({ route, navigation }) {
     const resetAnimationValues = key => {
         if (typeof swipeWidths[key] === "undefined") {
             swipeWidths[key] = new Animated.Value(0);
-            swipeHeights[key] = new Animated.Value(CARD_HEIGHT + styles.cardBack.paddingTop);
+            swipeHeights[key] = new Animated.Value(CARD_HEIGHT + styles.cardBack.paddingTop + 10);
             swipeOpacities[key] = new Animated.Value(1.0);
         } else {
             swipeWidths[key].setValue(0);
-            swipeHeights[key].setValue(CARD_HEIGHT + styles.cardBack.paddingTop);
+            swipeHeights[key].setValue(CARD_HEIGHT + styles.cardBack.paddingTop + 10);
             swipeOpacities[key].setValue(1.0);
         }
         setSwipeWidths(swipeWidths);
