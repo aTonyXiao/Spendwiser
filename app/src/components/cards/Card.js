@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     cardTitle: {
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 0,
+        marginBottom: 10,
         fontSize: 20 
     }
 });
