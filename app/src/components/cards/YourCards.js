@@ -8,7 +8,8 @@ import {
     StatusBar,
     Alert,
     Animated,
-    Dimensions
+    Dimensions,
+    PixelRatio
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -33,7 +34,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
     const [swipeWidths, setSwipeWidths] = useState([]);
-    const [swipePaddings, setSwipePaddings] = useState([]);
+    const [swipeOpacities, setSwipeOpacities] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
     const deleteOpen = useRef(false);
@@ -46,13 +47,13 @@ function YourCards({ route, navigation }) {
     const resetSwipeWidth = key => {
         if (typeof swipeWidths[key] === "undefined") {
             swipeWidths[key] = new Animated.Value(0);
-            swipePaddings[key] = new Animated.Value(0);
+            swipeOpacities[key] = new Animated.Value(1.0);
         } else {
             swipeWidths[key].setValue(0);
-            swipePaddings[key].setValue(0);
+            swipeOpacities[key].setValue(1.0);
         }
         setSwipeWidths(swipeWidths);
-        setSwipePaddings(swipePaddings);
+        setSwipeOpacities(swipeOpacities);
     };
 
     useEffect(() => {
@@ -179,37 +180,37 @@ function YourCards({ route, navigation }) {
         const { key, value } = swipeData;
         if (value < deleteThreshold) {
             if (!animationRunning.current && !deleteOpen.current) {
-                Animated.timing(swipePaddings[key], {
-                    toValue: Dimensions.get('window').width * 0.8,
-                    duration: 150,
-                    useNativeDriver: false,
+                Animated.timing(swipeOpacities[key], {
+                    toValue: 0.0,
+                    duration: 100,
+                    useNativeDriver: false
                 }).start();
                 Animated.timing(swipeWidths[key], {
                     toValue: Dimensions.get('window').width * 0.9,
                     duration: 150,
-                    useNativeDriver: false,
+                    useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
                     deleteOpen.current = true;
-                    swipePaddings[key].setValue(Dimensions.get('window').width * 0.8);
+                    swipeOpacities[key].setValue(0.0);
                 });
                 animationRunning.current = true;
             }
         } else {
             if (!animationRunning.current && deleteOpen.current) {
-                Animated.timing(swipePaddings[key], {
-                    toValue: 0,
-                    duration: 150,
-                    useNativeDriver: false,
+                Animated.timing(swipeOpacities[key], {
+                    toValue: 1.0,
+                    duration: 100,
+                    useNativeDriver: false
                 }).start();
                 Animated.timing(swipeWidths[key], {
                     toValue: Math.abs(value),
                     duration: 150,
-                    useNativeDriver: false,
+                    useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
                     deleteOpen.current = false;
-                    swipePaddings[key].setValue(0);
+                    swipeOpacities[key].setValue(1.0);
                 });
                 animationRunning.current = true;
             } else if (!animationRunning.current) {
@@ -217,7 +218,7 @@ function YourCards({ route, navigation }) {
             }
         }
         setSwipeWidths(swipeWidths);
-        setSwipePaddings(swipePaddings);
+        setSwipeOpacities(swipeOpacities);
     };
 
     const swipeGestureEnded = (key, data) => {
@@ -259,7 +260,7 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <Animated.View key={data.item.docId} style={{ paddingRight: swipePaddings[data.item.key] }}>
+                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key] }}>
                                     <Card key={data.item.docId} props={props} />
                                     <View style={styles.divider}></View>
                                 </Animated.View>
@@ -280,8 +281,8 @@ function YourCards({ route, navigation }) {
                         disableRightSwipe={true}
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
-                        useNativeDriver={false}
                         onRowOpen={onRowOpen}
+                        useNativeDriver={false}
                     />
                 </View>                
             </View>
@@ -338,16 +339,15 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginTop: 40,
-        marginRight: (Dimensions.get('window').width * 0.05),
-        marginBottom: 5
+        paddingTop: 20 * PixelRatio.getFontScale() + 24,
+        marginRight: (Dimensions.get('window').width * 0.05)
     },
     cardDelete: {
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
-        height: "100%",
         borderRadius: 15,
+        height: (Dimensions.get('window').width * 0.9) / 1.586
     }
 });
 

@@ -65,16 +65,11 @@ export class Card extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
-        width: "95%",
-    },
     card: {
-        resizeMode: "contain",
         alignSelf: "center",
         width: (Dimensions.get('window').width * 0.9),
         height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
-        marginBottom: 10,
-        zIndex: -1
+        marginBottom: 10
     }, 
     cardTitle: {
         textAlign: 'center',
