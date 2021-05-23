@@ -225,6 +225,10 @@ function YourCards({ route, navigation }) {
         }
     };
 
+    const onRowOpen = (rowKey, rowMap) => {
+        if (swipeWidths[rowKey].__getValue() === 0) rowMap[rowKey].closeRow(); // really hacky
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bodyContainer}>
@@ -276,6 +280,7 @@ function YourCards({ route, navigation }) {
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         useNativeDriver={false}
+                        onRowOpen={onRowOpen}
                     />
                 </View>                
             </View>
