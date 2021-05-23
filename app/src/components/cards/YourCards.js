@@ -76,7 +76,8 @@ function YourCards({ route, navigation }) {
         }
     }, [focused])
 
-    const deleteCard = (card, index) => {
+    const deleteCard = (rowMap, card, index) => {
+        if (rowMap !== null) rowMap[index].closeRow();
         user.deleteCard(userId, card.cardId, card.docId);
         let newCards = [...cards];
         for (let i = index; i < newCards.length; i++) { // recalculate keys
@@ -87,12 +88,12 @@ function YourCards({ route, navigation }) {
         resetSwipeWidth(index);
     }
     
-    const confirmDelete = (card, index) => {
+    const confirmDelete = (rowMap, card, index) => {
         Alert.alert(
             'Delete Card?',
             'This card will be permanently deleted from your profile.',
             [
-              {text: 'Delete', onPress: () => deleteCard(card, index)},
+              {text: 'Delete', onPress: () => deleteCard(rowMap, card, index)},
               {text: 'Cancel', onPress: () => console.log(''), style: 'cancel'},
             ]
           );
@@ -221,7 +222,7 @@ function YourCards({ route, navigation }) {
 
     const swipeGestureEnded = (key, data) => {
         if (data.translateX < deleteThreshold) {
-            deleteCard(cards[key], key);
+            deleteCard(null, cards[key], key);
         }
     };
 
@@ -265,7 +266,7 @@ function YourCards({ route, navigation }) {
                             )
                         }}
                         renderHiddenItem={(data, rowMap) => (
-                            <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
+                            <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(rowMap, data.item, cards.indexOf(data.item))}>
                                 <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
                                     <Ionicons
                                         name="trash-outline"
