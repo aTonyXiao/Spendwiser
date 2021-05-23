@@ -7,7 +7,8 @@ import {
     Text, 
     TouchableOpacity, 
     StatusBar,
-    Alert
+    Alert,
+    Animated
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -31,6 +32,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
+    const [swipeWidths, setSwipeWidths] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
@@ -38,11 +40,24 @@ function YourCards({ route, navigation }) {
     const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
     const focused = useIsFocused();
 
+    const resetSwipeWidth = key => {
+        if (typeof swipeWidths[key] === "undefined") {
+            swipeWidths[key] = new Animated.Value(0);
+        } else {
+            swipeWidths[key].setValue(0);
+        }
+        setSwipeWidths(swipeWidths);
+    };
+
     useEffect(() => {
         if (isLoaded === false || forceLoad === true) {
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
+                cards.forEach(element => {
+                    element["key"] = cards.indexOf(element);
+                    resetSwipeWidth(element["key"]);
+                });
                 setCards(cards);
             }).catch(({isCanceled, ...error}) => {});
     
@@ -57,9 +72,10 @@ function YourCards({ route, navigation }) {
 
     const deleteCard = (card, index) => {
         user.deleteCard(userId, card.cardId, card.docId);
-        let newCards = cards;
+        let newCards = [...cards];
         newCards.splice(index, 1);
         setCards(newCards);
+        resetSwipeWidth(index);
     }
     
     const confirmDelete = (card, index) => {
@@ -72,7 +88,6 @@ function YourCards({ route, navigation }) {
             ]
           );
     };
-
 
     // const focused = useIsFocused();
 
@@ -147,6 +162,12 @@ function YourCards({ route, navigation }) {
         )
     }
 
+    const onSwipeValueChange = swipeData => {
+        const { key, value } = swipeData;
+        swipeWidths[key].setValue(Math.abs(value));
+        setSwipeWidths(swipeWidths);
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.bodyContainer}>
@@ -184,20 +205,19 @@ function YourCards({ route, navigation }) {
                                 )
                             }}
                             renderHiddenItem={(data, rowMap) => (
-                                <View style={styles.cardBack}>
-                                    <TouchableOpacity
-                                        onPress={() => confirmDelete(data.item, data.index)}
-                                    >
+                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
+                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
                                         <Ionicons
                                             name="trash-outline"
                                             color="white"
                                             size={25}
                                         ></Ionicons>
-                                    </TouchableOpacity>
-                                </View>
+                                    </Animated.View>
+                                </TouchableOpacity>
                             )}
-                            rightOpenValue={-150}
+                            rightOpenValue={-100}
                             disableRightSwipe={true}
+                            onSwipeValueChange={onSwipeValueChange}
                         />
                    </View>
 
@@ -254,13 +274,19 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray'
     },
     cardBack: {
-        alignItems: 'center',
-        backgroundColor: 'red',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        paddingRight: 15
+        marginTop: 40,
+        marginBottom: 5,
     },
+    cardDelete: {
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: "100%",
+        borderRadius: 15
+    }
 });
 
 export { YourCards };
