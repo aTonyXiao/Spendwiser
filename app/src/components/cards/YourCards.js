@@ -6,7 +6,8 @@ import {
     View, 
     Text, 
     TouchableOpacity, 
-    StatusBar 
+    StatusBar,
+    Alert
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -42,9 +43,6 @@ function YourCards({ route, navigation }) {
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
-                cards.forEach(element => {
-                    element["key"] = element["docId"];
-                });
                 setCards(cards);
             }).catch(({isCanceled, ...error}) => {});
     
@@ -57,6 +55,23 @@ function YourCards({ route, navigation }) {
         }
     }, [focused])
 
+    const deleteCard = (card, index) => {
+        user.deleteCard(userId, card.cardId, card.docId);
+        let newCards = cards;
+        newCards.splice(index, 1);
+        setCards(newCards);
+    }
+    
+    const confirmDelete = (card, index) => {
+        Alert.alert(
+            'Delete Card?',
+            'This card will be permanently deleted from your profile.',
+            [
+              {text: 'Delete', onPress: () => deleteCard(card, index)},
+              {text: 'Cancel', onPress: () => console.log(''), style: 'cancel'},
+            ]
+          );
+    };
 
 
     // const focused = useIsFocused();
@@ -123,7 +138,7 @@ function YourCards({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={{ marginTop: 40, fontSize: 18 }}>You currently have no stored cards!</Text>
+                    <Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
                 </View>
                 <View style={styles.footerContainer}>
                     <Footer navigation={navigation} />
@@ -162,16 +177,23 @@ function YourCards({ route, navigation }) {
                                     origin: "yourcards"
                                 }
                                 return (
-                                    <View key={data.key}>
-                                        <Card key={data.key} props={props} />
+                                    <View key={data.item.docId}>
+                                        <Card key={data.item.docId} props={props} />
                                         <View style={styles.divider}></View>
                                     </View>
                                 )
                             }}
                             renderHiddenItem={(data, rowMap) => (
-                                <View style={styles.rowBack}>
-                                    <Text>Left</Text>
-                                    <Text>Right</Text>
+                                <View style={styles.cardBack}>
+                                    <TouchableOpacity
+                                        onPress={() => confirmDelete(data.item, data.index)}
+                                    >
+                                        <Ionicons
+                                            name="trash-outline"
+                                            color="white"
+                                            size={25}
+                                        ></Ionicons>
+                                    </TouchableOpacity>
                                 </View>
                             )}
                             rightOpenValue={-150}
@@ -206,8 +228,8 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
     },
     bodyContainer: {
-        justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: "100%"
     },
     cardScroll: {
         paddingHorizontal: '5%',
@@ -231,13 +253,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'lightgray'
     },
-    rowBack: {
+    cardBack: {
         alignItems: 'center',
-        backgroundColor: '#DDD',
+        backgroundColor: 'red',
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 15,
+        justifyContent: 'flex-end',
+        paddingRight: 15
     },
 });
 
