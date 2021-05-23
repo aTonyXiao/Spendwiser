@@ -186,44 +186,42 @@ function YourCards({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView style={{width: "100%"}}>
-                    <View style={styles.cardScroll}>
-                        <SwipeListView
-                            data={cards}
-                            renderItem={(data, rowMap) => {
-                                var props = {
-                                    navigation: navigation,
-                                    card: data.item,
-                                    storeInformation: storeInformation,
-                                    origin: "yourcards"
-                                }
-                                return (
-                                    <View key={data.item.docId}>
-                                        <Card key={data.item.docId} props={props} />
-                                        <View style={styles.divider}></View>
-                                    </View>
-                                )
-                            }}
-                            renderHiddenItem={(data, rowMap) => (
-                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
-                                        <Ionicons
-                                            name="trash-outline"
-                                            color="white"
-                                            size={25}
-                                        ></Ionicons>
-                                    </Animated.View>
-                                </TouchableOpacity>
-                            )}
-                            rightOpenValue={-100}
-                            disableRightSwipe={true}
-                            onSwipeValueChange={onSwipeValueChange}
-                        />
-                   </View>
-
+                <View style={styles.cardScroll}>
+                    <SwipeListView
+                        data={cards}
+                        renderItem={(data, rowMap) => {
+                            var props = {
+                                navigation: navigation,
+                                card: data.item,
+                                storeInformation: storeInformation,
+                                origin: "yourcards"
+                            }
+                            return (
+                                <View key={data.item.docId}>
+                                    <Card key={data.item.docId} props={props} />
+                                    <View style={styles.divider}></View>
+                                </View>
+                            )
+                        }}
+                        renderHiddenItem={(data, rowMap) => (
+                            <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
+                                <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
+                                    <Ionicons
+                                        name="trash-outline"
+                                        color="white"
+                                        size={25}
+                                    ></Ionicons>
+                                </Animated.View>
+                            </TouchableOpacity>
+                        )}
+                        rightOpenValue={-100}
+                        disableRightSwipe={true}
+                        onSwipeValueChange={onSwipeValueChange}
+                        useNativeDriver={true}
+                    />
                     {/* Below is empty height at bottom of scrollview because absolute footer cuts it off */}
                     <View style={{ height: 100 }}></View>
-                </ScrollView>
+                </View>                
             </View>
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />
