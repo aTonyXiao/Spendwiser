@@ -95,7 +95,7 @@ export function ChartCompare(
         }, [curCard, compareTransPeriod1, compareTransPeriod2]);
 
 
-
+    console.log(overallSpending[0]);
     return (
         <View style={{ flex: 1, paddingHorizontal: 10}}>
             <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 8 }}>
@@ -151,10 +151,9 @@ export function ChartCompare(
             </View>
             {/* Overall */}
             <Text style={{paddingHorizontal: 10, textAlign: 'center'}}>
-                You spent {overallSpending[0] === 0 ? 0 : (overallSpending[0] * 100/overallSpending[1]).toFixed(2)}% 
-                more
-                {"\n"}
-                this month than last month.
+                {(overallSpending[0] !== 0 && overallSpending[1] !== 0) &&
+                    `You spent ${(overallSpending[0] * 100/overallSpending[1]).toFixed(2)}% more \n this month than last month.`
+                }
             </Text>
         </View>
     )
