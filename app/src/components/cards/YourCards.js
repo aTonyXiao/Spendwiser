@@ -4,8 +4,7 @@ import {
     StyleSheet, 
     View, 
     Text, 
-    TouchableOpacity, 
-    StatusBar,
+    TouchableOpacity,
     Alert,
     Animated,
     Dimensions,
@@ -20,6 +19,7 @@ import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import mainStyles from "../../styles/mainStyles"
 
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
@@ -158,8 +158,8 @@ function YourCards({ route, navigation }) {
 
     if (cards.length == 0) {
         return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.bodyContainer}>
+            <SafeAreaView style={mainStyles.screen}>
+                <View style={mainStyles.bodyContainer}>
                     <AddCardModal
                         navigation={navigation}
                         modalVisible={modalVisible}
@@ -244,8 +244,8 @@ function YourCards({ route, navigation }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.bodyContainer}>
+        <SafeAreaView style={mainStyles.screen}>
+            <View style={mainStyles.bodyContainer}>
                 <AddCardModal
                     navigation={navigation}
                     modalVisible={modalVisible}
@@ -261,7 +261,7 @@ function YourCards({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{height: "100%"}}>
+                <View style={{flex: 1}}>
                     <SwipeListView
                         data={cards}
                         renderItem={(data, rowMap) => {
@@ -302,7 +302,7 @@ function YourCards({ route, navigation }) {
                     />
                 </View>                
             </View>
-            <View style={styles.footerContainer}>
+            <View style={mainStyles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
         </SafeAreaView>
@@ -310,27 +310,9 @@ function YourCards({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        backgroundColor: 'white',
-        height: '100%',
-        paddingTop: StatusBar.currentHeight
-    },
-    container : {
-        flex: 1,
-        backgroundColor: 'white',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'space-between', 
-        paddingTop: StatusBar.currentHeight,
-    },
     emptyBodyContainer: {
-        height: "100%",
+        flex: 1,
         alignItems: "center"
-    },
-    bodyContainer: {
-        height: "100%",
-        paddingBottom: 100
     },
     addButton: {
         borderRadius: 100,
@@ -338,13 +320,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         margin: 8,
         marginBottom: 0
-    },
-    footerContainer: {
-        width: '100%',
-        backgroundColor: 'white',
-        position: 'absolute',
-        bottom: 0,
-        paddingBottom: 35,
     },
     divider: { 
         width: '100%',
@@ -356,7 +331,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         direction: "rtl",
-        // paddingTop: 20 * PixelRatio.getFontScale() + 24,
         paddingLeft: (Dimensions.get('window').width * 0.05)
     },
     cardDelete: {

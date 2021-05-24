@@ -108,6 +108,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        marginTop: 20,
+        marginTop: 10,
     }
 })
