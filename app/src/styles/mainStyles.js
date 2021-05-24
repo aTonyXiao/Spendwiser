@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 
 const mainStyles = StyleSheet.create({
   container: {
@@ -19,6 +19,19 @@ const mainStyles = StyleSheet.create({
       color: '#28b573',
       position: 'absolute',
       top: 70
+  },
+
+  screen: {
+      backgroundColor: 'white',
+      height: '100%',
+      paddingTop: StatusBar.currentHeight
+  },
+  bodyContainer: {
+      flex: 1,
+  },
+  footerContainer: {
+      alignSelf: "flex-end",
+      width: '100%',
   },
 });
 

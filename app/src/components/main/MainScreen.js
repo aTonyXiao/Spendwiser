@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
+import ReactNative, { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -14,6 +14,8 @@ import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
 import { MainHelpModal } from './MainHelpModal';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import mainStyles from '../../styles/mainStyles';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -229,18 +231,18 @@ export function MainScreen({navigation}) {
         } 
     }
 
-    function onBottomSheetLayout(event, isFooter) {
+    function onBottomSheetLayout(event, insets, isFooter) {
         let {width, height} = event.nativeEvent.layout;
         if (!isFooter) {
             if (locationInfoHeight !== 0) {
                 return;
             }
-            setLocationInfoHeight(height);
+            setLocationInfoHeight(height + insets);
         } else {
             if (footerHeight !== 0) {
                 return;
             }
-            setFooterHeight(height);
+            setFooterHeight(height + insets);
         }
     }
 
@@ -281,8 +283,10 @@ export function MainScreen({navigation}) {
         }
     }, []);
     
+    const insets = useSafeAreaInsets();
+
     return (
-        <View style={styles.screen}>
+        <View style={mainStyles.screen} edges={["right", "bottom", "left"]}>
             <StatusBar barStyle='dark-content'/>
             {/* Modal */}
             <MainModals
@@ -298,7 +302,7 @@ export function MainScreen({navigation}) {
                 helpModalVisible={helpModalVisible}
                 setHelpModalVisible={setHelpModalVisible}
             />
-            <View style={{zIndex: 1}}>                
+            <View style={mainStyles.bodyContainer}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
                     {/* Butons */}
@@ -340,7 +344,7 @@ export function MainScreen({navigation}) {
                         wrapperStyle={Platform.OS === 'ios' ? {paddingBottom: footerHeight + 50} : {paddingBottom: footerHeight}}
                     >
                         {/* Location text */}
-                        <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, false)}>
+                        <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, 0, false)}>
                             <View style={mapStyles.locationTextContainer}>
                                 <Text
                                     style={{fontWeight: '500', fontSize: 20, textAlign: 'center', marginBottom: 10}}
@@ -367,9 +371,10 @@ export function MainScreen({navigation}) {
                 </View>
             </View>
             {/* Footer */}
-            <View style={styles.footerContainer} onLayout={(LayoutEvent => onBottomSheetLayout(LayoutEvent, true))}>
+            <View style={mainStyles.footerContainer} onLayout={(LayoutEvent => onBottomSheetLayout(LayoutEvent, insets.bottom, true))}>
                 <Footer navigation={navigation} />
             </View>
+            <View style={{alignSelf: "flex-end", width: "100%", height: insets.bottom, backgroundColor: "white"}} />
         </View>
         );
     }
@@ -380,6 +385,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
+        paddingTop: -ReactNative.StatusBar.currentHeight
     },
     loc: {
         marginTop: 20,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 import { Footer } from '../util/Footer';
@@ -14,6 +14,7 @@ import { ChartCompare } from './ChartCompare';
 import { ChartBudget } from './ChartBudget';
 import * as storage from '../../local/storage';
 import { StackActions, useFocusEffect } from '@react-navigation/native';
+import mainStyles from '../../styles/mainStyles';
 
 const modalType = {
     DISABLED: 0,
@@ -273,7 +274,7 @@ export function SpendingSummary({navigation}) {
     }, []);
 
     return (
-        <View style={styles.screen}>
+        <SafeAreaView style={mainStyles.screen}>
             <StatusBar barStyle='dark-content'/>
             <CategoryModal
                 modalType = {modalType}
@@ -310,6 +311,7 @@ export function SpendingSummary({navigation}) {
                 whichPeriod={whichPeriod}
                 setWhichPeriod={setWhichPeriod}
             />
+            <View style={mainStyles.bodyContainer}>
             {/* Content */}
             <View style={styles.contentContainer}>
                 {mode === modeType.SUMMARY && !(listViewEnabled) &&
@@ -363,11 +365,12 @@ export function SpendingSummary({navigation}) {
                     >{listViewEnabled ? "Chart View" : "List View"}</Text>
                 </View>
             }
+            </View>
             {/* Footer */}
-            <View style={styles.footerContainer}>
+            <View style={mainStyles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
-        </View>
+        </SafeAreaView>
     )
 };
 
