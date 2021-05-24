@@ -148,6 +148,22 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
     }
 }
 
+const checkSyncMapping = (db, accountName, document, id) => {
+    if ('sync_mappings' in db[accountName]) {
+        console.log("Checking sync mappings for document: " + document + " id: " + id);
+        sync_mappings = db[accountName]['sync_mappings'];
+        for (let i = 0; i < sync_mappings.length; i++) {
+            let mapping = sync_mappings[i];
+            if (mapping['location'] == document && mapping['oldId'] == id) {
+                console.log("Found " + mapping['newId']);
+                return mapping['newId'];
+            }
+        }
+        return id;
+    } else {
+        return id;
+    }
+}
 export const deleteLocalDB = async (accountName, location) => {
     try {
         getDB(async (db) => {
@@ -158,7 +174,10 @@ export const deleteLocalDB = async (accountName, location) => {
                 console.log("Location: " + location);
                 console.log("----------------------");
             }
-            const [document, id] = parseDocAndId(location);
+            let [document, id] = parseDocAndId(location);
+            id = checkSyncMapping(db, accountName, document, id);
+            
+            console.log("deleting with document: " + document + " id: " + id);
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
 
                 if ('unsynced_documents' in db[accountName]) {
