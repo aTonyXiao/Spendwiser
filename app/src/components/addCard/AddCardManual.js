@@ -5,8 +5,7 @@ import {
     StyleSheet, 
     TouchableOpacity,
     TextInput,
-    SafeAreaView,
-    KeyboardAvoidingView,
+    SafeAreaView
 } from 'react-native';
 import { TextBox } from '../util/TextBox';
 import { user } from '../../network/user';
@@ -15,6 +14,7 @@ import { DismissKeyboard } from '../util/DismissKeyboard';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { cards } from '../../network/cards';
 import { Ionicons } from '@expo/vector-icons';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -116,124 +116,116 @@ export function AddCardManual({navigation}) {
 
     return (
         <DismissKeyboard>
-            <SafeAreaView style={styles.container}>
-                <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{flex: 1, justifyContent: 'space-between'}}
-                >
-                    <Text style={mainStyles.title}>Add a Card Manually</Text>
+            <SafeAreaView style={mainStyles.screen}>
+                <BackButtonHeader navigation={navigation} title={"Add a Card Manually"} titleStyle={mainStyles.titleNoPadding} />
+                <View style={mainStyles.bodyContainer}>
 
-                    
+                <Text style={styles.inputTitle}>Credit Card Name</Text>
+                <TextBox
+                    style={!nameError ? styles.inputBox : styles.inputBoxError}
+                    ref={inputName}
+                    placeholder={'Your credit card title here '}
+                />
 
-                    <View>
-                        <Text style={styles.inputTitle}>Credit Card Name</Text>
-                        <TextBox
-                            style={!nameError ? styles.inputBox : styles.inputBoxError}
-                            ref={inputName}
-                            placeholder={'Your credit card title here '}
-                        />
+                <Text style={styles.inputTitle}>Card Type</Text>
+                <DropDownPicker
+                    items={[
+                        { label: 'Cashback', value: 'Cashback' },
+                        { label: 'Points', value: 'Points' },
+                        { label: 'Miles', value: 'Miles' },
+                        { label: 'Unknown', value: 'Unknown' },
+                    ]}
+                    defaultValue={"Cashback"}
+                    onChangeItem={item => setRewardType(item.value)}
+                    containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15 }}
+                    style={{ backgroundColor: '#fafafa' }}
+                    itemStyle={{ justifyContent: 'flex-start' }}
+                    dropDownStyle={{ backgroundColor: '#fafafa' }}
+                />
 
-                        <Text style={styles.inputTitle}>Card Type</Text>
-                        <DropDownPicker
-                            items={[
-                                { label: 'Cashback', value: 'Cashback' },
-                                { label: 'Points', value: 'Points' },
-                                { label: 'Miles', value: 'Miles' },
-                                { label: 'Unknown', value: 'Unknown' },
-                            ]}
-                            defaultValue={"Cashback"}
-                            onChangeItem={item => setRewardType(item.value)}
-                            containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15 }}
-                            style={{ backgroundColor: '#fafafa' }}
-                            itemStyle={{ justifyContent: 'flex-start' }}
-                            dropDownStyle={{ backgroundColor: '#fafafa' }}
-                        />
-
-                        <Text style={styles.inputTitle}>Rewards</Text>
-                        <View style={styles.rewardContainer}>
-                            {/* Already added rewards */}
+                <Text style={styles.inputTitle}>Rewards</Text>
+                <View style={styles.rewardContainer}>
+                    {/* Already added rewards */}
+                    {
+                        displayRewards &&
+                        <View style={styles.rewardText}>
                             {
-                                displayRewards &&
-                                <View style={styles.rewardText}>
-                                    {
-                                        rewards.map((reward, i) => {
-                                            let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
-                                            return <Text style={{ margin: 5 }} key={i}>{type}: {reward.value} cents</Text>
-                                        })
-                                    }
-                                </View>
+                                rewards.map((reward, i) => {
+                                    let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
+                                    return <Text style={{ margin: 5 }} key={i}>{type}: {reward.value} cents</Text>
+                                })
                             }
-
-                            {/* reward error */}
-                            {
-                                rewardError &&
-                                <Text style={{ color: 'red', marginHorizontal: 15 }}>Please input a number</Text>
-                            }
-
-                            {/* options to add reward */}
-                            <View style={styles.rewardRow}>
-                                <View style={styles.rewardRowContainer}>
-                                    <DropDownPicker
-                                        items={[
-                                            { label: 'Dining', value: 'dining', selected: true },
-                                            { label: 'Grocery', value: 'grocery' },
-                                            { label: 'Drugstore', value: 'drugstore' },
-                                            { label: 'Gas', value: 'gas' },
-                                            { label: 'Home Improvement', value: 'homeImprovement' },
-                                            { label: 'Travel', value: 'travel' },
-                                            { label: 'Others or All', value: 'others' },
-                                        ]}
-                                        placeholder={"Select an item"}
-                                        onChangeItem={item => setMonetaryType(item.value)}
-                                        containerStyle={styles.dropdown}
-                                        style={{ backgroundColor: '#fafafa' }}
-                                        itemStyle={{ justifyContent: 'flex-start' }}
-                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
-                                    />
-                                    <TextInput
-                                        style={styles.rewardInput}
-                                        onChangeText={(text) => setRewardValue(text)}
-                                        placeholder={'value in cents'}
-                                        placeholderTextColor={grayRGB}
-                                        value={rewardValue}
-                                        keyboardType={"number-pad"}
-                                        // onEndEditing={() => {
-                                        //     addReward();
-                                        //     setRewardValue("");
-                                        // }}
-                                    />
-                                    <TouchableOpacity
-                                        style={{width: '10%', justifyContent: 'center'}}
-                                        onPress={() => { addReward(), setRewardValue("") }}
-                                    >
-                                        <Ionicons
-                                            name="checkmark-outline"
-                                            color="black"
-                                            size={26}
-                                        ></Ionicons>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
                         </View>
-                        {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
-                        <View style={styles.bottomContainer}>
-                            <Text style={styles.inputTitle}>URL</Text>
-                            <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
+                    }
 
-                            <View style={styles.addCardContainer}>
-                                {
-                                    (invalidInputError) &&
-                                    <Text style={{ color: 'red' }}>Please add a name and reward</Text>
-                                }
-                            </View>
+                    {/* reward error */}
+                    {
+                        rewardError &&
+                        <Text style={{ color: 'red', marginHorizontal: 15 }}>Please input a number</Text>
+                    }
+
+                    {/* options to add reward */}
+                    <View style={styles.rewardRow}>
+                        <View style={styles.rewardRowContainer}>
+                            <DropDownPicker
+                                items={[
+                                    { label: 'Dining', value: 'dining', selected: true },
+                                    { label: 'Grocery', value: 'grocery' },
+                                    { label: 'Drugstore', value: 'drugstore' },
+                                    { label: 'Gas', value: 'gas' },
+                                    { label: 'Home Improvement', value: 'homeImprovement' },
+                                    { label: 'Travel', value: 'travel' },
+                                    { label: 'Others or All', value: 'others' },
+                                ]}
+                                placeholder={"Select an item"}
+                                onChangeItem={item => setMonetaryType(item.value)}
+                                containerStyle={styles.dropdown}
+                                style={{ backgroundColor: '#fafafa' }}
+                                itemStyle={{ justifyContent: 'flex-start' }}
+                                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                            />
+                            <TextInput
+                                style={styles.rewardInput}
+                                onChangeText={(text) => setRewardValue(text)}
+                                placeholder={'value in cents'}
+                                placeholderTextColor={grayRGB}
+                                value={rewardValue}
+                                keyboardType={"number-pad"}
+                                // onEndEditing={() => {
+                                //     addReward();
+                                //     setRewardValue("");
+                                // }}
+                            />
+                            <TouchableOpacity
+                                style={{width: '10%', justifyContent: 'center'}}
+                                onPress={() => { addReward(), setRewardValue("") }}
+                            >
+                                <Ionicons
+                                    name="checkmark-outline"
+                                    color="black"
+                                    size={26}
+                                ></Ionicons>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                </View>
+
+                {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
+                <View style={styles.bottomContainer}>
+                    <Text style={styles.inputTitle}>URL</Text>
+                    <TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
+
+                    <View style={styles.addCardContainer}>
+                        {
+                            (invalidInputError) &&
+                            <Text style={{ color: 'red' }}>Please add a name and reward</Text>
+                        }
                         <TouchableOpacity style={styles.addCardButton} onPress={addCard}>
                             <Text style={styles.addCardText}>Add this card</Text>
                         </TouchableOpacity>
                     </View>
-                </KeyboardAvoidingView>
+                </View>
+                </View>
             </SafeAreaView>
         </DismissKeyboard>
     );
@@ -242,7 +234,7 @@ export function AddCardManual({navigation}) {
 const styles = StyleSheet.create({
     container : {
         backgroundColor: 'white',
-        height: '100%',
+        height: '100%'
     },
     rewardContainer: { 
         display: 'flex',
