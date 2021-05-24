@@ -4,7 +4,8 @@ import {
     Text, 
     StyleSheet, 
     TouchableOpacity,
-    TextInput
+    TextInput,
+    SafeAreaView
 } from 'react-native';
 import { TextBox } from '../util/TextBox';
 import { user } from '../../network/user';
@@ -13,6 +14,7 @@ import { DismissKeyboard } from '../util/DismissKeyboard';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { cards } from '../../network/cards';
 import { Ionicons } from '@expo/vector-icons';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
@@ -114,8 +116,9 @@ export function AddCardManual({navigation}) {
 
     return (
         <DismissKeyboard>
-            <View style={styles.container}>
-                <Text style={mainStyles.title}>Add a Card Manually</Text>
+            <SafeAreaView style={mainStyles.screen}>
+                <BackButtonHeader navigation={navigation} title={"Add a Card Manually"} titleStyle={mainStyles.titleNoPadding} />
+                <View style={mainStyles.bodyContainer}>
 
                 <Text style={styles.inputTitle}>Credit Card Name</Text>
                 <TextBox
@@ -222,7 +225,8 @@ export function AddCardManual({navigation}) {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+                </View>
+            </SafeAreaView>
         </DismissKeyboard>
     );
 }
