@@ -34,7 +34,6 @@ const mainStyles = StyleSheet.create({
   footerContainer: {
       alignSelf: "flex-end",
       width: '100%',
-      paddingBottom: 10,
   },
 });
 

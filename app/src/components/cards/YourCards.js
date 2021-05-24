@@ -302,7 +302,8 @@ function YourCards({ route, navigation }) {
                     />
                 </View>                
             </View>
-            <View style={mainStyles.footerContainer}>
+            <View style={[{shadowColor: "white", shadowOffset: { width: 0, height: -10 }, shadowOpacity: 1.0, shadowRadius: 4.00}, 
+                          mainStyles.footerContainer]}>
                 <Footer navigation={navigation} />
             </View>
         </SafeAreaView>
