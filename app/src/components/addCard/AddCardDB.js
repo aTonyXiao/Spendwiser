@@ -67,7 +67,7 @@ export function AddCardDB({existingUserCards, navigation}) {
                     // Add the actual card data as well
                     appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
                         console.log("Got card data");
-                        console.log(cardData);
+                        // console.log(cardData);
                         let actualUserId = await userId;
                         storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
                             storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {

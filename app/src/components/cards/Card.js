@@ -9,8 +9,8 @@ export class Card extends React.Component {
         super(props);
         
         var cardInformation = props.props.card;
-        console.log("Creating a card: ");
-        console.log(cardInformation);
+        // console.log("Creating a card: ");
+        // console.log(cardInformation);
         this.state = {
             name: "",
             cardImage: "Not an Empty String",

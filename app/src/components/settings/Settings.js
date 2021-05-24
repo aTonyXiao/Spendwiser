@@ -156,10 +156,10 @@ let Settings = (props) => {
                 >
                     <Text>DEBUG delete local storage</Text>
                     <Ionicons
-                            name="chevron-forward-outline"
-                            color="gray"
-                            size={24}
-                            style={{marginRight: -8}}
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={24}
+                        style={{ marginRight: -8 }}
                     ></Ionicons>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -170,10 +170,10 @@ let Settings = (props) => {
                 >
                     <Text>DEBUG print local storage</Text>
                     <Ionicons
-                            name="chevron-forward-outline"
-                            color="gray"
-                            size={24}
-                            style={{marginRight: -8}}
+                        name="chevron-forward-outline"
+                        color="gray"
+                        size={24}
+                        style={{ marginRight: -8 }}
                     ></Ionicons>
                 </TouchableOpacity>
             </View>

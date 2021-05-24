@@ -262,7 +262,7 @@ export function MainScreen({navigation}) {
     // Called on mount
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
-        NetInfo.addEventListener('connectionChange', state => handleInternetStateChange(state));
+        // NetInfo.addEventListener('connectionChange', state => handleInternetStateChange(state));
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -273,12 +273,10 @@ export function MainScreen({navigation}) {
         })();
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
-            NetInfo.removeEventListener('connectionChange', state => handleInternetStateChange(state));
+            // NetInfo.removeEventListener('connectionChange', state => handleInternetStateChange(state));
         }
     }, []);
     
-   
-
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
@@ -345,7 +343,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" : storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permissions Denied')

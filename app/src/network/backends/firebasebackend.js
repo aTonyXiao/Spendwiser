@@ -89,10 +89,15 @@ class FirebaseBackend extends BaseBackend {
         });
 
 
+        let hasSyncedRemote = false;
         // Sync the local database every minute
         setInterval(async () => {
             await syncLocalDatabase();
-            await syncRemoteDatabase();
+            // only sync remote once
+            if (!hasSyncedRemote) {
+                await syncRemoteDatabase();
+                hasSyncedRemote = true;
+            }
         }, 30000);
     }
 
