@@ -35,15 +35,22 @@ async function replaceCardDocId(accountName, remote_id) {
     });
 }
 
-async function replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id) {
+async function replaceUnsyncedDocumentsId(unsynced_documents_list, accountName, location, local_id, remote_id) {
     return new Promise((resolve, reject) => {
         storage.replaceUnsyncedDocumentsId(accountName, location, local_id, remote_id, () => {
+            for (let i = 0; i < unsynced_documents_list.length; i++) {
+                let doc = unsynced_documents_list[i];
+
+                if (doc['location'] == location && doc['id'] == local_id) {
+                    doc['id'] = remote_id;
+                }
+            }
             resolve();
         });
     });
 }
 
-async function syncDocument(accountName, document) {
+async function syncDocument(accountName, document, unsynced_documents_list) {
     return new Promise((resolve, reject) => {
         let location = document['location'];
         let id = document['id'];
@@ -55,6 +62,7 @@ async function syncDocument(accountName, document) {
                 resolve();
             } else {
                 if (type == 'add') {
+                    console.log("Remote adding: " + location);
                     appBackend.remoteDBAdd(location, data, (remote_id) => {
                         storage.modifyDBEntryMetainfo(accountName, location, true, id, remote_id, async () => {
                             if (location.includes('cards') && !location.includes("users")) {
@@ -72,15 +80,8 @@ async function syncDocument(accountName, document) {
                             }
                             else if (location.includes('cards')) {
                                 await replaceCardDocId(accountName, remote_id);
-
-                                // Replace the docId variable ON FIREBASE
-                                await new Promise((resolve, reject) => {
-                                    appBackend.remoteDBSet(location + "." + remote_id, {"docId": remote_id}, true, () => {
-                                        resolve();
-                                    });
-                                })
                             }
-                            await replaceUnsyncedDocumentsId(accountName, location, id, remote_id);
+                            await replaceUnsyncedDocumentsId(unsynced_documents_list, accountName, location, id, remote_id);
                             storage.removeDocumentFromUnsyncedList(accountName, location, remote_id, () => {
                                 resolve();
                             });
@@ -93,6 +94,7 @@ async function syncDocument(accountName, document) {
                         });
                     });
                 } else if (type == 'set') {
+                    console.log("Remote Setting: " + location + "." + id);
                     appBackend.remoteDBSet(location + "." + id, data, document['merge'], () => {
                         storage.removeDocumentFromUnsyncedList(accountName, location, id, () => {
                             resolve();
@@ -111,7 +113,7 @@ async function syncLocalDatabase() {
                 console.log("Got unsynced documents: ");
                 console.log(unsynced_documents);
                 for (let i = 0; i < unsynced_documents.length; i++) {
-                    await syncDocument(accountName, unsynced_documents[i]);
+                    await syncDocument(accountName, unsynced_documents[i], unsynced_documents);
                 }
                 resolve();
             });

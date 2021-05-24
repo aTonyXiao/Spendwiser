@@ -297,10 +297,27 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             }
 
             let local_data = null;
+            // Normal get operation that will return one item
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 local_data = db[accountName][document][id];
-            } else if (accountName in db && location in db[accountName]) {
+            }
+            // Get operation that will most likely filter the data and receive a
+            // callback for each item in the array that meets certain conditions
+            else if (accountName in db && location in db[accountName]) {
                 local_data = Object.values(db[accountName][location]);
+            }
+            // NOTE: Look into the db's mappings from localdb generated id's to remote generated id's that
+            // have been replaced. Components can reference old id's if they are not updated after a sync
+            // operation but they still want to refer to the data
+            else if ('sync_mappings' in db[accountName]) {
+                sync_mappings = db[accountName]['sync_mappings'];
+                sync_mappings.forEach((mapping) => {
+                    if (mapping['location'] == document && mapping['oldId'] == id) {
+                        if (accountName in db && document in db[accountName] && mapping['newId'] in db[accountName][document]) {
+                            local_data = db[accountName][document][mapping['newId']];
+                        }
+                    }
+                });
             }
 
             var comp_op = {
