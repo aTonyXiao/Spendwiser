@@ -8,7 +8,8 @@ import {
     Alert,
     Animated,
     Dimensions,
-    PixelRatio
+    PixelRatio,
+    Vibration
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -192,6 +193,7 @@ function YourCards({ route, navigation }) {
         const { key, value } = swipeData;
         if (value < deleteThreshold) {
             if (!animationRunning.current && !deleteOpen.current) {
+                Vibration.vibrate(50, false);
                 Animated.timing(swipeOpacities[key], {
                     toValue: 0.0,
                     duration: 100,
@@ -302,7 +304,7 @@ function YourCards({ route, navigation }) {
                     />
                 </View>                
             </View>
-            <View style={[{shadowColor: "white", shadowOffset: { width: 0, height: -10 }, shadowOpacity: 1.0, shadowRadius: 4.00}, 
+            <View style={[{shadowColor: "white", shadowOffset: { width: 0, height: -6 }, shadowOpacity: 1.0, shadowRadius: 3.00}, 
                           mainStyles.footerContainer]}>
                 <Footer navigation={navigation} />
             </View>

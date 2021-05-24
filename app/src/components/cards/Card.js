@@ -50,7 +50,7 @@ export class Card extends React.Component {
     render () {
         return (
             <View>
-                <Text style={styles.cardTitle}>{this.state.name}</Text>
+                <Text numberOfLines="1" style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
                     <CardImage
                         style={[ styles.card ]}
