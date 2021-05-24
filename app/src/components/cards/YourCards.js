@@ -39,6 +39,7 @@ function YourCards({ route, navigation }) {
     const [swipeWidths, setSwipeWidths] = useState([]);
     const [swipeHeights, setSwipeHeights] = useState([]);
     const [swipeOpacities, setSwipeOpacities] = useState([]);
+    const [rowRefs, setRowRefs] = useState({});
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
     const deleteOpen = useRef(false);
@@ -84,14 +85,14 @@ function YourCards({ route, navigation }) {
         }
     }, [focused])
 
-    const deleteCard = (rowMap, card, index) => {
-        if (rowMap !== null) rowMap[index].closeRow();
+    const deleteCard = (card, index) => {
         user.deleteCard(userId, card.cardId, card.docId);
         Animated.timing(swipeHeights[index], {
             toValue: 0,
             duration: 150,
             useNativeDriver: false
         }).start(() => {
+            if (rowRefs[index] !== undefined) rowRefs[index].closeRow();
             let newCards = [...cards];
             for (let i = index; i < newCards.length; i++) { // recalculate keys
                 newCards[i]["key"]--;
@@ -102,12 +103,12 @@ function YourCards({ route, navigation }) {
         });
     }
     
-    const confirmDelete = (rowMap, card, index) => {
+    const confirmDelete = (card, index) => {
         Alert.alert(
             'Delete Card?',
             'This card will be permanently deleted from your profile.',
             [
-              {text: 'Delete', onPress: () => deleteCard(rowMap, card, index)},
+              {text: 'Delete', onPress: () => deleteCard(card, index)},
               {text: 'Cancel', onPress: () => console.log(''), style: 'cancel'},
             ]
           );
@@ -155,7 +156,7 @@ function YourCards({ route, navigation }) {
     //     // }
     // }, [focused])
 
-    // TODO: need to add loading screen 
+    // TODO: need to add loading screen
 
     if (cards.length == 0) {
         return (
@@ -240,12 +241,18 @@ function YourCards({ route, navigation }) {
 
     const swipeGestureEnded = (key, data) => {
         if (data.translateX < deleteThreshold) {
-            deleteCard(null, cards[key], key);
+            deleteCard(cards[key], key);
         }
     };
 
     const onRowOpen = (rowKey, rowMap) => {
-        if (swipeWidths[rowKey].__getValue() === 0) rowMap[rowKey].closeRow(); // really hacky
+        rowRefs[rowKey] = rowMap[rowKey]; // hacky
+        setRowRefs(rowRefs);
+    };
+
+    const onRowClose = (rowKey, rowMap) => {
+        rowRefs[rowKey] = undefined; // hacky
+        setRowRefs(rowRefs);
     };
 
     return (
@@ -287,7 +294,7 @@ function YourCards({ route, navigation }) {
                         }}
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(rowMap, data.item, cards.indexOf(data.item))}>
+                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
                                     <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
                                         <Ionicons
                                             name="trash-outline"
@@ -303,6 +310,7 @@ function YourCards({ route, navigation }) {
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
+                        onRowClose={onRowClose}
                         useNativeDriver={false}
                     />
                 </View>                
