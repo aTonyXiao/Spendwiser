@@ -1,6 +1,5 @@
 import React from 'react';
-import { 
-    SafeAreaView, 
+import {
     StyleSheet, 
     View, 
     Text, 
@@ -19,6 +18,7 @@ import { AddCardModal } from './AddCardModal'
 import { useIsFocused } from '@react-navigation/native'
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
 
