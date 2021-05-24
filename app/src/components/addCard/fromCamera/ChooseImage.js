@@ -6,6 +6,7 @@ import {
     Platform,
     StyleSheet
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
 // TODO: need to add permission to settings page
@@ -80,11 +81,24 @@ export function ChooseImage({navigation}) {
 
     return(
         <View style={styles.container}>
-            <TouchableOpacity onPress={launchCameraRoll}>
-                <Text style={styles.txt}>Pick an image from camera roll</Text>
+            <Text style={styles.txt}>Camera roll</Text>
+            <TouchableOpacity 
+                onPress={launchCameraRoll}
+                style={styles.icon}
+            >
+                <Ionicons
+                    name="image-outline"
+                    color="black"
+                    size={40}
+                ></Ionicons>
             </TouchableOpacity>
+            <Text style={styles.txt}>Take a photo</Text>
             <TouchableOpacity onPress={takePhoto}>
-                <Text style={styles.txt}>Take a photo</Text>
+                <Ionicons
+                    name="camera-outline"
+                    color="black"
+                    size={40}
+                ></Ionicons>
             </TouchableOpacity>
         </View>
     )
@@ -99,5 +113,8 @@ const styles = StyleSheet.create({
     txt: {
         fontSize: 18,
         margin: 10
+    },
+    icon: {
+        marginBottom: 15
     }
 })

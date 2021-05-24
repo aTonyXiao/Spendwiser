@@ -185,7 +185,8 @@ async function syncRemoteDatabase() {
             } else {
                 // Do nothing
             }
-            resolve();
+
+            resolve(true);
         });
     });
 }
