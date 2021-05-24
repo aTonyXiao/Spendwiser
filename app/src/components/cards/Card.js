@@ -50,7 +50,7 @@ export class Card extends React.Component {
     render () {
         return (
             <View>
-                <Text style={styles.cardTitle}>{this.state.name}</Text>
+                <Text numberOfLines={1} style={styles.cardTitle}>{this.state.name}</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
                     <CardImage
                         style={[ styles.card ]}
@@ -65,19 +65,16 @@ export class Card extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
-        width: "95%",
-    },
     card: {
-        resizeMode: "contain",
-        width: "100%",
+        alignSelf: "center",
+        width: (Dimensions.get('window').width * 0.9),
         height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
         marginBottom: 10
     }, 
     cardTitle: {
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 0,
+        marginBottom: 10,
         fontSize: 20 
     }
 });

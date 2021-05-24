@@ -6,7 +6,7 @@ import sha1 from 'crypto-js/sha1';
 const styles = StyleSheet.create({
     innerImage: {
         height: '100%',
-        width: 365, //hard coded for now
+        width: "100%",
         flexDirection: 'row'
     },
     overlay: {
