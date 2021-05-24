@@ -75,7 +75,8 @@
     "react-native-web": "~0.13.12",
     "sentry-expo": "^3.1.0",
     "unimodules-permissions-interface": "~6.1.0",
-    "expo-apple-authentication": "~3.1.0"
+    "expo-apple-authentication": "~3.1.0",
+    "expo-haptics": "~10.0.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

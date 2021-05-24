@@ -8,8 +8,7 @@ import {
     Alert,
     Animated,
     Dimensions,
-    PixelRatio,
-    Vibration
+    PixelRatio
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -21,6 +20,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import mainStyles from "../../styles/mainStyles"
+import * as Haptics from 'expo-haptics';
 
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
@@ -193,7 +193,8 @@ function YourCards({ route, navigation }) {
         const { key, value } = swipeData;
         if (value < deleteThreshold) {
             if (!animationRunning.current && !deleteOpen.current) {
-                Vibration.vibrate(50, false);
+                // https://docs.expo.io/versions/latest/sdk/haptics/
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Animated.timing(swipeOpacities[key], {
                     toValue: 0.0,
                     duration: 100,
