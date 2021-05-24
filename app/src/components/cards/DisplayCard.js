@@ -18,6 +18,8 @@ import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { summaryHelper } from '../summary/SummaryHelper';
+import mainStyles from '../../styles/mainStyles';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 // TODO: need to add reward modal back in here?
 
 /**
@@ -124,7 +126,9 @@ function DisplayCard({route, navigation}) {
 
     return (
         // <DismissKeyboard>
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={mainStyles.screen}>
+                <BackButtonHeader navigation={navigation} title={cardName} titleStyle={styles.cardTitle} />
+                <View style={mainStyles.bodyContainer}>
                 <EditTransactionModal
                     transaction={currentTransaction}
                     modalVisible={showEditTransactionModal}
@@ -142,7 +146,7 @@ function DisplayCard({route, navigation}) {
                 ></TransactionModal>
 
                 <View style={{ justifyContent: 'flex-start'}}>
-                    <Text style={styles.cardTitle}>{cardName}</Text>
+                    {/* <Text style={styles.cardTitle}>{cardName}</Text> */}
 
                     <CardImage
                         style={[styles.card]}
@@ -287,6 +291,7 @@ function DisplayCard({route, navigation}) {
                         </TouchableOpacity>
                     }
                 </View>
+                </View>
             </SafeAreaView>
         // </DismissKeyboard>
     )
@@ -300,7 +305,7 @@ const styles = StyleSheet.create({
     },
     cardTitle: { 
         textAlign: 'center',
-        marginTop: 25,
+        // marginTop: 25,
         fontSize: 24
     },
     card: {
