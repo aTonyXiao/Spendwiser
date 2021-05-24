@@ -405,6 +405,17 @@ export const setSubcollectionLocalDB = async (accountName, location, dataArr, ca
     }
 }
 
+const addDocIDMapping = (db, accountName, location, oldId, newId) => {
+    if (!('sync_mappings' in db[accountName])) {
+        db[accountName]['sync_mappings'] = [];
+    }
+
+    db[accountName]['sync_mappings'] = [
+        ...db[accountName]['sync_mappings'],
+        {'location': location, 'oldId': oldId, 'newId': newId},
+    ];
+} 
+
 export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
@@ -424,6 +435,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 delete db[accountName][location][oldId];
                 let id = newId;
                 db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+                addDocIDMapping(db, accountName, location, oldId, newId);
             }
 
             setDB(db, () => {
