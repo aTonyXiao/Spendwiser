@@ -50,11 +50,11 @@ function YourCards({ route, navigation }) {
     const resetAnimationValues = key => {
         if (typeof swipeWidths[key] === "undefined") {
             swipeWidths[key] = new Animated.Value(0);
-            swipeHeights[key] = new Animated.Value(CARD_HEIGHT + styles.cardBack.paddingTop + 10);
+            swipeHeights[key] = new Animated.Value(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key] = new Animated.Value(1.0);
         } else {
             swipeWidths[key].setValue(0);
-            swipeHeights[key].setValue(CARD_HEIGHT + styles.cardBack.paddingTop + 10);
+            swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key].setValue(1.0);
         }
         setSwipeWidths(swipeWidths);
@@ -272,10 +272,12 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                    <Card key={data.item.docId} props={props} />
+                                <View>
+                                    <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
+                                        <Card key={data.item.docId} props={props} />
+                                    </Animated.View>
                                     <View style={styles.divider}></View>
-                                </Animated.View>
+                                </View>
                             )
                         }}
                         renderHiddenItem={(data, rowMap) => (
@@ -347,14 +349,15 @@ const styles = StyleSheet.create({
     divider: { 
         width: '100%',
         borderWidth: 1,
-        borderColor: 'lightgray'
+        borderColor: 'lightgray',
+        marginTop: 10
     },
     cardBack: {
         flex: 1,
-        flexDirection: 'row',
         justifyContent: 'flex-end',
-        paddingTop: 20 * PixelRatio.getFontScale() + 24,
-        marginRight: (Dimensions.get('window').width * 0.05)
+        direction: "rtl",
+        // paddingTop: 20 * PixelRatio.getFontScale() + 24,
+        paddingLeft: (Dimensions.get('window').width * 0.05)
     },
     cardDelete: {
         backgroundColor: 'red',
