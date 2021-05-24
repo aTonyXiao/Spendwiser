@@ -213,6 +213,8 @@ function YourCards({ route, navigation }) {
             }
         } else {
             if (!animationRunning.current && deleteOpen.current) {
+                // https://docs.expo.io/versions/latest/sdk/haptics/
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Animated.timing(swipeOpacities[key], {
                     toValue: 1.0,
                     duration: 100,
