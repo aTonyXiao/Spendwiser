@@ -34,6 +34,13 @@ const mainStyles = StyleSheet.create({
       alignSelf: "flex-end",
       width: '100%',
   },
+  titleAligned: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: '#28b573',
+    textAlign: 'center',
+    marginTop: 50
+  },
 });
 
 export default mainStyles;

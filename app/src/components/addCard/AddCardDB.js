@@ -16,6 +16,7 @@ import mainStyles from '../../styles/mainStyles';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import * as storage from '../../local/storage';
 import { appBackend } from '../../network/backend';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
 
 export function AddCardDB({existingUserCards, navigation}) {
@@ -107,7 +108,7 @@ export function AddCardDB({existingUserCards, navigation}) {
     return (
         <DismissKeyboard>
             <View style={styles.container}>
-                <Text style={styles.title}>Search For a Card</Text>
+                <BackButtonHeader navigation={navigation} title={"Search For a Card"} titleStyle={mainStyles.titleAligned} />
 
                 {
                     displayErrorText &&
@@ -158,25 +159,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: '100%'
     },
-    title: {
-        fontSize: 32,
-        color: '#28b573',
-        textAlign: 'center',
-        marginTop: 70,
-        right: 1
-    },
     autocompleteContainer : {
         flex: 1,
         left: 30,
         position: 'absolute',
         right: 70,
-        top: 110,
+        top: 120,
         zIndex: 1
     },
     enterIcon : { 
         position: 'absolute',
         right: 20,
-        top: 110
+        top: 120
     },
     errorText : { 
         color:'red',

@@ -36,9 +36,9 @@ const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
-    const [swipeWidths, setSwipeWidths] = useState([]);
-    const [swipeHeights, setSwipeHeights] = useState([]);
-    const [swipeOpacities, setSwipeOpacities] = useState([]);
+    const [swipeWidths, setSwipeWidths] = useState({});
+    const [swipeHeights, setSwipeHeights] = useState({});
+    const [swipeOpacities, setSwipeOpacities] = useState({});
     const [rowRefs, setRowRefs] = useState({});
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
@@ -70,7 +70,7 @@ function YourCards({ route, navigation }) {
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
                 cards.forEach(element => {
-                    element["key"] = cards.indexOf(element);
+                    element["key"] = cards.indexOf(element).toString();
                     resetAnimationValues(element["key"]);
                 });
                 setCards(cards);
@@ -92,10 +92,10 @@ function YourCards({ route, navigation }) {
             duration: 150,
             useNativeDriver: false
         }).start(() => {
-            if (rowRefs[index] !== undefined) rowRefs[index].closeRow();
+            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
             let newCards = [...cards];
             for (let i = index; i < newCards.length; i++) { // recalculate keys
-                newCards[i]["key"]--;
+                newCards[i]["key"] = (parseInt(newCards[i]["key"]) - 1).toString();
             }
             newCards.splice(index, 1);
             setCards(newCards);
@@ -197,7 +197,8 @@ function YourCards({ route, navigation }) {
 
     const swipeGestureEnded = (key, data) => {
         if (data.translateX < deleteThreshold) {
-            deleteCard(cards[key], key);
+            let index = parseInt(key);
+            deleteCard(cards[index], index);
         }
     };
 

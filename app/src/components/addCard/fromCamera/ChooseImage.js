@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { BackButtonHeader } from '../../util/BackButtonHeader';
+import mainStyles from '../../../styles/mainStyles';
 
 // TODO: need to add permission to settings page
 
