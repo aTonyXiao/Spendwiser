@@ -25,7 +25,8 @@ let Settings = (props) => {
     const width = Dimensions.get('window').width;
 
     return(
-        <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={mainStyles.screen}>
+            <View style={mainStyles.bodyContainer}>
             <View style={{alignItems: 'center', justifyContent: 'center', marginTop: "15%"}}>
                 <Image source = {require("../../../assets/spendwiser_logo.png")}
                     style = {{ 
@@ -185,7 +186,8 @@ let Settings = (props) => {
                     ></Ionicons>
                 </TouchableOpacity> */}
             </View>
-            <View style={styles.footerContainer}>
+            </View>
+            <View style={mainStyles.footerContainer}>
                 <Footer navigation={navigation} />
             </View>
         </SafeAreaView>

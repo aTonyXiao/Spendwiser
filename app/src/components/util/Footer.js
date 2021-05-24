@@ -108,6 +108,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        marginTop: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: "white"
     }
 })
