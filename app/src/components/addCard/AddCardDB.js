@@ -1,5 +1,12 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { 
+    Alert, 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Dimensions 
+} from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
@@ -100,7 +107,7 @@ export function AddCardDB({existingUserCards, navigation}) {
     return (
         <DismissKeyboard>
             <View style={styles.container}>
-                <Text style={mainStyles.title}>Search For a Card</Text>
+                <Text style={styles.title}>Search For a Card</Text>
 
                 {
                     displayErrorText &&
@@ -151,18 +158,25 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: '100%'
     },
+    title: {
+        fontSize: 32,
+        color: '#28b573',
+        textAlign: 'center',
+        marginTop: 70,
+        right: 1
+    },
     autocompleteContainer : {
         flex: 1,
         left: 30,
         position: 'absolute',
         right: 70,
-        top: 90,
+        top: 110,
         zIndex: 1
     },
     enterIcon : { 
         position: 'absolute',
         right: 20,
-        top: 90
+        top: 110
     },
     errorText : { 
         color:'red',

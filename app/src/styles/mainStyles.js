@@ -15,7 +15,6 @@ const mainStyles = StyleSheet.create({
     marginTop: 50,
     right: 1
   },
-
   large_title : { 
       fontSize: 40,
       color: '#28b573',

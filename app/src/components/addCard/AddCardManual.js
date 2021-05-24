@@ -115,7 +115,7 @@ export function AddCardManual({navigation}) {
     return (
         <DismissKeyboard>
             <View style={styles.container}>
-                <Text style={mainStyles.title}>Add a Card Manually</Text>
+                <Text style={styles.title}>Add a Card Manually</Text>
 
                 <Text style={styles.inputTitle}>Credit Card Name</Text>
                 <TextBox
@@ -231,6 +231,13 @@ const styles = StyleSheet.create({
     container : {
         backgroundColor: 'white',
         height: '100%'
+    },
+    title: {
+        fontSize: 32,
+        color: '#28b573',
+        textAlign: 'center',
+        marginTop: 70,
+        right: 1
     },
     rewardContainer: { 
         display: 'flex',
