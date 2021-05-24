@@ -281,8 +281,6 @@ export function MainScreen({navigation}) {
         }
     }, []);
     
-   
-
     return (
         <View style={styles.screen}>
             <StatusBar barStyle='dark-content'/>
