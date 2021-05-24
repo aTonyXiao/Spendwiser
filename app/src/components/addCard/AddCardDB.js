@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
@@ -99,49 +99,54 @@ export function AddCardDB({existingUserCards, navigation}) {
 
     return (
         <DismissKeyboard>
-            <View style={styles.container}>
-                <Text style={mainStyles.title}>Search For a Card</Text>
+            <SafeAreaView style={styles.container}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={{flex: 1, justifyContent: 'space-between'}}
+                >
+                    <Text style={mainStyles.title}>Search For a Card</Text>
 
-                {
-                    displayErrorText &&
-                    <Text style={styles.errorText}>Please input a query into the search bar</Text>
-                }
-                <View style={styles.autocompleteContainer}>
-                    <Autocomplete
-                        inputContainerStyle={styles.autocompleteTextInput}
-                        listStyle={styles.autocompleteList}
-                        data={filteredCardNames}
-                        hideResults={hideResults}
-                        defaultValue={query}
-                        onChangeText={text => {
-                            if (text) {
-                                setHideResults(false);
-                            } else {
-                                setHideResults(true);
-                            }
-                            setQuery(text);
-                            filterData();
-                        }}
-                        renderItem={({ item, i }) => (
-                            <TouchableOpacity onPress={() => setQuery(item)}>
-                                <Text style={styles.autocompleteListText}>{item}</Text>
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item, index) => {
-                            return index.toString();
-                        }}
-                    />
-                </View>
-                <View style={styles.enterIcon}>
-                    <TouchableOpacity onPress={addCard}>
-                        <Ionicons
-                            name="enter"
-                            color="#28b573"
-                            size={32}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                    {
+                        displayErrorText &&
+                        <Text style={styles.errorText}>Please input a query into the search bar</Text>
+                    }
+                    <View style={styles.autocompleteContainer}>
+                        <Autocomplete
+                            inputContainerStyle={styles.autocompleteTextInput}
+                            listStyle={styles.autocompleteList}
+                            data={filteredCardNames}
+                            hideResults={hideResults}
+                            defaultValue={query}
+                            onChangeText={text => {
+                                if (text) {
+                                    setHideResults(false);
+                                } else {
+                                    setHideResults(true);
+                                }
+                                setQuery(text);
+                                filterData();
+                            }}
+                            renderItem={({ item, i }) => (
+                                <TouchableOpacity onPress={() => setQuery(item)}>
+                                    <Text style={styles.autocompleteListText}>{item}</Text>
+                                </TouchableOpacity>
+                            )}
+                            keyExtractor={(item, index) => {
+                                return index.toString();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.enterIcon}>
+                        <TouchableOpacity onPress={addCard}>
+                            <Ionicons
+                                name="enter"
+                                color="#28b573"
+                                size={32}
+                            ></Ionicons>
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
         </DismissKeyboard>
     )
 }

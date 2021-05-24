@@ -87,6 +87,7 @@ export function MainScreen({navigation}) {
     }
 
     const handleInternetStateChange = (nextState) => {
+        console.log(nextState.isConnected);
         if ((internetState.current === false && nextState.isConnected === true) || 
             (internetState.current === true && nextState.isConnected === false)) {
             navigation.dispatch(
@@ -262,7 +263,10 @@ export function MainScreen({navigation}) {
     // Called on mount
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
-        NetInfo.addEventListener('connectionChange', state => handleInternetStateChange(state));
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+        });
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -273,7 +277,7 @@ export function MainScreen({navigation}) {
         })();
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
-            NetInfo.removeEventListener('connectionChange', state => handleInternetStateChange(state));
+            unsubscribe();
         }
     }, []);
     
@@ -345,7 +349,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" : storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permissions Denied')
