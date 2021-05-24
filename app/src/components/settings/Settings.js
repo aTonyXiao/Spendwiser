@@ -1,10 +1,18 @@
 import React from 'react';
-import { View, Alert, StyleSheet, Image, TouchableOpacity, Text, StatusBar, SafeAreaView, Dimensions } from 'react-native';
-import mainStyles from '../../styles/mainStyles';
 import { appBackend } from '../../network/backend';
 import { Footer } from '../util/Footer';
 import { Ionicons } from '@expo/vector-icons';
-import * as storage from '../../local/storage';
+import { 
+    View, 
+    Alert, 
+    StyleSheet, 
+    Image, 
+    TouchableOpacity, 
+    Text, 
+    StatusBar, 
+    SafeAreaView, 
+    Dimensions 
+} from 'react-native';
 
 /**
  * Settings page that contains a plethora of navigations to different information and buttons
@@ -148,7 +156,7 @@ let Settings = (props) => {
                             style={{marginRight: -8}}
                     ></Ionicons>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
                         storage.clearLocalDB();
                     }}
@@ -175,7 +183,7 @@ let Settings = (props) => {
                         size={24}
                         style={{ marginRight: -8 }}
                     ></Ionicons>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <View style={styles.footerContainer}>
                 <Footer navigation={navigation} />

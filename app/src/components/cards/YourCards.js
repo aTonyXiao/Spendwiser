@@ -13,8 +13,8 @@ import { user } from '../../network/user';
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
-import { AddCardModal } from './AddCardModal'
-import { useIsFocused } from '@react-navigation/native'
+import { AddCardModal } from './AddCardModal';
+import { useIsFocused } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 
 /**
