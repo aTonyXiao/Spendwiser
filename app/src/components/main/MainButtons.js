@@ -42,6 +42,13 @@ export function MainButtons(
     
     return (
         <View style={styles.buttonArea}>
+            <View style={styles.internet}>
+                <Ionicons
+                    name={internetState.current ? "cloud-done-outline" : "cloud-offline-outline"}
+                    color={'black'}
+                    size={25}
+                ></Ionicons>
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={{borderBottomWidth: 0.5, padding: 3}}
@@ -63,18 +70,16 @@ export function MainButtons(
                         size={28}
                     ></Ionicons>
                 </TouchableOpacity>
-                {(internetState.current) &&
-                    <TouchableOpacity
-                        style={{padding: 3}}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <Ionicons
-                            name="search-circle-outline"
-                            color={'black'}
-                            size={30}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                }
+                <TouchableOpacity
+                    style={{padding: 3}}
+                    onPress={() => setModalVisible(true)}
+                >
+                    <Ionicons
+                        name="search-circle-outline"
+                        color={'black'}
+                        size={30}
+                    ></Ionicons>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -87,7 +92,19 @@ const styles = StyleSheet.create({
         zIndex: 1,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
+    },
+    internet: {
+        position: 'relative',
+        borderRadius: 5,
+        backgroundColor: 'white',
+        height: 35,
+        width: 40,
+        margin: 10,
+        paddingHorizontal: 5,
+        borderWidth: 0.5,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonContainer: {
         flexDirection: 'column',

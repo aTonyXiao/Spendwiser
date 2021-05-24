@@ -46,22 +46,27 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [helpModalVisible, setHelpModalVisible] = useState(false);
-    const internetState = useRef(true)
+    const internetState = useRef(true);
 
-    function setOfflineMode() {
-        setStoreArr([{
-            label: "No internet connection",
-            value: "No internet connection",
-            vicinity: "Internet access required to use the app",
-            placeId: "",
-            geometry: [38.542530, -121.749530,],
-            storeType: "N/A", 
-            key: 0,
-        }])
-        setCurStore("No internet connection");
-        setCurStoreKey(0);
-        setRecCards(null);
-        setLoading(false);
+    // Use case: Have location but no internet
+    function setOfflineMode(coords) {
+        // Only set storearr to show no internet connection when loading for the first time
+        if (storeArr.length === 0) {
+            setStoreArr([{
+                label: "No internet connection",
+                value: "No internet connection",
+                vicinity: "Click help button for more info",
+                placeId: "",
+                geometry: [coords.latitude, coords.longitude],
+                storeType: "N/A", 
+                key: 0,
+            }])
+            setCurStore("No internet connection");
+            setCurStoreKey(0);
+            setRegion({...region, longitude: coords.longitude, latitude: coords.latitude});
+            setRecCards(null);
+            setLoading(false);
+        }
     }
 
     function setLocationDisabledMode() {
@@ -88,16 +93,6 @@ export function MainScreen({navigation}) {
             return false;
     }
 
-    const handleInternetStateChange = (nextState) => {
-        console.log(nextState.isConnected);
-        if ((internetState.current === false && nextState.isConnected === true) || 
-            (internetState.current === true && nextState.isConnected === false)) {
-            navigation.dispatch(
-                StackActions.replace('SpendingSummary')
-            );
-        }
-    }
-
     function getRecCardFromDB(myRankedCards) {
         setRecCards(myRankedCards);
     }
@@ -118,12 +113,17 @@ export function MainScreen({navigation}) {
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
         if (found === undefined) {
-            fetch(googlePlaceDetailsURL + 
-                event.placeId + 
-                googlePlaceDetailsFields + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
-            .then((response) => response.json())
-            .then((json) => {getLocationFromAPI(json)})
-            .catch((error) => console.log(error))
+            NetInfo.fetch().then(state => {
+                // If connected to internet, query API for nearby stores. Else: set offline mode
+                if (state.isConnected) {
+                    fetch(googlePlaceDetailsURL + 
+                        event.placeId + 
+                        googlePlaceDetailsFields + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                    .then((response) => response.json())
+                    .then((json) => {getLocationFromAPI(json)})
+                    .catch((error) => console.log(error))
+                }
+            });
         } else {
             let index = storeArr.indexOf(found);
             reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType, storeArr[index].geometry);
@@ -222,7 +222,7 @@ export function MainScreen({navigation}) {
                         .finally(() => setLoading(false));
                     } else {
                         // Use case: Have location and no internet
-                        setOfflineMode();
+                        setOfflineMode(location.coords);
                     }
                     });
             } catch(e) {
@@ -266,16 +266,15 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
-            console.log("Connection type", state.type);
-            console.log("Is connected?", state.isConnected);
+            console.log("Internet reachable?", state.isInternetReachable);
+            if (internetState.current === false && state.isInternetReachable === true) {
+                internetState.current = true;
+            } else if (internetState.current === true && state.isInternetReachable === false) {
+                internetState.current = false;
+            }
         });
         (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setLocationDisabledMode();
-            } else {
-                tryToGetStoresFromLocation();
-            } 
+            tryToGetStoresFromLocation();
         })();
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
@@ -329,8 +328,9 @@ export function MainScreen({navigation}) {
                         showsUserLocation={true}
                         onPoiClick={e => {if (internetState.current) switchStoresFromPOI(e.nativeEvent)}}
                     >
-                        {
-                            internetState.current === true && <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
+                        {(storeArr.length > 0 &&
+                            storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&
+                            <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
                             )} />
