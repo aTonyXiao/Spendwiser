@@ -4,10 +4,13 @@ import {
     View, 
     TouchableOpacity, 
     Platform,
-    StyleSheet
+    StyleSheet,
+    SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import mainStyles from '../../../styles/mainStyles';
+import { BackButtonHeader } from '../../util/BackButtonHeader';
 
 // TODO: need to add permission to settings page
 
@@ -80,8 +83,10 @@ export function ChooseImage({navigation}) {
     };
 
     return(
-        <View style={styles.container}>
-            <Text style={styles.txt}>Camera roll</Text>
+        <SafeAreaView style={mainStyles.screen}>
+            <BackButtonHeader navigation={navigation} />
+            <View style={[mainStyles.bodyContainer, styles.container]}>
+            <Text style={styles.txt}>Camera Roll</Text>
             <TouchableOpacity 
                 onPress={launchCameraRoll}
                 style={styles.icon}
@@ -92,7 +97,7 @@ export function ChooseImage({navigation}) {
                     size={40}
                 ></Ionicons>
             </TouchableOpacity>
-            <Text style={styles.txt}>Take a photo</Text>
+            <Text style={styles.txt}>Take a Photo</Text>
             <TouchableOpacity onPress={takePhoto}>
                 <Ionicons
                     name="camera-outline"
@@ -100,13 +105,13 @@ export function ChooseImage({navigation}) {
                     size={40}
                 ></Ionicons>
             </TouchableOpacity>
-        </View>
+            </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: { 
-        flex: 1, 
         alignItems: 'center', 
         justifyContent: 'center' 
     },
