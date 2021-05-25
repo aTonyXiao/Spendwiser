@@ -39,6 +39,7 @@ function TransactionModal({
                             ],
                             { cancelable: false });
             } else {
+                let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
                 user.saveTransaction(
                     userId, 
                     cardId, 
@@ -47,7 +48,7 @@ function TransactionModal({
                         address: storeInformation["vicinity"],
                         storeType: storeInformation["storeType"]
                     },
-                    transactionInput, 
+                    transactionFiltered, 
                     (docId) => { 
                         user.addTransactionId(userId, docId);
                         setHasConstructed(false);

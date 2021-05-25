@@ -30,16 +30,18 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
     const editTransaction = () => {
         const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) {
+            let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
+            console.log("Filtered transaction to: " + transactionFiltered);
             user.editTransaction(
                 userId,
                 docId,
                 {
-                    amountSpent: transactionInput
+                    amountSpent: transactionFiltered
                 }
             )
             setModalVisible(false);
             let newTransactions = [...transactions];
-            newTransactions[newTransactions.length - 1 - parseInt(transaction.key)].amountSpent = transactionInput;
+            newTransactions[newTransactions.length - 1 - parseInt(transaction.key)].amountSpent = transactionFiltered;
             setTransactions(newTransactions);
         } else {
             setDisplayErrorText(true);

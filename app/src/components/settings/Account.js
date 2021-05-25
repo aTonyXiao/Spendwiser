@@ -10,8 +10,36 @@ import { BackButtonHeader } from '../util/BackButtonHeader';
  * @param {Object} props 
  */
 let Account = function(props) {
-    let userInfo = appBackend.getUserInfo();
-    let emailStatus = userInfo.emailVerified ? "Verified" : "Unverified";
+    const [userInfo, setUserInfo] = React.useState({
+        name: "N/A",
+        email: "N/A",
+        emailVerified: false,
+        lastLogin: "N/A",
+        photoURL: "",}
+    );
+
+    const [emailStatus, setEmailStatus] = React.useState("Unverified");
+    const [hasConstructed, setHasConstructed] = React.useState(false);
+
+    // simulate constructor for functional components
+    const constructor = () => { 
+        if (hasConstructed) { 
+            return;
+        } else { 
+            appBackend.getUserInfo().then((res) => {
+                setHasConstructed(true);
+                setUserInfo(res);
+                if (res.emailVerified) {
+                    setEmailStatus("Verified");
+                } else {
+                    setEmailStatus("Unverified");
+                }
+            });
+        }
+    }
+    constructor();
+    
+
     return(
         <SafeAreaView style={mainStyles.screen}>
             <BackButtonHeader navigation={props.navigation} title={"Your Account"} titleStyle={mainStyles.titleNoPadding} />
