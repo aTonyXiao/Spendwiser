@@ -11,7 +11,6 @@ export function MainButtons(
         region,
         setRegion,
         setModalVisible,
-        setHelpModalVisible,
         internetState,
         tryToGetStoresFromLocation,
     }) {
@@ -31,12 +30,12 @@ export function MainButtons(
                 { cancelable: false }
             );
         } else {
-            let location = await Location.getCurrentPositionAsync({});
-            if (location.coords !== undefined) 
+            let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
+            if (location.coords !== undefined) {
                 setRegion({...region, longitude: location.coords.longitude, latitude: location.coords.latitude});
-            setUserLocation(location.coords);
-            tryToGetStoresFromLocation();
-
+                setUserLocation(location.coords);
+                tryToGetStoresFromLocation();
+            }
         }
     }
     
