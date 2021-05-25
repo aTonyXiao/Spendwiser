@@ -1,5 +1,6 @@
 import React from 'react';
-import { 
+import {
+    SafeAreaView, 
     Alert, 
     View, 
     Text, 
@@ -107,8 +108,9 @@ export function AddCardDB({existingUserCards, navigation}) {
 
     return (
         <DismissKeyboard>
-            <View style={styles.container}>
-                <BackButtonHeader navigation={navigation} title={"Search For a Card"} titleStyle={mainStyles.titleAligned} />
+            <SafeAreaView style={mainStyles.screen}>
+                <BackButtonHeader navigation={navigation} title={"Search for a Card"} titleStyle={mainStyles.titleAligned} />
+                <View style={mainStyles.bodyContainer}>
 
                 {
                     displayErrorText &&
@@ -150,6 +152,7 @@ export function AddCardDB({existingUserCards, navigation}) {
                     </TouchableOpacity>
                 </View>
             </View>
+            </SafeAreaView>
         </DismissKeyboard>
     )
 }

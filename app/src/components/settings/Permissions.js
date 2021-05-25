@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Alert, Switch, StyleSheet, Linking, AppState } from 'react-native';
+import { View, Text, Alert, Switch, StyleSheet, Linking, AppState, SafeAreaView } from 'react-native';
 import mainStyles from '../../styles/mainStyles';
 import * as Notifications from 'expo-notifications';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as IntentLauncher from 'expo-intent-launcher';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
-export function AppPermissions({}) {
+export function AppPermissions(props) {
     const [notificationPermissions, setNotifiationPermission] = useState(false);
     const [photoPermissions, setPhotoPermissions] = useState(false);
     const [cameraRollPermissions, setCameraRollPermissions] = useState(false);
@@ -94,8 +95,9 @@ export function AppPermissions({}) {
       }, []);
 
     return (
-        <View style={styles.container}>
-            <Text style={mainStyles.large_title}>Permissions</Text>
+        <SafeAreaView style={mainStyles.screen}>
+        <BackButtonHeader navigation={props.navigation} title={"Permissions"} titleStyle={mainStyles.titleNoPadding} />
+        <View style={[mainStyles.bodyContainer, styles.container]}>
 
             <View style={styles.rowContainerTop}>
                 <Text>Notifications</Text>
@@ -137,6 +139,7 @@ export function AppPermissions({}) {
                 />
             </View>
         </View>
+        </SafeAreaView>
     );
 }
 
