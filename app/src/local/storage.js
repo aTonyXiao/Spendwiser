@@ -148,6 +148,22 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
     }
 }
 
+const checkSyncMapping = (db, accountName, document, id) => {
+    if ('sync_mappings' in db[accountName]) {
+        console.log("Checking sync mappings for document: " + document + " id: " + id);
+        sync_mappings = db[accountName]['sync_mappings'];
+        for (let i = 0; i < sync_mappings.length; i++) {
+            let mapping = sync_mappings[i];
+            if (mapping['location'] == document && mapping['oldId'] == id) {
+                console.log("Found " + mapping['newId']);
+                return mapping['newId'];
+            }
+        }
+        return id;
+    } else {
+        return id;
+    }
+}
 export const deleteLocalDB = async (accountName, location) => {
     try {
         getDB(async (db) => {
@@ -158,7 +174,10 @@ export const deleteLocalDB = async (accountName, location) => {
                 console.log("Location: " + location);
                 console.log("----------------------");
             }
-            const [document, id] = parseDocAndId(location);
+            let [document, id] = parseDocAndId(location);
+            id = checkSyncMapping(db, accountName, document, id);
+            
+            console.log("deleting with document: " + document + " id: " + id);
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
 
                 if ('unsynced_documents' in db[accountName]) {
@@ -297,10 +316,27 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             }
 
             let local_data = null;
+            // Normal get operation that will return one item
             if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
                 local_data = db[accountName][document][id];
-            } else if (accountName in db && location in db[accountName]) {
+            }
+            // Get operation that will most likely filter the data and receive a
+            // callback for each item in the array that meets certain conditions
+            else if (accountName in db && location in db[accountName]) {
                 local_data = Object.values(db[accountName][location]);
+            }
+            // NOTE: Look into the db's mappings from localdb generated id's to remote generated id's that
+            // have been replaced. Components can reference old id's if they are not updated after a sync
+            // operation but they still want to refer to the data
+            else if ('sync_mappings' in db[accountName]) {
+                sync_mappings = db[accountName]['sync_mappings'];
+                sync_mappings.forEach((mapping) => {
+                    if (mapping['location'] == document && mapping['oldId'] == id) {
+                        if (accountName in db && document in db[accountName] && mapping['newId'] in db[accountName][document]) {
+                            local_data = db[accountName][document][mapping['newId']];
+                        }
+                    }
+                });
             }
 
             var comp_op = {
@@ -405,6 +441,17 @@ export const setSubcollectionLocalDB = async (accountName, location, dataArr, ca
     }
 }
 
+const addDocIDMapping = (db, accountName, location, oldId, newId) => {
+    if (!('sync_mappings' in db[accountName])) {
+        db[accountName]['sync_mappings'] = [];
+    }
+
+    db[accountName]['sync_mappings'] = [
+        ...db[accountName]['sync_mappings'],
+        {'location': location, 'oldId': oldId, 'newId': newId},
+    ];
+} 
+
 export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
@@ -424,6 +471,7 @@ export const modifyDBEntryMetainfo = async (accountName, location, isSynced = fa
                 delete db[accountName][location][oldId];
                 let id = newId;
                 db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
+                addDocIDMapping(db, accountName, location, oldId, newId);
             }
 
             setDB(db, () => {
