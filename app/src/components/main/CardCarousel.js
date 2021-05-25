@@ -52,7 +52,7 @@ export function CardCarousel(
                 />
             </View>
         </TouchableOpacity>
-        ), []);
+    ), []);
 
     return (
         <View style={carouselStyles.cardContainer}>

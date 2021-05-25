@@ -70,32 +70,22 @@ export function HeaderAndTabContent(
             </Modal>
             }
             {/* Header */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '95%', padding: 10}}>
-                <Ionicons
-                    name="ellipsis-horizontal-circle"
-                    color={'white'}
-                    size={30}
-                ></Ionicons>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 10}}>
                 <Text style={styles.header}>Spendings</Text>
-                <Ionicons
-                    name="ellipsis-horizontal-circle"
-                    color={'black'}
-                    size={30}
-                    onPress={()=> {
-                        setModalVisible(modalType.CARDS);
-                    }}
-                ></Ionicons>
             </View>
             {/* Current Card */}
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <TouchableOpacity
+                style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 5}}
+                onPress={()=> {setModalVisible(modalType.CARDS)}}
+            >
                 <Ionicons
                     name="card-outline"
-                    color={"black"}
+                    color={"blue"}
                     size={15}
                     style={{paddingRight: 5}}
                 ></Ionicons>
-                <Text>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
-            </View>
+                <Text style={{color: 'blue'}}>{curCard === null ? "All Cards" : curCard["cardName"]}</Text>
+            </TouchableOpacity>
             {/* Tabs */}
             <View style={styles.tabContainer}>
                 {/* Tabs */}

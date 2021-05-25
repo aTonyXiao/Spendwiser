@@ -13,7 +13,6 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
-import { MainHelpModal } from './MainHelpModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
 
@@ -45,23 +44,27 @@ export function MainScreen({navigation}) {
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
-    const [helpModalVisible, setHelpModalVisible] = useState(false);
-    const internetState = useRef(true)
+    const [internetState, setInternetState] = useState(false);
 
-    function setOfflineMode() {
-        setStoreArr([{
-            label: "No internet connection",
-            value: "No internet connection",
-            vicinity: "Internet access required to use the app",
-            placeId: "",
-            geometry: [38.542530, -121.749530,],
-            storeType: "N/A", 
-            key: 0,
-        }])
-        setCurStore("No internet connection");
-        setCurStoreKey(0);
-        setRecCards(null);
-        setLoading(false);
+    // Use case: Have location but no internet
+    function setOfflineMode(coords) {
+        // Only set storearr to show no internet connection when loading for the first time
+        if (storeArr.length === 0) {
+            setStoreArr([{
+                label: "No internet connection",
+                value: "No internet connection",
+                vicinity: "Click help button for more info",
+                placeId: "",
+                geometry: [coords.latitude, coords.longitude],
+                storeType: "N/A", 
+                key: 0,
+            }])
+            setCurStore("No internet connection");
+            setCurStoreKey(0);
+            setRegion({...region, longitude: coords.longitude, latitude: coords.latitude});
+            setRecCards(null);
+            setLoading(false);
+        }
     }
 
     function setLocationDisabledMode() {
@@ -88,15 +91,6 @@ export function MainScreen({navigation}) {
             return false;
     }
 
-    const handleInternetStateChange = (nextState) => {
-        if ((internetState.current === false && nextState.isConnected === true) || 
-            (internetState.current === true && nextState.isConnected === false)) {
-            navigation.dispatch(
-                StackActions.replace('SpendingSummary')
-            );
-        }
-    }
-
     function getRecCardFromDB(myRankedCards) {
         setRecCards(myRankedCards);
     }
@@ -117,12 +111,17 @@ export function MainScreen({navigation}) {
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
             && o.label.includes(event.name.slice(0, event.name.indexOf("\n")))));
         if (found === undefined) {
-            fetch(googlePlaceDetailsURL + 
-                event.placeId + 
-                googlePlaceDetailsFields + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
-            .then((response) => response.json())
-            .then((json) => {getLocationFromAPI(json)})
-            .catch((error) => console.log(error))
+            NetInfo.fetch().then(state => {
+                // If connected to internet, query API for nearby stores. Else: set offline mode
+                if (state.isConnected) {
+                    fetch(googlePlaceDetailsURL + 
+                        event.placeId + 
+                        googlePlaceDetailsFields + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
+                    .then((response) => response.json())
+                    .then((json) => {getLocationFromAPI(json)})
+                    .catch((error) => console.log(error))
+                }
+            });
         } else {
             let index = storeArr.indexOf(found);
             reloadRecCard(storeArr[index].label, storeArr[index].key, storeArr[index].storeType, storeArr[index].geometry);
@@ -221,7 +220,7 @@ export function MainScreen({navigation}) {
                         .finally(() => setLoading(false));
                     } else {
                         // Use case: Have location and no internet
-                        setOfflineMode();
+                        setOfflineMode(location.coords);
                     }
                     });
             } catch(e) {
@@ -264,18 +263,20 @@ export function MainScreen({navigation}) {
     // Called on mount
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
-        // NetInfo.addEventListener('connectionChange', state => handleInternetStateChange(state));
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Internet reachable?", state.isInternetReachable);
+            if (internetState === false && state.isInternetReachable === true) {
+                setInternetState(true);
+            } else if (internetState === true && state.isInternetReachable === false) {
+                setInternetState(false);
+            }
+        });
         (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setLocationDisabledMode();
-            } else {
-                tryToGetStoresFromLocation();
-            } 
+            tryToGetStoresFromLocation();
         })();
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction);
-            // NetInfo.removeEventListener('connectionChange', state => handleInternetStateChange(state));
+            unsubscribe();
         }
     }, []);
     
@@ -294,10 +295,6 @@ export function MainScreen({navigation}) {
                 curStore={curStore}
                 userLocation={userLocation}
             />
-            <MainHelpModal
-                helpModalVisible={helpModalVisible}
-                setHelpModalVisible={setHelpModalVisible}
-            />
             <View style={mainStyles.bodyContainer}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
@@ -308,7 +305,6 @@ export function MainScreen({navigation}) {
                         region={region}
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
-                        setHelpModalVisible={setHelpModalVisible}
                         internetState={internetState}
                         tryToGetStoresFromLocation= {tryToGetStoresFromLocation}
                     />
@@ -323,10 +319,11 @@ export function MainScreen({navigation}) {
                                 setRegion(e);
                             }}
                         showsUserLocation={true}
-                        onPoiClick={e => {if (internetState.current) switchStoresFromPOI(e.nativeEvent)}}
+                        onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
-                        {
-                            internetState.current === true && <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
+                        {(storeArr.length > 0 &&
+                            storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&
+                            <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
                             )} />
@@ -347,7 +344,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" :  curStoreKey in storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permissions Denied')

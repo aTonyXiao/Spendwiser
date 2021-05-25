@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
@@ -9,6 +9,7 @@ import mainStyles from '../../styles/mainStyles';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import * as storage from '../../local/storage';
 import { appBackend } from '../../network/backend';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
 
 export function AddCardDB({existingUserCards, navigation}) {
@@ -99,8 +100,9 @@ export function AddCardDB({existingUserCards, navigation}) {
 
     return (
         <DismissKeyboard>
-            <View style={styles.container}>
-                <Text style={mainStyles.title}>Search For a Card</Text>
+            <SafeAreaView style={mainStyles.screen}>
+                <BackButtonHeader navigation={navigation} title={"Search for a Card"} titleStyle={mainStyles.titleNoPadding} />
+                <View style={mainStyles.bodyContainer}>
 
                 {
                     displayErrorText &&
@@ -142,6 +144,7 @@ export function AddCardDB({existingUserCards, navigation}) {
                     </TouchableOpacity>
                 </View>
             </View>
+            </SafeAreaView>
         </DismissKeyboard>
     )
 }
@@ -156,13 +159,11 @@ const styles = StyleSheet.create({
         left: 30,
         position: 'absolute',
         right: 70,
-        top: 90,
         zIndex: 1
     },
     enterIcon : { 
         position: 'absolute',
         right: 20,
-        top: 90
     },
     errorText : { 
         color:'red',

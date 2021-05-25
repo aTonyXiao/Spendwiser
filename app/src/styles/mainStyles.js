@@ -35,6 +35,12 @@ const mainStyles = StyleSheet.create({
       alignSelf: "flex-end",
       width: '100%',
   },
+  titleNoPadding: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: '#28b573',
+    textAlign: 'center',
+  },
 });
 
 export default mainStyles;
