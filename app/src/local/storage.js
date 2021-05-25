@@ -576,8 +576,39 @@ export const setShowCameraHelpMenu = async (showCameraHelpMenu) => {
 export const getShowCameraHelpMenu = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('showCameraHelpMenu');
-        if (jsonValue == null) {
+        if (jsonValue == null) { // default
             callback(true);
+        } else {
+            callback(JSON.parse(jsonValue));
+        }
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}
+
+/**
+ * Sets local list of disabled cards 
+ * @param {*} newDisabledCards 
+ */
+export const setDisabledCards = async (newDisabledCards) => {
+    try {
+        const jsonValue = JSON.stringify(newDisabledCards);
+        await AsyncStorage.setItem('showCameraHelpMenu', jsonValue);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Gets the list of disabled cards
+ * @param {*} callback 
+ */
+export const getDisabledCards = async (callback) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('disabledCards');
+        if (jsonValue == null) { //default, nothing set yet
+            callback({'cards':[]});
         } else {
             callback(JSON.parse(jsonValue));
         }

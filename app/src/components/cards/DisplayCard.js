@@ -12,7 +12,6 @@ import {
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import { Ionicons } from '@expo/vector-icons';
-import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
@@ -20,7 +19,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { summaryHelper } from '../summary/SummaryHelper';
 import mainStyles from '../../styles/mainStyles';
 import { BackButtonHeader } from '../util/BackButtonHeader';
-// TODO: need to add reward modal back in here?
+import * as storage from '../../local/storage';
 
 /**
  * Display for a single credit card. Shows information about a card's rewards as well
@@ -122,6 +121,15 @@ function DisplayCard({route, navigation}) {
         let newTransactions = [...transactions];
         newTransactions.splice(newTransactions.length - 1 - key, 1);
         setTransactions(newTransactions);
+    }
+
+    const toggleDisplayCard = () => {
+        // storage.setDisabledCards((val) => { 
+        //     setShowHelpModal(val);
+        //     if (!val) { 
+        //         setCheckBoxIsSelected([]);
+        //     }
+        // });
     }
 
     return (
@@ -286,9 +294,14 @@ function DisplayCard({route, navigation}) {
                 <View>
                     {
                         (origin !== "main") &&
-                        <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
-                            <Text style={styles.deleteText}>Delete this card</Text>
-                        </TouchableOpacity>
+                        <View>
+                            <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
+                                <Text style={styles.deleteText}>Delete this card</Text>
+                            </TouchableOpacity>
+                            {/* <TouchableOpacity style={styles.deleteContainer} onPress={toggleDisplayCard}>
+                                <Text style={styles.deleteText}>Disable this card</Text>
+                            </TouchableOpacity> */}
+                        </View>
                     }
                 </View>
                 </View>

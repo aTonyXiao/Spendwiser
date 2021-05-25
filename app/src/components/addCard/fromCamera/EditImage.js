@@ -11,7 +11,6 @@ import { CameraSettingsBar } from './CameraSettingsBar';
 import { MoveableBlock } from './MoveableBlock';
 
 // TODO: add a "loading" or "getting results"
-// TODO: seems to be an issue if add photo from camera
 
 /**
  * Page for allowing user to edit their image before they send it to Google Cloud API
@@ -24,7 +23,7 @@ import { MoveableBlock } from './MoveableBlock';
 export function EditImage({route, navigation}) {
     const image = route.params.img;
     const [encodedImage, setEncodedImage] = useState(null);
-    const [showSettingsBar, setShowSettingsBar] = useState(true); // TODO: allow double tap to show/hide settings bar
+    const [showSettingsBar, setShowSettingsBar] = useState(true); 
     const [moveableBlocks, setMoveableBlocks] = useState([]);
     const [rerender, setRerender] = useState(false);
     const key = process.env.REACT_NATIVE_GOOGLE_CLOUD_API_KEY;

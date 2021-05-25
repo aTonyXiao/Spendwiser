@@ -1,24 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
-
-const styles = StyleSheet.create({
-    innerImage: {
-        height: '100%',
-        width: "100%",
-        flexDirection: 'row'
-    },
-    overlay: {
-      textAlign: 'right',
-      fontWeight: 'bold',
-      fontSize: 20,
-      alignSelf: 'center',
-      top: '-5%',
-      left: '53%',
-      flex: 0.6
-    }
-});
+import * as storage from '../../local/storage';
+import { cards } from '../../network/cards';
 
 /**
  * Generates a contrasting rgb value based on the supplied parameter
@@ -52,6 +37,23 @@ function generateColor(string) {
 }
 
 /**
+ * calls storage function to check if card is disabled
+ * @param {*} cardId 
+ * @returns {boolean} - is the card disabled or not
+ */
+async function getIsCardDisabled(cardId) {
+  return new Promise((resolve, reject) => {
+    storage.getDisabledCards((list) => {
+      if (list.includes(cardid)) { 
+        resolve(true);
+      } else {
+        resovle(false);
+      }
+    });
+  })
+}
+
+/**
  * Component that displays a Credit Card Image. Either the card
  * image supplied via url will be displayed or a colorized background with a card's
  * name if no url is supplied.
@@ -63,26 +65,45 @@ function generateColor(string) {
  * @component
  *      
  */
-function CardImage (props) {
-    if (props.default) {
-        let generatedColor = generateColor(props.overlay);
-        return (
-            <View style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}>
-              <ImageBackground style={styles.innerImage}
-                               source={require('../../../assets/cards/blank.png')}
-                               imageStyle={props.overlay.length == 0 ? {} : {tintColor: generatedColor, resizeMode: "contain"}}>
-                <Text style={[{color: contrastRGB(generatedColor)}, styles.overlay]}>{props.overlay}</Text>
-              </ImageBackground>
-            </View>
-          );
-    } else {
-        return (
-        <CachedImage
-            style={[{justifyContent: 'center', alignItems: 'center'}, props.style]}
-            source={{uri: props.source}}
-        />
-        );
-    }
+function CardImage(props) {
+  // const isDisabled = await getIsCardDisabled(props.id);
+
+  if (props.default) {
+    let generatedColor = generateColor(props.overlay);
+    return (
+      <View style={[{ justifyContent: 'center', alignItems: 'center' }, props.style]}>
+        <ImageBackground style={styles.innerImage}
+          source={require('../../../assets/cards/blank.png')}
+          imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+          <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+        </ImageBackground>
+      </View>
+    );
+  } else {
+    return (
+      <CachedImage
+        style={[{ justifyContent: 'center', alignItems: 'center' }, props.style]}
+        source={{ uri: props.source }}
+      />
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  innerImage: {
+      height: '100%',
+      width: "100%",
+      flexDirection: 'row'
+  },
+  overlay: {
+    textAlign: 'right',
+    fontWeight: 'bold',
+    fontSize: 20,
+    alignSelf: 'center',
+    top: '-5%',
+    left: '53%',
+    flex: 0.6
+  }
+});
 
 export default CardImage;
