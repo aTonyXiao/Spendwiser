@@ -162,7 +162,7 @@ let Settings = (props) => {
                             style={{ marginRight: -8 }}
                         ></Ionicons>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => {
                             storage.clearLocalDB();
                         }}
@@ -189,7 +189,7 @@ let Settings = (props) => {
                             size={24}
                             style={{ marginRight: -8 }}
                         ></Ionicons>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
             <View style={mainStyles.footerContainer}>
