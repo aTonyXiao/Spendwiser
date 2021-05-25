@@ -11,7 +11,6 @@ export function MainButtons(
         region,
         setRegion,
         setModalVisible,
-        setHelpModalVisible,
         internetState,
         tryToGetStoresFromLocation,
     }) {
@@ -31,12 +30,12 @@ export function MainButtons(
                 { cancelable: false }
             );
         } else {
-            let location = await Location.getCurrentPositionAsync({});
-            if (location.coords !== undefined) 
+            let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Balanced});
+            if (location.coords !== undefined) {
                 setRegion({...region, longitude: location.coords.longitude, latitude: location.coords.latitude});
-            setUserLocation(location.coords);
-            tryToGetStoresFromLocation();
-
+                setUserLocation(location.coords);
+                tryToGetStoresFromLocation();
+            }
         }
     }
     
@@ -44,7 +43,7 @@ export function MainButtons(
         <View style={styles.buttonArea}>
             <View style={styles.internet}>
                 <Ionicons
-                    name={internetState.current ? "cloud-done-outline" : "cloud-offline-outline"}
+                    name={internetState ? "cloud-done-outline" : "cloud-offline-outline"}
                     color={'black'}
                     size={25}
                 ></Ionicons>
@@ -52,7 +51,8 @@ export function MainButtons(
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={{borderBottomWidth: 0.5, padding: 3}}
-                    onPress={() => setHelpModalVisible(true)}
+                    // onPress={() => setHelpModalVisible(true)}
+                    onPress={() => navigation.navigate('MainHelp')}
                 >
                     <Ionicons
                         name="help-circle-outline"

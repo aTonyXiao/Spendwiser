@@ -241,7 +241,7 @@ function YourCards({ route, navigation }) {
                                 origin: "yourcards"
                             }
                             return (
-                                <View>
+                                <View style={{paddingHorizontal: '5%'}}>
                                     <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                         <Card key={data.item.docId} props={props} />
                                     </Animated.View>

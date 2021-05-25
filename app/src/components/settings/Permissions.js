@@ -13,6 +13,7 @@ export function AppPermissions(props) {
     const [cameraRollPermissions, setCameraRollPermissions] = useState(false);
     const [locationPermissions, setLocationPermissions] = useState(false);
     const appState = useRef(AppState.currentState);
+    const trackColor = {false: "#767577", true: "#81b0ff"};
 
     const handleAppStateChange = (nextAppState) => {
         if (
@@ -102,7 +103,7 @@ export function AppPermissions(props) {
             <View style={styles.rowContainerTop}>
                 <Text>Notifications</Text>
                 <Switch
-                    trackColor={{false: "#767577", true: "#81b0ff"}}
+                    trackColor={trackColor}
                     thumbColor={notificationPermissions ? "#f4f3f4" : "#f4f3f4"}
                     onValueChange={openAppSettings}
                     value={notificationPermissions}
@@ -112,7 +113,7 @@ export function AppPermissions(props) {
             <View style={styles.rowContainerTop}>
                 <Text>Location</Text>
                 <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    trackColor={trackColor}
                     thumbColor={locationPermissions ? "#f4f3f4" : "#f4f3f4"}
                     onValueChange={openAppSettings}
                     value={locationPermissions}
@@ -122,7 +123,7 @@ export function AppPermissions(props) {
             <View style={styles.rowContainerTop}>
                 <Text>Camera</Text>
                 <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    trackColor={trackColor}
                     thumbColor={photoPermissions ? "#f4f3f4" : "#f4f3f4"}
                     onValueChange={openAppSettings}
                     value={photoPermissions}
@@ -132,7 +133,7 @@ export function AppPermissions(props) {
             <View style={styles.rowContainerTop}>
                 <Text>Camera Roll</Text>
                 <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    trackColor={trackColor}
                     thumbColor={cameraRollPermissions ? "#f4f3f4" : "#f4f3f4"}
                     onValueChange={openAppSettings}
                     value={cameraRollPermissions}

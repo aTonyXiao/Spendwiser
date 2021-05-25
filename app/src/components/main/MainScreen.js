@@ -13,7 +13,6 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
-import { MainHelpModal } from './MainHelpModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
 
@@ -45,8 +44,7 @@ export function MainScreen({navigation}) {
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
-    const [helpModalVisible, setHelpModalVisible] = useState(false);
-    const internetState = useRef(true);
+    const [internetState, setInternetState] = useState(false);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
@@ -267,10 +265,10 @@ export function MainScreen({navigation}) {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
             console.log("Internet reachable?", state.isInternetReachable);
-            if (internetState.current === false && state.isInternetReachable === true) {
-                internetState.current = true;
-            } else if (internetState.current === true && state.isInternetReachable === false) {
-                internetState.current = false;
+            if (internetState === false && state.isInternetReachable === true) {
+                setInternetState(true);
+            } else if (internetState === true && state.isInternetReachable === false) {
+                setInternetState(false);
             }
         });
         (async () => {
@@ -297,10 +295,6 @@ export function MainScreen({navigation}) {
                 curStore={curStore}
                 userLocation={userLocation}
             />
-            <MainHelpModal
-                helpModalVisible={helpModalVisible}
-                setHelpModalVisible={setHelpModalVisible}
-            />
             <View style={mainStyles.bodyContainer}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
@@ -311,7 +305,6 @@ export function MainScreen({navigation}) {
                         region={region}
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
-                        setHelpModalVisible={setHelpModalVisible}
                         internetState={internetState}
                         tryToGetStoresFromLocation= {tryToGetStoresFromLocation}
                     />
@@ -326,7 +319,7 @@ export function MainScreen({navigation}) {
                                 setRegion(e);
                             }}
                         showsUserLocation={true}
-                        onPoiClick={e => {if (internetState.current) switchStoresFromPOI(e.nativeEvent)}}
+                        onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
                         {(storeArr.length > 0 &&
                             storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&
@@ -351,7 +344,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" :  curStoreKey in storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permissions Denied')

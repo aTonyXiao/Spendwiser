@@ -20,6 +20,17 @@ function TransactionModal({
     const userId = user.getUserId();
     const [displayErrorText, setDisplayErrorText] = React.useState(false);
 
+    // Check if text input is a valid number and have a max of 2 decimals
+    updateTextInput = (text) => {
+        let dotIdx = text.indexOf(".");
+        if (dotIdx === 0 || text.split('.').length > 2) {
+            return;
+        }
+        if (text.length === 0 || dotIdx === -1 || (dotIdx === text.length - 1) || (text.length - dotIdx - 1 <= 2)) {
+            return setTransactionInput(text);
+        }
+    }
+
     // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
         if (isNaN(parseFloat(input))) { 
@@ -39,6 +50,7 @@ function TransactionModal({
                             ],
                             { cancelable: false });
             } else {
+                let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
                 user.saveTransaction(
                     userId, 
                     cardId, 
@@ -47,7 +59,7 @@ function TransactionModal({
                         address: storeInformation["vicinity"],
                         storeType: storeInformation["storeType"]
                     },
-                    transactionInput, 
+                    transactionFiltered, 
                     (docId) => { 
                         user.addTransactionId(userId, docId);
                         setHasConstructed(false);
@@ -77,12 +89,12 @@ function TransactionModal({
                     justifyContent: 'center',
                 }}
                 avoidKeyboard={true}
-                onBackdropPress={() => { setShowTransactionModal(false) }}
+                onBackdropPress={() => { setTransactionInput(""), setShowTransactionModal(false) }}
             >
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
                         <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity onPress={() => setShowTransactionModal(false)}>
+                            <TouchableOpacity onPress={() => {setTransactionInput(""), setShowTransactionModal(false)}}>
                                 <Ionicons
                                     name="close-circle-outline"
                                     color="black"
@@ -101,7 +113,7 @@ function TransactionModal({
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
                                 style={modalStyles.manualTextInput}
-                                onChangeText={(text) => setTransactionInput(text)}
+                                onChangeText={(text) => updateTextInput(text)}
                                 value={transactionInput}
                                 placeholder={"amount in dollars"}
                                 // onSubmitEditing={addTransaction}

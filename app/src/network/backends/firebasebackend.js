@@ -92,14 +92,15 @@ class FirebaseBackend extends BaseBackend {
 
 
         let hasSyncedRemote = false;
-        // Sync the local database every minute
+        if (!hasSyncedRemote) {
+            syncRemoteDatabase();
+            hasSyncedRemote = true;
+        }
+
+        // Sync the local database every 30 seconds
         setInterval(async () => {
             await syncLocalDatabase();
             // only sync remote once
-            if (!hasSyncedRemote) {
-                await syncRemoteDatabase();
-                hasSyncedRemote = true;
-            }
         }, 30000);
     }
 
@@ -644,15 +645,32 @@ class FirebaseBackend extends BaseBackend {
      * 
      */
     getUserInfo() {
-        let userData = firebase.auth().currentUser;
-
-        return {
-            name: userData.displayName,
-            email: userData.email,
-            emailVerified: userData.emailVerified,
-            lastLogin: userData.lastLogin,
-            photoURL: userData.photoURL,
-        }
+        return new Promise((resolve, reject) => {
+            storage.getLoginState((loginStatus) => {
+                if (loginStatus.signed_in == false) {
+                    reject();
+                }
+                if (loginStatus.account_type == "offline") {
+                    resolve({
+                        name: "Offline Account",
+                        email: "N/A",
+                        emailVerified: false,
+                        lastLogin: "N/A",
+                        photoURL: "",
+                    });
+                } else {
+                    let userData = firebase.auth().currentUser;
+    
+                    resolve({
+                        name: userData.displayName,
+                        email: userData.email,
+                        emailVerified: userData.emailVerified,
+                        lastLogin: userData.lastLogin,
+                        photoURL: userData.photoURL,
+                    });
+                }
+            })
+        })
     }
 }
 
