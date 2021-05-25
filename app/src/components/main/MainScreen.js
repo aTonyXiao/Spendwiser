@@ -351,7 +351,7 @@ export function MainScreen({navigation}) {
                                     numberOfLines={1}
                                 >{isLoading ? "Loading" : curStore}</Text>
                                 <Text>
-                                    {isLoading ? "N/A" :  curStoreKey in storeArr ? "N/A" : storeArr[curStoreKey].vicinity}
+                                    {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permissions Denied')
