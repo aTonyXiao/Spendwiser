@@ -19,6 +19,17 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
         docId = transaction.docId;
     }
 
+    // Check if text input is a valid number and have a max of 2 decimals
+    const updateTextInput = (text) => {
+        let dotIdx = text.indexOf(".");
+        if (dotIdx === 0 || text.split('.').length > 2) {
+            return;
+        }
+        if (text.length === 0 || dotIdx === -1 || (dotIdx === text.length - 1) || (text.length - dotIdx - 1 <= 2)) {
+            return setTransactionInput(text);
+        }
+    }
+
     // TODO: this should also probably account for whitespace, etc.
     const isInputValid = (input) => { 
         if (isNaN(parseFloat(input))) { 
@@ -62,14 +73,14 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
                 marginHorizontal: 0,
                 justifyContent: 'center',
             }}
-            onBackdropPress={()=> {setModalVisible(false)}}
+            onBackdropPress={()=> {setTransactionInput(""), setModalVisible(false)}}
             avoidKeyboard={true}
         >
             { transaction !== null &&
             <View style={modalStyles.modalCenteredView}>
                 <View style={modalStyles.modalView}>
                     <View style={modalStyles.modalHeader}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                        <TouchableOpacity onPress={() => {setTransactionInput(""), setModalVisible(false)}}>
                             <Ionicons
                                 name="close-circle-outline"
                                 color="black"
@@ -90,7 +101,7 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <TextInput
                                 style={modalStyles.manualTextInput}
-                                onChangeText={(text) => setTransactionInput(text)}
+                                onChangeText={(text) => updateTextInput(text)}
                                 value={transactionInput}
                                 placeholder={"amount in dollars"}
                                 keyboardType={"numeric"}
