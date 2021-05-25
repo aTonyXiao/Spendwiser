@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, Ima
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import mainStyles from '../../styles/mainStyles';
 import { BackButtonHeader } from '../util/BackButtonHeader';
+import { StackActions } from '@react-navigation/native';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -139,8 +140,11 @@ export function MainHelp({navigation}) {
                     inactiveDotScale={0.7}
                 />
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text>Skip</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.dispatch(StackActions.pop())}
+                    >
+                        <Text>Exit</Text>
                     </TouchableOpacity>
                 </View>
             </View>

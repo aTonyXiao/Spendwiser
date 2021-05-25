@@ -13,7 +13,6 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
-import { MainHelpModal } from './MainHelpModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
 
@@ -45,7 +44,6 @@ export function MainScreen({navigation}) {
     const [locationInfoHeight, setLocationInfoHeight] = useState(0);
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
-    const [helpModalVisible, setHelpModalVisible] = useState(false);
     const [internetState, setInternetState] = useState(false);
 
     // Use case: Have location but no internet
@@ -297,10 +295,6 @@ export function MainScreen({navigation}) {
                 curStore={curStore}
                 userLocation={userLocation}
             />
-            <MainHelpModal
-                helpModalVisible={helpModalVisible}
-                setHelpModalVisible={setHelpModalVisible}
-            />
             <View style={mainStyles.bodyContainer}>                
                 {/* Map Area */}
                 <View style={mapStyles.mapContainer}>
@@ -311,7 +305,6 @@ export function MainScreen({navigation}) {
                         region={region}
                         setRegion={setRegion}
                         setModalVisible={setModalVisible}
-                        setHelpModalVisible={setHelpModalVisible}
                         internetState={internetState}
                         tryToGetStoresFromLocation= {tryToGetStoresFromLocation}
                     />
