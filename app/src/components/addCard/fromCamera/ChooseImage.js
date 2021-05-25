@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { 
     Text, 
     View, 
     TouchableOpacity, 
-    Platform,
     StyleSheet,
     SafeAreaView
 } from 'react-native';
@@ -84,7 +83,7 @@ export function ChooseImage({navigation}) {
 
     return(
         <SafeAreaView style={mainStyles.screen}>
-            <BackButtonHeader navigation={navigation} />
+            <BackButtonHeader navigation={navigation} title={"Add a Card Using Camera"} titleStyle={mainStyles.titleAligned}/>
             <View style={[mainStyles.bodyContainer, styles.container]}>
             <Text style={styles.txt}>Camera Roll</Text>
             <TouchableOpacity 

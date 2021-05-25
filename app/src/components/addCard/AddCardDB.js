@@ -167,13 +167,11 @@ const styles = StyleSheet.create({
         left: 30,
         position: 'absolute',
         right: 70,
-        top: 120,
         zIndex: 1
     },
     enterIcon : { 
         position: 'absolute',
         right: 20,
-        top: 120
     },
     errorText : { 
         color:'red',
