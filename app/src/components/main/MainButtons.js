@@ -52,7 +52,8 @@ export function MainButtons(
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={{borderBottomWidth: 0.5, padding: 3}}
-                    onPress={() => setHelpModalVisible(true)}
+                    // onPress={() => setHelpModalVisible(true)}
+                    onPress={() => navigation.navigate('MainHelp')}
                 >
                     <Ionicons
                         name="help-circle-outline"

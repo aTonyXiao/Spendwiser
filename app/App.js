@@ -10,6 +10,7 @@ import { Settings } from './src/components/settings/Settings';
 import { YourCards } from './src/components/cards/YourCards';
 import { DisplayCard } from './src/components/cards/DisplayCard';
 import { MainScreen } from './src/components/main/MainScreen';
+import { MainHelp } from './src/components/main/MainHelp';
 import { AddCardManual } from './src/components/addCard/AddCardManual';
 import { PasswordReset } from './src/components/login/PasswordReset';
 import { AddCardDB } from './src/components/addCard/AddCardDB';
@@ -69,6 +70,10 @@ export default function App() {
             name="Main"
             component={MainScreen}
             options={{animationEnabled: false}}
+          />
+          <Stack.Screen
+            name="MainHelp"
+            component={MainHelp}
           />
           <Stack.Screen
             name="YourCards"
