@@ -46,7 +46,7 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [helpModalVisible, setHelpModalVisible] = useState(false);
-    const internetState = useRef(true);
+    const [internetState, setInternetState] = useState(false);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
@@ -267,10 +267,10 @@ export function MainScreen({navigation}) {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
             console.log("Internet reachable?", state.isInternetReachable);
-            if (internetState.current === false && state.isInternetReachable === true) {
-                internetState.current = true;
-            } else if (internetState.current === true && state.isInternetReachable === false) {
-                internetState.current = false;
+            if (internetState === false && state.isInternetReachable === true) {
+                setInternetState(true);
+            } else if (internetState === true && state.isInternetReachable === false) {
+                setInternetState(false);
             }
         });
         (async () => {
@@ -326,7 +326,7 @@ export function MainScreen({navigation}) {
                                 setRegion(e);
                             }}
                         showsUserLocation={true}
-                        onPoiClick={e => {if (internetState.current) switchStoresFromPOI(e.nativeEvent)}}
+                        onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
                         {(storeArr.length > 0 &&
                             storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&

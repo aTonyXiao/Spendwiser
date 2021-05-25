@@ -44,7 +44,7 @@ export function MainButtons(
         <View style={styles.buttonArea}>
             <View style={styles.internet}>
                 <Ionicons
-                    name={internetState.current ? "cloud-done-outline" : "cloud-offline-outline"}
+                    name={internetState ? "cloud-done-outline" : "cloud-offline-outline"}
                     color={'black'}
                     size={25}
                 ></Ionicons>
