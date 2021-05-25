@@ -13,7 +13,6 @@ import { CardCarousel } from './CardCarousel';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
-import { MainHelpModal } from './MainHelpModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
 
@@ -296,10 +295,6 @@ export function MainScreen({navigation}) {
                 storeArr={storeArr}
                 curStore={curStore}
                 userLocation={userLocation}
-            />
-            <MainHelpModal
-                helpModalVisible={helpModalVisible}
-                setHelpModalVisible={setHelpModalVisible}
             />
             <View style={mainStyles.bodyContainer}>                
                 {/* Map Area */}
