@@ -66,6 +66,8 @@ class FirebaseBackend extends BaseBackend {
             appId: process.env.REACT_NATIVE_APP_ID,
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
+
+
         console.log(firebaseConfig);
 
         // check if there is a Firebase 'App' already initialized
