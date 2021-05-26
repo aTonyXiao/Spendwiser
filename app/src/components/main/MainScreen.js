@@ -45,6 +45,7 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [internetState, setInternetState] = useState(false);
+    const internetRef = useRef(false);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
@@ -264,16 +265,18 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
-            console.log("Internet reachable?", state.isInternetReachable);
-            if (internetState === false && state.isInternetReachable === true) {
+            console.log("Has connection?", state.isConnected);
+            if (internetRef.current === false && state.isConnected === true) {
                 if (storeArr.length > 0 && storeArr[0].value === 'No internet connection') {
                     tryToGetStoresFromLocation();
                 }
+                console.log("current internet state: ", internetState);
+                console.log("internet ref: ", internetRef.current);
+                internetRef.current = true;
                 setInternetState(true);
-                return;
-            } else if (internetState === true && state.isInternetReachable === false) {
+            } else if (internetRef.current === true && state.isConnected === false) {
+                internetRef.current = false;
                 setInternetState(false);
-                return;
             }
         });
         (async () => {
@@ -326,13 +329,13 @@ export function MainScreen({navigation}) {
                         showsUserLocation={true}
                         onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
-                        {(storeArr.length > 0 &&
+                        {/* {(storeArr.length > 0 &&
                             storeArr[0].value !== "No Internet Connection" && storeArr[0].value !== "Location Permission Denied") &&
                             <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
                             )} />
-                        }
+                        } */}
                     </MapView>
                 </View>
                 <View>
