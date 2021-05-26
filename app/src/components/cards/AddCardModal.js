@@ -10,6 +10,7 @@ import {
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { appBackend } from '../../network/backend'
+import NetInfo from '@react-native-community/netinfo';
 
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
     const deviceHeight =
@@ -68,7 +69,18 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
                     <View style={modalStyles.modalBody}>
                         <TouchableOpacity
                             onPress={() => {
-                                navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
+                                NetInfo.fetch().then(state => {
+                                    if (state.isInternetReachable) {
+                                        navigateIfAuthorized(navigation, 'AddCardDB', "Sign up with an account to use this feature");
+                                    } else {
+                                        Alert.alert(
+                                            "Internet connection is required to use this feature",
+                                            [
+                                                { text: "OK" }
+                                            ]
+                                        );
+                                    }
+                                })
                             }}
                             style={modalStyles.button}
                         >
