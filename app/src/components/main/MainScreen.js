@@ -211,7 +211,7 @@ export function MainScreen({navigation}) {
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
                     if (state.isConnected) {
-                        console.log("Got in here");
+                        console.log("Got in tryToGetStoresFromLocation");
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
                             googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
@@ -329,13 +329,13 @@ export function MainScreen({navigation}) {
                         showsUserLocation={true}
                         onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
-                        {/* {(storeArr.length > 0 &&
+                        {(storeArr.length > 0 &&
                             storeArr[0].value !== "No Internet Connection" && storeArr[0].value !== "Location Permission Denied") &&
                             <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
                             )} />
-                        } */}
+                        }
                     </MapView>
                 </View>
                 <View>
