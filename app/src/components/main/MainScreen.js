@@ -267,7 +267,7 @@ export function MainScreen({navigation}) {
         const unsubscribe = NetInfo.addEventListener(state => {
             console.log("Has connection?", state.isConnected);
             if (internetRef.current === false && state.isConnected === true) {
-                if (storeArr.length > 0 && storeArr[0].value === 'No internet connection') {
+                if (storeArr.length > 0 && storeArr[0].value === 'No Internet Connection') {
                     tryToGetStoresFromLocation();
                 }
                 console.log("current internet state: ", internetState);
