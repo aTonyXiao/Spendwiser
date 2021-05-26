@@ -45,21 +45,22 @@ export function MainScreen({navigation}) {
     const [footerHeight, setFooterHeight] = useState(0);
     const [userLocation, setUserLocation] = useState(null);
     const [internetState, setInternetState] = useState(false);
+    const internetRef = useRef(false);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
         // Only set storearr to show no internet connection when loading for the first time
         if (storeArr.length === 0) {
             setStoreArr([{
-                label: "No internet connection",
-                value: "No internet connection",
+                label: "No Internet Connection",
+                value: "No Internet Connection",
                 vicinity: "Click help button for more info",
                 placeId: "",
                 geometry: [coords.latitude, coords.longitude],
                 storeType: "N/A", 
                 key: 0,
             }])
-            setCurStore("No internet connection");
+            setCurStore("No Internet Connection");
             setCurStoreKey(0);
             setRegion({...region, longitude: coords.longitude, latitude: coords.latitude});
             setRecCards(null);
@@ -69,15 +70,15 @@ export function MainScreen({navigation}) {
 
     function setLocationDisabledMode() {
         setStoreArr([{
-            label: "Location Permissions Denied",
-            value: "Location Permissions Denied",
+            label: "Location Permission Denied",
+            value: "Location Permission Denied",
             vicinity: "Click help button for more info",
             placeId: "",
             geometry: [38.542530, -121.749530,],
             storeType: "N/A", 
             key: 0,
         }])
-        setCurStore("Location Permissions Denied");
+        setCurStore("Location Permission Denied");
         setCurStoreKey(0);
         setUserLocation({ latitude: 38.542530, longitude: -121.749530});
         setLoading(false);
@@ -129,7 +130,7 @@ export function MainScreen({navigation}) {
     }
 
     function addManualInput(manualInputObj) {
-        if (storeArr[0].value === 'Location Permissions Denied') {
+        if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection') {
             if (manualInputObj.value === 'Manual Input 1') {
                 manualInputObj.value = 'Manual Input 0';
                 manualInputObj.label = 'Manual Input 0';
@@ -150,7 +151,7 @@ export function MainScreen({navigation}) {
             return;
         }
         let addCount = storeArr.length - 1 === -1 ? 0 : storeArr.length;
-        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied')
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection'))
             addCount = 0;
         let fetchResultLen = Object.keys(fetchResult).length;
 
@@ -185,8 +186,8 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        // Remove location permissions denied info if clicking POI manually
-        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied') {
+        // Remove location permission denied info if clicking POI manually
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection')) {
             setStoreArr(fetchStores);
         }
         else
@@ -210,7 +211,7 @@ export function MainScreen({navigation}) {
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
                     if (state.isConnected) {
-                        console.log("Got in here");
+                        console.log("Got in tryToGetStoresFromLocation");
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
                             googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
@@ -264,10 +265,17 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
-            console.log("Internet reachable?", state.isInternetReachable);
-            if (internetState === false && state.isInternetReachable === true) {
+            console.log("Has connection?", state.isConnected);
+            if (internetRef.current === false && state.isConnected === true) {
+                if (storeArr.length > 0 && storeArr[0].value === 'No internet connection') {
+                    tryToGetStoresFromLocation();
+                }
+                console.log("current internet state: ", internetState);
+                console.log("internet ref: ", internetRef.current);
+                internetRef.current = true;
                 setInternetState(true);
-            } else if (internetState === true && state.isInternetReachable === false) {
+            } else if (internetRef.current === true && state.isConnected === false) {
+                internetRef.current = false;
                 setInternetState(false);
             }
         });
@@ -322,7 +330,7 @@ export function MainScreen({navigation}) {
                         onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
                         {(storeArr.length > 0 &&
-                            storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&
+                            storeArr[0].value !== "No Internet Connection" && storeArr[0].value !== "Location Permission Denied") &&
                             <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
@@ -347,7 +355,7 @@ export function MainScreen({navigation}) {
                                     {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
-                                    {(isLoading || curStore === 'Location Permissions Denied')
+                                    {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No Internet Connection')
                                         ? "" : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
@@ -429,4 +437,3 @@ const mapStyles = StyleSheet.create({
         color: 'white'
     }
 });
-
