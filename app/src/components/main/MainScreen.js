@@ -51,15 +51,15 @@ export function MainScreen({navigation}) {
         // Only set storearr to show no internet connection when loading for the first time
         if (storeArr.length === 0) {
             setStoreArr([{
-                label: "No internet connection",
-                value: "No internet connection",
+                label: "No Internet Connection",
+                value: "No Internet Connection",
                 vicinity: "Click help button for more info",
                 placeId: "",
                 geometry: [coords.latitude, coords.longitude],
                 storeType: "N/A", 
                 key: 0,
             }])
-            setCurStore("No internet connection");
+            setCurStore("No Internet Connection");
             setCurStoreKey(0);
             setRegion({...region, longitude: coords.longitude, latitude: coords.latitude});
             setRecCards(null);
@@ -129,7 +129,7 @@ export function MainScreen({navigation}) {
     }
 
     function addManualInput(manualInputObj) {
-        if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No internet connection') {
+        if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection') {
             if (manualInputObj.value === 'Manual Input 1') {
                 manualInputObj.value = 'Manual Input 0';
                 manualInputObj.label = 'Manual Input 0';
@@ -150,7 +150,7 @@ export function MainScreen({navigation}) {
             return;
         }
         let addCount = storeArr.length - 1 === -1 ? 0 : storeArr.length;
-        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied') || (storeArr[0].value === 'No internet connection'))
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection'))
             addCount = 0;
         let fetchResultLen = Object.keys(fetchResult).length;
 
@@ -185,8 +185,8 @@ export function MainScreen({navigation}) {
                 addCount++;
             }
         }
-        // Remove location permissions denied info if clicking POI manually
-        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No internet connection')) {
+        // Remove location permission denied info if clicking POI manually
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection')) {
             setStoreArr(fetchStores);
         }
         else
@@ -327,7 +327,7 @@ export function MainScreen({navigation}) {
                         onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
                     >
                         {(storeArr.length > 0 &&
-                            storeArr[0].value !== "No internet connection" && storeArr[0].value !== "Location Permission Denied") &&
+                            storeArr[0].value !== "No Internet Connection" && storeArr[0].value !== "Location Permission Denied") &&
                             <Marker coordinate={(curStoreKey !== null && storeArr.length > 0 ?
                                 { latitude: storeArr[curStoreKey].geometry[0], longitude: storeArr[curStoreKey].geometry[1]} :
                                 { latitude: region.latitude, longitude: region.longitude }
@@ -352,7 +352,7 @@ export function MainScreen({navigation}) {
                                     {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
-                                    {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No internet connection')
+                                    {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No Internet Connection')
                                         ? "" : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
@@ -434,4 +434,3 @@ const mapStyles = StyleSheet.create({
         color: 'white'
     }
 });
-

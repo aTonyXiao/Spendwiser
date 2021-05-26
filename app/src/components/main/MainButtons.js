@@ -19,7 +19,7 @@ export function MainButtons(
         if (status !== 'granted') {
             Alert.alert(
                 'Permission Denied \n Unable to retrieve location!',
-                'You will not be able to re-center your location until you enable permissions',
+                'You will not be able to re-center your location until you enable permissions.\n\n Click again after enabling to retrieve nearby stores.',
                 [
                     { text: "Dismiss" },
                     {
