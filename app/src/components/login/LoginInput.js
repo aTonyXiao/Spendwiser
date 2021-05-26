@@ -25,7 +25,7 @@ export const PasswordInput = props => {
         <TextInput
             style={isFocused ? styles.focusedInput : styles.unfocusedInput}
             onChangeText={text => props.onChange(text)}
-            placeholder={' Password'}
+            placeholder={props.confirm ? ' Confirm Password' : ' Password'}
             placeholderTextColor={grayRGB}
             textContentType={'newPassword'}
             secureTextEntry={true}

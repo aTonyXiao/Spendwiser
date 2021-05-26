@@ -60,12 +60,7 @@ export const CreateAccount = props => {
                         <Text style={styles.errorText}>Passwords must match</Text>
                     }
                     <PasswordInput onChange={setPassword} />
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => setSecondPassword(text)}
-                        placeholder={' Password'}
-                        placeholderTextColor={grayRGB}
-                    />
+                    <PasswordInput onChange={setSecondPassword} confirm={true} />
                     <TouchableOpacity style={styles.signUpWrapper} onPress={signUp}>
                         <Text style={styles.signUpButton}>Sign Up</Text>
                     </TouchableOpacity>
