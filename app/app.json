@@ -19,13 +19,15 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.spendwiser",
-      "buildNumber": "1.0.18",
+      "buildNumber": "1.0.19",
       "usesAppleSignIn": true,
       "config": {
         "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
       },
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This application uses your location to detect which kind of store you're in and provide the best credit card based on that store."
+        "NSLocationWhenInUseUsageDescription": "This application uses your location to detect which kind of store you're in and provide the best credit card based on that store.",
+        "NSCameraUsageDescription" : "This application uses your camera when you want to add a credit card by taking a picture of it",
+        "NSPhotoLibraryUsageDescription" : "this application uses your camera when you want to add a credit card through a photo you already took of it"
       }
     },
     "android": {
