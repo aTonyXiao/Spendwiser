@@ -49,6 +49,7 @@ export function CardCarousel(
                     source={item.cardImg}
                     overlay={item.cardName}
                     default={item.cardImg.length == 0}
+                    cardId={item.cardId}
                 />
             </View>
         </TouchableOpacity>

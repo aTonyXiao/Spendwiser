@@ -57,6 +57,7 @@ export class Card extends React.Component {
                         source={this.state.cardImage}
                         overlay={this.state.name}
                         default={this.state.showDefault}
+                        cardId={this.state.cardId}
                     />
                 </TouchableOpacity>
             </View>
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: (Dimensions.get('window').width * 0.9),
         height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
-        marginBottom: 10
+        marginBottom: 10 
     }, 
     cardTitle: {
         textAlign: 'center',

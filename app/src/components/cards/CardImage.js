@@ -1,5 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ImageBackground 
+} from 'react-native';
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
@@ -43,11 +48,12 @@ function generateColor(string) {
  */
 async function getIsCardDisabled(cardId) {
   return new Promise((resolve, reject) => {
-    storage.getDisabledCards((list) => {
-      if (list.includes(cardid)) { 
+    storage.getDisabledCards((val) => {
+      const cardIdList = val['cards'];
+      if (cardIdList.includes(cardId)) { 
         resolve(true);
       } else {
-        resovle(false);
+        resolve(false);
       }
     });
   })
@@ -62,16 +68,28 @@ async function getIsCardDisabled(cardId) {
  * @param {string} props.source - Url of the image to be displayed if @props.default is true
  * @param {string} props.overlay - Name of the card to be overlayed on top of the image
  * @param {*} props.style - Style properties that will be passed down to the Image component
+ * @param {string} props.cardId - id of card 
  * @component
  *      
  */
 function CardImage(props) {
-  // const isDisabled = await getIsCardDisabled(props.id);
+  const [isCardDisabled, setIsCardDisabled] = useState(false);
+  const [hasConstructed, setHasConstructed] = useState(false);
+
+  constructor = async () => {
+    if (hasConstructed) { 
+      return;
+    } else {
+      setIsCardDisabled(await getIsCardDisabled(props.cardId));
+      setHasConstructed(true);
+    }
+  }
+  constructor();
 
   if (props.default) {
     let generatedColor = generateColor(props.overlay);
     return (
-      <View style={[{ justifyContent: 'center', alignItems: 'center' }, props.style]}>
+      <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
         <ImageBackground style={styles.innerImage}
           source={require('../../../assets/cards/blank.png')}
           imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
@@ -81,19 +99,33 @@ function CardImage(props) {
     );
   } else {
     return (
-      <CachedImage
-        style={[{ justifyContent: 'center', alignItems: 'center' }, props.style]}
-        source={{ uri: props.source }}
-      />
+      <View style={isCardDisabled ? styles.faded : {}}>
+        <CachedImage
+          style={[styles.outerImage, props.style]}
+          source={{ uri: props.source }}
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  outerImage: {
+    justifyContent: 'center', 
+    alignItems: 'center'
+  },
   innerImage: {
       height: '100%',
       width: "100%",
       flexDirection: 'row'
+  },
+  outerImageFaded: {
+    justifyContent: 'center', 
+    alignItems: 'center',
+    opacity: 0.5
+  },
+  faded: {
+    opacity: 0.5
   },
   overlay: {
     textAlign: 'right',

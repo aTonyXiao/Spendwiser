@@ -124,12 +124,8 @@ function DisplayCard({route, navigation}) {
     }
 
     const toggleDisplayCard = () => {
-        // storage.setDisabledCards((val) => { 
-        //     setShowHelpModal(val);
-        //     if (!val) { 
-        //         setCheckBoxIsSelected([]);
-        //     }
-        // });
+        console.log('toggling disable cards')
+        storage.setDisabledCards(cardId);
     }
 
     return (
@@ -161,6 +157,7 @@ function DisplayCard({route, navigation}) {
                         source={cardImage.uri}
                         overlay={cardName}
                         default={cardImage.uri === undefined || cardImage.uri.length == 0}
+                        cardId={cardId}
                     />
                 </View>
 
@@ -298,9 +295,9 @@ function DisplayCard({route, navigation}) {
                             <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
                                 <Text style={styles.deleteText}>Delete this card</Text>
                             </TouchableOpacity>
-                            {/* <TouchableOpacity style={styles.deleteContainer} onPress={toggleDisplayCard}>
+                            <TouchableOpacity style={styles.deleteContainer} onPress={toggleDisplayCard}>
                                 <Text style={styles.deleteText}>Disable this card</Text>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
                         </View>
                     }
                 </View>
