@@ -69,15 +69,15 @@ export function MainScreen({navigation}) {
 
     function setLocationDisabledMode() {
         setStoreArr([{
-            label: "Location Permissions Denied",
-            value: "Location Permissions Denied",
+            label: "Location Permission Denied",
+            value: "Location Permission Denied",
             vicinity: "Click help button for more info",
             placeId: "",
             geometry: [38.542530, -121.749530,],
             storeType: "N/A", 
             key: 0,
         }])
-        setCurStore("Location Permissions Denied");
+        setCurStore("Location Permission Denied");
         setCurStoreKey(0);
         setUserLocation({ latitude: 38.542530, longitude: -121.749530});
         setLoading(false);
@@ -129,7 +129,7 @@ export function MainScreen({navigation}) {
     }
 
     function addManualInput(manualInputObj) {
-        if (storeArr[0].value === 'Location Permissions Denied') {
+        if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No internet connection') {
             if (manualInputObj.value === 'Manual Input 1') {
                 manualInputObj.value = 'Manual Input 0';
                 manualInputObj.label = 'Manual Input 0';
@@ -150,7 +150,7 @@ export function MainScreen({navigation}) {
             return;
         }
         let addCount = storeArr.length - 1 === -1 ? 0 : storeArr.length;
-        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied')
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied') || (storeArr[0].value === 'No internet connection'))
             addCount = 0;
         let fetchResultLen = Object.keys(fetchResult).length;
 
@@ -186,7 +186,7 @@ export function MainScreen({navigation}) {
             }
         }
         // Remove location permissions denied info if clicking POI manually
-        if (storeArr.length !== 0 && storeArr[0].value === 'Location Permissions Denied') {
+        if (storeArr.length !== 0 && (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No internet connection')) {
             setStoreArr(fetchStores);
         }
         else
@@ -266,9 +266,14 @@ export function MainScreen({navigation}) {
         const unsubscribe = NetInfo.addEventListener(state => {
             console.log("Internet reachable?", state.isInternetReachable);
             if (internetState === false && state.isInternetReachable === true) {
+                if (storeArr.length > 0 && storeArr[0].value === 'No internet connection') {
+                    tryToGetStoresFromLocation();
+                }
                 setInternetState(true);
+                return;
             } else if (internetState === true && state.isInternetReachable === false) {
                 setInternetState(false);
+                return;
             }
         });
         (async () => {
@@ -347,7 +352,7 @@ export function MainScreen({navigation}) {
                                     {isLoading || !(curStoreKey in storeArr) ? "N/A" : storeArr[curStoreKey].vicinity}
                                 </Text>
                                 <Text>
-                                    {(isLoading || curStore === 'Location Permissions Denied')
+                                    {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No internet connection')
                                         ? "" : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
