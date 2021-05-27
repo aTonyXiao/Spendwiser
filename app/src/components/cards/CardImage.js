@@ -8,7 +8,8 @@ import {
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
-import { cards } from '../../network/cards';
+import { DoubleTap } from '../util/DoubleTap';
+import { user } from '../../network/user';
 
 /**
  * Generates a contrasting rgb value based on the supplied parameter
@@ -49,6 +50,7 @@ function generateColor(string) {
 async function getIsCardDisabled(cardId) {
   return new Promise((resolve, reject) => {
     storage.getDisabledCards((val) => {
+      console.log(val);
       const cardIdList = val['cards'];
       if (cardIdList.includes(cardId)) { 
         resolve(true);
@@ -86,25 +88,37 @@ function CardImage(props) {
   }
   constructor();
 
+  const toggleDisplayCard = () => {
+    console.log('double tap');
+    storage.setDisabledCards(props.cardId);
+    console.log('setting main needs update')
+    user.setMainNeedsUpdate(true);
+    setIsCardDisabled(!isCardDisabled);
+  }
+
   if (props.default) {
     let generatedColor = generateColor(props.overlay);
     return (
-      <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
-        <ImageBackground style={styles.innerImage}
-          source={require('../../../assets/cards/blank.png')}
-          imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
-          <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
-        </ImageBackground>
-      </View>
+      <DoubleTap onDoubleTap={toggleDisplayCard}>
+        <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
+          <ImageBackground style={styles.innerImage}
+            source={require('../../../assets/cards/blank.png')}
+            imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+          </ImageBackground>
+        </View>
+      </DoubleTap>
     );
   } else {
     return (
-      <View style={isCardDisabled ? styles.faded : {}}>
-        <CachedImage
-          style={[styles.outerImage, props.style]}
-          source={{ uri: props.source }}
-        />
-      </View>
+      <DoubleTap onDoubleTap={toggleDisplayCard}>
+        <View style={isCardDisabled ? styles.faded : {}}>
+          <CachedImage
+            style={[styles.outerImage, props.style]}
+            source={{ uri: props.source }}
+          />
+        </View>
+      </DoubleTap>
     );
   }
 }

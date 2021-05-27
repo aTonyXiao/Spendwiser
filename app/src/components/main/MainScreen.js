@@ -98,7 +98,6 @@ export function MainScreen({navigation}) {
 
     // Called when changing store to reload recommended cards
     function reloadRecCard(value, key, storeType, geometry) {
-        // console.log("hihi " + storeType);
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey || curStore !== value) {
             setCurStore(value);
@@ -247,6 +246,7 @@ export function MainScreen({navigation}) {
 
     // Called to refresh recommended cards if new cards added
     useEffect(() => {
+        console.log('update main')
         user.currentStore = storeArr[curStoreKey];
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {

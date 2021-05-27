@@ -1,8 +1,20 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, { 
+    useState, 
+    useRef, 
+    useCallback,
+    useEffect
+} from 'react';
+import { 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Dimensions 
+} from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
-import { Wave } from 'react-native-animated-spinkit'
+import { Wave } from 'react-native-animated-spinkit';
+import * as storage from '../../local/storage';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -16,10 +28,43 @@ export function CardCarousel(
         recCards,
         navigation,
         storeArr,
-        curStoreKey
+        curStoreKey, 
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
+    const [disabledCards, setDisabledCards] = useState([]);
+
+    // check for disabled cards
+    useEffect(() => {
+        const updateIfNeeded = async () => {
+            setDisabledCards(await getDisabledCards());
+
+            // remove disabled cards from array
+            if (recCards != null) {
+                for (let i = 0; i < recCards.length; i++) {
+                    if (disabledCards.includes(recCards[i].cardId)) {
+                        recCards.splice(i, 1);
+                    }
+                }
+
+                setHasConstructed(true);
+            }
+        }
+        updateIfNeeded();
+    })
+
+    /**
+    * calls storage function to check if card is disabled
+    * @returns {array} - is the card disabled or not
+    */
+    async function getDisabledCards() {
+        return new Promise((resolve, reject) => {
+            storage.getDisabledCards((val) => {
+                let cardIdList = val['cards'];
+                resolve(cardIdList);
+            });
+        })
+    }
 
     recommendedCardPressed = (item) => {
         if (item !== null) {
@@ -33,27 +78,29 @@ export function CardCarousel(
         }
     };
     
-    const renderItem = useCallback(({ item, index }) => (
-        <TouchableOpacity
-                activeOpacity={1}
-                style={carouselStyles.slideInnerContainer}
-                onPress={() => { recommendedCardPressed(item) }}
-                >
-            <View style={carouselStyles.imageContainer}>
-                <CardImage
-                    style = {{ 
-                        width: width * .8,  //its same to '20%' of device width
-                        aspectRatio: 1.5, // <-- this
-                        resizeMode: 'contain', //optional
-                    }}
-                    source={item.cardImg}
-                    overlay={item.cardName}
-                    default={item.cardImg.length == 0}
-                    cardId={item.cardId}
-                />
-            </View>
-        </TouchableOpacity>
-    ), []);
+    const renderItem = useCallback(({ item, index }) => { 
+        return (
+            <TouchableOpacity
+                    activeOpacity={1}
+                    style={carouselStyles.slideInnerContainer}
+                    onPress={() => { recommendedCardPressed(item) }}
+                    >
+                <View style={carouselStyles.imageContainer}>
+                    <CardImage
+                        style = {{ 
+                            width: width * .8,  //its same to '20%' of device width
+                            aspectRatio: 1.5, // <-- this
+                            resizeMode: 'contain', //optional
+                        }}
+                        source={item.cardImg}
+                        overlay={item.cardName}
+                        default={item.cardImg.length == 0}
+                        cardId={item.cardId}
+                    />
+                </View>
+            </TouchableOpacity>
+        )
+    })
 
     return (
         <View style={carouselStyles.cardContainer}>

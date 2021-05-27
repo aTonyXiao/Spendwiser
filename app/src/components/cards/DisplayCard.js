@@ -123,10 +123,6 @@ function DisplayCard({route, navigation}) {
         setTransactions(newTransactions);
     }
 
-    const toggleDisplayCard = () => {
-        storage.setDisabledCards(cardId);
-    }
-
     return (
         // <DismissKeyboard>
             <SafeAreaView style={mainStyles.screen}>
@@ -294,9 +290,6 @@ function DisplayCard({route, navigation}) {
                             <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
                                 <Text style={styles.deleteText}>Delete this card</Text>
                             </TouchableOpacity>
-                            {/* <TouchableOpacity style={styles.deleteContainer} onPress={toggleDisplayCard}>
-                                <Text style={styles.deleteText}>Disable this card</Text>
-                            </TouchableOpacity> */}
                         </View>
                     }
                 </View>
