@@ -59,7 +59,6 @@ function DisplayCard({route, navigation}) {
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 if (data !== null) {
-                    console.log(data);
                     setTransactions((transactions) => { 
                         data["key"] = transactions.length.toString();
                         if (data) {
@@ -105,7 +104,6 @@ function DisplayCard({route, navigation}) {
     };
 
     const confirmDeleteTransaction = (trans) => {
-        console.log(trans);
         Alert.alert(
             'Are you sure you would like to delete this transaction?',
             trans.storeInfo.storeName + '\n' + trans.dateAdded.toString().substring(0,24) + '\n$' + trans.amountSpent,

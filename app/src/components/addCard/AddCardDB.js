@@ -52,7 +52,7 @@ export function AddCardDB({existingUserCards, navigation}) {
     constructor();
 
     addCard = () => { 
-        console.log("Adding a card");
+        // console.log("Adding a card");
         if (!query) {
             setDisplayErrorText(true);
 
@@ -71,12 +71,10 @@ export function AddCardDB({existingUserCards, navigation}) {
                 cards.getCardData(cardId, async (data) => {
                     // Add the card into the user's list of cards
                     await user.saveCardToUser(userId, cardId, null, null);
-                    console.log("Saved card to user");
+                    // console.log("Saved card to user");
 
                     // Add the actual card data as well
                     appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
-                        console.log("Got card data");
-                        // console.log(cardData);
                         let actualUserId = await userId;
                         storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
                             storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {

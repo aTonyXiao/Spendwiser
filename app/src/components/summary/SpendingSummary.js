@@ -107,7 +107,6 @@ export function SpendingSummary({navigation}) {
             // end time frame is the last day of the month
             let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
             user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
-                console.log(data);
                 setCompareTransPeriod1(oldData => [...oldData, data]);
             });
         }
@@ -127,7 +126,6 @@ export function SpendingSummary({navigation}) {
 
     // process each transaction retrieved from db after timeframe change
     function processTransaction(transaction) {
-        // console.log(transaction);        
         let tmpValues = values;
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
             tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
@@ -177,13 +175,10 @@ export function SpendingSummary({navigation}) {
                     // If edited/ deleted transaction not synced
                     if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
                         if (transactions.some(e => e.docId === trans.docId)) {
-                            console.log(trans);
                             let tmpTransactions = [...transactions];
                             let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
                             let editedTrans = tmpTransactions[idx];
                             let prevAmount = editedTrans.amountSpent;
-                            // console.log(idx);
-                            // console.log(tmpTransactions);
                             if (trans.amountSpent === null) {
                                 tmpTransactions.splice(idx, 1);
                             } else {

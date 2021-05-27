@@ -50,7 +50,6 @@ function generateColor(string) {
 async function getIsCardDisabled(cardId) {
   return new Promise((resolve, reject) => {
     storage.getDisabledCards((val) => {
-      console.log(val);
       const cardIdList = val['cards'];
       if (cardIdList.includes(cardId)) { 
         resolve(true);
@@ -89,9 +88,7 @@ function CardImage(props) {
   constructor();
 
   const toggleDisplayCard = () => {
-    console.log('double tap');
     storage.setDisabledCards(props.cardId);
-    console.log('setting main needs update')
     user.setMainNeedsUpdate(true);
     setIsCardDisabled(!isCardDisabled);
   }

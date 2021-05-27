@@ -85,7 +85,6 @@ export function MainScreen({navigation}) {
     }
 
     const backAction = () => {
-        console.log(navigation.isFocused());
         if (navigation.isFocused())
             return true;
         else
@@ -135,7 +134,6 @@ export function MainScreen({navigation}) {
                 manualInputObj.label = 'Manual Input 0';
             }
             manualInputObj.key = 0;
-            console.log(manualInputObj);
             setStoreArr([manualInputObj]);
         }
         else
@@ -210,7 +208,6 @@ export function MainScreen({navigation}) {
                 NetInfo.fetch().then(state => {
                     // If connected to internet, query API for nearby stores. Else: set offline mode
                     if (state.isConnected) {
-                        console.log("Got in tryToGetStoresFromLocation");
                         fetch(googlePlaceSearchURL + 
                             location.coords.latitude + "," + location.coords.longitude + 
                             googlePlaceSearchRadius + process.env.REACT_NATIVE_PLACE_SEARCH_API_KEY)
@@ -246,13 +243,11 @@ export function MainScreen({navigation}) {
 
     // Called to refresh recommended cards if new cards added
     useEffect(() => {
-        console.log('update main')
         user.currentStore = storeArr[curStoreKey];
         if (isLoading === false) {
             const unsubscribe = navigation.addListener('focus', () => {
                 if (user.getMainNeedsUpdate()) {
                     /* triggered on a reload of the page */
-                    console.log("reset rec cards");
                     reloadRecCard(curStore, curStoreKey, storeArr[curStoreKey].storeType, storeArr[curStoreKey].geometry);
                     user.setMainNeedsUpdate(false);
                 }
@@ -265,13 +260,10 @@ export function MainScreen({navigation}) {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
-            console.log("Has connection?", state.isConnected);
             if (internetRef.current === false && state.isConnected === true) {
                 if (storeArr.length > 0 && storeArr[0].value === 'No internet connection') {
                     tryToGetStoresFromLocation();
                 }
-                console.log("current internet state: ", internetState);
-                console.log("internet ref: ", internetRef.current);
                 internetRef.current = true;
                 setInternetState(true);
             } else if (internetRef.current === true && state.isConnected === false) {
