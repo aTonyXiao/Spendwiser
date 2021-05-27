@@ -36,7 +36,7 @@ export function CardCarousel(
     const renderItem = useCallback(({ item, index }) => (
         <TouchableOpacity
                 activeOpacity={1}
-                style={carouselStyles.slideInnerContainer}
+                style={{justifyContent: 'center', alignItems: 'center'}}
                 onPress={() => { recommendedCardPressed(item) }}
                 >
             <View style={carouselStyles.imageContainer}>
@@ -108,7 +108,7 @@ const carouselStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     slider: {
-        marginTop: 5,
+        marginVertical: 5,
         flexGrow: 0,
         overflow: 'visible', // for custom animations
     },
