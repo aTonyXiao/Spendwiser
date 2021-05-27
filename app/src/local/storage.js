@@ -5,7 +5,7 @@ let storage_debug = false;
  * Store the login state of the application for future use. Anything stored here can be retrieved
  * by calling getLoginState
  * 
- * @param {object} login_info expects two items: 'signed_in' as a boolean and 'account_type' which can either be 'normal' or 'offline'
+ * @param {Object} login_info expects two items: 'signed_in' as a boolean and 'account_type' which can either be 'normal' or 'offline'
  */
 export const storeLoginState = async (login_info) => {
     try {
@@ -87,7 +87,7 @@ export const getDB = async (callback) => {
  * need a good way of determining which strings are dates when they are read back in
  * from JSON which is done here with a very recognizable format.
  * 
- * @param {object} db the database as a javascript object
+ * @param {Object} db the database as a javascript object
  * @returns {db} the modified db is returned
  */
 const convertDateToString = (db) => {
@@ -107,7 +107,7 @@ const convertDateToString = (db) => {
  * NOTE: This should be the only way that you write the database to local storage. 
  * Do not try to do it on your own.
  * 
- * @param {object} db the javascript object containing all the database info
+ * @param {Object} db the javascript object containing all the database info
  * @param {function} callback called when the data has finished being stored locally
  */
 const setDB = async (db, callback) => {
@@ -116,6 +116,12 @@ const setDB = async (db, callback) => {
     callback();
 }
 
+/**
+ * 
+ * @param {Object} local_data particular sub-object contained within the database that can have metadata added to it
+ * @param {boolean} isSynced 
+ * @returns 
+ */
 const addOrUpdateMetainfo = (local_data, isSynced = false) => {
     if (local_data) {
         local_data['meta_modified'] = new Date();
