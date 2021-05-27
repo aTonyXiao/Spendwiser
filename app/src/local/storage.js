@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 let storage_debug = false;
 
+/**
+ * Store the login state of the application for future use. Anything stored here can be retrieved
+ * by calling getLoginState
+ * 
+ * @param {object} login_info expects two items: 'signed_in' as a boolean and 'account_type' which can either be 'normal' or 'offline'
+ */
 export const storeLoginState = async (login_info) => {
     try {
         const jsonValue = JSON.stringify(login_info);
@@ -10,7 +16,12 @@ export const storeLoginState = async (login_info) => {
     }
 }
 
-
+/**
+ * 
+ * @param {function} callback returns an object containing a user's 'signed_in' state and their 'account_type'. 
+ * See storeLoginState function to understand the possible values for each of these items.
+ * @returns 
+ */
 export const getLoginState = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('logged in')
@@ -25,6 +36,14 @@ export const getLoginState = async (callback) => {
     }
 }
 
+/**
+ * This function is a brute force method of converting strings stored using AsyncStorage
+ * back into their origin Date object. See 'convertDateToString' function for more infromation
+ * on how dates are stored internally to understand the code provided.
+ * 
+ * @param {any} key the key in a key-value pair of a javascript object
+ * @param {any} value the value associated the key in a javascript object
+ */
 dateTimeReviver = function (key, value) {
     if (typeof value === 'string') {
         if (value.startsWith("__date__")) {
@@ -40,6 +59,12 @@ dateTimeReviver = function (key, value) {
     }
 }
 
+/**
+ * Reads the database from the phone's storage and returns the data as a javascript object.
+ * NOTE: This should be the only way that the database is read from AsyncStorage. Do not try to do this any other way.
+ * 
+ * @param {function} callback function that accepts an object containing all of the database information
+ */
 export const getDB = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('@db');
@@ -54,20 +79,40 @@ export const getDB = async (callback) => {
     }
 }
 
-const convertDateToString = (data) => {
-    for (let [key, value] of Object.entries(data)) {
+/**
+ * Converts all Date objects in the database to strings with special formatting.
+ * Example: 10/26/2021 is converted to "__date__(10/26/2021)". This is necessary
+ * because Date objects cannot be stored natively in JSON, which is what we need to
+ * convert our database to in order to write with AsyncStorage. Therefore, we
+ * need a good way of determining which strings are dates when they are read back in
+ * from JSON which is done here with a very recognizable format.
+ * 
+ * @param {object} db the database as a javascript object
+ * @returns {db} the modified db is returned
+ */
+const convertDateToString = (db) => {
+    for (let [key, value] of Object.entries(db)) {
         if (value instanceof Date) {
-            data[key] = "__date__(" + JSON.stringify(value) + ")";
+            db[key] = "__date__(" + JSON.stringify(value) + ")";
         } else if (value instanceof Object) {
-            data[key] = convertDateToString(value);
+            db[key] = convertDateToString(value);
         }
     }
 
-    return data;
+    return db;
 }
-const setDB = async (data, callback) => {
-    data = convertDateToString(data);
-    await AsyncStorage.setItem('@db', JSON.stringify(data));
+
+/**
+ * Writes the database in its entirety to local phone storage.
+ * NOTE: This should be the only way that you write the database to local storage. 
+ * Do not try to do it on your own.
+ * 
+ * @param {object} db the javascript object containing all the database info
+ * @param {function} callback called when the data has finished being stored locally
+ */
+const setDB = async (db, callback) => {
+    db = convertDateToString(db);
+    await AsyncStorage.setItem('@db', JSON.stringify(db));
     callback();
 }
 
