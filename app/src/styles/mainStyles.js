@@ -15,7 +15,6 @@ const mainStyles = StyleSheet.create({
     marginTop: 50,
     right: 1
   },
-
   large_title : { 
       fontSize: 40,
       color: '#28b573',
@@ -35,11 +34,12 @@ const mainStyles = StyleSheet.create({
       alignSelf: "flex-end",
       width: '100%',
   },
-  titleNoPadding: {
+  titleAligned: {
     fontSize: 24,
     fontWeight: "bold",
     color: '#28b573',
     textAlign: 'center',
+    marginTop: 50
   },
 });
 

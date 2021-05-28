@@ -117,7 +117,7 @@ export function AddCardManual({navigation}) {
     return (
         <DismissKeyboard>
             <SafeAreaView style={mainStyles.screen}>
-                <BackButtonHeader navigation={navigation} title={"Add a Card Manually"} titleStyle={mainStyles.titleNoPadding} />
+                <BackButtonHeader navigation={navigation} title={"Add a Card Manually"} titleStyle={mainStyles.titleAligned} />
                 <View style={mainStyles.bodyContainer}>
 
                 <Text style={styles.inputTitle}>Credit Card Name</Text>

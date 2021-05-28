@@ -576,8 +576,60 @@ export const setShowCameraHelpMenu = async (showCameraHelpMenu) => {
 export const getShowCameraHelpMenu = async (callback) => {
     try {
         const jsonValue = await AsyncStorage.getItem('showCameraHelpMenu');
-        if (jsonValue == null) {
+        if (jsonValue == null) { // default
             callback(true);
+        } else {
+            callback(JSON.parse(jsonValue));
+        }
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+}
+
+/**
+ * Sets local list of disabled cards. If a card is already disabled, will undisable the 
+ * card. If the card has not been disabled yet, will include it in list of disabled cards
+ * @param {*} newDisabledCards 
+ */
+export const setDisabledCards = async (cardId) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('disabledCards');
+        // default, nothing set yet
+        if (jsonValue == null) { 
+            let cardIdList = [];
+            cardIdList.push(cardId);
+            const newVal = JSON.stringify({'cards':cardIdList});
+            await AsyncStorage.setItem('disabledCards', newVal);
+        } else {
+            let cardIdList = JSON.parse(jsonValue)['cards'];
+            // undisable card
+            if (cardIdList.includes(cardId)) { 
+                const index = cardIdList.indexOf(cardId);
+                cardIdList.splice(index, 1);
+                const newVal = JSON.stringify({'cards':cardIdList});
+                await AsyncStorage.setItem('disabledCards', newVal);
+            // disable card
+            } else { 
+                cardIdList.push(cardId);
+                const newVal = JSON.stringify({'cards':cardIdList});
+                await AsyncStorage.setItem('disabledCards', newVal);
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Gets the list of disabled cards
+ * @param {*} callback 
+ */
+export const getDisabledCards = async (callback) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('disabledCards');
+        if (jsonValue == null) { //default, nothing set yet
+            callback({'cards':[]});
         } else {
             callback(JSON.parse(jsonValue));
         }

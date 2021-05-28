@@ -20,7 +20,6 @@ export function AppPermissions(props) {
             appState.current.match(/background/) &&
             nextAppState === 'active'
           ) {
-            console.log("Refreshing...");
             getCameraRollPermissions();
             getPhotoPermissions();
             getLocationPermissions();

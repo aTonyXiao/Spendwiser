@@ -14,8 +14,8 @@ import { user } from '../../network/user';
 import { useState, useRef, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
-import { AddCardModal } from './AddCardModal'
-import { useIsFocused } from '@react-navigation/native'
+import { AddCardModal } from './AddCardModal';
+import { useIsFocused } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { SafeAreaView } from 'react-native-safe-area-context';

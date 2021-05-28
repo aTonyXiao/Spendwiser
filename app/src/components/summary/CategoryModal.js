@@ -202,7 +202,6 @@ export function CategoryModal(
                         modalVisible === modalType.LIMITS &&
                         <View style={{marginBottom: 50}}>
                             {tmpCatLimits.map((catLimit, index) => { 
-                                console.log(catLimit);
                                 return (
                                     <TouchableOpacity 
                                         key={index}
