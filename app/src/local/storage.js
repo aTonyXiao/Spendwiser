@@ -583,26 +583,36 @@ const addDocIDMapping = (db, accountName, collection, oldId, newId) => {
     ];
 } 
 
-export const modifyDBEntryMetainfo = async (accountName, location, isSynced = false, oldId, newId, callback) => {
+/**
+ * Updates the metainfo of a particular item in the database
+ * 
+ * @param {string} accountName the user id of the signed in user
+ * @param {string} collection the period delimited path of the collection
+ * @param {boolean} isSynced whether or not a document has been synced with the remote database already
+ * @param {string} oldId the original id of the document
+ * @param {string} newId the new/updated id of the document
+ * @param {function} callback called when finished writing to local storage
+ */
+export const modifyDBEntryMetainfo = async (accountName, collection, isSynced = false, oldId, newId, callback) => {
     try {
         getDB(async (db) => {
             if (storage_debug) {
                 console.log("----------------------");
                 console.log("Modifying Locally");
                 console.log("AccountName: " + accountName);
-                console.log("Location: " + location);
+                console.log("Location: " + collection);
                 console.log("Old Id: " + oldId);
                 console.log("New Id: " + newId);
                 console.log("----------------------");
             }
 
-            if (accountName in db && location in db[accountName] && oldId in db[accountName][location]) {
-                db[accountName][location][newId] = db[accountName][location][oldId];
-                db[accountName][location][newId]['meta_id'] = newId;
-                delete db[accountName][location][oldId];
+            if (accountName in db && collection in db[accountName] && oldId in db[accountName][collection]) {
+                db[accountName][collection][newId] = db[accountName][collection][oldId];
+                db[accountName][collection][newId]['meta_id'] = newId;
+                delete db[accountName][collection][oldId];
                 let id = newId;
-                db[accountName][location][id] = addOrUpdateMetainfo(db[accountName][location][id], isSynced);
-                addDocIDMapping(db, accountName, location, oldId, newId);
+                db[accountName][collection][id] = addOrUpdateMetainfo(db[accountName][collection][id], isSynced);
+                addDocIDMapping(db, accountName, collection, oldId, newId);
             }
 
             setDB(db, () => {
