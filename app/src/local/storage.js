@@ -117,10 +117,11 @@ const setDB = async (db, callback) => {
 }
 
 /**
+ * Adds or updates metainfo items of an object
  * 
  * @param {Object} local_data particular sub-object contained within the database that can have metadata added to it
- * @param {boolean} isSynced 
- * @returns 
+ * @param {boolean} isSynced whether or not the data has been synced already with a remote database
+ * @returns {Object} the modified local data
  */
 const addOrUpdateMetainfo = (local_data, isSynced = false) => {
     if (local_data) {
@@ -132,21 +133,38 @@ const addOrUpdateMetainfo = (local_data, isSynced = false) => {
     }
 }
 
-export const stripMetadata = (data) => {
-    if (typeof data == 'object') {
-        let stripped_data = JSON.parse(JSON.stringify(data));
-        if ('meta_modified' in data) {
+/**
+ * Creates a new object with metadata items removed. The metadata items removed 
+ * are the ones added in the function 'addOrUpdateMetainfo' 
+ * 
+ * @param {Object} db_item a particular sub-object in the database
+ * @returns {Object} a new object with the metadata items removed
+ */
+export const stripMetadata = (db_item) => {
+    if (typeof db_item == 'object') {
+        let stripped_data = JSON.parse(JSON.stringify(db_item));
+        if ('meta_modified' in db_item) {
             delete stripped_data['meta_modified'];
         }
-        if ('meta_synced' in data) {
+        if ('meta_synced' in db_item) {
             delete stripped_data['meta_synced'];
         }
         return stripped_data;
     } else {
-        throw 'Data is not an object! ' + typeof data;
+        throw 'Data is not an object! ' + typeof db_item;
     }
 }
 
+/**
+ * Adds data to a specified collection and calls the callback function when
+ * all data has finished being writen to disk
+ * 
+ * @param {string} accountName the name of the user's account
+ * @param {string} location the period delimited location of a particular document/collection
+ * @param {Object} data the data that will be added to the collection
+ * @param {boolean} synced whether or not the data has already been synced with a remote database
+ * @param {function} callback takes one parameter that is the id of the data added to the collection in the form of a string
+ */
 export const addLocalDB = async (accountName, location, data, synced, callback) => {
     // Create a copy so that we don't modify the original data
     let local_data = addOrUpdateMetainfo(data);
@@ -199,13 +217,23 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
     }
 }
 
-const checkSyncMapping = (db, accountName, document, id) => {
+/**
+ * Determines if a document id has been modified by a sync event and returns the
+ * updated id or the old id if nothing has changed
+ * 
+ * @param {Object} db the database in the form of a javascript object
+ * @param {string} accountName the id of the user's account
+ * @param {string} collection the location of the collection
+ * @param {string} id the id of the data that should be accessed from the collection
+ * @returns {string} the correct id of the document inside the collection
+ */
+const checkSyncMapping = (db, accountName, collection, id) => {
     if ('sync_mappings' in db[accountName]) {
-        console.log("Checking sync mappings for document: " + document + " id: " + id);
+        console.log("Checking sync mappings for document: " + collection + " id: " + id);
         sync_mappings = db[accountName]['sync_mappings'];
         for (let i = 0; i < sync_mappings.length; i++) {
             let mapping = sync_mappings[i];
-            if (mapping['location'] == document && mapping['oldId'] == id) {
+            if (mapping['location'] == collection && mapping['oldId'] == id) {
                 console.log("Found " + mapping['newId']);
                 return mapping['newId'];
             }
@@ -215,6 +243,13 @@ const checkSyncMapping = (db, accountName, document, id) => {
         return id;
     }
 }
+
+/**
+ * Deletes data locally from the database based on the location provided
+ * 
+ * @param {string} accountName the id of the user's account
+ * @param {string} location the period delimited string denoting the collection and document id
+ */
 export const deleteLocalDB = async (accountName, location) => {
     try {
         getDB(async (db) => {
@@ -225,16 +260,16 @@ export const deleteLocalDB = async (accountName, location) => {
                 console.log("Location: " + location);
                 console.log("----------------------");
             }
-            let [document, id] = parseDocAndId(location);
-            id = checkSyncMapping(db, accountName, document, id);
+            let [collection, id] = parseCollectionAndDocId(location);
+            id = checkSyncMapping(db, accountName, collection, id);
             
-            console.log("deleting with document: " + document + " id: " + id);
-            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+            console.log("deleting with document: " + collection + " id: " + id);
+            if (accountName in db && collection in db[accountName] && id in db[accountName][collection]) {
 
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
                         ...db[accountName]['unsynced_documents'],
-                        {'location': document, 'id': id, 'type': 'delete'},
+                        {'location': collection, 'id': id, 'type': 'delete'},
                     ];
                 } else {
                     db[accountName]['unsynced_documents'] = [
@@ -245,9 +280,9 @@ export const deleteLocalDB = async (accountName, location) => {
                 // Remove any unsynced documents that relate to the location being deleted
                 db[accountName]['unsynced_documents'] = 
                 db[accountName]['unsynced_documents'].filter((doc, index, arr) => {
-                    if (doc['location'] == document && doc['id'] == id) {
+                    if (doc['location'] == collection && doc['id'] == id) {
                         if (doc['type'] == 'delete') {
-                            let item = db[accountName][document][id];
+                            let item = db[accountName][collection][id];
                             console.log("Item at: " + doc['location'] + "." + doc['id'])
                             console.log(item);
 
@@ -264,7 +299,7 @@ export const deleteLocalDB = async (accountName, location) => {
                     }
                 });
 
-                delete db[accountName][document][id];
+                delete db[accountName][collection][id];
             }
 
             setDB(db, () => {
@@ -275,7 +310,14 @@ export const deleteLocalDB = async (accountName, location) => {
     }
 }
 
-export const parseDocAndId = (location) => {
+/**
+ * Splits a full period delimited location string into its
+ * subparts: the collection path and the document id
+ * 
+ * @param {string} location the period delimited location of a document
+ * @returns {Array} both the collection and the document id
+ */
+export const parseCollectionAndDocId = (location) => {
     // Extract the unique_id from location
     let loc = location.lastIndexOf('.');
     if (loc == -1) {
@@ -283,14 +325,14 @@ export const parseDocAndId = (location) => {
         return;
     }
 
-    let document = location.substring(0, loc);
+    let collection = location.substring(0, loc);
     let id = location.substring(loc + 1);
 
-    return [document, id];
+    return [collection, id];
 }
 
 export const setLocalDB = async (accountName, location, local_data, merge = false, callback) => {
-    const [document, id] = parseDocAndId(location);
+    const [document, id] = parseCollectionAndDocId(location);
     local_data = addOrUpdateMetainfo(local_data);
     try {
         getDB(async (db) => {
@@ -346,7 +388,7 @@ export const clearLocalDB = async () => {
 
 export const getLocalDB = async (accountName, location, ...conditionWithCallback) => {
 
-    const [document, id] = parseDocAndId(location);
+    const [document, id] = parseCollectionAndDocId(location);
     try {
         getDB(async (db) => {
             let callback = conditionWithCallback.pop();
