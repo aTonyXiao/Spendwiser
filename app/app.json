@@ -53,6 +53,14 @@
         }
       ]
     },
+    "extra": {
+      "facebook": {
+        "appId": "460373351715327",
+        "scheme": "fb460373351715327",
+        "displayName": "Spendwiser"
+      }
+    },
+
     "facebookScheme": "fb460373351715327",
     "facebookAppId": "460373351715327",
     "facebookDisplayName": "Spendwiser"
