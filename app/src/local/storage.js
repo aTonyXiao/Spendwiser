@@ -525,14 +525,22 @@ export const getSubcollectionLocalDB = async (accountName, collection, callback)
     }
 }
 
-export const setSubcollectionLocalDB = async (accountName, location, dataArr, callback) => {
+/**
+ *  takes an array of items and puts them in a the specified collection
+ * 
+ * @param {string} accountName the id of the currently signed in user
+ * @param {string} collection the period delimited path to the collection
+ * @param {Array} dataArr contains all the items that should be added to a collection
+ * @param {function} callback called when the data is written to storage
+ */
+export const setSubcollectionLocalDB = async (accountName, collection, dataArr, callback) => {
     try {
         getDB(async (db) => {
             if (storage_debug) {
                 console.log("----------------------");
                 console.log("Setting Subcollection Locally");
                 console.log("AccountName: " + accountName);
-                console.log("Location: " + location);
+                console.log("Location: " + collection);
                 console.log("----------------------");
             }
 
@@ -540,13 +548,13 @@ export const setSubcollectionLocalDB = async (accountName, location, dataArr, ca
                 db[accountName] = {};
             }
 
-            if (accountName in db && location in db[accountName]) {
-                db[accountName][location] = [
-                    ...db[accountName][location],
+            if (accountName in db && collection in db[accountName]) {
+                db[accountName][collection] = [
+                    ...db[accountName][collection],
                     ...dataArr
                 ]
             } else {
-                db[accountName][location] = dataArr;
+                db[accountName][collection] = dataArr;
             }
 
             setDB(db, callback);
