@@ -43,6 +43,12 @@ const mainStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 50
   },
+  titleNoPadding: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: '#28b573',
+    textAlign: 'center',
+  },
 });
 
 export default mainStyles;
