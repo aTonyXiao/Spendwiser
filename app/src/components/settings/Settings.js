@@ -159,17 +159,27 @@ let Settings = (props) => {
                             name="chevron-forward-outline"
                             color="gray"
                             size={24}
-                            style={{ marginRight: -8 }}
-                        ></Ionicons>
-                    </TouchableOpacity>
-                    {/* <TouchableOpacity
-                        onPress={() => {
-                            storage.clearLocalDB();
-                        }}
-                        style={styles.rowContainer}
-                    >
-                        <Text>DEBUG delete local storage</Text>
-                        <Ionicons
+                            style={{marginRight: -8}}
+                    ></Ionicons>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        Alert.alert(
+                            'Are you sure you would like to log out?',
+                            '',
+                            [
+                                {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
+                                {text: 'YES', onPress: () => {
+                                    appBackend.signOut();
+                                    props.navigation.popToTop();
+                                }}
+                            ]
+                        );
+                    }}
+                    style={styles.rowContainer}
+                >
+                    <Text>Logout</Text>
+                    <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
                             size={24}

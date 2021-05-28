@@ -78,29 +78,27 @@ export function CardCarousel(
         }
     };
     
-    const renderItem = useCallback(({ item, index }) => { 
-        return (
-            <TouchableOpacity
-                    activeOpacity={1}
-                    style={carouselStyles.slideInnerContainer}
-                    onPress={() => { recommendedCardPressed(item) }}
-                    >
-                <View style={carouselStyles.imageContainer}>
-                    <CardImage
-                        style = {{ 
-                            width: width * .8,  //its same to '20%' of device width
-                            aspectRatio: 1.5, // <-- this
-                            resizeMode: 'contain', //optional
-                        }}
-                        source={item.cardImg}
-                        overlay={item.cardName}
-                        default={item.cardImg.length == 0}
-                        cardId={item.cardId}
-                    />
-                </View>
-            </TouchableOpacity>
-        )
-    })
+    const renderItem = useCallback(({ item, index }) => (
+        <TouchableOpacity
+                activeOpacity={1}
+                style={{justifyContent: 'center', alignItems: 'center'}}
+                onPress={() => { recommendedCardPressed(item) }}
+                >
+            <View style={carouselStyles.imageContainer}>
+                <CardImage
+                    style = {{ 
+                        width: width * .8,  //its same to '20%' of device width
+                        aspectRatio: 1.5, // <-- this
+                        resizeMode: 'contain', //optional
+                    }}
+                    source={item.cardImg}
+                    overlay={item.cardName}
+                    default={item.cardImg.length == 0}
+                />
+            </View>
+        </TouchableOpacity>
+    ), []);
+
 
     return (
         <View style={carouselStyles.cardContainer}>
@@ -156,7 +154,7 @@ const carouselStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     slider: {
-        marginTop: 5,
+        marginVertical: 5,
         flexGrow: 0,
         overflow: 'visible', // for custom animations
     },

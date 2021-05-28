@@ -83,27 +83,31 @@ export function ChooseImage({navigation}) {
 
     return(
         <SafeAreaView style={mainStyles.screen}>
-            <BackButtonHeader navigation={navigation} title={"Add a Card Using Camera"} titleStyle={mainStyles.titleAligned}/>
+            <BackButtonHeader navigation={navigation} title={"Search Card from Photo"} titleStyle={mainStyles.titleNoPadding}/>
             <View style={[mainStyles.bodyContainer, styles.container]}>
-            <Text style={styles.txt}>Camera Roll</Text>
-            <TouchableOpacity 
-                onPress={launchCameraRoll}
-                style={styles.icon}
-            >
-                <Ionicons
-                    name="image-outline"
-                    color="black"
-                    size={40}
-                ></Ionicons>
-            </TouchableOpacity>
-            <Text style={styles.txt}>Take a Photo</Text>
-            <TouchableOpacity onPress={takePhoto}>
-                <Ionicons
-                    name="camera-outline"
-                    color="black"
-                    size={40}
-                ></Ionicons>
-            </TouchableOpacity>
+                <View style={{alignItems: 'center'}}>
+                    <Text style={styles.txt}>Camera Roll</Text>
+                    <TouchableOpacity 
+                        onPress={launchCameraRoll}
+                        style={styles.icon}
+                    >
+                        <Ionicons
+                            name="image-outline"
+                            color="black"
+                            size={40}
+                        ></Ionicons>
+                    </TouchableOpacity>
+                </View>
+                <View style={{alignItems: 'center'}}>
+                    <Text style={styles.txt}>Take a Photo</Text>
+                    <TouchableOpacity onPress={takePhoto}>
+                        <Ionicons
+                            name="camera-outline"
+                            color="black"
+                            size={40}
+                        ></Ionicons>
+                    </TouchableOpacity>
+               </View>
             </View>
         </SafeAreaView>
     )
@@ -112,7 +116,7 @@ export function ChooseImage({navigation}) {
 const styles = StyleSheet.create({
     container: { 
         alignItems: 'center', 
-        justifyContent: 'center' 
+        justifyContent: 'space-evenly' 
     },
     txt: {
         fontSize: 18,

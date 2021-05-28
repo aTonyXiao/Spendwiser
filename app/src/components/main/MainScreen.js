@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactNative, { View, Text, StyleSheet, Dimensions, Platform, BackHandler } from 'react-native';
+import ReactNative, { View, Text, StyleSheet, Dimensions, Platform, BackHandler, SafeAreaView } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -283,7 +283,7 @@ export function MainScreen({navigation}) {
     const insets = useSafeAreaInsets();
 
     return (
-        <View style={mainStyles.screen} edges={["right", "bottom", "left"]}>
+        <View style={styles.screen} edges={["right", "bottom", "left"]}>
             <StatusBar barStyle='dark-content'/>
             {/* Modal */}
             <MainModals
@@ -320,6 +320,7 @@ export function MainScreen({navigation}) {
                             }}
                         showsUserLocation={true}
                         onPoiClick={e => {if (internetState) switchStoresFromPOI(e.nativeEvent)}}
+                        showsMyLocationButton={false}
                     >
                         {(storeArr.length > 0 &&
                             storeArr[0].value !== "No Internet Connection" && storeArr[0].value !== "Location Permission Denied") &&
@@ -330,11 +331,11 @@ export function MainScreen({navigation}) {
                         }
                     </MapView>
                 </View>
-                <View>
+                <View style={Platform.OS !== 'ios' ? {flex: 1} : {}}>
                     <BottomSheet isOpen={false}
-                        sliderMinHeight={Platform.OS === 'ios' ? locationInfoHeight + footerHeight + 75 : locationInfoHeight + 75}
+                        sliderMinHeight={Platform.OS === 'ios' ? locationInfoHeight + footerHeight + 75 : locationInfoHeight + footerHeight + 10}
                         sliderMaxHeight={(Dimensions.get('window').height)}
-                        wrapperStyle={Platform.OS === 'ios' ? {paddingBottom: footerHeight + 50} : {paddingBottom: footerHeight}}
+                        wrapperStyle={Platform.OS === 'ios' ? {paddingBottom: footerHeight + 25} : {paddingBottom: footerHeight}}
                     >
                         {/* Location text */}
                         <View style={mapStyles.textContainer} onLayout={(LayoutEvent) => onBottomSheetLayout(LayoutEvent, 0, false)}>
@@ -378,7 +379,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         height: '100%',
-        paddingTop: -ReactNative.StatusBar.currentHeight
     },
     loc: {
         marginTop: 20,

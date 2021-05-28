@@ -7,7 +7,8 @@ import {
     Alert,
     Animated,
     Dimensions,
-    PixelRatio
+    PixelRatio,
+    SafeAreaView
 } from 'react-native';
 import { Card } from './Card';
 import { user } from '../../network/user';
@@ -18,7 +19,6 @@ import { AddCardModal } from './AddCardModal';
 import { useIsFocused } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
 
@@ -289,10 +289,10 @@ const styles = StyleSheet.create({
     },
     addButton: {
         borderRadius: 100,
-        padding: 5,
+        paddingHorizontal: 5,
         alignSelf: 'flex-end',
         margin: 8,
-        marginBottom: 0
+        marginBottom: 0,
     },
     divider: { 
         width: '100%',

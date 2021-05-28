@@ -307,59 +307,59 @@ export function SpendingSummary({navigation}) {
                 setWhichPeriod={setWhichPeriod}
             />
             <View style={mainStyles.bodyContainer}>
-            {/* Content */}
-            <View style={styles.contentContainer}>
-                {mode === modeType.SUMMARY && !(listViewEnabled) &&
-                    <PieChartSummary
-                        style={{height:500}}
-                        values={values}
-                        keys={keys}
-                        curCategory={curCategory}
-                        setCurCategory={setCurCategory}
-                        setModalVisible={setModalVisible}
-                        colors={colors}
-                    />
-                }
-                {mode === modeType.SUMMARY && listViewEnabled &&
-                    <ListSummary
-                        setModalVisible={setModalVisible}
-                        changeCategory={changeCategory}
-                        values={values}
-                    />
-                    
-                }
-                {mode === modeType.COMPARE &&
-                    <ChartCompare
-                        compareTransPeriod1={compareTransPeriod1}
-                        compareTransPeriod2={compareTransPeriod2}
-                        keys={keys}
-                        curCard={curCard}
-                        compareTimeframe={compareTimeframe}
-                    />
-                }
-                {mode === modeType.BUDGET &&
-                    <ChartBudget
-                        compareTransPeriod1={compareTransPeriod1}
-                        categoriesLimit={categoriesLimit}
-                        keys={keys}
-                        curCard={curCard}
-                        compareTimeframe={compareTimeframe}
-                    />
-                }
-            </View>
-            {mode === modeType.SUMMARY &&
-                <View style={styles.viewType}>
-                    <Ionicons
-                        name="list-outline"
-                        color="blue"
-                        size={15}
-                    ></Ionicons>
-                    <Text 
-                        style={{color: 'blue', marginLeft: 5}}
-                        onPress={() => {setListViewEnabled(!listViewEnabled)}}
-                    >{listViewEnabled ? "Chart View" : "List View"}</Text>
+                {/* Content */}
+                <View style={styles.contentContainer}>
+                    {mode === modeType.SUMMARY && !(listViewEnabled) &&
+                        <PieChartSummary
+                            style={{height:500}}
+                            values={values}
+                            keys={keys}
+                            curCategory={curCategory}
+                            setCurCategory={setCurCategory}
+                            setModalVisible={setModalVisible}
+                            colors={colors}
+                        />
+                    }
+                    {mode === modeType.SUMMARY && listViewEnabled &&
+                        <ListSummary
+                            setModalVisible={setModalVisible}
+                            changeCategory={changeCategory}
+                            values={values}
+                        />
+                        
+                    }
+                    {mode === modeType.COMPARE &&
+                        <ChartCompare
+                            compareTransPeriod1={compareTransPeriod1}
+                            compareTransPeriod2={compareTransPeriod2}
+                            keys={keys}
+                            curCard={curCard}
+                            compareTimeframe={compareTimeframe}
+                        />
+                    }
+                    {mode === modeType.BUDGET &&
+                        <ChartBudget
+                            compareTransPeriod1={compareTransPeriod1}
+                            categoriesLimit={categoriesLimit}
+                            keys={keys}
+                            curCard={curCard}
+                            compareTimeframe={compareTimeframe}
+                        />
+                    }
                 </View>
-            }
+                {mode === modeType.SUMMARY &&
+                    <View style={styles.viewType}>
+                        <Ionicons
+                            name="list-outline"
+                            color="blue"
+                            size={15}
+                        ></Ionicons>
+                        <Text 
+                            style={{color: 'blue', marginLeft: 5}}
+                            onPress={() => {setListViewEnabled(!listViewEnabled)}}
+                        >{listViewEnabled ? "Chart View" : "List View"}</Text>
+                    </View>
+                }
             </View>
             {/* Footer */}
             <View style={mainStyles.footerContainer}>
