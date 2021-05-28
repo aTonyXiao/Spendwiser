@@ -42,7 +42,6 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
         const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) {
             let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
-            console.log("Filtered transaction to: " + transactionFiltered);
             user.editTransaction(
                 userId,
                 docId,

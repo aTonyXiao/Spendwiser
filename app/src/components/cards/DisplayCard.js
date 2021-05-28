@@ -12,7 +12,6 @@ import {
 import { cards } from '../../network/cards';
 import { user } from '../../network/user';
 import { Ionicons } from '@expo/vector-icons';
-import { RewardModal } from './RewardModal';
 import { EditTransactionModal } from './EditTransactionModal';
 import { TransactionModal } from './TransactionModal';
 import CardImage from './CardImage';
@@ -20,7 +19,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { summaryHelper } from '../summary/SummaryHelper';
 import mainStyles from '../../styles/mainStyles';
 import { BackButtonHeader } from '../util/BackButtonHeader';
-// TODO: need to add reward modal back in here?
+import * as storage from '../../local/storage';
 
 /**
  * Display for a single credit card. Shows information about a card's rewards as well
@@ -60,7 +59,6 @@ function DisplayCard({route, navigation}) {
             setTransactions([]);
             user.getTransactionsForCard(userId, cardId, (data) => {
                 if (data !== null) {
-                    console.log(data);
                     setTransactions((transactions) => { 
                         data["key"] = transactions.length.toString();
                         if (data) {
@@ -106,7 +104,6 @@ function DisplayCard({route, navigation}) {
     };
 
     const confirmDeleteTransaction = (trans) => {
-        console.log(trans);
         Alert.alert(
             'Are you sure you would like to delete this transaction?',
             trans.storeInfo.storeName + '\n' + trans.dateAdded.toString().substring(0,24) + '\n$' + trans.amountSpent,
@@ -153,6 +150,7 @@ function DisplayCard({route, navigation}) {
                         source={cardImage.uri}
                         overlay={cardName}
                         default={cardImage.uri === undefined || cardImage.uri.length == 0}
+                        cardId={cardId}
                     />
                 </View>
 
@@ -286,9 +284,11 @@ function DisplayCard({route, navigation}) {
                 <View>
                     {
                         (origin !== "main") &&
-                        <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
-                            <Text style={styles.deleteText}>Delete this card</Text>
-                        </TouchableOpacity>
+                        <View>
+                            <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
+                                <Text style={styles.deleteText}>Delete this card</Text>
+                            </TouchableOpacity>
+                        </View>
                     }
                 </View>
                 </View>

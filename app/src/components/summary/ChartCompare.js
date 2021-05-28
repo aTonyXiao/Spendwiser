@@ -95,7 +95,6 @@ export function ChartCompare(
         }, [curCard, compareTransPeriod1, compareTransPeriod2]);
 
 
-    console.log(overallSpending[0]);
     return (
         <View style={{ flex: 1, paddingHorizontal: 10}}>
             <View style={{ flexDirection: 'row', flex: 1, paddingVertical: 8 }}>

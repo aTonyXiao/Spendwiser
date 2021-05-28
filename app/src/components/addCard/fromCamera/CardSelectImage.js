@@ -11,6 +11,8 @@ import {
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
+import { BackButtonHeader } from '../../util/BackButtonHeader';
+import mainStyles from '../../../styles/mainStyles';
 
 // TODO: change to "CardSelectFromImage"
 // TODO: handle no text

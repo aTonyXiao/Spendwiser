@@ -9,9 +9,6 @@ class SummaryHelper {
      * @param {object} transaction - transaction to categorize
      */
     matchTransactionToCategory(transaction) {
-        // console.log("arghhh");
-        // console.log(transaction);
-        // console.log(transaction['storeInfo']);
         let catIdx = null;
         if (dining.includes(transaction['storeInfo']['storeType'])) {
             catIdx = 0;
@@ -81,7 +78,6 @@ class SummaryHelper {
                 startTimeFrame = new Date(year, month - 1);
                 break;
         }
-        // console.log(startTimeFrame + " " + endTimeFrame);
         return [startTimeFrame, endTimeFrame];
     }
 
@@ -91,7 +87,6 @@ class SummaryHelper {
      * @param {object} newTrans - new transaction to be added
      */
     addSortedNewTransaction(transactions, newTrans) {
-        // console.log(newTrans);
         let tmpTrans = [...transactions];
         if (tmpTrans.length === 0) {
             return [newTrans];

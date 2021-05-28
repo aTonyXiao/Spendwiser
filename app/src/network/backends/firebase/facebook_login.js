@@ -12,10 +12,11 @@ class FacebookLogin extends LoginAuthorizer {
         const { type, token } = await Facebook.logInWithReadPermissionsAsync({
             permissions: ['public_profile'],
         });
-
+    
+        const cred = await Facebook.getAuthenticationCredentialAsync();
         if (type === 'success') {
             // Build Firebase credential with the Facebook access token.
-            const credential = firebase.auth.FacebookAuthProvider.credential(token);
+            const credential = firebase.auth.FacebookAuthProvider.credential(cred.token);
 
             // Sign in with credential from the Facebook user.
             firebase
