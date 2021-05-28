@@ -186,7 +186,7 @@ let Settings = (props) => {
                             style={{ marginRight: -8 }}
                         ></Ionicons>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => {
                             storage.printLocalDB();
                         }}
