@@ -389,14 +389,23 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
     }
 }
 
-
+/**
+ * deletes the entire local database
+ */
 export const clearLocalDB = async () => {
     await AsyncStorage.removeItem("@db");
 }
 
+/**
+ * returns the database item at a particular location
+ * 
+ * @param {string} accountName the account id of the signed in user
+ * @param {string} location the period delimited path containing the collection and document id
+ * @param  {...any} conditionWithCallback any filtering parameters ending with a callback function which will be called with each individual item found
+ */
 export const getLocalDB = async (accountName, location, ...conditionWithCallback) => {
 
-    const [document, id] = parseCollectionAndDocId(location);
+    const [collection, id] = parseCollectionAndDocId(location);
     try {
         getDB(async (db) => {
             let callback = conditionWithCallback.pop();
@@ -406,7 +415,7 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 console.log("Getting Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log("Document: " + document);
+                console.log("Document: " + collection);
                 console.log("Id: " + id);
                 console.log("Conditions: " + JSON.stringify(conditions));
                 console.log("----------------------");
@@ -418,8 +427,8 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
 
             let local_data = null;
             // Normal get operation that will return one item
-            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
-                local_data = db[accountName][document][id];
+            if (accountName in db && collection in db[accountName] && id in db[accountName][collection]) {
+                local_data = db[accountName][collection][id];
             }
             // Get operation that will most likely filter the data and receive a
             // callback for each item in the array that meets certain conditions
@@ -432,9 +441,9 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
             else if ('sync_mappings' in db[accountName]) {
                 sync_mappings = db[accountName]['sync_mappings'];
                 sync_mappings.forEach((mapping) => {
-                    if (mapping['location'] == document && mapping['oldId'] == id) {
-                        if (accountName in db && document in db[accountName] && mapping['newId'] in db[accountName][document]) {
-                            local_data = db[accountName][document][mapping['newId']];
+                    if (mapping['location'] == collection && mapping['oldId'] == id) {
+                        if (accountName in db && collection in db[accountName] && mapping['newId'] in db[accountName][collection]) {
+                            local_data = db[accountName][collection][mapping['newId']];
                         }
                     }
                 });
@@ -450,8 +459,6 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
                 },
             }
 
-
-            let returned_filtered_data = false;
             // NOTE (Nathan W): This was originally typeof. It stopped working???
             if (local_data instanceof Array) {
                 for (let j = 0; j < local_data.length; j++) {
