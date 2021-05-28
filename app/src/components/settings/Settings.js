@@ -134,7 +134,7 @@ let Settings = (props) => {
                                 {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
                                 {text: 'YES', onPress: () => {
                                     appBackend.signOut();
-                                    props.navigation.navigate('Login');
+                                    props.navigation.popToTop();
                                 }}
                             ]
                         );
