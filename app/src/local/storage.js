@@ -624,6 +624,12 @@ export const modifyDBEntryMetainfo = async (accountName, collection, isSynced = 
     }
 }
 
+/**
+ * Retuns all the unsynced documents that have not been pushed to the remote database
+ * 
+ * @param {string} accountName the user id of the signed in user
+ * @param {function} callback called with one parameter containing an array of unsynced documents
+ */
 export const getUnsyncedDocuments = async (accountName, callback) => {
     try {
         getDB((db) => {
@@ -639,7 +645,16 @@ export const getUnsyncedDocuments = async (accountName, callback) => {
     }
 }
 
-export const replaceUnsyncedDocumentsId = async (accountName, location, local_id, remote_id, callback) => {
+/**
+ * Replaces all instances of a docid within the unsynced documents array with the one generated remotely 
+ * 
+ * @param {string} accountName the user id of the signed in user
+ * @param {string} collection the period delimited path to the collection
+ * @param {string} local_id the id of the local document 
+ * @param {string} remote_id the id of the remote document that corresponds to the same local document
+ * @param {function} callback called when finished writing to local storage
+ */
+export const replaceUnsyncedDocumentsId = async (accountName, collection, local_id, remote_id, callback) => {
     try {
         getDB((db) => {
             if (accountName in db && 'unsynced_documents' in db[accountName]) {
@@ -647,7 +662,7 @@ export const replaceUnsyncedDocumentsId = async (accountName, location, local_id
                 for (let i = 0; i < u_docs.length; i++) {
                     let doc = u_docs[i];
 
-                    if (doc['location'] == location && doc['id'] == local_id) {
+                    if (doc['location'] == collection && doc['id'] == local_id) {
                         doc['id'] = remote_id;
                     }
                 }
