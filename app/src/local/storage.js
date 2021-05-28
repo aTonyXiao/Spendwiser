@@ -331,8 +331,16 @@ export const parseCollectionAndDocId = (location) => {
     return [collection, id];
 }
 
+/**
+ * 
+ * @param {string} accountName the user's account id
+ * @param {string} location the full period delimited path containing the collection and document id
+ * @param {Object} local_data the data that should be set as the value for the document id
+ * @param {boolean} merge whether or not to replace
+ * @param {function} callback called when the data is finished being written to disk
+ */
 export const setLocalDB = async (accountName, location, local_data, merge = false, callback) => {
-    const [document, id] = parseCollectionAndDocId(location);
+    const [collection, id] = parseCollectionAndDocId(location);
     local_data = addOrUpdateMetainfo(local_data);
     try {
         getDB(async (db) => {
@@ -341,26 +349,26 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 console.log("Setting Locally");
                 console.log("AccountName: " + accountName);
                 console.log("Location: " + location);
-                console.log("Document: " + document);
+                console.log("Document: " + collection);
                 console.log("ID: " + id);
                 console.log("----------------------");
             }
 
             // NOTE (Nathan W) the document **should** exist
-            if (accountName in db && document in db[accountName] && id in db[accountName][document]) {
+            if (accountName in db && collection in db[accountName] && id in db[accountName][collection]) {
                 if (merge) {
-                    db[accountName][document][id] = {
-                        ...db[accountName][document][id],
+                    db[accountName][collection][id] = {
+                        ...db[accountName][collection][id],
                         ...local_data,
                     }
                 } else {
-                    db[accountName][document][id] = local_data;
+                    db[accountName][collection][id] = local_data;
                 }
 
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
                         ...db[accountName]['unsynced_documents'],
-                        {'location': document, 'id': id, 'type': 'set', 'merge': merge},
+                        {'location': collection, 'id': id, 'type': 'set', 'merge': merge},
                     ];
                 } else {
                     db[accountName]['unsynced_documents'] = [
