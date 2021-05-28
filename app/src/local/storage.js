@@ -564,14 +564,22 @@ export const setSubcollectionLocalDB = async (accountName, collection, dataArr, 
     }
 }
 
-const addDocIDMapping = (db, accountName, location, oldId, newId) => {
+/**
+ * 
+ * @param {Object} db the database read from local storage
+ * @param {string} accountName the id of the currently signed in user
+ * @param {string} collection the period delimited path to a collection
+ * @param {string} oldId the original id of the document
+ * @param {string} newId the updated id of the document
+ */
+const addDocIDMapping = (db, accountName, collection, oldId, newId) => {
     if (!('sync_mappings' in db[accountName])) {
         db[accountName]['sync_mappings'] = [];
     }
 
     db[accountName]['sync_mappings'] = [
         ...db[accountName]['sync_mappings'],
-        {'location': location, 'oldId': oldId, 'newId': newId},
+        {'location': collection, 'oldId': oldId, 'newId': newId},
     ];
 } 
 
