@@ -496,19 +496,26 @@ export const getLocalDB = async (accountName, location, ...conditionWithCallback
     }
 }
 
-export const getSubcollectionLocalDB = async (accountName, location, callback) => {
+/**
+ * gets all the items contained within a collection
+ * 
+ * @param {string} accountName the user id of the signed in user
+ * @param {string} collection the period delimited collection
+ * @param {function} callback called with one parameter containing the array of items contained within a collection
+ */
+export const getSubcollectionLocalDB = async (accountName, collection, callback) => {
     try {
         getDB(async (db) => {
             if (storage_debug) {
                 console.log("----------------------");
                 console.log("Getting Subcollection Locally");
                 console.log("AccountName: " + accountName);
-                console.log("Location: " + location);
+                console.log("Location: " + collection);
                 console.log("----------------------");
             }
 
-            if (accountName in db && location in db[accountName]) {
-                callback(Object.values(db[accountName][location]));
+            if (accountName in db && collection in db[accountName]) {
+                callback(Object.values(db[accountName][collection]));
             } else {
                 callback([]);
             }
