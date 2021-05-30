@@ -34,26 +34,25 @@ export function CardCarousel(
     const ref = useRef(null);
     const [disabledCards, setDisabledCards] = useState([]);
     const [hasConstructed, setHasConstructed] = useState(false);
+    
     // check for disabled cards
-    useEffect(() => {
-        const updateIfNeeded = async () => {
-            if (!hasConstructed) {
-                setDisabledCards(await getDisabledCards());
+    const updateIfNeeded = async () => {
+        if (!hasConstructed) {
+            setDisabledCards(await getDisabledCards());
 
-                // remove disabled cards from array
-                if (recCards != null) {
-                    for (let i = 0; i < recCards.length; i++) {
-                        if (disabledCards.includes(recCards[i].cardId)) {
-                            recCards.splice(i, 1);
-                        }
+            // remove disabled cards from array
+            if (recCards != null) {
+                for (let i = 0; i < recCards.length; i++) {
+                    if (disabledCards.includes(recCards[i].cardId)) {
+                        recCards.splice(i, 1);
                     }
-
-                    setHasConstructed(true);
                 }
+
+                setHasConstructed(true);
             }
         }
-        updateIfNeeded();
-    })
+    }
+    updateIfNeeded();
 
     /**
     * calls storage function to check if card is disabled
