@@ -113,13 +113,13 @@ export function MainScreen({navigation}) {
         // check for disabled cards
         getDisabledCards().then((data) => {
             let disabledCards = data;
-            for (let i=0 ; i<myRankedCards.length ; i++) {
-                if (disabledCards.includes(myRankedCards[i].cardId)) {
-                    myRankedCards.splice(i, 1);
+            let rankedEnabledCards = [];
+            for (let i=0 ; i< myRankedCards.length ; i++) {
+                if (!(disabledCards.includes(myRankedCards[i].cardId))) {
+                    rankedEnabledCards.push(myRankedCards[i]);
                 }
             }
-
-            setRecCards(myRankedCards);
+            setRecCards(rankedEnabledCards);
         })
     }
 
