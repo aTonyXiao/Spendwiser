@@ -26,6 +26,10 @@ let Settings = (props) => {
     const navigation = props.navigation;
     const width = Dimensions.get('window').width;
 
+    function sendBackToLoadingScreen() {
+        props.navigation.popToTop();
+    }
+
     return (
         <SafeAreaView style={mainStyles.screen}>
             <View style={mainStyles.bodyContainer}>
@@ -142,13 +146,10 @@ let Settings = (props) => {
                                 'Are you sure you would like to log out?',
                                 '',
                                 [
-                                    { text: 'NO', onPress: () => console.log(''), style: 'cancel' },
-                                    {
-                                        text: 'YES', onPress: () => {
-                                            appBackend.signOut();
-                                            props.navigation.navigate('Login');
-                                        }
-                                    }
+                                    {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
+                                    {text: 'YES', onPress: () => {
+                                        appBackend.signOut(sendBackToLoadingScreen);
+                                    }}
                                 ]
                             );
                         }}
@@ -156,30 +157,6 @@ let Settings = (props) => {
                     >
                         <Text>Logout</Text>
                         <Ionicons
-                            name="chevron-forward-outline"
-                            color="gray"
-                            size={24}
-                            style={{marginRight: -8}}
-                    ></Ionicons>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        Alert.alert(
-                            'Are you sure you would like to log out?',
-                            '',
-                            [
-                                {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
-                                {text: 'YES', onPress: () => {
-                                    appBackend.signOut();
-                                    props.navigation.popToTop();
-                                }}
-                            ]
-                        );
-                    }}
-                    style={styles.rowContainer}
-                >
-                    <Text>Logout</Text>
-                    <Ionicons
                             name="chevron-forward-outline"
                             color="gray"
                             size={24}
@@ -220,7 +197,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-        paddingTop: "15%",
+        paddingTop: "20%",
         marginBottom: 40,
     },
     rowContainerTop: {
