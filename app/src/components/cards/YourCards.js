@@ -36,7 +36,8 @@ const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
-    const [swipeWidths, setSwipeWidths] = useState({});
+    const [swipeDeleteWidths, setSwipeDeleteWidths] = useState({});
+    const [swipeLockWidths, setSwipeLockWidths] = useState({});
     const [swipeHeights, setSwipeHeights] = useState({});
     const [swipeOpacities, setSwipeOpacities] = useState({});
     const [rowRefs, setRowRefs] = useState({});
@@ -51,12 +52,14 @@ function YourCards({ route, navigation }) {
 
     const deleteOpacity = new Animated.Value(0.0), lockOpacity = new Animated.Value(0.0);
     const resetAnimationValues = key => {
-        if (typeof swipeWidths[key] === "undefined") {
-            swipeWidths[key] = new Animated.Value(0);
+        if (typeof swipeDeleteWidths[key] === "undefined") {
+            swipeDeleteWidths[key] = new Animated.Value(0);
+            swipeLockWidths[key] = new Animated.Value(0);
             swipeHeights[key] = new Animated.Value(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key] = new Animated.Value(1.0);
         } else {
-            swipeWidths[key].setValue(0);
+            swipeDeleteWidths[key].setValue(0);
+            swipeLockWidths[key].setValue(0);
             swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key].setValue(1.0);
         }
@@ -143,109 +146,61 @@ function YourCards({ route, navigation }) {
         )
     }
 
-    const deleteThreshold = Dimensions.get('window').width * -0.5; 
-    const lockThreshold = Dimensions.get('window').width * 0.5; 
+    const swipeThreshold = Dimensions.get('window').width * 0.5;
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        if (value < 0) { // delete
-            deleteOpacity.setValue(1);
-            lockOpacity.setValue(0);
-
-            if (value < deleteThreshold) {
-                if (!animationRunning.current && !swipeButtonOpen.current) {
-                    // https://docs.expo.io/versions/latest/sdk/haptics/
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    Animated.timing(swipeOpacities[key], {
-                        toValue: 0.0,
-                        duration: 100,
-                        useNativeDriver: false
-                    }).start();
-                    Animated.timing(swipeWidths[key], {
-                        toValue: Dimensions.get('window').width * 0.9,
-                        duration: 150,
-                        useNativeDriver: false
-                    }).start(() => {
-                        animationRunning.current = false;
-                        swipeButtonOpen.current = true;
-                        swipeOpacities[key].setValue(0.0);
-                    });
-                    animationRunning.current = true;
-                }
-            } else {
-                if (!animationRunning.current && swipeButtonOpen.current) {
-                    // https://docs.expo.io/versions/latest/sdk/haptics/
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    Animated.timing(swipeOpacities[key], {
-                        toValue: 1.0,
-                        duration: 100,
-                        useNativeDriver: false
-                    }).start();
-                    Animated.timing(swipeWidths[key], {
-                        toValue: Math.abs(value),
-                        duration: 150,
-                        useNativeDriver: false
-                    }).start(() => {
-                        animationRunning.current = false;
-                        swipeButtonOpen.current = false;
-                        swipeOpacities[key].setValue(1.0);
-                    });
-                    animationRunning.current = true;
-                } else if (!animationRunning.current) {
-                    swipeWidths[key].setValue(Math.abs(value));
-                }
+        let deleteFlag = value < 0;
+        // reset the widths if not visible
+        if (deleteFlag) swipeLockWidths[key].setValue(0);
+        else swipeDeleteWidths[key].setValue(0);
+        if (Math.abs(value) > swipeThreshold) {
+            if (!animationRunning.current && !swipeButtonOpen.current) {
+                // https://docs.expo.io/versions/latest/sdk/haptics/
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                Animated.timing(swipeOpacities[key], {
+                    toValue: 0.0,
+                    duration: 100,
+                    useNativeDriver: false
+                }).start();
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
+                    toValue: Dimensions.get('window').width * 0.9,
+                    duration: 150,
+                    useNativeDriver: false
+                }).start(() => {
+                    animationRunning.current = false;
+                    swipeButtonOpen.current = true;
+                    swipeOpacities[key].setValue(0.0);
+                });
+                animationRunning.current = true;
             }
-        } else { // lock
-            deleteOpacity.setValue(0);
-            lockOpacity.setValue(1);
-
-            if (value > lockThreshold) {
-                if (!animationRunning.current && !swipeButtonOpen.current) {
-                    // https://docs.expo.io/versions/latest/sdk/haptics/
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    Animated.timing(swipeOpacities[key], {
-                        toValue: 0.0,
-                        duration: 100,
-                        useNativeDriver: false
-                    }).start();
-                    Animated.timing(swipeWidths[key], {
-                        toValue: Dimensions.get('window').width * 0.9,
-                        duration: 150,
-                        useNativeDriver: false
-                    }).start(() => {
-                        animationRunning.current = false;
-                        swipeButtonOpen.current = true;
-                        swipeOpacities[key].setValue(0.0);
-                    });
-                    animationRunning.current = true;
-                }
-            } else {
-                if (!animationRunning.current && swipeButtonOpen.current) {
-                    // https://docs.expo.io/versions/latest/sdk/haptics/
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    Animated.timing(swipeOpacities[key], {
-                        toValue: 1.0,
-                        duration: 100,
-                        useNativeDriver: false
-                    }).start();
-                    Animated.timing(swipeWidths[key], {
-                        toValue: Math.abs(value),
-                        duration: 150,
-                        useNativeDriver: false
-                    }).start(() => {
-                        animationRunning.current = false;
-                        swipeButtonOpen.current = false;
-                        swipeOpacities[key].setValue(1.0);
-                    });
-                    animationRunning.current = true;
-                } else if (!animationRunning.current) {
-                    swipeWidths[key].setValue(Math.abs(value));
-                }
+        } else {
+            if (!animationRunning.current && swipeButtonOpen.current) {
+                // https://docs.expo.io/versions/latest/sdk/haptics/
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                Animated.timing(swipeOpacities[key], {
+                    toValue: 1.0,
+                    duration: 100,
+                    useNativeDriver: false
+                }).start();
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
+                    toValue: Math.abs(value),
+                    duration: 150,
+                    useNativeDriver: false
+                }).start(() => {
+                    animationRunning.current = false;
+                    swipeButtonOpen.current = false;
+                    swipeOpacities[key].setValue(1.0);
+                });
+                animationRunning.current = true;
+            } else if (!animationRunning.current) {
+                if (deleteFlag) swipeDeleteWidths[key].setValue(Math.abs(value));
+                else swipeLockWidths[key].setValue(Math.abs(value));
             }
         }
     };
 
     const swipeGestureEnded = (key, data) => {
-        if (data.translateX < deleteThreshold) {
+        if (Math.abs(data.translateX) > swipeThreshold) {
             let index = parseInt(key);
             deleteCard(cards[index], index);
         }
@@ -304,14 +259,14 @@ function YourCards({ route, navigation }) {
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                 <View style={styles.cardBackWrapper}>
                                     <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                        <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
+                                        <Animated.View style={[styles.cardDelete, { width: swipeDeleteWidths[data.item.key] }]}>
                                             <Ionicons
                                                 name="trash-outline"
                                                 color="white"
                                                 size={25}
                                             ></Ionicons>
                                         </Animated.View>
-                                        <Animated.View style={[styles.cardLock, { width: swipeWidths[data.item.key] }]}>
+                                        <Animated.View style={[styles.cardLock, { width: swipeLockWidths[data.item.key] }]}>
                                             <Ionicons
                                                 name="eye-off-outline"
                                                 color="white"
