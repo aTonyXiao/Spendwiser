@@ -148,6 +148,7 @@ function YourCards({ route, navigation }) {
     const deleteThreshold = Dimensions.get('window').width * -0.5; 
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
+        console.log(value);
         if (value < deleteThreshold) {
             if (!animationRunning.current && !deleteOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
@@ -253,15 +254,17 @@ function YourCards({ route, navigation }) {
                         }}
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
-                                        <Ionicons
-                                            name="trash-outline"
-                                            color="white"
-                                            size={25}
-                                        ></Ionicons>
-                                    </Animated.View>
-                                </TouchableOpacity>
+                                <View style={styles.cardBackWrapper}>
+                                    <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
+                                        <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
+                                            <Ionicons
+                                                name="trash-outline"
+                                                color="white"
+                                                size={25}
+                                            ></Ionicons>
+                                        </Animated.View>
+                                    </TouchableOpacity>
+                                </View>
                             </Animated.View>
                         )}
                         rightOpenValue={-100}
@@ -300,18 +303,24 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray',
         marginTop: 10
     },
+    cardBackWrapper: {
+        height: "100%",
+        flexDirection: "row",
+        paddingHorizontal: (Dimensions.get('window').width * 0.05),
+    },
     cardBack: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        direction: "rtl",
-        paddingLeft: (Dimensions.get('window').width * 0.05)
+        width: "100%",
+        height: CARD_HEIGHT,
+        alignSelf: "flex-end",
+        flexDirection: "column-reverse",
     },
     cardDelete: {
         backgroundColor: 'red',
+        alignSelf: "flex-end",
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        height: CARD_HEIGHT
+        height: "100%"
     }
 });
 
