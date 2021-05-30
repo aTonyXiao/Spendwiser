@@ -312,11 +312,11 @@ const styles = StyleSheet.create({
         width: "100%",
         height: CARD_HEIGHT,
         alignSelf: "flex-end",
-        flexDirection: "column-reverse",
+        flexDirection: "row-reverse",
+        justifyContent: "space-between"
     },
     cardDelete: {
         backgroundColor: 'red',
-        alignSelf: "flex-end",
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
