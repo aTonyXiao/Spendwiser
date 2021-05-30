@@ -84,7 +84,7 @@ export function CardCarousel(
                         storeInformation: storeArr[curStoreKey]
                     })}
                     style={{paddingVertical: 20, paddingHorizontal: 30, backgroundColor: '#5F9EA0', borderRadius: 3, marginTop: 10}}>
-                    <Text style={{textAlign: 'center'}}>You currently have no cards. {"\n"} Click here to get started!</Text>
+                    <Text style={{textAlign: 'center'}}>You have no enabled cards. {"\n"} Click here to get started!</Text>
                 </TouchableOpacity>
                 :
                 <View>
