@@ -42,7 +42,7 @@ function YourCards({ route, navigation }) {
     const [rowRefs, setRowRefs] = useState({});
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
-    const deleteOpen = useRef(false);
+    const swipeButtonOpen = useRef(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
@@ -60,9 +60,6 @@ function YourCards({ route, navigation }) {
             swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key].setValue(1.0);
         }
-        setSwipeWidths(swipeWidths);
-        setSwipeHeights(swipeHeights);
-        setSwipeOpacities(swipeOpacities);
     };
 
     useEffect(() => {
@@ -155,7 +152,7 @@ function YourCards({ route, navigation }) {
             lockOpacity.setValue(0);
 
             if (value < deleteThreshold) {
-                if (!animationRunning.current && !deleteOpen.current) {
+                if (!animationRunning.current && !swipeButtonOpen.current) {
                     // https://docs.expo.io/versions/latest/sdk/haptics/
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Animated.timing(swipeOpacities[key], {
@@ -169,13 +166,13 @@ function YourCards({ route, navigation }) {
                         useNativeDriver: false
                     }).start(() => {
                         animationRunning.current = false;
-                        deleteOpen.current = true;
+                        swipeButtonOpen.current = true;
                         swipeOpacities[key].setValue(0.0);
                     });
                     animationRunning.current = true;
                 }
             } else {
-                if (!animationRunning.current && deleteOpen.current) {
+                if (!animationRunning.current && swipeButtonOpen.current) {
                     // https://docs.expo.io/versions/latest/sdk/haptics/
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Animated.timing(swipeOpacities[key], {
@@ -189,7 +186,7 @@ function YourCards({ route, navigation }) {
                         useNativeDriver: false
                     }).start(() => {
                         animationRunning.current = false;
-                        deleteOpen.current = false;
+                        swipeButtonOpen.current = false;
                         swipeOpacities[key].setValue(1.0);
                     });
                     animationRunning.current = true;
@@ -202,7 +199,7 @@ function YourCards({ route, navigation }) {
             lockOpacity.setValue(1);
 
             if (value > lockThreshold) {
-                if (!animationRunning.current && !deleteOpen.current) {
+                if (!animationRunning.current && !swipeButtonOpen.current) {
                     // https://docs.expo.io/versions/latest/sdk/haptics/
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Animated.timing(swipeOpacities[key], {
@@ -216,13 +213,13 @@ function YourCards({ route, navigation }) {
                         useNativeDriver: false
                     }).start(() => {
                         animationRunning.current = false;
-                        deleteOpen.current = true;
+                        swipeButtonOpen.current = true;
                         swipeOpacities[key].setValue(0.0);
                     });
                     animationRunning.current = true;
                 }
             } else {
-                if (!animationRunning.current && deleteOpen.current) {
+                if (!animationRunning.current && swipeButtonOpen.current) {
                     // https://docs.expo.io/versions/latest/sdk/haptics/
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     Animated.timing(swipeOpacities[key], {
@@ -236,7 +233,7 @@ function YourCards({ route, navigation }) {
                         useNativeDriver: false
                     }).start(() => {
                         animationRunning.current = false;
-                        deleteOpen.current = false;
+                        swipeButtonOpen.current = false;
                         swipeOpacities[key].setValue(1.0);
                     });
                     animationRunning.current = true;
@@ -245,9 +242,6 @@ function YourCards({ route, navigation }) {
                 }
             }
         }
-        
-        setSwipeWidths(swipeWidths);
-        setSwipeOpacities(swipeOpacities);
     };
 
     const swipeGestureEnded = (key, data) => {
@@ -310,16 +304,16 @@ function YourCards({ route, navigation }) {
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                 <View style={styles.cardBackWrapper}>
                                     <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                        <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key], opacity: deleteOpacity }]}>
+                                        <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
                                             <Ionicons
                                                 name="trash-outline"
                                                 color="white"
                                                 size={25}
                                             ></Ionicons>
                                         </Animated.View>
-                                        <Animated.View style={[styles.cardLock, { width: swipeWidths[data.item.key], opacity: lockOpacity }]}>
+                                        <Animated.View style={[styles.cardLock, { width: swipeWidths[data.item.key] }]}>
                                             <Ionicons
-                                                name="trash-outline"
+                                                name="eye-off-outline"
                                                 color="white"
                                                 size={25}
                                             ></Ionicons>
