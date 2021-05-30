@@ -125,6 +125,7 @@ function DisplayCard({route, navigation}) {
     const toggleDisplayCard = () => {
         storage.setDisabledCards(cardId);
         user.setMainNeedsUpdate(true);
+        navigation.navigate('YourCards', { forceLoad: true });
     }
 
     return (

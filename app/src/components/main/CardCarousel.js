@@ -37,7 +37,7 @@ export function CardCarousel(
     
     // check for disabled cards
     const updateIfNeeded = async () => {
-        if (!hasConstructed) {
+        // if (!hasConstructed) {
             setDisabledCards(await getDisabledCards());
 
             // remove disabled cards from array
@@ -48,9 +48,9 @@ export function CardCarousel(
                     }
                 }
 
-                setHasConstructed(true);
+                // setHasConstructed(true);
             }
-        }
+        // }
     }
     updateIfNeeded();
 
