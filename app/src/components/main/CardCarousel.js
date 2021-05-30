@@ -1,8 +1,7 @@
 import React, { 
     useState, 
     useRef, 
-    useCallback,
-    useEffect
+    useCallback
 } from 'react';
 import { 
     View, 
@@ -14,7 +13,6 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
 import { Wave } from 'react-native-animated-spinkit';
-import * as storage from '../../local/storage';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,27 +30,7 @@ export function CardCarousel(
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
-    // const [disabledCards, setDisabledCards] = useState([]);
-    // const [hasConstructed, setHasConstructed] = useState(false);
     
-    // // check for disabled cards
-    // const updateIfNeeded = async () => {
-    //     // if (!hasConstructed) {
-    //         setDisabledCards(await getDisabledCards());
-
-    //         // remove disabled cards from array
-    //         if (recCards != null) {
-    //             for (let i = 0; i < recCards.length; i++) {
-    //                 if (disabledCards.includes(recCards[i].cardId)) {
-    //                     recCards.splice(i, 1);
-    //                 }
-    //             }
-
-    //             // setHasConstructed(true);
-    //         }
-    //     // }
-    // }
-    // updateIfNeeded();
 
     recommendedCardPressed = (item) => {
         if (item !== null) {

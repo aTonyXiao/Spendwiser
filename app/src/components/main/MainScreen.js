@@ -47,7 +47,6 @@ export function MainScreen({navigation}) {
     const [userLocation, setUserLocation] = useState(null);
     const [internetState, setInternetState] = useState(false);
     const internetRef = useRef(false);
-    // const [disabledCards, setDisabledCards] = useState([]);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
@@ -101,27 +100,24 @@ export function MainScreen({navigation}) {
         return new Promise((resolve, reject) => {
             storage.getDisabledCards((val) => {
                 let cardIdList = val['cards'];
-                // console.log('got disabled cards`')
-                // console.log(cardIdList)
                 resolve(cardIdList);
             });
         })
     }
 
+    /**
+     * Sets the ranked cards and checks for disabled cards
+     * @param {array} myRankedCards - the array of ranked cards objects
+     */
     function getRecCardFromDB(myRankedCards) {
         // check for disabled cards
         getDisabledCards().then((data) => {
-            console.log(data);
             let disabledCards = data;
-            for (let i = 0; i < myRankedCards.length; i++) {
+            for (let i=0 ; i<myRankedCards.length ; i++) {
                 if (disabledCards.includes(myRankedCards[i].cardId)) {
                     myRankedCards.splice(i, 1);
                 }
             }
-            // console.log('DISABLED CARD')
-            // console.log(disabledCards);
-            // console.log('RANKED CARDs')
-            // console.log(myRankedCards);
 
             setRecCards(myRankedCards);
         })

@@ -86,35 +86,25 @@ function CardImage(props) {
   }
   constructor();
 
-  // const toggleDisplayCard = () => {
-  //   storage.setDisabledCards(props.cardId);
-  //   user.setMainNeedsUpdate(true);
-  //   setIsCardDisabled(!isCardDisabled);
-  // }
-
   if (props.default) {
     let generatedColor = generateColor(props.overlay);
     return (
-      // <DoubleTap onDoubleTap={toggleDisplayCard}>
-        <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
-          <ImageBackground style={styles.innerImage}
-            source={require('../../../assets/cards/blank.png')}
-            imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
-            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
-          </ImageBackground>
-        </View>
-      // </DoubleTap>
+      <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
+        <ImageBackground style={styles.innerImage}
+          source={require('../../../assets/cards/blank.png')}
+          imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+          <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+        </ImageBackground>
+      </View>
     );
   } else {
     return (
-      // <DoubleTap onDoubleTap={toggleDisplayCard}>
-        <View style={isCardDisabled ? styles.faded : {}}>
-          <CachedImage
-            style={[styles.outerImage, props.style]}
-            source={{ uri: props.source }}
-          />
-        </View>
-      // </DoubleTap>
+      <View style={isCardDisabled ? styles.faded : {}}>
+        <CachedImage
+          style={[styles.outerImage, props.style]}
+          source={{ uri: props.source }}
+        />
+      </View>
     );
   }
 }
