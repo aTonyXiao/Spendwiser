@@ -32,40 +32,27 @@ export function CardCarousel(
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
-    const [disabledCards, setDisabledCards] = useState([]);
-    const [hasConstructed, setHasConstructed] = useState(false);
+    // const [disabledCards, setDisabledCards] = useState([]);
+    // const [hasConstructed, setHasConstructed] = useState(false);
     
-    // check for disabled cards
-    const updateIfNeeded = async () => {
-        // if (!hasConstructed) {
-            setDisabledCards(await getDisabledCards());
+    // // check for disabled cards
+    // const updateIfNeeded = async () => {
+    //     // if (!hasConstructed) {
+    //         setDisabledCards(await getDisabledCards());
 
-            // remove disabled cards from array
-            if (recCards != null) {
-                for (let i = 0; i < recCards.length; i++) {
-                    if (disabledCards.includes(recCards[i].cardId)) {
-                        recCards.splice(i, 1);
-                    }
-                }
+    //         // remove disabled cards from array
+    //         if (recCards != null) {
+    //             for (let i = 0; i < recCards.length; i++) {
+    //                 if (disabledCards.includes(recCards[i].cardId)) {
+    //                     recCards.splice(i, 1);
+    //                 }
+    //             }
 
-                // setHasConstructed(true);
-            }
-        // }
-    }
-    updateIfNeeded();
-
-    /**
-    * calls storage function to check if card is disabled
-    * @returns {array} - is the card disabled or not
-    */
-    async function getDisabledCards() {
-        return new Promise((resolve, reject) => {
-            storage.getDisabledCards((val) => {
-                let cardIdList = val['cards'];
-                resolve(cardIdList);
-            });
-        })
-    }
+    //             // setHasConstructed(true);
+    //         }
+    //     // }
+    // }
+    // updateIfNeeded();
 
     recommendedCardPressed = (item) => {
         if (item !== null) {

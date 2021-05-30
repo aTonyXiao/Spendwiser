@@ -770,6 +770,7 @@ export const setDisabledCards = async (cardId) => {
                 cardIdList.push(cardId);
                 const newVal = JSON.stringify({'cards':cardIdList});
                 await AsyncStorage.setItem('disabledCards', newVal);
+                console.log('finished')
             }
         }
     } catch (e) {

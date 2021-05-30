@@ -15,6 +15,7 @@ import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
+import * as storage from '../../local/storage';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -46,6 +47,7 @@ export function MainScreen({navigation}) {
     const [userLocation, setUserLocation] = useState(null);
     const [internetState, setInternetState] = useState(false);
     const internetRef = useRef(false);
+    // const [disabledCards, setDisabledCards] = useState([]);
 
     // Use case: Have location but no internet
     function setOfflineMode(coords) {
@@ -91,8 +93,38 @@ export function MainScreen({navigation}) {
             return false;
     }
 
+    /**
+    * calls storage function to check if card is disabled
+    * @returns {array} - is the card disabled or not
+    */
+     async function getDisabledCards() {
+        return new Promise((resolve, reject) => {
+            storage.getDisabledCards((val) => {
+                let cardIdList = val['cards'];
+                // console.log('got disabled cards`')
+                // console.log(cardIdList)
+                resolve(cardIdList);
+            });
+        })
+    }
+
     function getRecCardFromDB(myRankedCards) {
-        setRecCards(myRankedCards);
+        // check for disabled cards
+        getDisabledCards().then((data) => {
+            console.log(data);
+            let disabledCards = data;
+            for (let i = 0; i < myRankedCards.length; i++) {
+                if (disabledCards.includes(myRankedCards[i].cardId)) {
+                    myRankedCards.splice(i, 1);
+                }
+            }
+            // console.log('DISABLED CARD')
+            // console.log(disabledCards);
+            // console.log('RANKED CARDs')
+            // console.log(myRankedCards);
+
+            setRecCards(myRankedCards);
+        })
     }
 
     // Called when changing store to reload recommended cards
