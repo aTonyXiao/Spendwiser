@@ -100,7 +100,7 @@ function CardImage(props) {
         <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
           <ImageBackground style={styles.innerImage}
             source={require('../../../assets/cards/blank.png')}
-            imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+            imageStyle={{ tintColor: generatedColor, resizeMode: "contain" }}>
             <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
           </ImageBackground>
         </View>
