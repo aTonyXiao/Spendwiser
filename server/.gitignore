@@ -16,11 +16,8 @@ firebase_admin.json
 # macOS
 .DS_Store
 
-# db artifacts
-database/
-
 #ssl
-cert/
+cert/*.pem
 
 #node
 package-lock.json

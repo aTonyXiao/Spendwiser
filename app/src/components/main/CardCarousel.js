@@ -28,26 +28,28 @@ export function CardCarousel(
         recCards,
         navigation,
         storeArr,
-        curStoreKey, 
+        curStoreKey,
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
     const [disabledCards, setDisabledCards] = useState([]);
-
+    const [hasConstructed, setHasConstructed] = useState(false);
     // check for disabled cards
     useEffect(() => {
         const updateIfNeeded = async () => {
-            setDisabledCards(await getDisabledCards());
+            if (!hasConstructed) {
+                setDisabledCards(await getDisabledCards());
 
-            // remove disabled cards from array
-            if (recCards != null) {
-                for (let i = 0; i < recCards.length; i++) {
-                    if (disabledCards.includes(recCards[i].cardId)) {
-                        recCards.splice(i, 1);
+                // remove disabled cards from array
+                if (recCards != null) {
+                    for (let i = 0; i < recCards.length; i++) {
+                        if (disabledCards.includes(recCards[i].cardId)) {
+                            recCards.splice(i, 1);
+                        }
                     }
-                }
 
-                setHasConstructed(true);
+                    setHasConstructed(true);
+                }
             }
         }
         updateIfNeeded();

@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // allow reads and writes to the cards if authenticated
+    match /cards/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    // allow reads and writes to the user if authenticated
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
