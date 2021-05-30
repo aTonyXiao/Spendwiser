@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { appBackend } from '../network/backend';
+import { useIsFocused } from '@react-navigation/native';
 
 async function redirectToMain() {
     navigation.navigate('Main');
@@ -14,6 +15,7 @@ let globalDebugRedirectBasedOnLoginStatus = false;
 async function handleRedirectsBasedOnLoginStatus(navigation) {
     if (globalDebugRedirectBasedOnLoginStatus) {
         appBackend.userLoggedIn((loggedIn) => {
+            console.log("Logged in?", loggedIn);
             if (loggedIn) {
                 navigation.navigate('Main');
             } else {
@@ -35,9 +37,13 @@ function LoadingScreen({navigation}) {
     // For now, you can disable redirects based on login status by
     // setting the global boolean to false
     globalDebugRedirectBasedOnLoginStatus = true;
-    appBackend.onAuthStateChange(() => {
-        handleRedirectsBasedOnLoginStatus(navigation);
-    });
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        appBackend.onAuthStateChange(() => {
+            handleRedirectsBasedOnLoginStatus(navigation);
+        });
+    }, [isFocused]);
 
     return (
         <View style={styles.screen}>

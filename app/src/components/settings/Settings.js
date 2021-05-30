@@ -26,6 +26,10 @@ let Settings = (props) => {
     const navigation = props.navigation;
     const width = Dimensions.get('window').width;
 
+    function sendBackToLoadingScreen() {
+        props.navigation.popToTop();
+    }
+
     return (
         <SafeAreaView style={mainStyles.screen}>
             <View style={mainStyles.bodyContainer}>
@@ -144,8 +148,7 @@ let Settings = (props) => {
                                 [
                                     {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
                                     {text: 'YES', onPress: () => {
-                                        appBackend.signOut();
-                                        props.navigation.popToTop();
+                                        appBackend.signOut(sendBackToLoadingScreen);
                                     }}
                                 ]
                             );

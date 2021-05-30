@@ -516,7 +516,7 @@ class FirebaseBackend extends BaseBackend {
     /**
      * Sign out the currently logged in user
      */
-    signOut() {
+    signOut(callback) {
         storage.getLoginState((state) => {
             if (state == null) return;
 
@@ -525,10 +525,13 @@ class FirebaseBackend extends BaseBackend {
                 if (onAuthStateChangeCallback != null) {
                     onAuthStateChangeCallback();
                 }
+                callback();
+                return;
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
                     storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
+                    callback();
                     return;
                 }).catch((error) => {
                     // An error happened.
