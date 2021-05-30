@@ -50,7 +50,6 @@ function YourCards({ route, navigation }) {
     const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
     const focused = useIsFocused();
 
-    const deleteOpacity = new Animated.Value(0.0), lockOpacity = new Animated.Value(0.0);
     const resetAnimationValues = key => {
         if (typeof swipeDeleteWidths[key] === "undefined") {
             swipeDeleteWidths[key] = new Animated.Value(0);
@@ -103,6 +102,10 @@ function YourCards({ route, navigation }) {
             resetAnimationValues(index);
         });
     }
+
+    const lockCard = (card, index) => {
+        // need card locking logic
+    }
     
     const confirmDelete = (card, index) => {
         Alert.alert(
@@ -114,6 +117,11 @@ function YourCards({ route, navigation }) {
             ]
           );
     };
+
+    const confirmSwipeAction = (card, index) => {
+        if (swipeDeleteWidths[index].__getValue() === 0) lockCard(card, index);
+        else confirmDelete(card, index);
+    }
 
     if (cards.length == 0) {
         return (
@@ -202,7 +210,8 @@ function YourCards({ route, navigation }) {
     const swipeGestureEnded = (key, data) => {
         if (Math.abs(data.translateX) > swipeThreshold) {
             let index = parseInt(key);
-            deleteCard(cards[index], index);
+            if (data.translateX < 0) deleteCard(cards[index], index);
+            else lockCard(cards[index], index);
         }
     };
 
@@ -258,7 +267,7 @@ function YourCards({ route, navigation }) {
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                 <View style={styles.cardBackWrapper}>
-                                    <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
+                                    <TouchableOpacity style={styles.cardBack} onPress={() => confirmSwipeAction(data.item, cards.indexOf(data.item))}>
                                         <Animated.View style={[styles.cardDelete, { width: swipeDeleteWidths[data.item.key] }]}>
                                             <Ionicons
                                                 name="trash-outline"
