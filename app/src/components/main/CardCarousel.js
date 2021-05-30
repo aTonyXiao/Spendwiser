@@ -1,5 +1,6 @@
 import React, { 
     useState, 
+    useEffect,
     useRef, 
     useCallback
 } from 'react';
@@ -13,6 +14,7 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
 import { Wave } from 'react-native-animated-spinkit';
+import { refreshAsync } from 'expo-apple-authentication';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -31,6 +33,11 @@ export function CardCarousel(
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
     
+    useEffect(() => {
+        setRecIdx(0);
+        if (ref.current !== null)
+            ref.current.snapToItem(0);
+    }, [recCards]);
 
     recommendedCardPressed = (item) => {
         if (item !== null) {
