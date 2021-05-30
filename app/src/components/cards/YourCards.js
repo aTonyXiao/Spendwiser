@@ -288,6 +288,7 @@ function YourCards({ route, navigation }) {
                         )}
                         rightOpenValue={-100}
                         leftOpenValue={100}
+                        disableRightSwipe={true} // comment this out to enable lock swiping
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
