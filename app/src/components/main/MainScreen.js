@@ -15,6 +15,7 @@ import { StatusBar } from 'expo-status-bar';
 import { MainButtons } from './MainButtons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import mainStyles from '../../styles/mainStyles';
+import * as storage from '../../local/storage';
 
 const googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
 const googlePlaceSearchRadius = "&radius=100&key=";
@@ -91,8 +92,35 @@ export function MainScreen({navigation}) {
             return false;
     }
 
+    /**
+    * calls storage function to check if card is disabled
+    * @returns {array} - is the card disabled or not
+    */
+     async function getDisabledCards() {
+        return new Promise((resolve, reject) => {
+            storage.getDisabledCards((val) => {
+                let cardIdList = val['cards'];
+                resolve(cardIdList);
+            });
+        })
+    }
+
+    /**
+     * Sets the ranked cards and checks for disabled cards
+     * @param {array} myRankedCards - the array of ranked cards objects
+     */
     function getRecCardFromDB(myRankedCards) {
-        setRecCards(myRankedCards);
+        // check for disabled cards
+        getDisabledCards().then((data) => {
+            let disabledCards = data;
+            let rankedEnabledCards = [];
+            for (let i=0 ; i< myRankedCards.length ; i++) {
+                if (!(disabledCards.includes(myRankedCards[i].cardId))) {
+                    rankedEnabledCards.push(myRankedCards[i]);
+                }
+            }
+            setRecCards(rankedEnabledCards);
+        })
     }
 
     // Called when changing store to reload recommended cards
