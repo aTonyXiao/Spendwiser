@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import { syncLocalDatabase, syncRemoteDatabase } from '../../local/sync'
 import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
