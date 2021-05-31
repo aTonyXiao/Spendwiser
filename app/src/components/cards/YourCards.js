@@ -277,7 +277,7 @@ function YourCards({ route, navigation }) {
                                         </Animated.View>
                                         <Animated.View style={[styles.cardLock, { width: swipeLockWidths[data.item.key] }]}>
                                             <Ionicons
-                                                name="eye-off-outline"
+                                                name="lock-closed-outline"
                                                 color="white"
                                                 size={25}
                                             ></Ionicons>
