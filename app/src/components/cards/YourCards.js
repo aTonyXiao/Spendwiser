@@ -258,9 +258,8 @@ function YourCards({ route, navigation }) {
                                     <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                         <Card key={data.item.docId} props={props} />
                                     </Animated.View>
-                                    {data.item.key < cards.length-1 && // render divider bar for all cards except for last card
-                                        <View style={styles.divider}></View>
-                                    }
+                                    { /* render divider bar for all cards except for last card */ }
+                                    <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
                                 </View>
                             )
                         }}

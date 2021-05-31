@@ -47,6 +47,7 @@ function DisplayCard({route, navigation}) {
     const [currentTransaction, setCurrentTransaction] = useState(null);
     const [showEditTransactionModal, setShowEditTransactionModal] = useState(false);
     const [showTransactionsList, setShowTransactionsList] = useState(origin !== "main" ? true : false);
+    // const [disableOrUndisable, setDisableOrUndisable] = useState("Dis")
 
     const constructor = () => { 
         if (hasConstructed) { 
@@ -119,6 +120,12 @@ function DisplayCard({route, navigation}) {
         let newTransactions = [...transactions];
         newTransactions.splice(newTransactions.length - 1 - key, 1);
         setTransactions(newTransactions);
+    }
+
+    const toggleDisplayCard = () => {
+        storage.setDisabledCards(cardId);
+        user.setMainNeedsUpdate(true);
+        navigation.navigate('YourCards', { forceLoad: true });
     }
 
     return (
@@ -285,6 +292,9 @@ function DisplayCard({route, navigation}) {
                     {
                         (origin !== "main") &&
                         <View>
+                            <TouchableOpacity style={styles.deleteContainer} onPress={toggleDisplayCard}>
+                                <Text style={styles.deleteText}>Disable/Undisable this card </Text>
+                            </TouchableOpacity>
                             <TouchableOpacity style={styles.deleteContainer} onPress={confirmDelete}>
                                 <Text style={styles.deleteText}>Delete this card</Text>
                             </TouchableOpacity>

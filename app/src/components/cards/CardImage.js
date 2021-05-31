@@ -10,6 +10,7 @@ import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
 import { DoubleTap } from '../util/DoubleTap';
 import { user } from '../../network/user';
+import { Ionicons } from '@expo/vector-icons';
 
 /**
  * Generates a contrasting rgb value based on the supplied parameter
@@ -82,40 +83,52 @@ function CardImage(props) {
       return;
     } else {
       setIsCardDisabled(await getIsCardDisabled(props.cardId));
-      setHasConstructed(true);
     }
   }
   constructor();
 
-  const toggleDisplayCard = () => {
-    storage.setDisabledCards(props.cardId);
-    user.setMainNeedsUpdate(true);
-    setIsCardDisabled(!isCardDisabled);
-  }
-
   if (props.default) {
     let generatedColor = generateColor(props.overlay);
     return (
-      <DoubleTap onDoubleTap={toggleDisplayCard}>
+      <View>
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+          {
+            isCardDisabled && <Ionicons
+                name="lock-closed"
+                color={'black'}
+                size={50}
+            ></Ionicons>
+          }
+        </View>
         <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
           <ImageBackground style={styles.innerImage}
             source={require('../../../assets/cards/blank.png')}
-            imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+            imageStyle={{ tintColor: generatedColor, resizeMode: "contain" }}>
             <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
           </ImageBackground>
         </View>
-      </DoubleTap>
+      </View>
     );
   } else {
     return (
-      <DoubleTap onDoubleTap={toggleDisplayCard}>
+      <View>
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+          {
+            isCardDisabled && <Ionicons
+                name="lock-closed"
+                color={'black'}
+                size={50}
+            ></Ionicons>
+          }
+        </View>
         <View style={isCardDisabled ? styles.faded : {}}>
           <CachedImage
             style={[styles.outerImage, props.style]}
             source={{ uri: props.source }}
           />
         </View>
-      </DoubleTap>
+      </View>
+      
     );
   }
 }
@@ -136,7 +149,7 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   faded: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   overlay: {
     textAlign: 'right',

@@ -18,23 +18,25 @@ export class DoubleTap extends React.Component {
   static defaultProps = {
     delay: 300,
     onDoubleTap: () => null,
+    // onSingletap: () => null
   };
 
   lastTap = null;
 
   // https://gist.github.com/brunotavares/3c9a373ba5cd1b4ff28b
-  handleDoubleTap = () => {
+  handleTap = () => {
     const now = Date.now();
     if (this.lastTap && (now - this.lastTap) < this.props.delay) {
       this.props.onDoubleTap();
     } else {
       this.lastTap = now;
+      // this.props.onSingletap();
     }
   }
 
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this.handleDoubleTap}>
+      <TouchableWithoutFeedback onPress={this.handleTap}>
         {this.props.children}
       </TouchableWithoutFeedback>
     );

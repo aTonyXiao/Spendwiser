@@ -1,8 +1,8 @@
 import React, { 
     useState, 
+    useEffect,
     useRef, 
-    useCallback,
-    useEffect
+    useCallback
 } from 'react';
 import { 
     View, 
@@ -14,7 +14,7 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
 import { Wave } from 'react-native-animated-spinkit';
-import * as storage from '../../local/storage';
+import { refreshAsync } from 'expo-apple-authentication';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,41 +32,12 @@ export function CardCarousel(
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
-    const [disabledCards, setDisabledCards] = useState([]);
-    const [hasConstructed, setHasConstructed] = useState(false);
-    // check for disabled cards
+    
     useEffect(() => {
-        const updateIfNeeded = async () => {
-            if (!hasConstructed) {
-                setDisabledCards(await getDisabledCards());
-
-                // remove disabled cards from array
-                if (recCards != null) {
-                    for (let i = 0; i < recCards.length; i++) {
-                        if (disabledCards.includes(recCards[i].cardId)) {
-                            recCards.splice(i, 1);
-                        }
-                    }
-
-                    setHasConstructed(true);
-                }
-            }
-        }
-        updateIfNeeded();
-    })
-
-    /**
-    * calls storage function to check if card is disabled
-    * @returns {array} - is the card disabled or not
-    */
-    async function getDisabledCards() {
-        return new Promise((resolve, reject) => {
-            storage.getDisabledCards((val) => {
-                let cardIdList = val['cards'];
-                resolve(cardIdList);
-            });
-        })
-    }
+        setRecIdx(0);
+        if (ref.current !== null)
+            ref.current.snapToItem(0);
+    }, [recCards]);
 
     recommendedCardPressed = (item) => {
         if (item !== null) {
@@ -113,7 +84,7 @@ export function CardCarousel(
                         storeInformation: storeArr[curStoreKey]
                     })}
                     style={{paddingVertical: 20, paddingHorizontal: 30, backgroundColor: '#5F9EA0', borderRadius: 3, marginTop: 10}}>
-                    <Text style={{textAlign: 'center'}}>You currently have no cards. {"\n"} Click here to get started!</Text>
+                    <Text style={{textAlign: 'center'}}>You have no enabled cards. {"\n"} Click here to get started!</Text>
                 </TouchableOpacity>
                 :
                 <View>

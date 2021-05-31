@@ -6,6 +6,7 @@ import BaseBackend from './basebackend';
 import GoogleLogin from './firebase/google_login'
 import FacebookLogin from './firebase/facebook_login'
 import * as storage from '../../local/storage'
+import { syncLocalDatabase, syncRemoteDatabase } from '../../local/sync'
 import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
@@ -53,6 +54,18 @@ class ServerBackend extends BaseBackend {
                 // in as an offline account
             }
         });
+
+        let hasSyncedRemote = false;
+        if (!hasSyncedRemote) {
+            syncRemoteDatabase();
+            hasSyncedRemote = true;
+        }
+
+        // Sync the local database every 30 seconds
+        setInterval(async () => {
+            await syncLocalDatabase();
+            // only sync remote once
+        }, 30000);
     }
 
     /**
@@ -72,27 +85,9 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
-     * where the callback is called for each document in the collection
-     * reference: https://firebase.google.com/docs/firestore/quickstart
-     *
-     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
-     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
-     *                             (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)
-     * @param {function} callback - Function that will be invoked to give the caller the data in JSON
-     *
-     * @example
-     * appBackend.dbGet("experimental.exp2", (data) => {
-     *     console.log(data);
-     * });
-     * 
-     * @example
-     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)
-     * appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
-     *   console.log(data);
-     * });
+     * Get the data from the remote database
      */
-    dbGet(location, ...conditionsWithCallback) {
+    remoteDBGet(location, ...conditionsWithCallback) {
         let uri = location.replaceAll(".", "/");
         let callback = conditionsWithCallback.pop();
         let conditions = conditionsWithCallback;
@@ -128,6 +123,35 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+     * where the callback is called for each document in the collection
+     * reference: https://firebase.google.com/docs/firestore/quickstart
+     *
+     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'
+     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
+     *                             (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)
+     * @param {function} callback - Function that will be invoked to give the caller the data in JSON
+     *
+     * @example
+     * appBackend.dbGet("experimental.exp2", (data) => {
+     *     console.log(data);
+     * });
+     * 
+     * @example
+     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)
+     * appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
+     *   console.log(data);
+     * });
+     */
+     async dbGet(location, ...conditionsWithCallback) {
+        let callback = conditionsWithCallback.pop();
+        let conditions = conditionsWithCallback;
+        this.getUserID((accountId) => {
+            storage.getLocalDB(accountId, location, ...conditions, callback);
+        });
+    }
+
 
     // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**
@@ -143,6 +167,25 @@ class ServerBackend extends BaseBackend {
      * })
      */
     dbGetSubCollections(location, callback) {
+        this.userAccountType((type) => {
+            if (type == 'normal') {
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
+                        callback(local_collection);
+                    });
+                });
+            } else {
+                this.getUserID((accountId) => {
+                    storage.getSubcollectionLocalDB(accountId, location, callback);
+                });
+            }
+        })
+    }
+
+    /**
+     * Get sub collections (remote)
+     */
+    dbGetSubCollectionsRemote(location, callback) {
         let uri = location.replaceAll(".", "/");
         let collection = [];
         this.getUserToken((user_token) => {
@@ -163,6 +206,88 @@ class ServerBackend extends BaseBackend {
                 console.log(err);
             });
         });
+    }
+
+    idk(location, callback) {
+        console.log("called idk")
+        this.getUserID((accountId) => {
+            this.userAccountType((type) => {
+                if (type == 'normal') {
+                    storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
+                        // get local collection names to check for matching ids later
+                        let localIds = [];
+                        local_collection.forEach(doc => {
+                            localIds.push(doc.cardId);
+                        })
+
+                        // console.log('local ids')
+                        // console.log(localIds);
+
+                        let dbloc = getDatabaseLocation(this.database, location);
+                        // check firebase documents by matching id
+                        dbloc.get().then((query) => {
+                            var checkForFirebaseCards = new Promise((resolve, reject) => {
+                                var querySize = query.size; // firebase .get() isn't of array type so get length this way
+                                var index = 0;
+
+                                if (querySize == 0) resolve();
+                                query.forEach(doc => {
+                                    var currentDoc = doc.data();
+                                    currentDoc["docId"] = doc.id;
+
+                                    // add to local db if list of local ids doesn't contain the current firebase id
+                                    if (!localIds.includes(doc.id)) {
+                                        local_collection.push(currentDoc);
+
+                                        // console.log('adding ' + doc.id)
+                                        // get card information from firebase to add to local card database
+                                        const cardLocation = getDatabaseLocation(this.database, "cards." + currentDoc.cardId);
+                                        cardLocation.get().then((cardData) => {
+                                            // add card to cards local
+                                            storage.addLocalDB(accountId, "cards", cardData.data(), true, (local_query_id) => {
+                                                storage.modifyDBEntryMetainfo(accountId, "cards", true, local_query_id, doc.id, () => {
+                                                    // add card to user cards list
+                                                    storage.addLocalDB(accountId, "users." + accountId + ".cards", currentDoc, true, () => {
+                                                        // console.log('added ' + doc.id);
+                                                        index += 1;
+                                                        if (index == querySize) {
+                                                            // console.log('resolving')
+                                                            resolve();
+                                                        }
+                                                        // console.log('indexed, now at ' + index)
+                                                        // storage.printLocalDB();
+                                                    })
+                                                })
+                                            })
+                                        })
+                                    } else {
+                                        index += 1;
+                                    }
+                                })
+                            })
+
+                            // wait for storage to add cards to local database to finish before executing callback
+                            checkForFirebaseCards.then(() => {
+                                console.log('RESOLVED');
+
+                                // console.log('local collection: ')
+                                // console.log(local_collection)
+
+                                // console.log('storage')
+                                // storage.printLocalDB();
+                                
+
+                                callback(local_collection);
+                            })
+                        })
+                    });
+
+                // offline mode
+                } else {
+                    storage.getSubcollectionLocalDB(accountId, location, callback);
+                }
+            })
+        })
     }
 
     /** 
@@ -210,6 +335,21 @@ class ServerBackend extends BaseBackend {
      * });
      */
     dbSet(location, data, merge = false, callback) {
+        storage.getLoginState((state) => {
+            this.getUserID((accountId) => {
+                // Store locally
+                console.log("Setting local db")
+                storage.setLocalDB(accountId, location, data, merge, () => {
+                    callback();
+                });
+            });
+        })
+    }
+
+    /**
+     * DB set (remote)
+     */
+    remoteDBSet(location, data, merge = false, callback) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
@@ -244,7 +384,20 @@ class ServerBackend extends BaseBackend {
      *     console.log(id);
      * });
      */
-    dbAdd(location, data, callback) {
+     dbAdd(location, data, callback) {
+        // Add card data to our internal storage
+        // NOTE: This will get synced at regular intervals with firebase
+        this.getUserID((accountId) => {
+            storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
+                callback(local_query_id);
+            });
+        });
+    }
+
+    /**
+     * DB add (remote)
+     */
+    remoteDBAdd(location, data, callback) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
@@ -273,7 +426,13 @@ class ServerBackend extends BaseBackend {
      * @example
      * appBackend.dbDelete("users." + userId + ".cards." + docId);
      */
-    dbDelete(location) {
+     dbDelete(location) {
+        this.getUserID((userId) => {
+            storage.deleteLocalDB(userId, location);
+        });
+    }
+
+    remoteDBDelete(location) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
@@ -352,7 +511,7 @@ class ServerBackend extends BaseBackend {
     /**
      * Sign out the currently logged in user
      */
-    signOut() {
+    signOut(callback) {
         storage.getLoginState((state) => {
             if (state == null) return;
 
@@ -361,10 +520,13 @@ class ServerBackend extends BaseBackend {
                 if (onAuthStateChangeCallback != null) {
                     onAuthStateChangeCallback();
                 }
+                callback();
+                return;
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
                     storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal', 'user_token': '' });
+                    callback();
                     return;
                 }).catch((error) => {
                     // An error happened.
@@ -481,15 +643,32 @@ class ServerBackend extends BaseBackend {
      * 
      */
     getUserInfo() {
-        let userData = firebase.auth().currentUser;
-
-        return {
-            name: userData.displayName,
-            email: userData.email,
-            emailVerified: userData.emailVerified,
-            lastLogin: userData.lastLogin,
-            photoURL: userData.photoURL,
-        }
+        return new Promise((resolve, reject) => {
+            storage.getLoginState((loginStatus) => {
+                if (loginStatus.signed_in == false) {
+                    reject();
+                }
+                if (loginStatus.account_type == "offline") {
+                    resolve({
+                        name: "Offline Account",
+                        email: "N/A",
+                        emailVerified: false,
+                        lastLogin: "N/A",
+                        photoURL: "",
+                    });
+                } else {
+                    let userData = firebase.auth().currentUser;
+    
+                    resolve({
+                        name: userData.displayName,
+                        email: userData.email,
+                        emailVerified: userData.emailVerified,
+                        lastLogin: userData.lastLogin,
+                        photoURL: userData.photoURL,
+                    });
+                }
+            })
+        })
     }
 }
 
