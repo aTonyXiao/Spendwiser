@@ -24,7 +24,8 @@ export function PieChartSummary({
         }
       })
     const deviceWidth = Dimensions.get('window').width;
-    const iconArray = ["fast-food", "cart", "medkit", "car", "construct", "airplane", "archive"]
+    const iconArray = ["fast-food", "cart", "medkit", "car", "construct", "airplane", "archive"];
+
      // Render legend in flatlist
     function renderLegend({cat, index}) {
       if (values[index] !== 0) {
