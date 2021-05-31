@@ -10,6 +10,7 @@ import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
 import { DoubleTap } from '../util/DoubleTap';
 import { user } from '../../network/user';
+import { Ionicons } from '@expo/vector-icons';
 
 /**
  * Generates a contrasting rgb value based on the supplied parameter
@@ -99,12 +100,24 @@ function CardImage(props) {
     );
   } else {
     return (
-      <View style={isCardDisabled ? styles.faded : {}}>
-        <CachedImage
-          style={[styles.outerImage, props.style]}
-          source={{ uri: props.source }}
-        />
+      <View>
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+          {
+            isCardDisabled && <Ionicons
+                name="lock-closed"
+                color={'black'}
+                size={50}
+            ></Ionicons>
+          }
+        </View>
+        <View style={isCardDisabled ? styles.faded : {}}>
+          <CachedImage
+            style={[styles.outerImage, props.style]}
+            source={{ uri: props.source }}
+          />
+        </View>
       </View>
+      
     );
   }
 }
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   faded: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   overlay: {
     textAlign: 'right',
