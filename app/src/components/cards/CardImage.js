@@ -90,12 +90,23 @@ function CardImage(props) {
   if (props.default) {
     let generatedColor = generateColor(props.overlay);
     return (
-      <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
-        <ImageBackground style={styles.innerImage}
-          source={require('../../../assets/cards/blank.png')}
-          imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
-          <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
-        </ImageBackground>
+      <View>
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+          {
+            isCardDisabled && <Ionicons
+                name="lock-closed"
+                color={'black'}
+                size={50}
+            ></Ionicons>
+          }
+        </View>
+        <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
+          <ImageBackground style={styles.innerImage}
+            source={require('../../../assets/cards/blank.png')}
+            imageStyle={props.overlay.length == 0 ? {} : { tintColor: generatedColor, resizeMode: "contain" }}>
+            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+          </ImageBackground>
+        </View>
       </View>
     );
   } else {
