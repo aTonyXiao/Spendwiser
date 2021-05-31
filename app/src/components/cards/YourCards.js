@@ -16,11 +16,12 @@ import { useState, useRef, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, StackActions } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
+import * as storage from '../../local/storage';
 
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
@@ -104,7 +105,16 @@ function YourCards({ route, navigation }) {
     }
 
     const lockCard = (card, index) => {
-        // need card locking logic
+        if (card !== null) {
+            storage.setDisabledCards(card.cardId);
+            user.setMainNeedsUpdate(true);
+            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
+            // Force a a new YourCards to replace the current YourCards to trigger re-render
+            // Might not be the best
+            navigation.dispatch(
+                StackActions.replace('YourCards', {})
+            );
+        }
     }
     
     const confirmDelete = (card, index) => {
@@ -144,7 +154,7 @@ function YourCards({ route, navigation }) {
                     </View>
 
                     <View style={styles.emptyBodyContainer}>
-                    <   Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
+                    <Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
                     </View>
                 </View>
                 <View style={styles.footerContainer}>
@@ -287,7 +297,7 @@ function YourCards({ route, navigation }) {
                         )}
                         rightOpenValue={-100}
                         leftOpenValue={100}
-                        disableRightSwipe={true} // comment this out to enable lock swiping
+                        // disableRightSwipe={true} // comment this out to enable lock swiping
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
