@@ -11,6 +11,11 @@ export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Ca
     'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo', 'Travel'];
 
 class RecommendCard {
+    /**
+     * Function to convert google category name to the database's category format
+     * @param {string} googleCategory - selected store's category based on google places API
+     * @returns {string} - the translated category that fits our database
+     */
     getCategory(googleCategory) {
         if (dining.includes(googleCategory)) {
             return "dining";
@@ -29,6 +34,11 @@ class RecommendCard {
         }
     }
 
+    /**
+     * Function to get recommended cards ranked based on category given
+     * @param {string} googleCategory - selected store's category based on google places API
+     * @param {Function} callback - callback function
+     */
     // get user's cards ranked by category given
     async getRecCards(googleCategory, callback) {
         const userId = user.getUserId();

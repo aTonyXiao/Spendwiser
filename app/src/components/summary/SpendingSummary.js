@@ -55,10 +55,19 @@ export function SpendingSummary({navigation}) {
     const [categoriesLimit, setCategoriesLimit] = useState(Array(7).fill(0));
 
     const userId = user.getUserId();
+
+    /**
+     * A callback function that updates the state of cards array
+     * @param {Array} myCards - array of user's cards retrieved from the database
+     */
     function getCardFromDB(myCards) {
         setCards(myCards);
     }
 
+    /**
+     * Function to change the current category in summary mode
+     * @param {string} cat - new category to change to curCategory to
+     */
     function changeCategory(cat) {
         setCurCategory({
             label: cat,
@@ -66,6 +75,11 @@ export function SpendingSummary({navigation}) {
         });
     };
 
+
+    /**
+     * Function to change current card of the spend analyzer to filter transactions from
+     * @param {string} cardName - name of the card the user wants to view transactions from
+     */
     function setCurCardFromModal(cardName) {
         let curCardIdx = -1;
         if (cardName === "All Cards") {
@@ -84,6 +98,11 @@ export function SpendingSummary({navigation}) {
         setCurCategory({label: "All Categories", value: tmpValues.reduce((a, b) => a + b, 0)});
     };
 
+    /**
+     * Function to set new month period for COMPARE and BUDGET modes
+     * whichPeriod state determines if the user wants to set the first or second month period
+     * @param {Date} date - date object with month and year that the user has chosen to update to
+     */
     function setNewPeriod(date) {
         const dateSplit = date.split(' ');
         let newCompare = compareTimeframe;
@@ -98,7 +117,10 @@ export function SpendingSummary({navigation}) {
         getCompareTimeframeTransactions(newCompare)
     }
     
-    // Get transactions for compare mode
+    /**
+     * Get transactions based on parameter array's month period for COMPARE and BUDGET mode
+     * @param {Array} newCompareTimeframe - array of two Data objects 
+     */
     function getCompareTimeframeTransactions(newCompareTimeframe) {
         if (newCompareTimeframe.length === 0) {
             return;
@@ -118,13 +140,19 @@ export function SpendingSummary({navigation}) {
         }
     };
 
-    // Change category limits
+    /**
+     * Set and store new category limits for BUDGET mode
+     * @param {Array} newCategoriesLimit - an array of integers representing the limits of each category
+     */
     function changeCategoriesLimit(newCategoriesLimit) {
         setCategoriesLimit(newCategoriesLimit);
         storage.storeCategoriesLimit(newCategoriesLimit);
     }
 
-    // process each transaction retrieved from db after timeframe change
+    /**
+     * Process and add transaction to the values array if the transaction is within the card filter
+     * @param {Object} transaction - transaction object retrieved from database
+     */
     function processTransaction(transaction) {
         let tmpValues = values;
         if (curCard === null || transaction["cardId"] === curCard["cardId"])
@@ -135,7 +163,11 @@ export function SpendingSummary({navigation}) {
         });
     };
 
-     // Check if any new transactions added when screen is focused
+     /**
+      * useFocusEffect called when spend analyzer in focus
+      * Checks if spend analyzer screen requires update
+      * Requires update when transactions are added, edited, or deleted. Also when cards are added or deleted
+      */
      useFocusEffect(
         useCallback(() => {
             if (compareTimeframe.length !== 0) {
@@ -239,7 +271,11 @@ export function SpendingSummary({navigation}) {
         })
     )
 
-    // Get transactions from db when timeframe change
+    /**
+     * useEffect called on curTimeFrame state change
+     * Retrieve transactions from database based on new curTimeFrame
+     * Call to database function has a callback, processTransactions(), to add transaction data to value array
+     */
     useEffect(() => {
         setTransactions([]);
         setCurCategory({
@@ -255,7 +291,10 @@ export function SpendingSummary({navigation}) {
         });
     }, [curTimeframe]);
 
-    // Load card names and id, and COMPARE mode info when mount
+    /**
+     * useEffect called on mount
+     * Loads card names and id, and initialize COMPARE and BUDGET mode info
+     */
     useEffect(() => {
         summaryHelper.getDbCards(getCardFromDB);
         let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");

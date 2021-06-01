@@ -16,11 +16,12 @@ import { useState, useRef, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, StackActions } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
+import * as storage from '../../local/storage';
 
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
@@ -36,13 +37,14 @@ const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
  */
 function YourCards({ route, navigation }) {
     const [cards, setCards] = useState([]);
-    const [swipeWidths, setSwipeWidths] = useState({});
+    const [swipeDeleteWidths, setSwipeDeleteWidths] = useState({});
+    const [swipeLockWidths, setSwipeLockWidths] = useState({});
     const [swipeHeights, setSwipeHeights] = useState({});
     const [swipeOpacities, setSwipeOpacities] = useState({});
     const [rowRefs, setRowRefs] = useState({});
     const [isLoaded, setLoaded] = useState(false);
     const animationRunning = useRef(false);
-    const deleteOpen = useRef(false);
+    const swipeButtonOpen = useRef(false);
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
@@ -50,18 +52,17 @@ function YourCards({ route, navigation }) {
     const focused = useIsFocused();
 
     const resetAnimationValues = key => {
-        if (typeof swipeWidths[key] === "undefined") {
-            swipeWidths[key] = new Animated.Value(0);
+        if (typeof swipeDeleteWidths[key] === "undefined") {
+            swipeDeleteWidths[key] = new Animated.Value(0);
+            swipeLockWidths[key] = new Animated.Value(0);
             swipeHeights[key] = new Animated.Value(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key] = new Animated.Value(1.0);
         } else {
-            swipeWidths[key].setValue(0);
+            swipeDeleteWidths[key].setValue(0);
+            swipeLockWidths[key].setValue(0);
             swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key].setValue(1.0);
         }
-        setSwipeWidths(swipeWidths);
-        setSwipeHeights(swipeHeights);
-        setSwipeOpacities(swipeOpacities);
     };
 
     useEffect(() => {
@@ -102,6 +103,19 @@ function YourCards({ route, navigation }) {
             resetAnimationValues(index);
         });
     }
+
+    const lockCard = (card, index) => {
+        if (card !== null) {
+            storage.setDisabledCards(card.cardId);
+            user.setMainNeedsUpdate(true);
+            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
+            // Force a a new YourCards to replace the current YourCards to trigger re-render
+            // Might not be the best
+            navigation.dispatch(
+                StackActions.replace('YourCards', {})
+            );
+        }
+    }
     
     const confirmDelete = (card, index) => {
         Alert.alert(
@@ -113,6 +127,11 @@ function YourCards({ route, navigation }) {
             ]
           );
     };
+
+    const confirmSwipeAction = (card, index) => {
+        if (swipeDeleteWidths[index].__getValue() === 0) lockCard(card, index);
+        else confirmDelete(card, index);
+    }
 
     if (cards.length == 0) {
         return (
@@ -135,7 +154,7 @@ function YourCards({ route, navigation }) {
                     </View>
 
                     <View style={styles.emptyBodyContainer}>
-                    <   Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
+                    <Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
                     </View>
                 </View>
                 <View style={styles.footerContainer}>
@@ -145,11 +164,15 @@ function YourCards({ route, navigation }) {
         )
     }
 
-    const deleteThreshold = Dimensions.get('window').width * -0.5; 
+    const swipeThreshold = Dimensions.get('window').width * 0.5;
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        if (value < deleteThreshold) {
-            if (!animationRunning.current && !deleteOpen.current) {
+        let deleteFlag = value < 0;
+        // reset the widths if not visible
+        if (deleteFlag) swipeLockWidths[key].setValue(0);
+        else swipeDeleteWidths[key].setValue(0);
+        if (Math.abs(value) > swipeThreshold) {
+            if (!animationRunning.current && !swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Animated.timing(swipeOpacities[key], {
@@ -157,19 +180,19 @@ function YourCards({ route, navigation }) {
                     duration: 100,
                     useNativeDriver: false
                 }).start();
-                Animated.timing(swipeWidths[key], {
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Dimensions.get('window').width * 0.9,
                     duration: 150,
                     useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
-                    deleteOpen.current = true;
+                    swipeButtonOpen.current = true;
                     swipeOpacities[key].setValue(0.0);
                 });
                 animationRunning.current = true;
             }
         } else {
-            if (!animationRunning.current && deleteOpen.current) {
+            if (!animationRunning.current && swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Animated.timing(swipeOpacities[key], {
@@ -177,28 +200,28 @@ function YourCards({ route, navigation }) {
                     duration: 100,
                     useNativeDriver: false
                 }).start();
-                Animated.timing(swipeWidths[key], {
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Math.abs(value),
                     duration: 150,
                     useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
-                    deleteOpen.current = false;
+                    swipeButtonOpen.current = false;
                     swipeOpacities[key].setValue(1.0);
                 });
                 animationRunning.current = true;
             } else if (!animationRunning.current) {
-                swipeWidths[key].setValue(Math.abs(value));
+                if (deleteFlag) swipeDeleteWidths[key].setValue(Math.abs(value));
+                else swipeLockWidths[key].setValue(Math.abs(value));
             }
         }
-        setSwipeWidths(swipeWidths);
-        setSwipeOpacities(swipeOpacities);
     };
 
     const swipeGestureEnded = (key, data) => {
-        if (data.translateX < deleteThreshold) {
+        if (Math.abs(data.translateX) > swipeThreshold) {
             let index = parseInt(key);
-            deleteCard(cards[index], index);
+            if (data.translateX < 0) deleteCard(cards[index], index);
+            else lockCard(cards[index], index);
         }
     };
 
@@ -252,19 +275,29 @@ function YourCards({ route, navigation }) {
                         }}
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
-                                        <Ionicons
-                                            name="trash-outline"
-                                            color="white"
-                                            size={25}
-                                        ></Ionicons>
-                                    </Animated.View>
-                                </TouchableOpacity>
+                                <View style={styles.cardBackWrapper}>
+                                    <TouchableOpacity style={styles.cardBack} onPress={() => confirmSwipeAction(data.item, cards.indexOf(data.item))}>
+                                        <Animated.View style={[styles.cardDelete, { width: swipeDeleteWidths[data.item.key] }]}>
+                                            <Ionicons
+                                                name="trash-outline"
+                                                color="white"
+                                                size={25}
+                                            ></Ionicons>
+                                        </Animated.View>
+                                        <Animated.View style={[styles.cardLock, { width: swipeLockWidths[data.item.key] }]}>
+                                            <Ionicons
+                                                name="lock-closed-outline"
+                                                color="white"
+                                                size={25}
+                                            ></Ionicons>
+                                        </Animated.View>
+                                    </TouchableOpacity>
+                                </View>
                             </Animated.View>
                         )}
                         rightOpenValue={-100}
-                        disableRightSwipe={true}
+                        leftOpenValue={100}
+                        // disableRightSwipe={true} // comment this out to enable lock swiping
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
@@ -299,18 +332,31 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray',
         marginTop: 10
     },
+    cardBackWrapper: {
+        height: "100%",
+        flexDirection: "row",
+        paddingHorizontal: (Dimensions.get('window').width * 0.05),
+    },
     cardBack: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        direction: "rtl",
-        paddingLeft: (Dimensions.get('window').width * 0.05)
+        width: "100%",
+        height: CARD_HEIGHT,
+        alignSelf: "flex-end",
+        flexDirection: "row-reverse",
+        justifyContent: "space-between"
     },
     cardDelete: {
+        height: "100%",
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        height: CARD_HEIGHT
+    },
+    cardLock: {
+        height: "100%",
+        backgroundColor: 'orange',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 15,
     }
 });
 
