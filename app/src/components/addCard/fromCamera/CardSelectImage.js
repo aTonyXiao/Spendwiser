@@ -6,12 +6,12 @@ import {
     TouchableOpacity, 
     StyleSheet, 
     Button,
-    View
+    View,
+    SafeAreaView
 } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
-import { BackButtonHeader } from '../../util/BackButtonHeader';
 import mainStyles from '../../../styles/mainStyles';
 
 // TODO: change to "CardSelectFromImage"
@@ -98,50 +98,54 @@ export function CardSelectImage({route, navigation}) {
                 { cancelable: false });
         }
 
-        navigation.navigate('YourCards');
+        navigation.navigate('YourCards', { forceLoad: true });
     }
 
     return (
-        <ScrollView style={styles.container}>
-            {/* No cards found */}
-            {
-                filteredCardNames.length == 0 &&
-                <View>
-                    <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
-
-                    <Button
-                        title="Try another image"
-                        onPress={() => {navigation.navigate('ChooseImage')}}
-                    >
-                    </Button>
-
-                    <Button
-                        title="Go back to your cards"
-                        onPress={() => {navigation.navigate('YourCards')}}
-                    >
-                    </Button>
-                </View>
-            }
-
-            {/* Found cards */}
-            {
-                filteredCardNames.length > 0 &&
-                <View>
-                    <Text style={styles.title}>Here's a list of possible cards we found: </Text>
-
-                    {/* List of cards */}
+        <SafeAreaView style={mainStyles.screen}>
+            <View style={mainStyles.bodyContainer}>
+                <ScrollView style={styles.container}>
+                    {/* No cards found */}
                     {
-                        filteredCardNames.map((cardName, i) => {
-                            return (
-                                <TouchableOpacity key={i} onPress={() => { setChosenCard(cardName) }}>
-                                    <Text style={styles.body}>{cardName}</Text>
-                                </TouchableOpacity>
-                            )
-                        })
+                        filteredCardNames.length == 0 &&
+                        <View>
+                            <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
+
+                            <Button
+                                title="Try another image"
+                                onPress={() => {navigation.navigate('ChooseImage')}}
+                            >
+                            </Button>
+
+                            <Button
+                                title="Go back to your cards"
+                                onPress={() => {navigation.navigate('YourCards', { forceLoad: true })}}
+                            >
+                            </Button>
+                        </View>
                     }
-                </View>
-            }
-        </ScrollView>
+
+                    {/* Found cards */}
+                    {
+                        filteredCardNames.length > 0 &&
+                        <View>
+                            <Text style={styles.title}>Here's a list of possible cards we found: </Text>
+
+                            {/* List of cards */}
+                            {
+                                filteredCardNames.map((cardName, i) => {
+                                    return (
+                                        <TouchableOpacity key={i} onPress={() => { setChosenCard(cardName) }}>
+                                            <Text style={styles.body}>{cardName}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                        </View>
+                    }
+                </ScrollView>
+            </View>
+        </SafeAreaView>
     )
 }
 
