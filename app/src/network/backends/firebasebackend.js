@@ -129,6 +129,11 @@ class FirebaseBackend extends BaseBackend {
 
     // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
     // to Date objects
+    /**
+     * 
+     * @param {Object} data any kind of object that could have firebase timestamp objects
+     * @returns the modified data
+     */
     convertTimestampToDate = (data) => {
         if (data instanceof Object) {
             for (let [key, value] of Object.entries(data)) {
@@ -142,6 +147,12 @@ class FirebaseBackend extends BaseBackend {
         return data;
     }
 
+    /**
+     * Like normal @ref dbGet, but does the operation on the remote firebase db
+     * 
+     * @param {string} location the period delimited path to a document or collection
+     * @param  {...any} conditionsWithCallback any filters (optional) followed by a callback function
+     */
     remoteDBGet(location, ...conditionsWithCallback) {
         console.log("Gettting from remote db");
         let callback = conditionsWithCallback.pop();
@@ -230,6 +241,11 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    /**
+     * 
+     * @param {string} location period delimited path to a collection
+     * @param {function} callback called back with an array of itmes within the collection
+     */
     dbGetSubCollectionsRemote(location, callback) {
         let dbloc = getDatabaseLocation(this.database, location);
 
@@ -297,6 +313,14 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    /**
+     * Sets the data of a document
+     * 
+     * @param {string} location the period delimited path to a document
+     * @param {Object} data any object data that should be assigned to the  {@link location}
+     * @param {*} merge if false all data will be replaced with new {@link data} passed in
+     * @param {*} callback  called when set operation is done
+     */
     remoteDBSet(location, data, merge, callback) {
         // Store on firebase if possible
         let databaseLocation = getDatabaseLocation(this.database, location);
@@ -310,6 +334,13 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Adds a document to a collection in the remote firebase db
+     * 
+     * @param {string} location the period delimited path to a collection
+     * @param {Object} data the data of a item that should be added to the {@link location}
+     * @param {function} callback called with a string containing the id of the newly added document
+     */
     remoteDBAdd(location, data, callback) {
         // Add data to our firebase storage
         let databaseLocation = getDatabaseLocation(this.database, location);
