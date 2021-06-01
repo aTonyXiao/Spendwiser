@@ -11,10 +11,9 @@ import {
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
-import { BackButtonHeader } from '../../util/BackButtonHeader';
-import mainStyles from '../../../styles/mainStyles';
+import { appBackend } from '../../../network/backend';
+import * as storage from '../../../local/storage';
 
-// TODO: change to "CardSelectFromImage"
 // TODO: handle no text
 
 /**
@@ -23,9 +22,9 @@ import mainStyles from '../../../styles/mainStyles';
  * @param {{Object, Object}} obj - The route and navigation passed directly to display card
  * @param {Object} obj.route - routing object containing information about a specific credit card
  * @param {Object} obj.navigation - navigation object used to move between different pages
- * @module CardSelectImage
+ * @module CardSelect
  */
-export function CardSelectImage({route, navigation}) {
+export function CardSelect({route, navigation}) {
     const text = route.params.text;
     const userId = user.getUserId();
     const [cardMap, setCardMap] = useState(null); // card name to card id
@@ -54,7 +53,7 @@ export function CardSelectImage({route, navigation}) {
 
                 let originalCardNames = Object.keys(mapping);
 
-                // filter card names for detected words from imag
+                // filter card names for detected words from image
                 originalCardNames.forEach(cardName => { 
                     for (let i=0 ; i<text.length ; i++) { 
                         let detectedWord = text[i];
@@ -88,7 +87,20 @@ export function CardSelectImage({route, navigation}) {
 
         // check for user trying to add card they already have
         if (!currentCardIds.includes(cardId)) {
-            await user.saveCardToUser(userId, cardId, null, null);
+            cards.getCardData(cardId, async (data) => {
+                // Add the card into the user's list of cards
+                await user.saveCardToUser(userId, cardId, null, null);
+
+                // Add the actual card data as well
+                appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
+                    let actualUserId = await userId;
+                    storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
+                        storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {
+                            navigation.navigate('YourCards', { forceLoad: true });
+                        });
+                    });
+                });
+            });
         } else {
             Alert.alert("Already have this card",
                 "You've attempted to add a card that has already been added to your account",
@@ -96,9 +108,9 @@ export function CardSelectImage({route, navigation}) {
                     { text: "Ok" }
                 ],
                 { cancelable: false });
-        }
 
-        navigation.navigate('YourCards');
+            navigation.navigate('YourCards', { forceLoad: true });
+        }
     }
 
     return (

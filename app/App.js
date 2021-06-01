@@ -21,7 +21,7 @@ import { About } from './src/components/settings/About';
 import { SpendingSummary } from './src/components/summary/SpendingSummary';
 import { EditImage } from './src/components/addCard/fromCamera/EditImage';
 import { ChooseImage } from './src/components/addCard/fromCamera/ChooseImage';
-import { CardSelectImage } from './src/components/addCard/fromCamera/CardSelectImage';
+import { CardSelect } from './src/components/addCard/fromCamera/CardSelect';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
@@ -107,8 +107,8 @@ export default function App() {
             component={ChooseImage}
           />
           <Stack.Screen
-            name="CardSelectImage"
-            component={CardSelectImage}
+            name="CardSelect"
+            component={CardSelect}
           />
           <Stack.Screen
             name="PasswordReset"
