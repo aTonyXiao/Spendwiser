@@ -20,7 +20,6 @@ export const storeLoginState = async (login_info) => {
  * 
  * @param {function} callback returns an object containing a user's 'signed_in' state and their 'account_type'. 
  * See storeLoginState function to understand the possible values for each of these items.
- * @returns 
  */
 export const getLoginState = async (callback) => {
     try {

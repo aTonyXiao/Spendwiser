@@ -13,86 +13,86 @@ export function ChartCompare(
         keys,
         curCard,
     }) {
-        let periodData1 = Array(7).fill(0);
-        let periodData2 = Array(7).fill(0);
-        const [cutOff, setCutOff] = useState(50);
-        const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
-        const [barData, setBarData] = useState([
+    let periodData1 = Array(7).fill(0);
+    let periodData2 = Array(7).fill(0);
+    const [cutOff, setCutOff] = useState(50);
+    const [overallSpending, setOverallSpending] = useState(Array(2).fill(0));
+    const [barData, setBarData] = useState([
+        {
+            data: periodData1.map((value) => ({ value })),
+            svg: {
+                fill: 'blue',
+            },
+        },
+        {
+            data: periodData2.map((value) => ({ value })),
+        },
+    ]);
+    const Labels = ({  x, y, bandwidth, data }) => {
+        return (
+            data[0]["data"].map((valueObj, index) => {
+                let value = valueObj["value"].toFixed(2);
+                let value2 = data[1]["data"][index]["value"].toFixed(2);
+                return(
+                    <SvgText
+                    key={ index }
+                    style={{flexDirection:'column'}}>
+                        {value != 0 ? <SvgText
+                            x={ value + value.toString().length * 8 >= cutOff ? x(value) - value.toString().length * 8 - 10 : x(value) + 5 }
+                            y={ y(index) + (bandwidth / 2) - 12}
+                            fontSize={ 14 }
+                            fill={ value + value.toString().length * 8 >= cutOff ? 'white' : 'black' }
+                            alignmentBaseline={ 'middle' }
+                        >
+                            {value}
+                        </SvgText>
+                        : <SvgText/>
+                        }
+                        {value2 != 0 ?
+                        <SvgText
+                            x={ value2 + value2.toString().length * 8 >= cutOff ? x(value2) - value2.toString().length * 8 - 10 : x(value2) + 5 }
+                            y={ y(index) + (bandwidth / 2) + 12}
+                            fontSize={ 14 }
+                            fill={ value2 + value2.toString().length * 8 >= cutOff ? 'white' : 'black' }
+                            alignmentBaseline={ 'middle' }
+                        >
+                            {value2}
+                        </SvgText>
+                        : <SvgText/>
+                        }
+                    </SvgText>
+                );
+            })
+        )
+    };
+
+    useEffect(() => {
+        for (var i = 0; i < compareTransPeriod1.length; i++) {
+            if (compareTransPeriod1[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"])) {
+                periodData1[summaryHelper.matchTransactionToCategory(compareTransPeriod1[i])]
+                += parseFloat(compareTransPeriod1[i]['amountSpent']);
+            }
+        }
+        for (var i = 0; i < compareTransPeriod2.length; i++) {
+            if (compareTransPeriod2[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"])) {
+                periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
+                += parseFloat(compareTransPeriod2[i]['amountSpent']);
+            }
+        }
+        setCutOff(Math.max(Math.max.apply(Math, periodData1), Math.max.apply(Math, periodData2)));
+        setBarData([
             {
                 data: periodData1.map((value) => ({ value })),
                 svg: {
-                    fill: 'blue',
+                    fill: '#0000CD',
                 },
             },
             {
                 data: periodData2.map((value) => ({ value })),
             },
         ]);
-        const Labels = ({  x, y, bandwidth, data }) => {
-            return (
-                data[0]["data"].map((valueObj, index) => {
-                    let value = valueObj["value"].toFixed(2);
-                    let value2 = data[1]["data"][index]["value"].toFixed(2);
-                    return(
-                        <SvgText
-                        key={ index }
-                        style={{flexDirection:'column'}}>
-                            {value != 0 ? <SvgText
-                                x={ value + value.toString().length * 8 >= cutOff ? x(value) - value.toString().length * 8 - 10 : x(value) + 5 }
-                                y={ y(index) + (bandwidth / 2) - 12}
-                                fontSize={ 14 }
-                                fill={ value + value.toString().length * 8 >= cutOff ? 'white' : 'black' }
-                                alignmentBaseline={ 'middle' }
-                            >
-                                {value}
-                            </SvgText>
-                            : <SvgText/>
-                            }
-                            {value2 != 0 ?
-                            <SvgText
-                                x={ value2 + value2.toString().length * 8 >= cutOff ? x(value2) - value2.toString().length * 8 - 10 : x(value2) + 5 }
-                                y={ y(index) + (bandwidth / 2) + 12}
-                                fontSize={ 14 }
-                                fill={ value2 + value2.toString().length * 8 >= cutOff ? 'white' : 'black' }
-                                alignmentBaseline={ 'middle' }
-                            >
-                                {value2}
-                            </SvgText>
-                            : <SvgText/>
-                            }
-                        </SvgText>
-                    );
-                })
-            )
-        };
-
-        useEffect(() => {
-            for (var i = 0; i < compareTransPeriod1.length; i++) {
-                if (compareTransPeriod1[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod1[i]["cardId"])) {
-                    periodData1[summaryHelper.matchTransactionToCategory(compareTransPeriod1[i])]
-                    += parseFloat(compareTransPeriod1[i]['amountSpent']);
-                }
-            }
-            for (var i = 0; i < compareTransPeriod2.length; i++) {
-                if (compareTransPeriod2[i].length !== 0 && (curCard === null || curCard["cardId"] === compareTransPeriod2[i]["cardId"])) {
-                    periodData2[summaryHelper.matchTransactionToCategory(compareTransPeriod2[i])]
-                    += parseFloat(compareTransPeriod2[i]['amountSpent']);
-                }
-            }
-            setCutOff(Math.max(Math.max.apply(Math, periodData1), Math.max.apply(Math, periodData2)));
-            setBarData([
-                {
-                    data: periodData1.map((value) => ({ value })),
-                    svg: {
-                        fill: '#0000CD',
-                    },
-                },
-                {
-                    data: periodData2.map((value) => ({ value })),
-                },
-            ]);
-            setOverallSpending([periodData1.reduce((a, b) => a + b, 0), periodData2.reduce((a, b) => a + b, 0)])
-        }, [curCard, compareTransPeriod1, compareTransPeriod2]);
+        setOverallSpending([periodData1.reduce((a, b) => a + b, 0), periodData2.reduce((a, b) => a + b, 0)]);
+    }, [curCard, compareTransPeriod1, compareTransPeriod2]);
 
 
     return (

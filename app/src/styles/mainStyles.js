@@ -1,5 +1,8 @@
 import { StyleSheet, StatusBar, Platform } from 'react-native';
 
+/**
+ * The global styles for the app
+ */
 const mainStyles = StyleSheet.create({
   container: {
     flex: 1,

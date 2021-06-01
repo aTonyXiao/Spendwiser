@@ -4,29 +4,38 @@ import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 import CardImage from './CardImage';
 import {makeCancelable} from '../util/promise-helper'
 
+/**
+ * The Card module that houses the name and image.  Utilized in 'YourCards' for pressable buttons.
+ * @param {*} navigation - navigation object used to move between different pages
+ * @param {*} card - the card information data structure
+ * @param {*} storeInformation - the data with the current store information
+ * @param {String} origin - the origin of the navigation
+ * @module Card
+ */
 export class Card extends React.Component {
     constructor(props) { 
         super(props);
         
-        var cardInformation = props.props.card;
-        // console.log("Creating a card: ");
-        // console.log(cardInformation);
+        var cardInformation = props.card;
+
+        // the state data for this card
         this.state = {
             name: "",
             cardImage: "Not an Empty String",
             showDefault: true,
-            // opacity: new Animated.Value(0),
             cardId: cardInformation.cardId,
-            navigation: props.props.navigation,
+            navigation: props.navigation,
             docId: cardInformation.docId,
-            storeInformation: props.props.storeInformation,
+            storeInformation: props.storeInformation,
             getCardImageURL: makeCancelable(cards.getCardImageURL(cardInformation.cardId)),
             getCardName: makeCancelable(cards.getCardName(cardInformation.cardId))
         }
 
+        // get the card image url from cards
         this.state.getCardImageURL.promise.then(url => {
             this.setState({cardImage: url, showDefault: url.length == 0});
         }).catch(({isCanceled, ...error}) => {});
+        // get the card name from cards
         this.state.getCardName.promise.then((cardName) => {
             this.setState({name: cardName});
         }).catch(({isCanceled, ...error}) => {});
@@ -37,7 +46,7 @@ export class Card extends React.Component {
         this.state.getCardImageURL.cancel();
     }
 
-
+    // on press, navigate to the CardInfo page
     onPress = () => { 
         this.state.navigation.navigate('CardInfo', {
             cardId: this.state.cardId,
@@ -65,11 +74,12 @@ export class Card extends React.Component {
     }
 }
 
+// the stylesheet for this module
 const styles = StyleSheet.create({
     card: {
         alignSelf: "center",
-        width: (Dimensions.get('window').width * 0.9),
-        height: (Dimensions.get('window').width * 0.9) / 1.586, // was hardcoded to 230 before
+        width: (Dimensions.get('window').width * 0.9), // 90% of the device width
+        height: (Dimensions.get('window').width * 0.9) / 1.586, // use a ratio to calculate height from the width
         marginBottom: 10 
     }, 
     cardTitle: {

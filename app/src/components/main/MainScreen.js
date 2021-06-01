@@ -48,7 +48,11 @@ export function MainScreen({navigation}) {
     const [internetState, setInternetState] = useState(false);
     const internetRef = useRef(false);
 
-    // Use case: Have location but no internet
+    /**
+     * Set main screen to display no internet connection
+     * Use case: No internet connection, have location permissions
+     * @param {Array} coords - Coordinate array with user's location to set the current region to.
+     */
     function setOfflineMode(coords) {
         // Only set storearr to show no internet connection when loading for the first time
         if (storeArr.length === 0) {
@@ -69,6 +73,10 @@ export function MainScreen({navigation}) {
         }
     }
 
+    /**
+     * Set main screen to display no location permission
+     * Use case: No location, with or without internet
+     */
     function setLocationDisabledMode() {
         setStoreArr([{
             label: "Location Permission Denied",
@@ -85,6 +93,10 @@ export function MainScreen({navigation}) {
         setLoading(false);
     }
 
+    /**
+     * Prevent android users from using hardware back button on main screen
+     * @returns {boolean} - Returns true on Main Screen and false on other pages
+     */
     const backAction = () => {
         if (navigation.isFocused())
             return true;
@@ -93,8 +105,8 @@ export function MainScreen({navigation}) {
     }
 
     /**
-    * calls storage function to check if card is disabled
-    * @returns {array} - is the card disabled or not
+    * Calls storage function to check if card is disabled
+    * @returns {array} - Is the card disabled or not
     */
      async function getDisabledCards() {
         return new Promise((resolve, reject) => {
@@ -123,7 +135,14 @@ export function MainScreen({navigation}) {
         })
     }
 
-    // Called when changing store to reload recommended cards
+    /**
+     * Called when recommended cards need changing
+     * Should be called when user disable/enable cards, add cards, delete cards, change selected store
+     * @param {string} value - new selected store
+     * @param {int} key - index of new selected store in storeArr
+     * @param {string} storeType - category of new selected store
+     * @param {Array} geometry - Array with longitude and latitude of new selected store
+     */
     function reloadRecCard(value, key, storeType, geometry) {
         recommendCard.getRecCards(storeType, getRecCardFromDB);
         if (key !== curStoreKey || curStore !== value) {
@@ -133,6 +152,11 @@ export function MainScreen({navigation}) {
         }
     }
 
+    /**
+     * Function to switch selected store to user's selected store on Google Maps, then reload recommended cards
+     * If new selected store not in storeArr, add the new store to the array.
+     * @param {Object} event - POI object given by Google Maps on POI click
+     */
     function switchStoresFromPOI(event) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
         let found = storeArr.find(o => (o.placeId.substr(o.placeId.length - 5) === last5placeId
@@ -155,6 +179,10 @@ export function MainScreen({navigation}) {
         }
     }
 
+    /**
+     * Add the manual store to the storeArr, set it as the selected store and reload the recommended cards
+     * @param {Object} manualInputObj - object containing user's manual store to add to storeArr
+     */
     function addManualInput(manualInputObj) {
         if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection') {
             if (manualInputObj.value === 'Manual Input 1') {
@@ -169,6 +197,10 @@ export function MainScreen({navigation}) {
         reloadRecCard(manualInputObj.label, manualInputObj.key, manualInputObj.storeType, manualInputObj.geometry);
     }
 
+    /**
+     * Load the store array with stores found 100m around the user's location
+     * @param {JSON} json - JSON document with a list of stores
+     */
     function getLocationFromAPI(json) {
         let fetchResult = json.results !== undefined ? json.results : [json.result];
         let fetchStores = [];
@@ -225,6 +257,11 @@ export function MainScreen({navigation}) {
         }
     };
 
+    /**
+     * Check if app has location permission. If no permission, call setLocationDisabledMode()
+     * Check if app has internet connection. If no internet, call setOfflineMode()
+     * If have internet and location, fetch Google Places API and load stores into store array with getLocationFromAPI()
+     */
     async function tryToGetStoresFromLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -254,6 +291,13 @@ export function MainScreen({navigation}) {
         } 
     }
 
+    /**
+     * Sets the minimum height of the bottom sheet by getting the height of the footer and the bottom sheet store text
+     * @param {Object} event - object containing the height of the component the call came from
+     * @param {int} insets - additional border height
+     * @param {boolean} isFooter - if the function call came from the footer component
+     * @returns 
+     */
     function onBottomSheetLayout(event, insets, isFooter) {
         let {width, height} = event.nativeEvent.layout;
         if (!isFooter) {
@@ -269,7 +313,9 @@ export function MainScreen({navigation}) {
         }
     }
 
-    // Called to refresh recommended cards if new cards added
+    /**
+     * useEffect to be called when main screen in focus. Checks if recommended cards require update
+     */
     useEffect(() => {
         user.currentStore = storeArr[curStoreKey];
         if (isLoading === false) {
@@ -284,7 +330,10 @@ export function MainScreen({navigation}) {
         }
     }, [isFocused]);
 
-    // Called on mount
+    /**
+     * useEffect called on mount. Add android backpress and internet state event listener
+     * call tryToGetStoresFromLocation() to setup main screen
+     */
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', backAction);
         const unsubscribe = NetInfo.addEventListener(state => {
@@ -377,7 +426,7 @@ export function MainScreen({navigation}) {
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No Internet Connection')
-                                        ? "" : "Category: " + storeArr[curStoreKey].storeType}
+                                        ? " " : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
                         </View>

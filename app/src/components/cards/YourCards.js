@@ -16,12 +16,14 @@ import { useState, useRef, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Footer } from '../util/Footer';
 import { AddCardModal } from './AddCardModal';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, StackActions } from '@react-navigation/native';
 import { makeCancelable } from '../util/promise-helper';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
+import * as storage from '../../local/storage';
 
+// the card height found using a ratio
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
 /**
@@ -35,46 +37,50 @@ const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
  * @module YourCards
  */
 function YourCards({ route, navigation }) {
-    const [cards, setCards] = useState([]);
-    const [swipeWidths, setSwipeWidths] = useState({});
-    const [swipeHeights, setSwipeHeights] = useState({});
-    const [swipeOpacities, setSwipeOpacities] = useState({});
-    const [rowRefs, setRowRefs] = useState({});
-    const [isLoaded, setLoaded] = useState(false);
-    const animationRunning = useRef(false);
-    const deleteOpen = useRef(false);
-    const userId = user.getUserId();
+    const [cards, setCards] = useState([]); // the current cards list
+    const [swipeDeleteWidths, setSwipeDeleteWidths] = useState({}); // the swipe button widths (for delete)
+    const [swipeLockWidths, setSwipeLockWidths] = useState({}); // the swipe button widths (for lock)
+    const [swipeHeights, setSwipeHeights] = useState({}); // the swipe button heights
+    const [swipeOpacities, setSwipeOpacities] = useState({}); // the card opacities (for swipe)
+    const [rowRefs, setRowRefs] = useState({}); // the row references for swipeable cards
+    const [isLoaded, setLoaded] = useState(false); // whether this page was loaded already or not
+    const animationRunning = useRef(false); // whether there is an animation currently running
+    const swipeButtonOpen = useRef(false); // whether a swipe button is currently open
+    const userId = user.getUserId(); // get the user id
     const [modalVisible, setModalVisible] = useState(false);
+<<<<<<< HEAD
     const storeInformation = route.params.storeInformation;
     const forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
     const focused = useIsFocused();
+=======
+
+    const storeInformation = route.params.storeInformation; // curent store information
+    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true; // whether there should be a force reload of cards
+    const focused = useIsFocused(); // the component focus action
+>>>>>>> 61e79581a43962846a5610cae1c15577c351063b
 
     const resetAnimationValues = key => {
-        if (typeof swipeWidths[key] === "undefined") {
-            swipeWidths[key] = new Animated.Value(0);
+        if (typeof swipeDeleteWidths[key] === "undefined") { // if they don't exist, create them
+            swipeDeleteWidths[key] = new Animated.Value(0);
+            swipeLockWidths[key] = new Animated.Value(0);
             swipeHeights[key] = new Animated.Value(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key] = new Animated.Value(1.0);
-        } else {
-            swipeWidths[key].setValue(0);
+        } else { // set to their defaults if they do exist
+            swipeDeleteWidths[key].setValue(0);
+            swipeLockWidths[key].setValue(0);
             swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key].setValue(1.0);
         }
-        setSwipeWidths(swipeWidths);
-        setSwipeHeights(swipeHeights);
-        setSwipeOpacities(swipeOpacities);
     };
 
+    // react native use effect for the 'OnFocus' action
     useEffect(() => {
-        // let forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
-        console.log('JA;;DFJA;DJ;AJ');
-        console.log(forceLoad);
-
-        if (isLoaded === false || forceLoad === true) {
-            console.log("ok, reloading then")
+        if (isLoaded === false || forceLoad === true) { // whether a force load or if not loaded yet
+            // load the cards in
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
-                cards.forEach(element => {
+                cards.forEach(element => { // add a "key" for each for SwipeListView support
                     element["key"] = cards.indexOf(element).toString();
                     resetAnimationValues(element["key"]);
                 });
@@ -90,8 +96,10 @@ function YourCards({ route, navigation }) {
         }
     }, [focused])
 
+    // delete card function with animation
     const deleteCard = (card, index) => {
-        user.deleteCard(userId, card.cardId, card.docId);
+        user.deleteCard(userId, card.cardId, card.docId); // delete from the user
+        // animate the delete
         Animated.timing(swipeHeights[index], {
             toValue: 0,
             duration: 150,
@@ -107,7 +115,23 @@ function YourCards({ route, navigation }) {
             resetAnimationValues(index);
         });
     }
+
+    // lock a card
+    const lockCard = (card, index) => {
+        if (card !== null) {
+            // disable the card for the user
+            storage.setDisabledCards(card.cardId);
+            user.setMainNeedsUpdate(true);
+            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
+            // Force a a new YourCards to replace the current YourCards to trigger re-render
+            // Might not be the best
+            navigation.dispatch(
+                StackActions.replace('YourCards', {})
+            );
+        }
+    }
     
+    // confirmation for deletion using an Alert
     const confirmDelete = (card, index) => {
         Alert.alert(
             'Delete Card?',
@@ -119,6 +143,14 @@ function YourCards({ route, navigation }) {
           );
     };
 
+    // confirmation for when a swipe button is clicked
+    const confirmSwipeAction = (card, index) => {
+        // choose a swipe action depending on the width of the delete button
+        if (swipeDeleteWidths[index].__getValue() === 0) lockCard(card, index);
+        else confirmDelete(card, index);
+    }
+
+    // No cards, render empty
     if (cards.length == 0) {
         return (
             <SafeAreaView style={mainStyles.screen}>
@@ -140,7 +172,7 @@ function YourCards({ route, navigation }) {
                     </View>
 
                     <View style={styles.emptyBodyContainer}>
-                    <   Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
+                    <Text style={{ paddingTop: "50%", fontSize: 18 }}>No cards yet.</Text>
                     </View>
                 </View>
                 <View style={styles.footerContainer}>
@@ -150,73 +182,85 @@ function YourCards({ route, navigation }) {
         )
     }
 
-    const deleteThreshold = Dimensions.get('window').width * -0.5; 
+    // calculate the swipe threshold to be 50% of the width of the screen
+    const swipeThreshold = Dimensions.get('window').width * 0.5;
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        if (value < deleteThreshold) {
-            if (!animationRunning.current && !deleteOpen.current) {
+        let deleteFlag = value < 0; // flag for deletion (left swipe)
+        // reset the widths if not visible
+        if (deleteFlag) swipeLockWidths[key].setValue(0);
+        else swipeDeleteWidths[key].setValue(0);
+        if (Math.abs(value) > swipeThreshold) {
+            if (!animationRunning.current && !swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                // animate to hide the card
                 Animated.timing(swipeOpacities[key], {
                     toValue: 0.0,
                     duration: 100,
                     useNativeDriver: false
                 }).start();
-                Animated.timing(swipeWidths[key], {
+                // animate to make the button in full view
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Dimensions.get('window').width * 0.9,
                     duration: 150,
                     useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
-                    deleteOpen.current = true;
+                    swipeButtonOpen.current = true;
                     swipeOpacities[key].setValue(0.0);
                 });
                 animationRunning.current = true;
             }
         } else {
-            if (!animationRunning.current && deleteOpen.current) {
+            if (!animationRunning.current && swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                // animate to make card visible again
                 Animated.timing(swipeOpacities[key], {
                     toValue: 1.0,
                     duration: 100,
                     useNativeDriver: false
                 }).start();
-                Animated.timing(swipeWidths[key], {
+                // spring back to what it was before
+                Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Math.abs(value),
                     duration: 150,
                     useNativeDriver: false
                 }).start(() => {
                     animationRunning.current = false;
-                    deleteOpen.current = false;
+                    swipeButtonOpen.current = false;
                     swipeOpacities[key].setValue(1.0);
                 });
                 animationRunning.current = true;
             } else if (!animationRunning.current) {
-                swipeWidths[key].setValue(Math.abs(value));
+                // keep updating the width for smooth
+                if (deleteFlag) swipeDeleteWidths[key].setValue(Math.abs(value));
+                else swipeLockWidths[key].setValue(Math.abs(value));
             }
         }
-        setSwipeWidths(swipeWidths);
-        setSwipeOpacities(swipeOpacities);
     };
 
     const swipeGestureEnded = (key, data) => {
-        if (data.translateX < deleteThreshold) {
+        // detect when past theswipe threshold
+        if (Math.abs(data.translateX) > swipeThreshold) {
             let index = parseInt(key);
-            deleteCard(cards[index], index);
+            if (data.translateX < 0) deleteCard(cards[index], index);
+            else lockCard(cards[index], index);
         }
     };
 
     const onRowOpen = (rowKey, rowMap) => {
-        rowRefs[rowKey] = rowMap[rowKey]; // hacky
+        rowRefs[rowKey] = rowMap[rowKey]; // hacky update of the rowRefs
         setRowRefs(rowRefs);
     };
 
     const onRowClose = (rowKey, rowMap) => {
-        rowRefs[rowKey] = undefined; // hacky
+        rowRefs[rowKey] = undefined; // hacky update of the rowRefs
         setRowRefs(rowRefs);
     };
 
+    // render the cards
     return (
         <SafeAreaView style={mainStyles.screen}>
             <View style={mainStyles.bodyContainer}>
@@ -238,38 +282,39 @@ function YourCards({ route, navigation }) {
                 <View style={{flex: 1}}>
                     <SwipeListView
                         data={cards}
-                        renderItem={(data, rowMap) => {
-                            var props = {
-                                navigation: navigation,
-                                card: data.item,
-                                storeInformation: storeInformation,
-                                origin: "yourcards"
-                            }
-                            return (
-                                <View style={{paddingHorizontal: '5%'}}>
-                                    <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                        <Card key={data.item.docId} props={props} />
-                                    </Animated.View>
-                                    { /* render divider bar for all cards except for last card */ }
-                                    <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
-                                </View>
-                            )
-                        }}
+                        renderItem={(data, rowMap) => (
+                            <View style={{paddingHorizontal: '5%'}}>
+                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
+                                    <Card key={data.item.docId} navigation={navigation} card={data.item} storeInformation={storeInformation} origin={"yourcards"} />
+                                </Animated.View>
+                                { /* render divider bar for all cards except for last card */ }
+                                <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
+                            </View>
+                        )}
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                <TouchableOpacity style={styles.cardBack} onPress={() => confirmDelete(data.item, cards.indexOf(data.item))}>
-                                    <Animated.View style={[styles.cardDelete, { width: swipeWidths[data.item.key] }]}>
-                                        <Ionicons
-                                            name="trash-outline"
-                                            color="white"
-                                            size={25}
-                                        ></Ionicons>
-                                    </Animated.View>
-                                </TouchableOpacity>
+                                <View style={styles.cardBackWrapper}>
+                                    <TouchableOpacity style={styles.cardBack} onPress={() => confirmSwipeAction(data.item, cards.indexOf(data.item))}>
+                                        <Animated.View style={[styles.cardDelete, { width: swipeDeleteWidths[data.item.key] }]}>
+                                            <Ionicons
+                                                name="trash-outline"
+                                                color="white"
+                                                size={25}
+                                            ></Ionicons>
+                                        </Animated.View>
+                                        <Animated.View style={[styles.cardLock, { width: swipeLockWidths[data.item.key] }]}>
+                                            <Ionicons
+                                                name="lock-closed-outline"
+                                                color="white"
+                                                size={25}
+                                            ></Ionicons>
+                                        </Animated.View>
+                                    </TouchableOpacity>
+                                </View>
                             </Animated.View>
                         )}
                         rightOpenValue={-100}
-                        disableRightSwipe={true}
+                        leftOpenValue={100}
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
@@ -286,6 +331,7 @@ function YourCards({ route, navigation }) {
     );
 }
 
+// the styles for this component
 const styles = StyleSheet.create({
     emptyBodyContainer: {
         flex: 1,
@@ -304,18 +350,31 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray',
         marginTop: 10
     },
+    cardBackWrapper: {
+        height: "100%",
+        flexDirection: "row",
+        paddingHorizontal: (Dimensions.get('window').width * 0.05),
+    },
     cardBack: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        direction: "rtl",
-        paddingLeft: (Dimensions.get('window').width * 0.05)
+        width: "100%",
+        height: CARD_HEIGHT,
+        alignSelf: "flex-end",
+        flexDirection: "row-reverse",
+        justifyContent: "space-between"
     },
     cardDelete: {
+        height: "100%",
         backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        height: CARD_HEIGHT
+    },
+    cardLock: {
+        height: "100%",
+        backgroundColor: 'orange',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 15,
     }
 });
 

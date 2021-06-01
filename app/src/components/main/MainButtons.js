@@ -14,6 +14,10 @@ export function MainButtons(
         internetState,
         tryToGetStoresFromLocation,
     }) {
+    /**
+     * Function to re-center user's location on Google Maps
+     * If location permission denied, shows an alert to enable permissions
+     */
     async function getUserLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {

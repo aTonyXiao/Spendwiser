@@ -14,7 +14,6 @@ let onAuthStateChangeCallback = null;
 
 /**
  * Backend for containerized server
- * TODO TROI: https://reactnative.dev/docs/network
  */
 class ServerBackend extends BaseBackend {
 
@@ -22,7 +21,7 @@ class ServerBackend extends BaseBackend {
      * This function initializes the Backend
      */
     initializeApp() {
-        // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
+        // firebase config using .env
         const firebaseConfig = {
             apiKey: process.env.REACT_NATIVE_API_KEY,
             authDomain: process.env.REACT_NATIVE_AUTH_DOMAIN,
@@ -33,6 +32,7 @@ class ServerBackend extends BaseBackend {
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
 
+        // load in the server url
         this.server_url = process.env.REACT_NATIVE_SERVER_URL;
 
         // check if there is a Firebase 'App' already initialized
@@ -152,8 +152,6 @@ class ServerBackend extends BaseBackend {
         });
     }
 
-
-    // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**
      * This function gets data for each document in a subcollection of a Firestore document. 
      * Needed because for a subcollection there is no '.data()'
@@ -189,6 +187,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         let collection = [];
         this.getUserToken((user_token) => {
+            // use a get request to the server
             fetch(this.server_url + uri, {
                 method: 'GET',
                 headers: {
@@ -206,88 +205,6 @@ class ServerBackend extends BaseBackend {
                 console.log(err);
             });
         });
-    }
-
-    idk(location, callback) {
-        console.log("called idk")
-        this.getUserID((accountId) => {
-            this.userAccountType((type) => {
-                if (type == 'normal') {
-                    storage.getSubcollectionLocalDB(accountId, location, (local_collection) => {
-                        // get local collection names to check for matching ids later
-                        let localIds = [];
-                        local_collection.forEach(doc => {
-                            localIds.push(doc.cardId);
-                        })
-
-                        // console.log('local ids')
-                        // console.log(localIds);
-
-                        let dbloc = getDatabaseLocation(this.database, location);
-                        // check firebase documents by matching id
-                        dbloc.get().then((query) => {
-                            var checkForFirebaseCards = new Promise((resolve, reject) => {
-                                var querySize = query.size; // firebase .get() isn't of array type so get length this way
-                                var index = 0;
-
-                                if (querySize == 0) resolve();
-                                query.forEach(doc => {
-                                    var currentDoc = doc.data();
-                                    currentDoc["docId"] = doc.id;
-
-                                    // add to local db if list of local ids doesn't contain the current firebase id
-                                    if (!localIds.includes(doc.id)) {
-                                        local_collection.push(currentDoc);
-
-                                        // console.log('adding ' + doc.id)
-                                        // get card information from firebase to add to local card database
-                                        const cardLocation = getDatabaseLocation(this.database, "cards." + currentDoc.cardId);
-                                        cardLocation.get().then((cardData) => {
-                                            // add card to cards local
-                                            storage.addLocalDB(accountId, "cards", cardData.data(), true, (local_query_id) => {
-                                                storage.modifyDBEntryMetainfo(accountId, "cards", true, local_query_id, doc.id, () => {
-                                                    // add card to user cards list
-                                                    storage.addLocalDB(accountId, "users." + accountId + ".cards", currentDoc, true, () => {
-                                                        // console.log('added ' + doc.id);
-                                                        index += 1;
-                                                        if (index == querySize) {
-                                                            // console.log('resolving')
-                                                            resolve();
-                                                        }
-                                                        // console.log('indexed, now at ' + index)
-                                                        // storage.printLocalDB();
-                                                    })
-                                                })
-                                            })
-                                        })
-                                    } else {
-                                        index += 1;
-                                    }
-                                })
-                            })
-
-                            // wait for storage to add cards to local database to finish before executing callback
-                            checkForFirebaseCards.then(() => {
-                                console.log('RESOLVED');
-
-                                // console.log('local collection: ')
-                                // console.log(local_collection)
-
-                                // console.log('storage')
-                                // storage.printLocalDB();
-                                
-
-                                callback(local_collection);
-                            })
-                        })
-                    });
-
-                // offline mode
-                } else {
-                    storage.getSubcollectionLocalDB(accountId, location, callback);
-                }
-            })
-        })
     }
 
     /** 
@@ -314,7 +231,7 @@ class ServerBackend extends BaseBackend {
                     Authorization: "Bearer " + user_token
                 }
             }).then(res => res.json()).then((res) => {
-                callback(true);
+                callback(true); // if there was no error! it exists!
             }).catch((err) => {
                 callback(false);
             });
@@ -353,6 +270,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a PUT request to set the server data
             fetch(this.server_url + uri, {
                 method: 'PUT',
                 headers: {
@@ -386,7 +304,7 @@ class ServerBackend extends BaseBackend {
      */
      dbAdd(location, data, callback) {
         // Add card data to our internal storage
-        // NOTE: This will get synced at regular intervals with firebase
+        // NOTE: This will get synced at regular intervals with the server
         this.getUserID((accountId) => {
             storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
                 callback(local_query_id);
@@ -401,6 +319,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a POST request to add to the server
             fetch(this.server_url + uri, {
                 method: 'POST',
                 headers: {
@@ -432,10 +351,14 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Remote document delete function
+     */
     remoteDBDelete(location) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a DELETE request to delete from the server
             fetch(this.server_url + uri, {
                 method: 'DELETE',
                 headers: {
@@ -447,6 +370,10 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Get the current user token from it's login state (uses callbacks for async)
+     * @param {*} callback 
+     */
     getUserToken (callback) {
         storage.getLoginState((state) => {
             callback(state.user_token)
@@ -549,6 +476,9 @@ class ServerBackend extends BaseBackend {
         };
     }
 
+    /**
+     * Get the type of account that is currently logged in (offline or not)
+     */
     userAccountType(callback) {
         storage.getLoginState((state) => {
             callback(state.account_type);
@@ -640,7 +570,7 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * 
+     * Get the current user's info
      */
     getUserInfo() {
         return new Promise((resolve, reject) => {

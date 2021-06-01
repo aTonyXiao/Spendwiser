@@ -8,8 +8,6 @@ import {
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
-import { DoubleTap } from '../util/DoubleTap';
-import { user } from '../../network/user';
 import { Ionicons } from '@expo/vector-icons';
 
 /**
@@ -71,17 +69,19 @@ async function getIsCardDisabled(cardId) {
  * @param {string} props.overlay - Name of the card to be overlayed on top of the image
  * @param {*} props.style - Style properties that will be passed down to the Image component
  * @param {string} props.cardId - id of card 
- * @component
- *      
+ * @module CardImage
  */
 function CardImage(props) {
+  // states that keep track of the component
   const [isCardDisabled, setIsCardDisabled] = useState(false);
   const [hasConstructed, setHasConstructed] = useState(false);
 
+  // constructor for this component
   constructor = async () => {
     if (hasConstructed) { 
       return;
     } else {
+      // defaults of whether disabled or not
       setIsCardDisabled(await getIsCardDisabled(props.cardId));
     }
   }
