@@ -23,6 +23,7 @@ import mainStyles from "../../styles/mainStyles"
 import * as Haptics from 'expo-haptics';
 import * as storage from '../../local/storage';
 
+// the card height found using a ratio
 const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
 
 /**
@@ -256,23 +257,15 @@ function YourCards({ route, navigation }) {
                 <View style={{flex: 1}}>
                     <SwipeListView
                         data={cards}
-                        renderItem={(data, rowMap) => {
-                            var props = {
-                                navigation: navigation,
-                                card: data.item,
-                                storeInformation: storeInformation,
-                                origin: "yourcards"
-                            }
-                            return (
-                                <View style={{paddingHorizontal: '5%'}}>
-                                    <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                        <Card key={data.item.docId} props={props} />
-                                    </Animated.View>
-                                    { /* render divider bar for all cards except for last card */ }
-                                    <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
-                                </View>
-                            )
-                        }}
+                        renderItem={(data, rowMap) => (
+                            <View style={{paddingHorizontal: '5%'}}>
+                                <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
+                                    <Card key={data.item.docId} navigation={navigation} card={data.item} storeInformation={storeInformation} origin={"yourcards"} />
+                                </Animated.View>
+                                { /* render divider bar for all cards except for last card */ }
+                                <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
+                            </View>
+                        )}
                         renderHiddenItem={(data, rowMap) => (
                             <Animated.View style={{ height: swipeHeights[data.item.key], overflow: "hidden" }}>
                                 <View style={styles.cardBackWrapper}>

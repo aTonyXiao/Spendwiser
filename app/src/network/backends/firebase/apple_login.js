@@ -5,6 +5,11 @@ import LoginAuthorizer from '../login_authorizer';
 // ref: https://github.com/brix/crypto-js
 import sha256 from 'crypto-js/sha256';
 
+/**
+ * Generate a nonce for apple authentication
+ * @param {Number} length - length of the nonce
+ * @returns the new nonce
+ */
 function generateNonce(length) {
     const chars_avail = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     let result = "";
