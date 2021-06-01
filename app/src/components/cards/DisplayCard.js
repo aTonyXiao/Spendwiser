@@ -47,7 +47,6 @@ function DisplayCard({route, navigation}) {
     const [currentTransaction, setCurrentTransaction] = useState(null);
     const [showEditTransactionModal, setShowEditTransactionModal] = useState(false);
     const [showTransactionsList, setShowTransactionsList] = useState(origin !== "main" ? true : false);
-    // const [disableOrUndisable, setDisableOrUndisable] = useState("Dis")
 
     const constructor = () => { 
         if (hasConstructed) { 
@@ -67,7 +66,6 @@ function DisplayCard({route, navigation}) {
                                 return [...data, ...transactions];
                             } else {
                                 return summaryHelper.addSortedNewTransaction(transactions, data);
-                                // return [... new Set([data, ...transactions])];
                             }
                         }
                         else {
@@ -129,10 +127,9 @@ function DisplayCard({route, navigation}) {
     }
 
     return (
-        // <DismissKeyboard>
-            <SafeAreaView style={mainStyles.screen}>
-                <BackButtonHeader navigation={navigation} title={cardName} titleStyle={styles.cardTitle} />
-                <View style={mainStyles.bodyContainer}>
+        <SafeAreaView style={mainStyles.screen}>
+            <BackButtonHeader navigation={navigation} title={cardName} titleStyle={styles.cardTitle} />
+            <View style={mainStyles.bodyContainer}>
                 <EditTransactionModal
                     transaction={currentTransaction}
                     modalVisible={showEditTransactionModal}
@@ -149,9 +146,7 @@ function DisplayCard({route, navigation}) {
                     cardId={cardId}
                 ></TransactionModal>
 
-                <View style={{ justifyContent: 'flex-start'}}>
-                    {/* <Text style={styles.cardTitle}>{cardName}</Text> */}
-
+                <View style={{ justifyContent: 'flex-start' }}>
                     <CardImage
                         style={[styles.card]}
                         source={cardImage.uri}
@@ -161,27 +156,27 @@ function DisplayCard({route, navigation}) {
                     />
                 </View>
 
-                <View style={{flex: 2}}>
+                <View style={{ flex: 2 }}>
                     <View style={styles.sectionTitle}>
-                        <View style={{width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <View style={{flexDirection: 'row'}}>
+                        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <View style={{ flexDirection: 'row' }}>
                                 <Text
                                     style={showTransactionsList ? styles.sectionTitleText : styles.sectionTitleTextUnselected}
-                                    onPress={() => {if(!showTransactionsList) setShowTransactionsList(true)}}
+                                    onPress={() => { if (!showTransactionsList) setShowTransactionsList(true) }}
                                 >
                                     Transactions
                                 </Text>
-                                <View style={{borderRightWidth: 1, marginHorizontal: 10, borderColor: 'white'}}/>
+                                <View style={{ borderRightWidth: 1, marginHorizontal: 10, borderColor: 'white' }} />
                                 <Text
                                     style={!showTransactionsList ? styles.sectionTitleText : styles.sectionTitleTextUnselected}
-                                    onPress={() => {if(showTransactionsList) setShowTransactionsList(false)}}
+                                    onPress={() => { if (showTransactionsList) setShowTransactionsList(false) }}
                                 >
                                     Rewards
                                 </Text>
                             </View>
-                           <TouchableOpacity
+                            <TouchableOpacity
                                 onPress={() => setShowTransactionModal(true)}
-                                style={{marginRight: -5}}
+                                style={{ marginRight: -5 }}
                             >
                                 <Ionicons
                                     name="add-circle-outline"
@@ -193,99 +188,100 @@ function DisplayCard({route, navigation}) {
                     </View>
                     {
                         showTransactionsList ?
-                        <View style={{flex:1}}>
-                            {
-                                ((transactions.length == 0) || !displayTransactions) ?
-                                <View style={{alignItems: 'center', paddingTop: 10}}>
-                                    <Text>You currently have no transactions!</Text>
-                                </View>
-                                :
-                                <SwipeListView
-                                    data={transactions}
-                                    renderItem={ (data, rowMap) => {
-                                        var date = data.item.dateAdded.toString().substring(0,24);
-                                        var name = data.item.storeInfo.storeName;
-                                        var dollarAmount = data.item.amountSpent;
-                                        return (
-                                        <View style={styles.rowFront}>
-                                            <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
-                                                <View style={{flexDirection: 'column'}}>
-                                                    <Text style={styles.transactionTextLeft}>{name}</Text>
-                                                    <Text>{date}</Text>
+                            <View style={{ flex: 1 }}>
+                                {
+                                    ((transactions.length == 0) || !displayTransactions) ?
+                                        <View style={{ alignItems: 'center', paddingTop: 10 }}>
+                                            <Text>You currently have no transactions!</Text>
+                                        </View>
+                                        :
+                                        <SwipeListView
+                                            data={transactions}
+                                            renderItem={(data, rowMap) => {
+                                                var date = data.item.dateAdded.toString().substring(0, 24);
+                                                var name = data.item.storeInfo.storeName;
+                                                var dollarAmount = data.item.amountSpent;
+                                                return (
+                                                    <View style={styles.rowFront}>
+                                                        <View style={{ flexDirection: 'row', width: '90%', justifyContent: 'space-between' }}>
+                                                            <View style={{ flexDirection: 'column' }}>
+                                                                <Text style={styles.transactionTextLeft}>{name}</Text>
+                                                                <Text>{date}</Text>
+                                                            </View>
+                                                            <View style={{ justifyContent: 'center' }}>
+                                                                <Text>${dollarAmount}</Text>
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                )
+                                            }}
+                                            renderHiddenItem={(data, rowMap) => (
+                                                <View style={styles.rowBack}>
+                                                    <Text>Left</Text>
+                                                    <TouchableOpacity
+                                                        style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                                                        onPress={() => {
+                                                            setCurrentTransaction(data.item),
+                                                                setShowEditTransactionModal(true),
+                                                                rowMap[data.item.key].closeRow()
+                                                        }}
+                                                    >
+                                                        <Ionicons
+                                                            name="eyedrop-outline"
+                                                            color="white"
+                                                            size={25}
+                                                        ></Ionicons>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={[styles.backRightBtn, styles.backRightBtnRight]}
+                                                        onPress={() => {
+                                                            setCurrentTransaction(data.item),
+                                                                confirmDeleteTransaction(data.item),
+                                                                rowMap[data.item.key].closeRow()
+                                                        }}
+                                                    >
+                                                        <Ionicons
+                                                            name="trash-outline"
+                                                            color="white"
+                                                            size={25}
+                                                        ></Ionicons>
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <View style={{justifyContent: 'center'}}>
-                                                    <Text>${dollarAmount}</Text>
+                                            )}
+                                            rightOpenValue={-150}
+                                            disableRightSwipe={true}
+                                        />
+                                }
+                            </View>
+                            :
+                            <ScrollView>
+                                {
+                                    displayRewards &&
+                                    rewards.map((reward, i) => {
+                                        var category;
+                                        var rewardPercentage;
+                                        // temporary way to tell if card is a manual addition
+                                        if (rewards[0][0] == '0') {
+                                            category = reward[1].type;
+                                            rewardPercentage = reward[1].value;
+                                        } else {
+                                            category = reward[0];
+                                            rewardPercentage = reward[1];
+                                        }
+
+                                        return (
+                                            <View style={styles.sectionText} key={i}>
+                                                <View style={{ flexDirection: 'row', width: '90%', justifyContent: 'space-between' }}>
+                                                    <Text style={{ fontWeight: 'bold' }}>{category}</Text>
+                                                    <Text style={{ marginLeft: 5 }}>{rewardPercentage}%</Text>
                                                 </View>
                                             </View>
-                                        </View>
-                                    )}}
-                                    renderHiddenItem={ (data, rowMap) => (
-                                        <View style={styles.rowBack}>
-                                            <Text>Left</Text>
-                                            <TouchableOpacity
-                                                style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                                                onPress={() => {
-                                                    setCurrentTransaction(data.item),
-                                                    setShowEditTransactionModal(true),
-                                                    rowMap[data.item.key].closeRow()
-                                                    }}
-                                            >
-                                                <Ionicons
-                                                    name="eyedrop-outline"
-                                                    color="white"
-                                                    size={25}
-                                                ></Ionicons>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[styles.backRightBtn, styles.backRightBtnRight]}
-                                                onPress={() => {
-                                                    setCurrentTransaction(data.item),
-                                                    confirmDeleteTransaction(data.item),
-                                                    rowMap[data.item.key].closeRow()
-                                                    }}
-                                            >
-                                                <Ionicons
-                                                    name="trash-outline"
-                                                    color="white"
-                                                    size={25}
-                                                ></Ionicons>
-                                            </TouchableOpacity>
-                                        </View>
-                                    )}
-                                    rightOpenValue={-150}
-                                    disableRightSwipe={true}
-                                />
-                            }
-                        </View>
-                        :
-                        <ScrollView>
-                        {
-                            displayRewards &&
-                            rewards.map((reward, i) => {
-                                var category;
-                                var rewardPercentage;
-                                // temporary way to tell if card is a manual addition
-                                if (rewards[0][0] == '0') {
-                                    category = reward[1].type;
-                                    rewardPercentage = reward[1].value;
-                                } else {
-                                    category = reward[0];
-                                    rewardPercentage = reward[1];
+                                        )
+                                    })
                                 }
-
-                                return (
-                                    <View style={styles.sectionText} key={i}>
-                                        <View style={{flexDirection: 'row', width: '90%', justifyContent: 'space-between'}}>
-                                            <Text style={{ fontWeight: 'bold' }}>{category}</Text>
-                                            <Text style={{ marginLeft: 5 }}>{rewardPercentage}%</Text>
-                                        </View>
-                                    </View>
-                                )
-                            })
-                        }
-                        </ScrollView>
+                            </ScrollView>
                     }
-                    
+
                 </View>
 
                 <View>
@@ -301,9 +297,8 @@ function DisplayCard({route, navigation}) {
                         </View>
                     }
                 </View>
-                </View>
-            </SafeAreaView>
-        // </DismissKeyboard>
+            </View>
+        </SafeAreaView>
     )
 }
 
