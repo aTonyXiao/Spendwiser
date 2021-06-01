@@ -64,11 +64,11 @@ async function getIsCardDisabled(cardId) {
  * image supplied via url will be displayed or a colorized background with a card's
  * name if no url is supplied.
  * 
- * @param {boolean} props.default - If true will return a colorized image with card's name. If false, the image supplied via source will be used
- * @param {string} props.source - Url of the image to be displayed if @props.default is true
- * @param {string} props.overlay - Name of the card to be overlayed on top of the image
- * @param {*} props.style - Style properties that will be passed down to the Image component
- * @param {string} props.cardId - id of card 
+ * @param {boolean} defaultImg - If true will return a colorized image with card's name. If false, the image supplied via source will be used
+ * @param {string} source - Url of the image to be displayed if defaultImg is true
+ * @param {string} overlay - Name of the card to be overlayed on top of the image
+ * @param {*} style - Style properties that will be passed down to the Image component
+ * @param {string} cardId - id of card 
  * @module CardImage
  */
 function CardImage({
