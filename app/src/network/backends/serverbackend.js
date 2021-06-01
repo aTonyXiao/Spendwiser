@@ -14,7 +14,6 @@ let onAuthStateChangeCallback = null;
 
 /**
  * Backend for containerized server
- * TODO TROI: https://reactnative.dev/docs/network
  */
 class ServerBackend extends BaseBackend {
 
@@ -22,7 +21,7 @@ class ServerBackend extends BaseBackend {
      * This function initializes the Backend
      */
     initializeApp() {
-        // eventually replace w/ : https://github.com/dwyl/learn-json-web-tokens
+        // firebase config using .env
         const firebaseConfig = {
             apiKey: process.env.REACT_NATIVE_API_KEY,
             authDomain: process.env.REACT_NATIVE_AUTH_DOMAIN,
@@ -33,6 +32,7 @@ class ServerBackend extends BaseBackend {
             measurementId: process.env.REACT_NATIVE_MEASUREMENT_ID,
         };
 
+        // load in the server url
         this.server_url = process.env.REACT_NATIVE_SERVER_URL;
 
         // check if there is a Firebase 'App' already initialized
@@ -152,8 +152,6 @@ class ServerBackend extends BaseBackend {
         });
     }
 
-
-    // TODO: simple callback rework (data passed in as a firebase document object, could be more flexible) //
     /**
      * This function gets data for each document in a subcollection of a Firestore document. 
      * Needed because for a subcollection there is no '.data()'
@@ -208,8 +206,12 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * IDK function
+     * @param {*} location 
+     * @param {*} callback 
+     */
     idk(location, callback) {
-        console.log("called idk")
         this.getUserID((accountId) => {
             this.userAccountType((type) => {
                 if (type == 'normal') {
@@ -432,6 +434,9 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Remote document delete function
+     */
     remoteDBDelete(location) {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
@@ -447,6 +452,10 @@ class ServerBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Get the current user token from it's login state
+     * @param {*} callback 
+     */
     getUserToken (callback) {
         storage.getLoginState((state) => {
             callback(state.user_token)
@@ -549,6 +558,9 @@ class ServerBackend extends BaseBackend {
         };
     }
 
+    /**
+     * Get the type of account that is currently logged in (offline or not)
+     */
     userAccountType(callback) {
         storage.getLoginState((state) => {
             callback(state.account_type);
@@ -640,7 +652,7 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * 
+     * Get the current user's info
      */
     getUserInfo() {
         return new Promise((resolve, reject) => {
