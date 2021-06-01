@@ -8,8 +8,6 @@ import {
 import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
-import { DoubleTap } from '../util/DoubleTap';
-import { user } from '../../network/user';
 import { Ionicons } from '@expo/vector-icons';
 
 /**

@@ -187,6 +187,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         let collection = [];
         this.getUserToken((user_token) => {
+            // use a get request to the server
             fetch(this.server_url + uri, {
                 method: 'GET',
                 headers: {
@@ -230,7 +231,7 @@ class ServerBackend extends BaseBackend {
                     Authorization: "Bearer " + user_token
                 }
             }).then(res => res.json()).then((res) => {
-                callback(true);
+                callback(true); // if there was no error! it exists!
             }).catch((err) => {
                 callback(false);
             });
@@ -269,6 +270,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a PUT request to set the server data
             fetch(this.server_url + uri, {
                 method: 'PUT',
                 headers: {
@@ -302,7 +304,7 @@ class ServerBackend extends BaseBackend {
      */
      dbAdd(location, data, callback) {
         // Add card data to our internal storage
-        // NOTE: This will get synced at regular intervals with firebase
+        // NOTE: This will get synced at regular intervals with the server
         this.getUserID((accountId) => {
             storage.addLocalDB(accountId, location, data, false, (local_query_id) => {
                 callback(local_query_id);
@@ -317,6 +319,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a POST request to add to the server
             fetch(this.server_url + uri, {
                 method: 'POST',
                 headers: {
@@ -355,6 +358,7 @@ class ServerBackend extends BaseBackend {
         let uri = location.replaceAll(".", "/");
         console.log(this.server_url + uri);
         this.getUserToken((user_token) => {
+            // use a DELETE request to delete from the server
             fetch(this.server_url + uri, {
                 method: 'DELETE',
                 headers: {
@@ -367,7 +371,7 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * Get the current user token from it's login state
+     * Get the current user token from it's login state (uses callbacks for async)
      * @param {*} callback 
      */
     getUserToken (callback) {
