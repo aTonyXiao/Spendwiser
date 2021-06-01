@@ -82,40 +82,36 @@ function CardImage({
   }) {
   // states that keep track of the component
   const [isCardDisabled, setIsCardDisabled] = useState(false);
-  const [hasConstructed, setHasConstructed] = useState(false);
+  let generatedColor = generateColor(overlay);
 
-  // constructor for this component
-  constructor = async () => {
-    if (hasConstructed) { 
-      return;
-    } else {
-      // defaults of whether disabled or not
+  useEffect(() => {
+    (async () => {
       setIsCardDisabled(await getIsCardDisabled(cardId));
-    }
-  }
-  constructor();
+    })()
+  }, []);
 
   useEffect(() => {
     if (cardToEnableDisable !== null && cardToEnableDisable === cardId) {
+      console.log("In card " + cardId + " " + isCardDisabled);
       if (isCardDisabled !== null)
         setIsCardDisabled(!isCardDisabled);
       setCardToEnableDisable(null);
     }
-  }, [cardToEnableDisable])
+  }, [cardToEnableDisable]);
 
-  if (defaultImg) {
-    let generatedColor = generateColor(overlay);
-    return (
-      <View>
-        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {
-            isCardDisabled && <Ionicons
-                name="lock-closed"
-                color={'black'}
-                size={50}
-            ></Ionicons>
-          }
-        </View>
+  return (
+    <View>
+      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+        {
+          isCardDisabled && <Ionicons
+              name="lock-closed"
+              color={'black'}
+              size={50}
+          ></Ionicons>
+        }
+      </View>
+      {
+        defaultImg ?
         <View style={isCardDisabled ? [styles.outerImageFaded, style] : [styles.outerImage, style]}>
           <ImageBackground style={styles.innerImage}
             source={require('../../../assets/cards/blank.png')}
@@ -123,30 +119,17 @@ function CardImage({
             <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{overlay}</Text>
           </ImageBackground>
         </View>
-      </View>
-    );
-  } else {
-    return (
-      <View>
-        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {
-            isCardDisabled && <Ionicons
-                name="lock-closed"
-                color={'black'}
-                size={50}
-            ></Ionicons>
-          }
-        </View>
+        :
         <View style={isCardDisabled ? styles.faded : {}}>
           <CachedImage
             style={[styles.outerImage, style]}
             source={{ uri: source }}
           />
         </View>
-      </View>
-      
-    );
-  }
+      }
+    </View>
+    
+  );
 }
 
 const styles = StyleSheet.create({

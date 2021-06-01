@@ -4,8 +4,15 @@ import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 import CardImage from './CardImage';
 import {makeCancelable} from '../util/promise-helper'
 
+/**
+ * The Card module that houses the name and image.  Utilized in 'YourCards' for pressable buttons.
+ * @param {*} navigation - navigation object used to move between different pages
+ * @param {*} card - the card information data structure
+ * @param {*} storeInformation - the data with the current store information
+ * @param {String} origin - the origin of the navigation
+ * @module Card
+ */
 export function Card({
-        key,
         navigation,
         card,
         storeInformation,
