@@ -426,7 +426,7 @@ export function MainScreen({navigation}) {
                                 </Text>
                                 <Text>
                                     {(isLoading || curStore === 'Location Permission Denied' || curStore === 'No Internet Connection')
-                                        ? "" : "Category: " + storeArr[curStoreKey].storeType}
+                                        ? " " : "Category: " + storeArr[curStoreKey].storeType}
                                 </Text>
                             </View>
                         </View>
