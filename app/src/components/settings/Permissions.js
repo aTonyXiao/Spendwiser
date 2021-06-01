@@ -96,7 +96,7 @@ export function AppPermissions(props) {
 
     return (
         <SafeAreaView style={mainStyles.screen}>
-        <BackButtonHeader navigation={props.navigation} title={"Permissions"} titleStyle={mainStyles.titleNoPadding} />
+        <BackButtonHeader navigation={props.navigation} title={"Permissions"} titleStyle={mainStyles.titleAligned} />
         <View style={[mainStyles.bodyContainer, styles.container]}>
 
             <View style={styles.rowContainerTop}>

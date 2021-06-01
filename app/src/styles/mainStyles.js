@@ -44,14 +44,8 @@ const mainStyles = StyleSheet.create({
     fontWeight: "bold",
     color: '#28b573',
     textAlign: 'center',
-    marginTop: 50
-  },
-  titleNoPadding: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: '#28b573',
-    textAlign: 'center',
-  },
+    // marginTop: 50 // comment this out for no padding
+  }
 });
 
 export default mainStyles;

@@ -42,7 +42,7 @@ let Account = function(props) {
 
     return(
         <SafeAreaView style={mainStyles.screen}>
-            <BackButtonHeader navigation={props.navigation} title={"Your Account"} titleStyle={mainStyles.titleNoPadding} />
+            <BackButtonHeader navigation={props.navigation} title={"Your Account"} titleStyle={mainStyles.titleAligned} />
             <View style={[mainStyles.bodyContainer, mainStyles.container]}>
             <Text>Name: {userInfo.name}</Text>
             <Text>Email: {userInfo.email}</Text>
