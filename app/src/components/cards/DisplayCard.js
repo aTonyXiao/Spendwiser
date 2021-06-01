@@ -156,7 +156,7 @@ function DisplayCard({route, navigation}) {
                         style={[styles.card]}
                         source={cardImage.uri}
                         overlay={cardName}
-                        default={cardImage.uri === undefined || cardImage.uri.length == 0}
+                        defaultImg={cardImage.uri === undefined || cardImage.uri.length == 0}
                         cardId={cardId}
                     />
                 </View>
