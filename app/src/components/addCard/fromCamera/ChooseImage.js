@@ -83,7 +83,7 @@ export function ChooseImage({navigation}) {
 
     return(
         <SafeAreaView style={mainStyles.screen}>
-            <BackButtonHeader navigation={navigation} title={"Search Card from Photo"} titleStyle={mainStyles.titleNoPadding}/>
+            <BackButtonHeader navigation={navigation} title={"Search Card from Photo"} titleStyle={mainStyles.titleAligned}/>
             <View style={[mainStyles.bodyContainer, styles.container]}>
                 <View style={{alignItems: 'center'}}>
                     <Text style={styles.txt}>Camera Roll</Text>
