@@ -42,7 +42,7 @@ function YourCards({ route, navigation }) {
     const [swipeLockWidths, setSwipeLockWidths] = useState({}); // the swipe button widths (for lock)
     const [swipeHeights, setSwipeHeights] = useState({}); // the swipe button heights
     const [swipeOpacities, setSwipeOpacities] = useState({}); // the card opacities (for swipe)
-    const [rowRefs, setRowRefs] = useState({}); // the row references for swipeable cards
+    const rowRefs = useRef({}); // the row references for swipeable cards
     const [isLoaded, setLoaded] = useState(false); // whether this page was loaded already or not
     const animationRunning = useRef(false); // whether there is an animation currently running
     const swipeButtonOpen = useRef(false); // whether a swipe button is currently open
@@ -51,6 +51,7 @@ function YourCards({ route, navigation }) {
     const storeInformation = route.params.storeInformation;
     const forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
     const focused = useIsFocused();
+    const [cardToEnableDisable, setCardToEnableDisable] = useState(null);
 
     const resetAnimationValues = key => {
         if (typeof swipeDeleteWidths[key] === "undefined") { // if they don't exist, create them
@@ -98,7 +99,7 @@ function YourCards({ route, navigation }) {
             duration: 150,
             useNativeDriver: false
         }).start(() => {
-            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
+            if (rowRefs.current[index.toString()] !== undefined) rowRefs.current[index.toString()].closeRow();
             let newCards = [...cards];
             for (let i = index; i < newCards.length; i++) { // recalculate keys
                 newCards[i]["key"] = (parseInt(newCards[i]["key"]) - 1).toString();
@@ -115,12 +116,11 @@ function YourCards({ route, navigation }) {
             // disable the card for the user
             storage.setDisabledCards(card.cardId);
             user.setMainNeedsUpdate(true);
-            if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
-            // Force a a new YourCards to replace the current YourCards to trigger re-render
-            // Might not be the best
-            navigation.dispatch(
-                StackActions.replace('YourCards', {})
-            );
+            setTimeout(() => {
+                if (rowRefs.current[index.toString()] !== undefined) rowRefs.current[index.toString()].closeRow();
+                swipeOpacities[index.toString()].setValue(1.0);
+            }, 150);
+            setCardToEnableDisable(card.cardId);
         }
     }
     
@@ -244,13 +244,11 @@ function YourCards({ route, navigation }) {
     };
 
     const onRowOpen = (rowKey, rowMap) => {
-        rowRefs[rowKey] = rowMap[rowKey]; // hacky update of the rowRefs
-        setRowRefs(rowRefs);
+        rowRefs.current[rowKey] = rowMap[rowKey]; // hacky update of the rowRefs
     };
 
     const onRowClose = (rowKey, rowMap) => {
-        rowRefs[rowKey] = undefined; // hacky update of the rowRefs
-        setRowRefs(rowRefs);
+        rowRefs.current[rowKey] = undefined; // hacky update of the rowRefs
     };
 
     // render the cards
@@ -278,7 +276,15 @@ function YourCards({ route, navigation }) {
                         renderItem={(data, rowMap) => (
                             <View style={{paddingHorizontal: '5%'}}>
                                 <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                    <Card key={data.item.docId} navigation={navigation} card={data.item} storeInformation={storeInformation} origin={"yourcards"} />
+                                    <Card
+                                        key={data.item.docId}
+                                        navigation={navigation}
+                                        card={data.item}
+                                        storeInformation={storeInformation}
+                                        origin={"yourcards"}
+                                        cardToEnableDisable = {cardToEnableDisable}
+                                        setCardToEnableDisable = {setCardToEnableDisable}
+                                    />
                                 </Animated.View>
                                 { /* render divider bar for all cards except for last card */ }
                                 <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
