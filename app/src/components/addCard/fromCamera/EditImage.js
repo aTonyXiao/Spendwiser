@@ -73,7 +73,7 @@ export function EditImage({route, navigation}) {
 
             let formattedResponse = formatApiResponse(responseJson);
 
-            navigation.navigate('CardSelectImage', {
+            navigation.navigate('CardSelect', {
                 text: formattedResponse 
             });
         } catch (error) {
