@@ -9,6 +9,7 @@ import CachedImage from 'react-native-expo-cached-image';
 import sha1 from 'crypto-js/sha1';
 import * as storage from '../../local/storage';
 import { Ionicons } from '@expo/vector-icons';
+import { Wave } from 'react-native-animated-spinkit';
 
 /**
  * Generates a contrasting rgb value based on the supplied parameter
@@ -81,6 +82,7 @@ function CardImage({
   setCardToEnableDisable,
   }) {
   // states that keep track of the component
+  const [isLoading, setIsLoading] = useState(false);
   const [isCardDisabled, setIsCardDisabled] = useState(false);
   let generatedColor = generateColor(overlay);
 
@@ -100,7 +102,7 @@ function CardImage({
 
   return (
     <View>
-      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.iconCentered}>
         {
           isCardDisabled && <Ionicons
               name="lock-closed"
@@ -109,7 +111,14 @@ function CardImage({
           ></Ionicons>
         }
       </View>
+      <View style={styles.iconCentered}>
+        {
+          isLoading && <Wave size={128} color="#088F8F" />
+        }
+      </View>
+      
       {
+        
         defaultImg ?
         <View style={isCardDisabled ? [styles.outerImageFaded, style] : [styles.outerImage, style]}>
           <ImageBackground style={styles.innerImage}
@@ -121,6 +130,8 @@ function CardImage({
         :
         <View style={isCardDisabled ? styles.faded : {}}>
           <CachedImage
+            onLoadStart={() => setIsLoading(true)}
+            onLoad={() => setIsLoading(false)}
             style={[styles.outerImage, style]}
             source={{ uri: source }}
           />
@@ -157,6 +168,15 @@ const styles = StyleSheet.create({
     top: '-5%',
     left: '53%',
     flex: 0.6
+  },
+  iconCentered: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
