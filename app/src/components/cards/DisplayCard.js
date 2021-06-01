@@ -107,16 +107,17 @@ function DisplayCard({route, navigation}) {
             'Are you sure you would like to delete this transaction?',
             trans.storeInfo.storeName + '\n' + trans.dateAdded.toString().substring(0,24) + '\n$' + trans.amountSpent,
             [
-              {text: 'YES', onPress: () => deleteTransaction(trans.docId, parseInt(trans.key))},
+              {text: 'YES', onPress: () => deleteTransaction(trans.docId)},
               {text: 'NO', onPress: () => console.log(''), style: 'cancel'},
             ]
           );
     };
 
-    const deleteTransaction = (transDocId, key) => { 
+    const deleteTransaction = (transDocId) => { 
+        let pos = transactions.map(function(e) { return e.docId; }).indexOf(transDocId);
         user.deleteTransaction(userId, transDocId);
         let newTransactions = [...transactions];
-        newTransactions.splice(newTransactions.length - 1 - key, 1);
+        newTransactions.splice(pos, 1);
         setTransactions(newTransactions);
     }
 
