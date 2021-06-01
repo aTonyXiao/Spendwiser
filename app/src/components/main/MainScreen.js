@@ -410,7 +410,7 @@ export function MainScreen({navigation}) {
                 </View>
                 <View style={Platform.OS !== 'ios' ? {flex: 1} : {}}>
                     <BottomSheet isOpen={false}
-                        sliderMinHeight={Platform.OS === 'ios' ? locationInfoHeight + footerHeight + 75 : locationInfoHeight + footerHeight + 70}
+                        sliderMinHeight={Platform.OS === 'ios' ? locationInfoHeight + footerHeight + 75 : locationInfoHeight + footerHeight + 55}
                         sliderMaxHeight={(Dimensions.get('window').height)}
                         wrapperStyle={Platform.OS === 'ios' ? {paddingBottom: footerHeight + 25} : {paddingBottom: footerHeight + 25}}
                     >
