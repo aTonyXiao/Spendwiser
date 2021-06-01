@@ -51,7 +51,8 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
             )
             setModalVisible(false);
             let newTransactions = [...transactions];
-            newTransactions[newTransactions.length - 1 - parseInt(transaction.key)].amountSpent = transactionFiltered;
+            let pos = transactions.map(function(e) { return e.docId; }).indexOf(transaction.docId);
+            newTransactions[pos].amountSpent = transactionFiltered;
             setTransactions(newTransactions);
         } else {
             setDisplayErrorText(true);

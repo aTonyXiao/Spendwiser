@@ -33,10 +33,25 @@ function TransactionModal({
 
     // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
+        // don't allow $0 transactions
         if (isNaN(parseFloat(input))) { 
             return false;
         }
+
+        if (parseFloat(input) == 0) { 
+            toggleErrorText();
+            return false;
+        }
+
         return !isNaN(input); 
+    }
+
+    toggleErrorText = () => {
+        setDisplayErrorText(true);
+
+        setTimeout(function () {
+            setDisplayErrorText(false);
+        }, 2500)
     }
 
     addTransaction = () => {
@@ -68,11 +83,7 @@ function TransactionModal({
             }
             setShowTransactionModal(false);
         } else {
-                setDisplayErrorText(true);
-
-                setTimeout(function () {
-                    setDisplayErrorText(false);
-            }, 2500)
+            toggleErrorText();
         }
     }
 
