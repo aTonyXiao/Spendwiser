@@ -350,22 +350,7 @@ class FirebaseBackend extends BaseBackend {
             console.log(err);
         });
     }
-
-    dbFirebaseAddWithMetadata(location, data, callback) {
-        let sync_id = JSON.stringify(data);
-        if (!syncing_items.includes(sync_id)) {
-            syncing_items.push(sync_id);
-            this.dbFirebaseAdd(location, data, (query_id) => {
-                // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
-                // consolidation between our local database and the remote one.
-                this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
-                    syncing_items = syncing_items.filter(item => item !== sync_id);
-                    callback(query_id);
-                });
-            });
-        }
-    }
-
+    
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
