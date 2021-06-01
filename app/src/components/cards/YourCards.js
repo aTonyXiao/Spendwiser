@@ -118,6 +118,7 @@ function YourCards({ route, navigation }) {
             user.setMainNeedsUpdate(true);
             setTimeout(() => {
                 if (rowRefs.current[index.toString()] !== undefined) rowRefs.current[index.toString()].closeRow();
+                swipeOpacities[index.toString()].setValue(1.0);
             }, 150);
             // Force a a new YourCards to replace the current YourCards to trigger re-render
             // Might not be the best
