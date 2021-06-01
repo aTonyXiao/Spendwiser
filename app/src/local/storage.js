@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import sha256 from 'crypto-js/sha256';
+
 let storage_debug = false;
 
 /**
@@ -189,7 +191,9 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
             }
 
             // Insert local_data in location
-            let id = Object.values(db[accountName][location]).length
+            //let id = Object.values(db[accountName][location]).length
+            let id = sha256(JSON.stringify(data)).toString();
+
 
             if (synced == false) {
                 if ('unsynced_documents' in db[accountName]) {
