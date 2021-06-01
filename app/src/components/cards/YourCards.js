@@ -48,16 +48,9 @@ function YourCards({ route, navigation }) {
     const swipeButtonOpen = useRef(false); // whether a swipe button is currently open
     const userId = user.getUserId(); // get the user id
     const [modalVisible, setModalVisible] = useState(false);
-<<<<<<< HEAD
     const storeInformation = route.params.storeInformation;
     const forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
     const focused = useIsFocused();
-=======
-
-    const storeInformation = route.params.storeInformation; // curent store information
-    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true; // whether there should be a force reload of cards
-    const focused = useIsFocused(); // the component focus action
->>>>>>> 61e79581a43962846a5610cae1c15577c351063b
 
     const resetAnimationValues = key => {
         if (typeof swipeDeleteWidths[key] === "undefined") { // if they don't exist, create them
