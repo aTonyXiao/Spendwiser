@@ -350,7 +350,7 @@ class FirebaseBackend extends BaseBackend {
             console.log(err);
         });
     }
-    
+
     /**
      * This function adds a new Firestore document to a collection
      * reference: https://firebase.google.com/docs/firestore/quickstart
@@ -391,6 +391,11 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Deletes a document from the firebase db
+     * 
+     * @param {string} location the period delimited path to a document
+     */
     remoteDBDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
@@ -449,6 +454,8 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Sign out the currently logged in user
+     * 
+     * @param {function} callback called when sign out is complete
      */
     signOut(callback) {
         storage.getLoginState((state) => {
@@ -460,18 +467,16 @@ class FirebaseBackend extends BaseBackend {
                     onAuthStateChangeCallback();
                 }
                 callback();
-                return;
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
                     storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
                     callback();
-                    return;
                 }).catch((error) => {
                     // An error happened.
                     // TODO: Is there a good way to handle this kind of error?
                     console.log(error);
-                    return;
+                    callback();
                 });
             }
         });
@@ -479,6 +484,7 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Get the login providers that are implemented
+     * @returns {Object} object containing all the supported login providers
      */
     getLoginProviders() {
         return {
@@ -488,6 +494,11 @@ class FirebaseBackend extends BaseBackend {
         };
     }
 
+    /**
+     * Gets the account type of the currently logged in user
+     * 
+     * @param {function} callback called with a string denoting the account type
+     */
     userAccountType(callback) {
         storage.getLoginState((state) => {
             callback(state.account_type);
@@ -524,7 +535,9 @@ class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * Returns true or false depending on if the user is already logged in
+     * Check if a user is logged in
+     * 
+     * @returns true or false depending on if the user is already logged in
      */
     userLoggedIn(callback) {
         storage.getLoginState((state) => {
@@ -573,13 +586,17 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Get the current Timestamp
+     * 
+     * @returns timestamp in the form of a Date object
      */
     getTimestamp() {
         return firebase.firestore.Timestamp.now().toDate()
     }
 
     /**
+     * Gets info of the currently logged in user
      * 
+     * @returns object containing basic user info
      */
     getUserInfo() {
         return new Promise((resolve, reject) => {
