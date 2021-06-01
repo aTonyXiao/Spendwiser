@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -64,73 +64,71 @@ async function getIsCardDisabled(cardId) {
  * image supplied via url will be displayed or a colorized background with a card's
  * name if no url is supplied.
  * 
- * @param {boolean} props.default - If true will return a colorized image with card's name. If false, the image supplied via source will be used
- * @param {string} props.source - Url of the image to be displayed if @props.default is true
- * @param {string} props.overlay - Name of the card to be overlayed on top of the image
- * @param {*} props.style - Style properties that will be passed down to the Image component
- * @param {string} props.cardId - id of card 
+ * @param {boolean} defaultImg - If true will return a colorized image with card's name. If false, the image supplied via source will be used
+ * @param {string} source - Url of the image to be displayed if defaultImg is true
+ * @param {string} overlay - Name of the card to be overlayed on top of the image
+ * @param {*} style - Style properties that will be passed down to the Image component
+ * @param {string} cardId - id of card 
  * @module CardImage
  */
-function CardImage(props) {
+function CardImage({
+  style,
+  source,
+  overlay,
+  defaultImg,
+  cardId,
+  cardToEnableDisable,
+  setCardToEnableDisable,
+  }) {
   // states that keep track of the component
   const [isCardDisabled, setIsCardDisabled] = useState(false);
-  const [hasConstructed, setHasConstructed] = useState(false);
+  let generatedColor = generateColor(overlay);
 
-  // constructor for this component
-  constructor = async () => {
-    if (hasConstructed) { 
-      return;
-    } else {
-      // defaults of whether disabled or not
-      setIsCardDisabled(await getIsCardDisabled(props.cardId));
+  useEffect(() => {
+    (async () => {
+      setIsCardDisabled(await getIsCardDisabled(cardId));
+    })()
+  }, []);
+
+  useEffect(() => {
+    if (cardToEnableDisable !== null && cardToEnableDisable === cardId) {
+      if (isCardDisabled !== null)
+        setIsCardDisabled(!isCardDisabled);
+      setCardToEnableDisable(null);
     }
-  }
-  constructor();
+  }, [cardToEnableDisable]);
 
-  if (props.default) {
-    let generatedColor = generateColor(props.overlay);
-    return (
-      <View>
-        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {
-            isCardDisabled && <Ionicons
-                name="lock-closed"
-                color={'black'}
-                size={50}
-            ></Ionicons>
-          }
-        </View>
-        <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
+  return (
+    <View>
+      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+        {
+          isCardDisabled && <Ionicons
+              name="lock-closed"
+              color={'black'}
+              size={50}
+          ></Ionicons>
+        }
+      </View>
+      {
+        defaultImg ?
+        <View style={isCardDisabled ? [styles.outerImageFaded, style] : [styles.outerImage, style]}>
           <ImageBackground style={styles.innerImage}
             source={require('../../../assets/cards/blank.png')}
             imageStyle={{ tintColor: generatedColor, resizeMode: "contain" }}>
-            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{overlay}</Text>
           </ImageBackground>
         </View>
-      </View>
-    );
-  } else {
-    return (
-      <View>
-        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {
-            isCardDisabled && <Ionicons
-                name="lock-closed"
-                color={'black'}
-                size={50}
-            ></Ionicons>
-          }
-        </View>
+        :
         <View style={isCardDisabled ? styles.faded : {}}>
           <CachedImage
-            style={[styles.outerImage, props.style]}
-            source={{ uri: props.source }}
+            style={[styles.outerImage, style]}
+            source={{ uri: source }}
           />
         </View>
-      </View>
-      
-    );
-  }
+      }
+    </View>
+    
+  );
 }
 
 const styles = StyleSheet.create({

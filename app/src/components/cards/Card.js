@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cards } from '../../network/cards';
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import CardImage from './CardImage';
@@ -12,66 +12,64 @@ import {makeCancelable} from '../util/promise-helper'
  * @param {String} origin - the origin of the navigation
  * @module Card
  */
-export class Card extends React.Component {
-    constructor(props) { 
-        super(props);
-        
-        var cardInformation = props.card;
-
-        // the state data for this card
-        this.state = {
-            name: "",
-            cardImage: "Not an Empty String",
-            showDefault: true,
-            cardId: cardInformation.cardId,
-            navigation: props.navigation,
-            docId: cardInformation.docId,
-            storeInformation: props.storeInformation,
-            getCardImageURL: makeCancelable(cards.getCardImageURL(cardInformation.cardId)),
-            getCardName: makeCancelable(cards.getCardName(cardInformation.cardId))
-        }
-
-        // get the card image url from cards
-        this.state.getCardImageURL.promise.then(url => {
-            this.setState({cardImage: url, showDefault: url.length == 0});
-        }).catch(({isCanceled, ...error}) => {});
-        // get the card name from cards
-        this.state.getCardName.promise.then((cardName) => {
-            this.setState({name: cardName});
-        }).catch(({isCanceled, ...error}) => {});
-    }
-
-    componentWillUnmount() {
-        this.state.getCardName.cancel();
-        this.state.getCardImageURL.cancel();
-    }
+export function Card({
+        navigation,
+        card,
+        storeInformation,
+        origin,
+        cardToEnableDisable,
+        setCardToEnableDisable
+    }) {
+    const [name, setName] = useState("");
+    const [showDefault, setShowDefault] = useState(true);
+    const [cardImage, setCardImage] = useState("Not an Empty String");
+    
 
     // on press, navigate to the CardInfo page
-    onPress = () => { 
-        this.state.navigation.navigate('CardInfo', {
-            cardId: this.state.cardId,
-            docId: this.state.docId,
-            storeInformation: this.state.storeInformation,
-            img: this.state.showDefault ? require('../../../assets/cards/blank.png') : { uri: this.state.cardImage },
+    const onPressToCard = () => { 
+        navigation.navigate('CardInfo', {
+            cardId: card.cardId,
+            docId: card.docId,
+            storeInformation: storeInformation,
+            img: showDefault ? require('../../../assets/cards/blank.png') : { uri: cardImage },
         })
-    }
+    };
 
-    render () {
-        return (
-            <View>
-                <Text numberOfLines={1} style={styles.cardTitle}>{this.state.name}</Text>
-                <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-                    <CardImage
-                        style={[ styles.card ]}
-                        source={this.state.cardImage}
-                        overlay={this.state.name}
-                        default={this.state.showDefault}
-                        cardId={this.state.cardId}
-                    />
-                </TouchableOpacity>
-            </View>
-        );
-    }
+    useEffect(() => {
+        const getCardImageURL = makeCancelable(cards.getCardImageURL(card.cardId));
+        const getCardName = makeCancelable(cards.getCardName(card.cardId));
+        if (card !== null) {
+            getCardImageURL.promise.then(url => {
+                setCardImage(url);
+                setShowDefault(url.length == 0);
+            }).catch(({isCanceled, ...error}) => {});
+            // get the card name from cards
+            getCardName.promise.then((cardName) => {
+                setName(cardName);
+            }).catch(({isCanceled, ...error}) => {});
+        }
+        return () => {
+            getCardName.cancel();
+            getCardImageURL.cancel();
+        }
+    }, [])
+
+    return(
+        <View>
+            <Text numberOfLines={1} style={styles.cardTitle}>{name}</Text>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => onPressToCard()}>
+                <CardImage
+                    style={[ styles.card ]}
+                    source={cardImage}
+                    overlay={name}
+                    defaultImg={showDefault}
+                    cardId={card.cardId}
+                    cardToEnableDisable={cardToEnableDisable}
+                    setCardToEnableDisable={setCardToEnableDisable}
+                />
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 // the stylesheet for this module
