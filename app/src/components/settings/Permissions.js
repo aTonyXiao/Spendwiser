@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as IntentLauncher from 'expo-intent-launcher';
 import { BackButtonHeader } from '../util/BackButtonHeader';
+import Constants from 'expo-constants';
 
 export function AppPermissions(props) {
     const [notificationPermissions, setNotifiationPermission] = useState(false);
@@ -14,6 +15,9 @@ export function AppPermissions(props) {
     const [locationPermissions, setLocationPermissions] = useState(false);
     const appState = useRef(AppState.currentState);
     const trackColor = {false: "#767577", true: "#81b0ff"};
+    const pkg = Constants.manifest.releaseChannel
+    ? Constants.manifest.android.package 
+    : 'com.spendwiser';
 
     const handleAppStateChange = (nextAppState) => {
         if (
@@ -34,7 +38,8 @@ export function AppPermissions(props) {
             Linking.openURL('app-settings:')
         } else{
             IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+                IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
+                { data: 'package:' + pkg }
             );
         }
     }
