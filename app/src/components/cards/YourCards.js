@@ -120,14 +120,7 @@ function YourCards({ route, navigation }) {
                 if (rowRefs.current[index.toString()] !== undefined) rowRefs.current[index.toString()].closeRow();
                 swipeOpacities[index.toString()].setValue(1.0);
             }, 150);
-            // Force a a new YourCards to replace the current YourCards to trigger re-render
-            // Might not be the best
-            // navigation.dispatch(
-            //     StackActions.replace('YourCards', {})
-            // );
             setCardToEnableDisable(card.cardId);
-            console.log("Change card " + card.cardId);
-            // rowRefs[index.toString()].closeRow();
         }
     }
     
@@ -252,8 +245,6 @@ function YourCards({ route, navigation }) {
 
     const onRowOpen = (rowKey, rowMap) => {
         rowRefs.current[rowKey] = rowMap[rowKey]; // hacky update of the rowRefs
-        // console.log("hi");
-        // console.log(rowRefs);
     };
 
     const onRowClose = (rowKey, rowMap) => {

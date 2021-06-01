@@ -92,7 +92,6 @@ function CardImage({
 
   useEffect(() => {
     if (cardToEnableDisable !== null && cardToEnableDisable === cardId) {
-      console.log("In card " + cardId + " " + isCardDisabled);
       if (isCardDisabled !== null)
         setIsCardDisabled(!isCardDisabled);
       setCardToEnableDisable(null);
