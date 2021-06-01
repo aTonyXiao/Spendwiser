@@ -129,6 +129,11 @@ class FirebaseBackend extends BaseBackend {
 
     // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
     // to Date objects
+    /**
+     * 
+     * @param {Object} data any kind of object that could have firebase timestamp objects
+     * @returns the modified data
+     */
     convertTimestampToDate = (data) => {
         if (data instanceof Object) {
             for (let [key, value] of Object.entries(data)) {
@@ -142,6 +147,12 @@ class FirebaseBackend extends BaseBackend {
         return data;
     }
 
+    /**
+     * Like normal @ref dbGet, but does the operation on the remote firebase db
+     * 
+     * @param {string} location the period delimited path to a document or collection
+     * @param  {...any} conditionsWithCallback any filters (optional) followed by a callback function
+     */
     remoteDBGet(location, ...conditionsWithCallback) {
         console.log("Gettting from remote db");
         let callback = conditionsWithCallback.pop();
@@ -230,6 +241,11 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    /**
+     * 
+     * @param {string} location period delimited path to a collection
+     * @param {function} callback called back with an array of itmes within the collection
+     */
     dbGetSubCollectionsRemote(location, callback) {
         let dbloc = getDatabaseLocation(this.database, location);
 
@@ -297,6 +313,14 @@ class FirebaseBackend extends BaseBackend {
         })
     }
 
+    /**
+     * Sets the data of a document
+     * 
+     * @param {string} location the period delimited path to a document
+     * @param {Object} data any object data that should be assigned to the  {@link location}
+     * @param {*} merge if false all data will be replaced with new {@link data} passed in
+     * @param {*} callback  called when set operation is done
+     */
     remoteDBSet(location, data, merge, callback) {
         // Store on firebase if possible
         let databaseLocation = getDatabaseLocation(this.database, location);
@@ -310,6 +334,13 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Adds a document to a collection in the remote firebase db
+     * 
+     * @param {string} location the period delimited path to a collection
+     * @param {Object} data the data of a item that should be added to the {@link location}
+     * @param {function} callback called with a string containing the id of the newly added document
+     */
     remoteDBAdd(location, data, callback) {
         // Add data to our firebase storage
         let databaseLocation = getDatabaseLocation(this.database, location);
@@ -318,21 +349,6 @@ class FirebaseBackend extends BaseBackend {
         }).catch((err) => {
             console.log(err);
         });
-    }
-
-    dbFirebaseAddWithMetadata(location, data, callback) {
-        let sync_id = JSON.stringify(data);
-        if (!syncing_items.includes(sync_id)) {
-            syncing_items.push(sync_id);
-            this.dbFirebaseAdd(location, data, (query_id) => {
-                // Note (Nathan W): Add the query id as one of the keys in this item. We need it for easier data
-                // consolidation between our local database and the remote one.
-                this.dbSet(location + "." + query_id, {'id': query_id, 'modified': new Date()}, true, () => {
-                    syncing_items = syncing_items.filter(item => item !== sync_id);
-                    callback(query_id);
-                });
-            });
-        }
     }
 
     /**
@@ -375,6 +391,11 @@ class FirebaseBackend extends BaseBackend {
         });
     }
 
+    /**
+     * Deletes a document from the firebase db
+     * 
+     * @param {string} location the period delimited path to a document
+     */
     remoteDBDelete(location) {
         let databaseLocation = getDatabaseLocation(this.database, location);
         databaseLocation.delete();
@@ -433,6 +454,8 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Sign out the currently logged in user
+     * 
+     * @param {function} callback called when sign out is complete
      */
     signOut(callback) {
         storage.getLoginState((state) => {
@@ -444,18 +467,16 @@ class FirebaseBackend extends BaseBackend {
                     onAuthStateChangeCallback();
                 }
                 callback();
-                return;
             } else {
                 firebase.auth().signOut().then(() => {
                     // Sign-out successful.
                     storage.storeLoginState({ 'signed_in': false, 'account_type': 'normal' });
                     callback();
-                    return;
                 }).catch((error) => {
                     // An error happened.
                     // TODO: Is there a good way to handle this kind of error?
                     console.log(error);
-                    return;
+                    callback();
                 });
             }
         });
@@ -463,6 +484,7 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Get the login providers that are implemented
+     * @returns {Object} object containing all the supported login providers
      */
     getLoginProviders() {
         return {
@@ -472,6 +494,11 @@ class FirebaseBackend extends BaseBackend {
         };
     }
 
+    /**
+     * Gets the account type of the currently logged in user
+     * 
+     * @param {function} callback called with a string denoting the account type
+     */
     userAccountType(callback) {
         storage.getLoginState((state) => {
             callback(state.account_type);
@@ -508,7 +535,9 @@ class FirebaseBackend extends BaseBackend {
     }
 
     /**
-     * Returns true or false depending on if the user is already logged in
+     * Check if a user is logged in
+     * 
+     * @returns true or false depending on if the user is already logged in
      */
     userLoggedIn(callback) {
         storage.getLoginState((state) => {
@@ -557,13 +586,17 @@ class FirebaseBackend extends BaseBackend {
 
     /**
      * Get the current Timestamp
+     * 
+     * @returns timestamp in the form of a Date object
      */
     getTimestamp() {
         return firebase.firestore.Timestamp.now().toDate()
     }
 
     /**
+     * Gets info of the currently logged in user
      * 
+     * @returns object containing basic user info
      */
     getUserInfo() {
         return new Promise((resolve, reject) => {
