@@ -39,8 +39,12 @@ LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
+/**
+ * The app module utilized by React Native
+ * @module App
+ */
 export default function App() {
-  initializeAppBackend("firebase");
+  initializeAppBackend("firebase"); // utilize the Firebase backend in the app
 
   return (
     <SafeAreaProvider>

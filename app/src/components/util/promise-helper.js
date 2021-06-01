@@ -1,3 +1,6 @@
+/**
+ * Simple wrapper Util function that allows for the creation of cancellable Promises
+ */
 export const makeCancelable = (promise) => {
   let hasCanceled_ = false;
 

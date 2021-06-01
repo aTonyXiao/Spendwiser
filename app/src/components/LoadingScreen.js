@@ -51,10 +51,6 @@ function LoadingScreen({navigation}) {
                 style={styles.image}
                 source={require('../../assets/spendwiser_logo.png')}
             />
-            {/* TODO delete when done with frontend styling*/}
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.button}>Login</Text>
-            </TouchableOpacity> */}
         </View>
     );
 }
@@ -68,10 +64,5 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
-    }, 
-    // button: {
-    //     fontSize: 30,
-    //     color: 'black',
-    //     marginBottom: 25
-    // },
+    }
 })

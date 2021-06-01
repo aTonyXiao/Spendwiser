@@ -3,8 +3,9 @@ import { TextInput, StyleSheet } from 'react-native';
 
 /**
  * TextBox util component - a simple textbox 
- * 
- * TODO add parameters for documentation
+ * @param {string} placeholder - The placeholder text that will be in the TextBox
+ * @param {*} style - The passed in style of the TextBox
+ * @module Textbox
  */
 const grayRGB = 'rgb(211, 211, 211)';
 export class TextBox extends React.Component {
