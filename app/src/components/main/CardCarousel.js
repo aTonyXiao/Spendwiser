@@ -32,6 +32,7 @@ export function CardCarousel(
     }) {
     const [recIdx, setRecIdx] = useState(0);
     const ref = useRef(null);
+    const [cardToEnableDisable, setCardToEnableDisable] = useState(null);
     
     useEffect(() => {
         setRecIdx(0);
@@ -66,7 +67,10 @@ export function CardCarousel(
                     }}
                     source={item.cardImg}
                     overlay={item.cardName}
-                    default={item.cardImg.length == 0}
+                    defaultImg={item.cardImg.length == 0}
+                    cardId={item.cardId}
+                    cardToEnableDisable={null}
+                    setCardToEnableDisable={null}
                 />
             </View>
         </TouchableOpacity>

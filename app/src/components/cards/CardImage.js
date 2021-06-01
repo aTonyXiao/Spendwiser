@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -71,7 +71,15 @@ async function getIsCardDisabled(cardId) {
  * @param {string} props.cardId - id of card 
  * @module CardImage
  */
-function CardImage(props) {
+function CardImage({
+  style,
+  source,
+  overlay,
+  defaultImg,
+  cardId,
+  cardToEnableDisable,
+  setCardToEnableDisable,
+  }) {
   // states that keep track of the component
   const [isCardDisabled, setIsCardDisabled] = useState(false);
   const [hasConstructed, setHasConstructed] = useState(false);
@@ -82,13 +90,21 @@ function CardImage(props) {
       return;
     } else {
       // defaults of whether disabled or not
-      setIsCardDisabled(await getIsCardDisabled(props.cardId));
+      setIsCardDisabled(await getIsCardDisabled(cardId));
     }
   }
   constructor();
 
-  if (props.default) {
-    let generatedColor = generateColor(props.overlay);
+  useEffect(() => {
+    if (cardToEnableDisable !== null && cardToEnableDisable === cardId) {
+      if (isCardDisabled !== null)
+        setIsCardDisabled(!isCardDisabled);
+      setCardToEnableDisable(null);
+    }
+  }, [cardToEnableDisable])
+
+  if (defaultImg) {
+    let generatedColor = generateColor(overlay);
     return (
       <View>
         <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
@@ -100,11 +116,11 @@ function CardImage(props) {
             ></Ionicons>
           }
         </View>
-        <View style={isCardDisabled ? [styles.outerImageFaded, props.style] : [styles.outerImage, props.style]}>
+        <View style={isCardDisabled ? [styles.outerImageFaded, style] : [styles.outerImage, style]}>
           <ImageBackground style={styles.innerImage}
             source={require('../../../assets/cards/blank.png')}
             imageStyle={{ tintColor: generatedColor, resizeMode: "contain" }}>
-            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{props.overlay}</Text>
+            <Text style={[{ color: contrastRGB(generatedColor) }, styles.overlay]}>{overlay}</Text>
           </ImageBackground>
         </View>
       </View>
@@ -123,8 +139,8 @@ function CardImage(props) {
         </View>
         <View style={isCardDisabled ? styles.faded : {}}>
           <CachedImage
-            style={[styles.outerImage, props.style]}
-            source={{ uri: props.source }}
+            style={[styles.outerImage, style]}
+            source={{ uri: source }}
           />
         </View>
       </View>

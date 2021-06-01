@@ -51,6 +51,7 @@ function YourCards({ route, navigation }) {
     const storeInformation = route.params.storeInformation;
     const forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
     const focused = useIsFocused();
+    const [cardToEnableDisable, setCardToEnableDisable] = useState(null);
 
     const resetAnimationValues = key => {
         if (typeof swipeDeleteWidths[key] === "undefined") { // if they don't exist, create them
@@ -118,9 +119,10 @@ function YourCards({ route, navigation }) {
             if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
             // Force a a new YourCards to replace the current YourCards to trigger re-render
             // Might not be the best
-            navigation.dispatch(
-                StackActions.replace('YourCards', {})
-            );
+            // navigation.dispatch(
+            //     StackActions.replace('YourCards', {})
+            // );
+            setCardToEnableDisable(card.cardId);
         }
     }
     
@@ -278,7 +280,15 @@ function YourCards({ route, navigation }) {
                         renderItem={(data, rowMap) => (
                             <View style={{paddingHorizontal: '5%'}}>
                                 <Animated.View key={data.item.docId} style={{ opacity: swipeOpacities[data.item.key], height: swipeHeights[data.item.key], overflow: "hidden" }}>
-                                    <Card key={data.item.docId} navigation={navigation} card={data.item} storeInformation={storeInformation} origin={"yourcards"} />
+                                    <Card
+                                        key={data.item.docId}
+                                        navigation={navigation}
+                                        card={data.item}
+                                        storeInformation={storeInformation}
+                                        origin={"yourcards"}
+                                        cardToEnableDisable = {cardToEnableDisable}
+                                        setCardToEnableDisable = {setCardToEnableDisable}
+                                    />
                                 </Animated.View>
                                 { /* render divider bar for all cards except for last card */ }
                                 <View style={data.item.key < cards.length-1 ? styles.divider : [styles.divider, { opacity: 0 }]}></View>
