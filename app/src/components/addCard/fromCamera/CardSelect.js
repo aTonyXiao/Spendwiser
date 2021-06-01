@@ -6,15 +6,13 @@ import {
     TouchableOpacity, 
     StyleSheet, 
     Button,
-    View,
-    SafeAreaView
+    View
 } from 'react-native';
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
 import { appBackend } from '../../../network/backend';
 import * as storage from '../../../local/storage';
-import mainStyles from '../../../styles/mainStyles';
 
 // TODO: handle no text
 
@@ -116,50 +114,46 @@ export function CardSelect({route, navigation}) {
     }
 
     return (
-        <SafeAreaView style={mainStyles.screen}>
-            <View style={mainStyles.bodyContainer}>
-                <ScrollView style={styles.container}>
-                    {/* No cards found */}
+        <ScrollView style={styles.container}>
+            {/* No cards found */}
+            {
+                filteredCardNames.length == 0 &&
+                <View>
+                    <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
+
+                    <Button
+                        title="Try another image"
+                        onPress={() => {navigation.navigate('ChooseImage')}}
+                    >
+                    </Button>
+
+                    <Button
+                        title="Go back to your cards"
+                        onPress={() => {navigation.navigate('YourCards')}}
+                    >
+                    </Button>
+                </View>
+            }
+
+            {/* Found cards */}
+            {
+                filteredCardNames.length > 0 &&
+                <View>
+                    <Text style={styles.title}>Here's a list of possible cards we found: </Text>
+
+                    {/* List of cards */}
                     {
-                        filteredCardNames.length == 0 &&
-                        <View>
-                            <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
-
-                            <Button
-                                title="Try another image"
-                                onPress={() => {navigation.navigate('ChooseImage')}}
-                            >
-                            </Button>
-
-                            <Button
-                                title="Go back to your cards"
-                                onPress={() => {navigation.navigate('YourCards', { forceLoad: true })}}
-                            >
-                            </Button>
-                        </View>
+                        filteredCardNames.map((cardName, i) => {
+                            return (
+                                <TouchableOpacity key={i} onPress={() => { setChosenCard(cardName) }}>
+                                    <Text style={styles.body}>{cardName}</Text>
+                                </TouchableOpacity>
+                            )
+                        })
                     }
-
-                    {/* Found cards */}
-                    {
-                        filteredCardNames.length > 0 &&
-                        <View>
-                            <Text style={styles.title}>Here's a list of possible cards we found: </Text>
-
-                            {/* List of cards */}
-                            {
-                                filteredCardNames.map((cardName, i) => {
-                                    return (
-                                        <TouchableOpacity key={i} onPress={() => { setChosenCard(cardName) }}>
-                                            <Text style={styles.body}>{cardName}</Text>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-                    }
-                </ScrollView>
-            </View>
-        </SafeAreaView>
+                </View>
+            }
+        </ScrollView>
     )
 }
 
