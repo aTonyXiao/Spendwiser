@@ -27,6 +27,7 @@ function setAppBackend (type) {
  * 
  * Currently supported backends:
  *   - 'firebase'
+ *   - 'server'
  * 
  * @param {string} type - The backend type to initialize
  */
