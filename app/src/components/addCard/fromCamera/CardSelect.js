@@ -14,7 +14,6 @@ import { cards } from '../../../network/cards';
 import { appBackend } from '../../../network/backend';
 import * as storage from '../../../local/storage';
 
-// TODO: change to "CardSelectFromImage"
 // TODO: handle no text
 
 /**
@@ -109,9 +108,9 @@ export function CardSelect({route, navigation}) {
                     { text: "Ok" }
                 ],
                 { cancelable: false });
-        }
 
-        navigation.navigate('YourCards');
+            navigation.navigate('YourCards', { forceLoad: true });
+        }
     }
 
     return (

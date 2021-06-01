@@ -46,7 +46,7 @@ function YourCards({ route, navigation }) {
     const userId = user.getUserId();
     const [modalVisible, setModalVisible] = useState(false);
     const storeInformation = route.params.storeInformation;
-    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
+    const forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
     const focused = useIsFocused();
 
     const resetAnimationValues = key => {
@@ -65,7 +65,12 @@ function YourCards({ route, navigation }) {
     };
 
     useEffect(() => {
+        // let forceLoad = ((typeof route.params.forceLoad !== "undefined") && (route.params.forceLoad === true));
+        console.log('JA;;DFJA;DJ;AJ');
+        console.log(forceLoad);
+
         if (isLoaded === false || forceLoad === true) {
+            console.log("ok, reloading then")
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
