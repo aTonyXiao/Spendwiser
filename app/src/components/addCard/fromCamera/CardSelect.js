@@ -11,8 +11,8 @@ import {
 import { useState } from 'react';
 import { user } from '../../../network/user';
 import { cards } from '../../../network/cards';
-import { BackButtonHeader } from '../../util/BackButtonHeader';
-import mainStyles from '../../../styles/mainStyles';
+import { appBackend } from '../../../network/backend';
+import * as storage from '../../../local/storage';
 
 // TODO: change to "CardSelectFromImage"
 // TODO: handle no text
@@ -54,7 +54,7 @@ export function CardSelect({route, navigation}) {
 
                 let originalCardNames = Object.keys(mapping);
 
-                // filter card names for detected words from imag
+                // filter card names for detected words from image
                 originalCardNames.forEach(cardName => { 
                     for (let i=0 ; i<text.length ; i++) { 
                         let detectedWord = text[i];
@@ -91,7 +91,6 @@ export function CardSelect({route, navigation}) {
             cards.getCardData(cardId, async (data) => {
                 // Add the card into the user's list of cards
                 await user.saveCardToUser(userId, cardId, null, null);
-                // console.log("Saved card to user");
 
                 // Add the actual card data as well
                 appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
