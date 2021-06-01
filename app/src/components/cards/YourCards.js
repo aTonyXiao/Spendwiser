@@ -37,28 +37,29 @@ const CARD_HEIGHT = (Dimensions.get('window').width * 0.9) / 1.586;
  * @module YourCards
  */
 function YourCards({ route, navigation }) {
-    const [cards, setCards] = useState([]);
-    const [swipeDeleteWidths, setSwipeDeleteWidths] = useState({});
-    const [swipeLockWidths, setSwipeLockWidths] = useState({});
-    const [swipeHeights, setSwipeHeights] = useState({});
-    const [swipeOpacities, setSwipeOpacities] = useState({});
-    const [rowRefs, setRowRefs] = useState({});
-    const [isLoaded, setLoaded] = useState(false);
-    const animationRunning = useRef(false);
-    const swipeButtonOpen = useRef(false);
-    const userId = user.getUserId();
+    const [cards, setCards] = useState([]); // the current cards list
+    const [swipeDeleteWidths, setSwipeDeleteWidths] = useState({}); // the swipe button widths (for delete)
+    const [swipeLockWidths, setSwipeLockWidths] = useState({}); // the swipe button widths (for lock)
+    const [swipeHeights, setSwipeHeights] = useState({}); // the swipe button heights
+    const [swipeOpacities, setSwipeOpacities] = useState({}); // the card opacities (for swipe)
+    const [rowRefs, setRowRefs] = useState({}); // the row references for swipeable cards
+    const [isLoaded, setLoaded] = useState(false); // whether this page was loaded already or not
+    const animationRunning = useRef(false); // whether there is an animation currently running
+    const swipeButtonOpen = useRef(false); // whether a swipe button is currently open
+    const userId = user.getUserId(); // get the user id
     const [modalVisible, setModalVisible] = useState(false);
-    const storeInformation = route.params.storeInformation;
-    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true;
-    const focused = useIsFocused();
+
+    const storeInformation = route.params.storeInformation; // curent store information
+    const forceLoad = typeof route.params.forceLoad !== "undefined" && route.params.forceLoad === true; // whether there should be a force reload of cards
+    const focused = useIsFocused(); // the component focus action
 
     const resetAnimationValues = key => {
-        if (typeof swipeDeleteWidths[key] === "undefined") {
+        if (typeof swipeDeleteWidths[key] === "undefined") { // if they don't exist, create them
             swipeDeleteWidths[key] = new Animated.Value(0);
             swipeLockWidths[key] = new Animated.Value(0);
             swipeHeights[key] = new Animated.Value(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
             swipeOpacities[key] = new Animated.Value(1.0);
-        } else {
+        } else { // set to their defaults if they do exist
             swipeDeleteWidths[key].setValue(0);
             swipeLockWidths[key].setValue(0);
             swipeHeights[key].setValue(CARD_HEIGHT + 20 * PixelRatio.getFontScale() + 24);
@@ -66,12 +67,14 @@ function YourCards({ route, navigation }) {
         }
     };
 
+    // react native use effect for the 'OnFocus' action
     useEffect(() => {
-        if (isLoaded === false || forceLoad === true) {
+        if (isLoaded === false || forceLoad === true) { // whether a force load or if not loaded yet
+            // load the cards in
             const cancelableGetCards = makeCancelable(user.getCards(userId));
             cancelableGetCards.promise.then(cards => {
                 setCards([]);
-                cards.forEach(element => {
+                cards.forEach(element => { // add a "key" for each for SwipeListView support
                     element["key"] = cards.indexOf(element).toString();
                     resetAnimationValues(element["key"]);
                 });
@@ -87,8 +90,10 @@ function YourCards({ route, navigation }) {
         }
     }, [focused])
 
+    // delete card function with animation
     const deleteCard = (card, index) => {
-        user.deleteCard(userId, card.cardId, card.docId);
+        user.deleteCard(userId, card.cardId, card.docId); // delete from the user
+        // animate the delete
         Animated.timing(swipeHeights[index], {
             toValue: 0,
             duration: 150,
@@ -105,8 +110,10 @@ function YourCards({ route, navigation }) {
         });
     }
 
+    // lock a card
     const lockCard = (card, index) => {
         if (card !== null) {
+            // disable the card for the user
             storage.setDisabledCards(card.cardId);
             user.setMainNeedsUpdate(true);
             if (rowRefs[index.toString()] !== undefined) rowRefs[index.toString()].closeRow();
@@ -118,6 +125,7 @@ function YourCards({ route, navigation }) {
         }
     }
     
+    // confirmation for deletion using an Alert
     const confirmDelete = (card, index) => {
         Alert.alert(
             'Delete Card?',
@@ -129,11 +137,14 @@ function YourCards({ route, navigation }) {
           );
     };
 
+    // confirmation for when a swipe button is clicked
     const confirmSwipeAction = (card, index) => {
+        // choose a swipe action depending on the width of the delete button
         if (swipeDeleteWidths[index].__getValue() === 0) lockCard(card, index);
         else confirmDelete(card, index);
     }
 
+    // No cards, render empty
     if (cards.length == 0) {
         return (
             <SafeAreaView style={mainStyles.screen}>
@@ -165,10 +176,11 @@ function YourCards({ route, navigation }) {
         )
     }
 
+    // calculate the swipe threshold to be 50% of the width of the screen
     const swipeThreshold = Dimensions.get('window').width * 0.5;
     const onSwipeValueChange = swipeData => {
         const { key, value } = swipeData;
-        let deleteFlag = value < 0;
+        let deleteFlag = value < 0; // flag for deletion (left swipe)
         // reset the widths if not visible
         if (deleteFlag) swipeLockWidths[key].setValue(0);
         else swipeDeleteWidths[key].setValue(0);
@@ -176,11 +188,13 @@ function YourCards({ route, navigation }) {
             if (!animationRunning.current && !swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                // animate to hide the card
                 Animated.timing(swipeOpacities[key], {
                     toValue: 0.0,
                     duration: 100,
                     useNativeDriver: false
                 }).start();
+                // animate to make the button in full view
                 Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Dimensions.get('window').width * 0.9,
                     duration: 150,
@@ -196,11 +210,13 @@ function YourCards({ route, navigation }) {
             if (!animationRunning.current && swipeButtonOpen.current) {
                 // https://docs.expo.io/versions/latest/sdk/haptics/
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                // animate to make card visible again
                 Animated.timing(swipeOpacities[key], {
                     toValue: 1.0,
                     duration: 100,
                     useNativeDriver: false
                 }).start();
+                // spring back to what it was before
                 Animated.timing(deleteFlag ? swipeDeleteWidths[key] : swipeLockWidths[key], {
                     toValue: Math.abs(value),
                     duration: 150,
@@ -212,6 +228,7 @@ function YourCards({ route, navigation }) {
                 });
                 animationRunning.current = true;
             } else if (!animationRunning.current) {
+                // keep updating the width for smooth
                 if (deleteFlag) swipeDeleteWidths[key].setValue(Math.abs(value));
                 else swipeLockWidths[key].setValue(Math.abs(value));
             }
@@ -219,6 +236,7 @@ function YourCards({ route, navigation }) {
     };
 
     const swipeGestureEnded = (key, data) => {
+        // detect when past theswipe threshold
         if (Math.abs(data.translateX) > swipeThreshold) {
             let index = parseInt(key);
             if (data.translateX < 0) deleteCard(cards[index], index);
@@ -227,15 +245,16 @@ function YourCards({ route, navigation }) {
     };
 
     const onRowOpen = (rowKey, rowMap) => {
-        rowRefs[rowKey] = rowMap[rowKey]; // hacky
+        rowRefs[rowKey] = rowMap[rowKey]; // hacky update of the rowRefs
         setRowRefs(rowRefs);
     };
 
     const onRowClose = (rowKey, rowMap) => {
-        rowRefs[rowKey] = undefined; // hacky
+        rowRefs[rowKey] = undefined; // hacky update of the rowRefs
         setRowRefs(rowRefs);
     };
 
+    // render the cards
     return (
         <SafeAreaView style={mainStyles.screen}>
             <View style={mainStyles.bodyContainer}>
@@ -290,7 +309,6 @@ function YourCards({ route, navigation }) {
                         )}
                         rightOpenValue={-100}
                         leftOpenValue={100}
-                        // disableRightSwipe={true} // comment this out to enable lock swiping
                         onSwipeValueChange={onSwipeValueChange}
                         swipeGestureEnded={swipeGestureEnded}
                         onRowOpen={onRowOpen}
@@ -307,6 +325,7 @@ function YourCards({ route, navigation }) {
     );
 }
 
+// the styles for this component
 const styles = StyleSheet.create({
     emptyBodyContainer: {
         flex: 1,
