@@ -34,6 +34,12 @@ const modeType = {
 const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
 const colors = ['#FF0000', '#FF7F00', '#FFD700', '#228B22', '#0000FF', '#2E2B5F', '#8B00FF']
 
+/**
+ * Display spend analyzer that lets users analyze their spendings
+ * 
+ * @param {Object} navigation - navigation object used to move between different pages
+ * @module SpendingSummary
+ */
 export function SpendingSummary({navigation}) {
     const [modalVisible, setModalVisible] = useState(modalType.DISABLED);
     const [curCategory, setCurCategory] = useState({
@@ -59,6 +65,7 @@ export function SpendingSummary({navigation}) {
     /**
      * A callback function that updates the state of cards array
      * @param {Array} myCards - array of user's cards retrieved from the database
+     * @function getCardFromDB
      */
     function getCardFromDB(myCards) {
         setCards(myCards);
@@ -67,6 +74,7 @@ export function SpendingSummary({navigation}) {
     /**
      * Function to change the current category in summary mode
      * @param {string} cat - new category to change to curCategory to
+     * @function changeCategory
      */
     function changeCategory(cat) {
         setCurCategory({
@@ -79,6 +87,7 @@ export function SpendingSummary({navigation}) {
     /**
      * Function to change current card of the spend analyzer to filter transactions from
      * @param {string} cardName - name of the card the user wants to view transactions from
+     * @function setCurCardFromModal
      */
     function setCurCardFromModal(cardName) {
         let curCardIdx = -1;
@@ -102,6 +111,7 @@ export function SpendingSummary({navigation}) {
      * Function to set new month period for COMPARE and BUDGET modes
      * whichPeriod state determines if the user wants to set the first or second month period
      * @param {Date} date - date object with month and year that the user has chosen to update to
+     * @function setNewPeriod
      */
     function setNewPeriod(date) {
         const dateSplit = date.split(' ');
@@ -120,6 +130,7 @@ export function SpendingSummary({navigation}) {
     /**
      * Get transactions based on parameter array's month period for COMPARE and BUDGET mode
      * @param {Array} newCompareTimeframe - array of two Data objects 
+     * @function getCompareTimeFrameTransactions
      */
     function getCompareTimeframeTransactions(newCompareTimeframe) {
         if (newCompareTimeframe.length === 0) {
@@ -143,6 +154,7 @@ export function SpendingSummary({navigation}) {
     /**
      * Set and store new category limits for BUDGET mode
      * @param {Array} newCategoriesLimit - an array of integers representing the limits of each category
+     * @function changeCategoriesLimit
      */
     function changeCategoriesLimit(newCategoriesLimit) {
         setCategoriesLimit(newCategoriesLimit);
@@ -152,6 +164,7 @@ export function SpendingSummary({navigation}) {
     /**
      * Process and add transaction to the values array if the transaction is within the card filter
      * @param {Object} transaction - transaction object retrieved from database
+     * @function processTransaction
      */
     function processTransaction(transaction) {
         let tmpValues = values;

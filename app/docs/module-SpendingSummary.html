@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Cards - Documentation</title>
+    <title>SpendingSummary - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Cards</h1>
+    <h1 class="page-title">SpendingSummary</h1>
     
 
     <!--container.tmpl-->
@@ -49,11 +49,9 @@
 
 <header data-tmpl="container.tmpl">
     
-        <h2>
-        Cards
-        </h2>
+      <h2>Module: SpendingSummary</h2>
         
-            <div class="lead">A Card class that performs database operations for cards</div>
+            
         
     
 
@@ -63,57 +61,45 @@
         <br />
         <dl class="dl-horizontal methods-members">
         <dt>Methods</dt><dd><ul>
-            <li><a href="#addCardToDatabase">addCardToDatabase</a></li>
+            <li><a href="#changeCategoriesLimit">changeCategoriesLimit</a></li>
             
-            <li><a href="#addJsonToDatabase">addJsonToDatabase</a></li>
+            <li><a href="#changeCategory">changeCategory</a></li>
             
-            <li><a href="#getCardData">getCardData</a></li>
+            <li><a href="#getCardFromDB">getCardFromDB</a></li>
             
-            <li><a href="#getCardImageURL">getCardImageURL</a></li>
+            <li><a href="#getCompareTimeFrameTransactions">getCompareTimeFrameTransactions</a></li>
             
-            <li><a href="#getCardImg">getCardImg</a></li>
+            <li><a href="#processTransaction">processTransaction</a></li>
             
-            <li><a href="#getCardName">getCardName</a></li>
+            <li><a href="#setCurCardFromModal">setCurCardFromModal</a></li>
             
-            <li><a href="#getCardNames">getCardNames</a></li>
-            
-            <li><a href="#getCardReward">getCardReward</a></li>
+            <li><a href="#setNewPeriod">setNewPeriod</a></li>
             </ul></dd></dl></div>
 </header>
 
 <article>
     <div class="container-overview">
     
-        <!--method.tmpl-->
+        
+            <div class="description">Display spend analyzer that lets users analyze their spendings</div>
+        
+
+        
+            <!--method.tmpl-->
 <div class="method-details">
 
 
 
-
-
-    
-    <h3 class="constructor">Constructor</h3>
-    
-
-    
-      <!--source-link.tmpl-->
+  <!--source-link.tmpl-->
 
 
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line6">6</a>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line37">37</a>
   </code>
 </div>
 
-    
-
-    <h4 class="name" id="Cards">
-      <a href="#params-Cards"><span class="type-signature"></span>new Cards</a><span class="signature">()</span><span class="type-signature"></span>
-
-    </h4>
-
-    
 
 
 
@@ -134,7 +120,9 @@
 
 
 
-<div class="collapse_" id="methodCollapse-Cards">
+
+
+<div class="collapse_" id="methodCollapse-SpendingSummary">
 
   
 
@@ -142,6 +130,17 @@
 
 <!-- details.tmpl -->
 
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line37">37</a>
+  </code>
+</div>
 
 
 
@@ -183,6 +182,58 @@
 
 
 
+  <div id="params-SpendingSummary" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>navigation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">navigation object used to move between different pages</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
 
 
 
@@ -205,11 +256,12 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n * A Card class that performs database operations for cards\r\n */","meta":{"range":[114,5624],"filename":"cards.js","lineno":6,"columnno":0,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035044","name":"Cards","type":"ClassDeclaration","paramnames":[]},"shortpath":"src/network/cards.js"},"classdesc":"A Card class that performs database operations for cards","name":"Cards","longname":"Cards","kind":"class","scope":"global","___id":"T000003R000004","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Cards","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\r\n * Display spend analyzer that lets users analyze their spendings\r\n * \r\n * @param {Object} navigation - navigation object used to move between different pages\r\n * @module SpendingSummary\r\n */","meta":{"filename":"SpendingSummary.js","lineno":37,"columnno":0,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Display spend analyzer that lets users analyze their spendings","params":[{"type":{"names":["Object"]},"description":"navigation object used to move between different pages","name":"navigation"}],"kind":"module","name":"SpendingSummary","longname":"module:SpendingSummary","___id":"T000002R002275","___s":true,"attribs":"","id":"SpendingSummary","ancestors":[]}
 </pre>
 -->
 </div>
 
+        
     
     </div>
 
@@ -240,7 +292,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line86">86</a>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line154">154</a>
   </code>
 </div>
 
@@ -251,8 +303,8 @@
 
     
 
-    <h4 class="name" id="addCardToDatabase">
-      <a href="#params-addCardToDatabase"><span class="type-signature"></span>addCardToDatabase</a><span class="signature">(name, benefits, rewards, url)</span><span class="type-signature"></span>
+    <h4 class="name" id="~changeCategoriesLimit">
+      <a href="#params-changeCategoriesLimit"><span class="type-signature">(inner) </span>changeCategoriesLimit</a><span class="signature">(newCategoriesLimit)</span><span class="type-signature"></span>
 
     </h4>
 
@@ -271,7 +323,7 @@
 
 
 <div class="description">
-    Adds a card to the the cards database
+    Set and store new category limits for BUDGET mode
 </div>
 
 
@@ -281,7 +333,7 @@
 
 
 
-<div class="collapse_" id="methodCollapse-addCardToDatabase">
+<div class="collapse_" id="methodCollapse-changeCategoriesLimit">
 
   
 
@@ -330,7 +382,7 @@
 
 
 
-  <div id="params-addCardToDatabase" class="bs-callout bs-callout-primary">
+  <div id="params-changeCategoriesLimit" class="bs-callout bs-callout-primary">
     <h5>Parameters</h5>
     <!--params.tmpl-->
 
@@ -357,7 +409,188 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>newCategoriesLimit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an array of integers representing the limits of each category</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Set and store new category limits for BUDGET mode\r\n     * @param {Array} newCategoriesLimit - an array of integers representing the limits of each category\r\n     * @function changeCategoriesLimit\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":154,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Set and store new category limits for BUDGET mode","params":[{"type":{"names":["Array"]},"description":"an array of integers representing the limits of each category","name":"newCategoriesLimit"}],"kind":"function","name":"changeCategoriesLimit","longname":"module:SpendingSummary~changeCategoriesLimit","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002307","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~changeCategoriesLimit","signature":"<span class=\"signature\">(newCategoriesLimit)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line74">74</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="~changeCategory">
+      <a href="#params-changeCategory"><span class="type-signature">(inner) </span>changeCategory</a><span class="signature">(cat)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Function to change the current category in summary mode
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-changeCategory">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-changeCategory" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cat</code></td>
             
 
             <td class="type">
@@ -373,20 +606,178 @@
 
             
 
-            <td class="description last">card name</td>
+            <td class="description last">new category to change to curCategory to</td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Function to change the current category in summary mode\r\n     * @param {string} cat - new category to change to curCategory to\r\n     * @function changeCategory\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":74,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Function to change the current category in summary mode","params":[{"type":{"names":["string"]},"description":"new category to change to curCategory to","name":"cat"}],"kind":"function","name":"changeCategory","longname":"module:SpendingSummary~changeCategory","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002284","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~changeCategory","signature":"<span class=\"signature\">(cat)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line65">65</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="~getCardFromDB">
+      <a href="#params-getCardFromDB"><span class="type-signature">(inner) </span>getCardFromDB</a><span class="signature">(myCards)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    A callback function that updates the state of cards array
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardFromDB">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardFromDB" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>benefits</code></td>
+                <td class="name"><code>myCards</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">Array</span>
 
 
             
@@ -396,20 +787,178 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">array of user's cards retrieved from the database</td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * A callback function that updates the state of cards array\r\n     * @param {Array} myCards - array of user's cards retrieved from the database\r\n     * @function getCardFromDB\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":65,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"A callback function that updates the state of cards array","params":[{"type":{"names":["Array"]},"description":"array of user's cards retrieved from the database","name":"myCards"}],"kind":"function","name":"getCardFromDB","longname":"module:SpendingSummary~getCardFromDB","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002282","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~getCardFromDB","signature":"<span class=\"signature\">(myCards)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line130">130</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="~getCompareTimeFrameTransactions">
+      <a href="#params-getCompareTimeFrameTransactions"><span class="type-signature">(inner) </span>getCompareTimeFrameTransactions</a><span class="signature">(newCompareTimeframe)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get transactions based on parameter array's month period for COMPARE and BUDGET mode
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCompareTimeFrameTransactions">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCompareTimeFrameTransactions" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>rewards</code></td>
+                <td class="name"><code>newCompareTimeframe</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">Array</span>
 
 
             
@@ -419,14 +968,353 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">array of two Data objects</td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Get transactions based on parameter array's month period for COMPARE and BUDGET mode\r\n     * @param {Array} newCompareTimeframe - array of two Data objects \r\n     * @function getCompareTimeFrameTransactions\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":130,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Get transactions based on parameter array's month period for COMPARE and BUDGET mode","params":[{"type":{"names":["Array"]},"description":"array of two Data objects","name":"newCompareTimeframe"}],"kind":"function","name":"getCompareTimeFrameTransactions","longname":"module:SpendingSummary~getCompareTimeFrameTransactions","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002303","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~getCompareTimeFrameTransactions","signature":"<span class=\"signature\">(newCompareTimeframe)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line164">164</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="~processTransaction">
+      <a href="#params-processTransaction"><span class="type-signature">(inner) </span>processTransaction</a><span class="signature">(transaction)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Process and add transaction to the values array if the transaction is within the card filter
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-processTransaction">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-processTransaction" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>transaction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">transaction object retrieved from database</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Process and add transaction to the values array if the transaction is within the card filter\r\n     * @param {Object} transaction - transaction object retrieved from database\r\n     * @function processTransaction\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":164,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Process and add transaction to the values array if the transaction is within the card filter","params":[{"type":{"names":["Object"]},"description":"transaction object retrieved from database","name":"transaction"}],"kind":"function","name":"processTransaction","longname":"module:SpendingSummary~processTransaction","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002309","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~processTransaction","signature":"<span class=\"signature\">(transaction)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line87">87</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="~setCurCardFromModal">
+      <a href="#params-setCurCardFromModal"><span class="type-signature">(inner) </span>setCurCardFromModal</a><span class="signature">(cardName)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Function to change current card of the spend analyzer to filter transactions from
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-setCurCardFromModal">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-setCurCardFromModal" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardName</code></td>
             
 
             <td class="type">
@@ -442,7 +1330,7 @@
 
             
 
-            <td class="description last">card url</td>
+            <td class="description last">name of the card the user wants to view transactions from</td>
         </tr>
 
     
@@ -473,7 +1361,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Adds a card to the the cards database\r\n     * @param {string} name - card name\r\n     * @param {*} benefits \r\n     * @param {*} rewards \r\n     * @param {string} url - card url\r\n     */","meta":{"range":[2708,3504],"filename":"cards.js","lineno":86,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035249","name":"Cards#addCardToDatabase","type":"MethodDefinition","paramnames":["name","benefits","rewardType","rewards","url"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Adds a card to the the cards database","params":[{"type":{"names":["string"]},"description":"card name","name":"name"},{"type":{"names":["*"]},"name":"benefits"},{"type":{"names":["*"]},"name":"rewards"},{"type":{"names":["string"]},"description":"card url","name":"url"}],"name":"addCardToDatabase","longname":"Cards#addCardToDatabase","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003065","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addCardToDatabase","signature":"<span class=\"signature\">(name, benefits, rewards, url)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+{"comment":"/**\r\n     * Function to change current card of the spend analyzer to filter transactions from\r\n     * @param {string} cardName - name of the card the user wants to view transactions from\r\n     * @function setCurCardFromModal\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":87,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Function to change current card of the spend analyzer to filter transactions from","params":[{"type":{"names":["string"]},"description":"name of the card the user wants to view transactions from","name":"cardName"}],"kind":"function","name":"setCurCardFromModal","longname":"module:SpendingSummary~setCurCardFromModal","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002288","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~setCurCardFromModal","signature":"<span class=\"signature\">(cardName)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
 </pre>
 -->
 </div>
@@ -490,7 +1378,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line115">115</a>
+    <a href="src_components_summary_SpendingSummary.js.html">SpendingSummary.js</a>:<a href="src_components_summary_SpendingSummary.js.html#line110">110</a>
   </code>
 </div>
 
@@ -501,8 +1389,8 @@
 
     
 
-    <h4 class="name" id="addJsonToDatabase">
-      <a href="#params-addJsonToDatabase"><span class="type-signature"></span>addJsonToDatabase</a><span class="signature">(json)</span><span class="type-signature"></span>
+    <h4 class="name" id="~setNewPeriod">
+      <a href="#params-setNewPeriod"><span class="type-signature">(inner) </span>setNewPeriod</a><span class="signature">(date)</span><span class="type-signature"></span>
 
     </h4>
 
@@ -521,7 +1409,7 @@
 
 
 <div class="description">
-    Adds JSON data with card data to the database
+    Function to set new month period for COMPARE and BUDGET modeswhichPeriod state determines if the user wants to set the first or second month period
 </div>
 
 
@@ -531,7 +1419,7 @@
 
 
 
-<div class="collapse_" id="methodCollapse-addJsonToDatabase">
+<div class="collapse_" id="methodCollapse-setNewPeriod">
 
   
 
@@ -580,7 +1468,7 @@
 
 
 
-  <div id="params-addJsonToDatabase" class="bs-callout bs-callout-primary">
+  <div id="params-setNewPeriod" class="bs-callout bs-callout-primary">
     <h5>Parameters</h5>
     <!--params.tmpl-->
 
@@ -607,13 +1495,13 @@
 
         <tr>
             
-                <td class="name"><code>json</code></td>
+                <td class="name"><code>date</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">JSON</span>
+<span class="param-type">Date</span>
 
 
             
@@ -623,7 +1511,7 @@
 
             
 
-            <td class="description last">the JSON data with the 'cards' element</td>
+            <td class="description last">date object with month and year that the user has chosen to update to</td>
         </tr>
 
     
@@ -654,1164 +1542,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Adds JSON data with card data to the database\r\n     * \r\n     * @param {JSON} json - the JSON data with the 'cards' element\r\n     */","meta":{"range":[3663,4418],"filename":"cards.js","lineno":115,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035322","name":"Cards#addJsonToDatabase","type":"MethodDefinition","paramnames":["json"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Adds JSON data with card data to the database","params":[{"type":{"names":["JSON"]},"description":"the JSON data with the 'cards' element","name":"json"}],"name":"addJsonToDatabase","longname":"Cards#addJsonToDatabase","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003076","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addJsonToDatabase","signature":"<span class=\"signature\">(json)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line161">161</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardData">
-      <a href="#params-getCardData"><span class="type-signature"></span>getCardData</a><span class="signature">(cardId, callback)</span><span class="type-signature"></span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="description">
-    Get the general card's data for a certain card id
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardData">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardData" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cardId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the card id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">function that is invoked for the returned data (called for the card)</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Get the general card's data for a certain card id\r\n     * @param {*} cardId - the card id\r\n     * @param {*} callback - function that is invoked for the returned data (called for the card)\r\n     */","meta":{"range":[5258,5621],"filename":"cards.js","lineno":161,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035470","name":"Cards#getCardData","type":"MethodDefinition","paramnames":["cardId","callback"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get the general card's data for a certain card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"},{"type":{"names":["*"]},"description":"function that is invoked for the returned data (called for the card)","name":"callback"}],"name":"getCardData","longname":"Cards#getCardData","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003092","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getCardData","signature":"<span class=\"signature\">(cardId, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line59">59</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardImageURL">
-      <a href="#params-getCardImageURL"><span class="type-signature">(async) </span>getCardImageURL</a><span class="signature">(cardId)</span><span class="type-signature"></span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-<span class="label label-default">Async</span>
-
-
-
-
-<div class="description">
-    Get a card image url based on its card id
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardImageURL">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardImageURL" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cardId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the card id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Get a card image url based on its card id\r\n     * @param {*} cardId - the card id\r\n     */","meta":{"range":[1958,2175],"filename":"cards.js","lineno":59,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035191","name":"Cards#getCardImageURL","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get a card image url based on its card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"}],"name":"getCardImageURL","longname":"Cards#getCardImageURL","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003063","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardImageURL","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line71">71</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardImg">
-      <a href="#params-getCardImg"><span class="type-signature">(async) </span>getCardImg</a><span class="signature">(cardId)</span><span class="type-signature"></span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-<span class="label label-default">Async</span>
-
-
-
-
-<div class="description">
-    Get a card image based on its card id
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardImg">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardImg" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cardId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the card id</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Get a card image based on its card id\r\n     * @param {*} cardId - the card id\r\n     */","meta":{"range":[2287,2499],"filename":"cards.js","lineno":71,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035220","name":"Cards#getCardImg","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get a card image based on its card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"}],"name":"getCardImg","longname":"Cards#getCardImg","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003064","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardImg","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line12">12</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardName">
-      <a href="#params-getCardName"><span class="type-signature">(async) </span>getCardName</a><span class="signature">(cardId)</span><span class="type-signature"></span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-<span class="label label-default">Async</span>
-
-
-
-
-<div class="description">
-    Gets the name of a card
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardName">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardName" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cardId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Gets the name of a card\r\n     * @param {string} cardId \r\n     */","meta":{"range":[218,602],"filename":"cards.js","lineno":12,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035047","name":"Cards#getCardName","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets the name of a card","params":[{"type":{"names":["string"]},"name":"cardId"}],"name":"getCardName","longname":"Cards#getCardName","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003052","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardName","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line143">143</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardNames">
-      <a href="#params-getCardNames"><span class="type-signature"></span>getCardNames</a><span class="signature">(callback)</span><span class="type-signature"> &rarr; {object}</span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="description">
-    Gets all the card names in the database in mapping to card id
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardNames">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardNames" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">function to be invoked on resulting mapping</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="bs-callout bs-callout-success">
-    <h5>Returns </h5>
-
-        
-<div class="param-desc">
-    - mapping of card name to card id
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-</div>
-  
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Gets all the card names in the database in mapping to card id\r\n     * @param {function} callback - function to be invoked on resulting mapping\r\n     * \r\n     * @returns {object} - mapping of card name to card id\r\n     */","meta":{"range":[4664,5035],"filename":"cards.js","lineno":143,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035413","name":"Cards#getCardNames","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets all the card names in the database in mapping to card id","params":[{"type":{"names":["function"]},"description":"function to be invoked on resulting mapping","name":"callback"}],"returns":[{"type":{"names":["object"]},"description":"- mapping of card name to card id"}],"name":"getCardNames","longname":"Cards#getCardNames","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003086","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getCardNames","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"> &rarr; {object}</span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line29">29</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="getCardReward">
-      <a href="#params-getCardReward"><span class="type-signature">(async) </span>getCardReward</a><span class="signature">(cardId, category)</span><span class="type-signature"></span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-<span class="label label-default">Async</span>
-
-
-
-
-<div class="description">
-    Gets the card reward of a card for a specific category
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-getCardReward">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-getCardReward" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cardId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the cards id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>category</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the category to get a reward foe</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n     * Gets the card reward of a card for a specific category\r\n     * @param {string} cardId - the cards id\r\n     * @param {string} category - the category to get a reward foe\r\n     */","meta":{"range":[805,1842],"filename":"cards.js","lineno":29,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\network","code":{"id":"astnode100035092","name":"Cards#getCardReward","type":"MethodDefinition","paramnames":["cardId","category"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets the card reward of a card for a specific category","params":[{"type":{"names":["string"]},"description":"the cards id","name":"cardId"},{"type":{"names":["string"]},"description":"the category to get a reward foe","name":"category"}],"name":"getCardReward","longname":"Cards#getCardReward","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003053","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardReward","signature":"<span class=\"signature\">(cardId, category)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+{"comment":"/**\r\n     * Function to set new month period for COMPARE and BUDGET modes\r\n     * whichPeriod state determines if the user wants to set the first or second month period\r\n     * @param {Date} date - date object with month and year that the user has chosen to update to\r\n     * @function setNewPeriod\r\n     */","meta":{"filename":"SpendingSummary.js","lineno":110,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{},"shortpath":"src/components/summary/SpendingSummary.js"},"description":"Function to set new month period for COMPARE and BUDGET modes\rwhichPeriod state determines if the user wants to set the first or second month period","params":[{"type":{"names":["Date"]},"description":"date object with month and year that the user has chosen to update to","name":"date"}],"kind":"function","name":"setNewPeriod","longname":"module:SpendingSummary~setNewPeriod","scope":"inner","memberof":"module:SpendingSummary","___id":"T000002R002297","___s":true,"attribs":"<span class=\"type-signature\">(inner) </span>","id":"~setNewPeriod","signature":"<span class=\"signature\">(date)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"module-SpendingSummary.html\">SpendingSummary</a>~"]}
 </pre>
 -->
 </div>

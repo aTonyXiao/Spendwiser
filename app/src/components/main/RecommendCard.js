@@ -10,6 +10,9 @@ export let homeImprovement = ['Furniture store', 'Home goods store', 'Electricia
 export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
     'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo', 'Travel'];
 
+/**
+ * A class for main screen to peforms user database options
+ */
 class RecommendCard {
     /**
      * Function to convert google category name to the database's category format
