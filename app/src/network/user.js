@@ -149,8 +149,7 @@ class userClass {
             },
             amountSpent: amountSpent,
             dateAdded: timestamp 
-        }, (id) => { 
-            callback(id);
+        }, (id) => {
             this.newTransactions.push({
                 cardId: cardId,
                 storeInfo: {
@@ -162,6 +161,10 @@ class userClass {
                 dateAdded: timestamp,
                 docId: id
             });
+
+            appBackend.dbSet("users." + userId + ".transactions." + id, {'docId': id}, true, () => {
+                callback(id);
+            })
         })
     }
 
