@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/components/summary/SpendingSummary.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-BackButtonHeader.html">BackButtonHeader</a></li><li><a href="module-CameraSettingsBar.html">CameraSettingsBar</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CardImage.html">CardImage</a></li><li><a href="module-CardSelect.html">CardSelect</a></li><li><a href="module-ChooseImage.html">ChooseImage</a></li><li><a href="module-DisplayCard.html">DisplayCard</a></li><li><a href="module-DoubleTap.html">DoubleTap</a></li><li><a href="module-EditImage.html">EditImage</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-HelpModal.html">HelpModal</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MainScreen.html">MainScreen</a></li><li><a href="module-MoveableBlock.html">MoveableBlock</a></li><li><a href="module-Textbox.html">Textbox</a></li><li><a href="module-YourCards.html">YourCards</a></li></ul><h3>Classes</h3><ul><li><a href="AppleLogin.html">AppleLogin</a></li><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="Cards.html">Cards</a><ul class='methods'><li data-type='method'><a href="Cards.html#addCardToDatabase">addCardToDatabase</a></li><li data-type='method'><a href="Cards.html#addJsonToDatabase">addJsonToDatabase</a></li><li data-type='method'><a href="Cards.html#getCardData">getCardData</a></li><li data-type='method'><a href="Cards.html#getCardImageURL">getCardImageURL</a></li><li data-type='method'><a href="Cards.html#getCardImg">getCardImg</a></li><li data-type='method'><a href="Cards.html#getCardName">getCardName</a></li><li data-type='method'><a href="Cards.html#getCardNames">getCardNames</a></li><li data-type='method'><a href="Cards.html#getCardReward">getCardReward</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="ServerBackend.html">ServerBackend</a><ul class='methods'><li data-type='method'><a href="ServerBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="ServerBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="ServerBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="ServerBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="ServerBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="ServerBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="ServerBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="ServerBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="ServerBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="ServerBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="ServerBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="ServerBackend.html#getUserToken">getUserToken</a></li><li data-type='method'><a href="ServerBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="ServerBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="ServerBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="ServerBackend.html#signIn">signIn</a></li><li data-type='method'><a href="ServerBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="ServerBackend.html#signOut">signOut</a></li><li data-type='method'><a href="ServerBackend.html#signUp">signUp</a></li><li data-type='method'><a href="ServerBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="ServerBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addTransactionId">addTransactionId</a></li><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#deleteTransaction">deleteTransaction</a></li><li data-type='method'><a href="userClass.html#editTransaction">editTransaction</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCardDocId">getCardDocId</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getMainNeedsUpdate">getMainNeedsUpdate</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTimeFrameTransactions">getTimeFrameTransactions</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransaction">saveTransaction</a></li><li data-type='method'><a href="userClass.html#setMainNeedsUpdate">setMainNeedsUpdate</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/components/summary/SpendingSummary.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useCallback } from 'react'
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import Constants from 'expo-constants';
+import { Footer } from '../util/Footer';
+import { CategoryModal } from './CategoryModal';
+import { PieChartSummary } from './PieChartSummary';
+import { Ionicons } from '@expo/vector-icons';
+import { user } from '../../network/user';
+import { summaryHelper } from './SummaryHelper';
+import { ListSummary } from './ListSummary';
+import { HeaderAndTabContent } from './HeaderAndTabContent';
+import { ChartCompare } from './ChartCompare';
+import { ChartBudget } from './ChartBudget';
+import * as storage from '../../local/storage';
+import { StackActions, useFocusEffect } from '@react-navigation/native';
+import mainStyles from '../../styles/mainStyles';
+
+const modalType = {
+    DISABLED: 0,
+    TIME: 1,
+    CATEGORY: 2,
+    TRANSACTIONS: 3,
+    CARDS: 4,
+    MODE: 5,
+    MONTH: 6,
+    LIMITS: 7,
+}
+const modeType = {
+    SUMMARY: "Summary",
+    COMPARE: "Compare",
+    BUDGET: "Budget",
+}
+const keys = ['Dining', 'Grocery', 'Drugstore', 'Gas', 'Home', 'Travel', 'Others'];
+const colors = ['#FF0000', '#FF7F00', '#FFD700', '#228B22', '#0000FF', '#2E2B5F', '#8B00FF']
+
+export function SpendingSummary({navigation}) {
+    const [modalVisible, setModalVisible] = useState(modalType.DISABLED);
+    const [curCategory, setCurCategory] = useState({
+        label: 'All categories',
+        value: 0,
+    });
+    const [curTimeframe, setCurTimeframe] = useState('This month');
+    const [transactions, setTransactions] = useState([]);
+    const [values, setValues] = useState(Array(7).fill(0));
+    const [listViewEnabled, setListViewEnabled] = useState(false);
+    const [cards, setCards] = useState([]);
+    const [curCard, setCurCard] = useState(null);
+    const [mode, setMode] = useState(modeType.SUMMARY);
+    // Compare and Budget mode variables
+    const [compareTransPeriod1, setCompareTransPeriod1] = useState([]);
+    const [compareTransPeriod2, setCompareTransPeriod2] = useState([]);
+    const [compareTimeframe, setCompareTimeframe] = useState([]);
+    const [whichPeriod, setWhichPeriod] = useState(0);
+    const [categoriesLimit, setCategoriesLimit] = useState(Array(7).fill(0));
+
+    const userId = user.getUserId();
+
+    /**
+     * A callback function that updates the state of cards array
+     * @param {Array} myCards - array of user's cards retrieved from the database
+     */
+    function getCardFromDB(myCards) {
+        setCards(myCards);
+    }
+
+    /**
+     * Function to change the current category in summary mode
+     * @param {string} cat - new category to change to curCategory to
+     */
+    function changeCategory(cat) {
+        setCurCategory({
+            label: cat,
+            value: cat === "All categories" ? values.reduce((a, b) => a + b, 0) : values[keys.indexOf(cat)],
+        });
+    };
+
+
+    /**
+     * Function to change current card of the spend analyzer to filter transactions from
+     * @param {string} cardName - name of the card the user wants to view transactions from
+     */
+    function setCurCardFromModal(cardName) {
+        let curCardIdx = -1;
+        if (cardName === "All Cards") {
+            setCurCard(null);
+        } else {
+            curCardIdx = cards.findIndex(x => x["cardName"] === cardName);
+            setCurCard(cards[curCardIdx]);
+        }
+        let tmpValues = Array(7).fill(0);
+        for (var i = 0; i &lt; transactions.length; i++) {
+            if (curCardIdx === -1 || transactions[i]["cardId"] === cards[curCardIdx]["cardId"]) {
+                tmpValues[summaryHelper.matchTransactionToCategory(transactions[i])] += parseFloat(transactions[i]['amountSpent']);
+            }
+        }
+        setValues(tmpValues);
+        setCurCategory({label: "All Categories", value: tmpValues.reduce((a, b) => a + b, 0)});
+    };
+
+    /**
+     * Function to set new month period for COMPARE and BUDGET modes
+     * whichPeriod state determines if the user wants to set the first or second month period
+     * @param {Date} date - date object with month and year that the user has chosen to update to
+     */
+    function setNewPeriod(date) {
+        const dateSplit = date.split(' ');
+        let newCompare = compareTimeframe;
+        if (whichPeriod === 1) {
+            newCompare[0] = new Date(dateSplit[0], dateSplit[1] - 1);
+            setCompareTransPeriod1([]);
+        } else {
+            newCompare[1] = new Date(dateSplit[0], dateSplit[1] - 1);
+            setCompareTransPeriod2([]);
+        }
+        setCompareTimeframe(newCompare);
+        getCompareTimeframeTransactions(newCompare)
+    }
+    
+    /**
+     * Get transactions based on parameter array's month period for COMPARE and BUDGET mode
+     * @param {Array} newCompareTimeframe - array of two Data objects 
+     */
+    function getCompareTimeframeTransactions(newCompareTimeframe) {
+        if (newCompareTimeframe.length === 0) {
+            return;
+        }
+        if (whichPeriod === 1 || whichPeriod === 0) {
+            // end time frame is the last day of the month
+            let endTimeFrame0 = new Date(newCompareTimeframe[0].getFullYear(), newCompareTimeframe[0].getMonth() + 1, 0, 23, 59, 59, 59);
+            user.getTimeFrameTransactions(userId, newCompareTimeframe[0], endTimeFrame0, (data) => {
+                setCompareTransPeriod1(oldData => [...oldData, data]);
+            });
+        }
+        if (whichPeriod === 2 || whichPeriod === 0) {
+            let endTimeFrame1 = new Date(newCompareTimeframe[1].getFullYear(), newCompareTimeframe[1].getMonth() + 1, 0, 23, 59, 59, 59);
+            user.getTimeFrameTransactions(userId, newCompareTimeframe[1], endTimeFrame1, (data) => {
+                setCompareTransPeriod2(oldData => [...oldData, data]);
+            });
+        }
+    };
+
+    /**
+     * Set and store new category limits for BUDGET mode
+     * @param {Array} newCategoriesLimit - an array of integers representing the limits of each category
+     */
+    function changeCategoriesLimit(newCategoriesLimit) {
+        setCategoriesLimit(newCategoriesLimit);
+        storage.storeCategoriesLimit(newCategoriesLimit);
+    }
+
+    /**
+     * Process and add transaction to the values array if the transaction is within the card filter
+     * @param {Object} transaction - transaction object retrieved from database
+     */
+    function processTransaction(transaction) {
+        let tmpValues = values;
+        if (curCard === null || transaction["cardId"] === curCard["cardId"])
+            tmpValues[summaryHelper.matchTransactionToCategory(transaction)] += parseFloat(transaction['amountSpent']);
+        setValues(tmpValues);
+        setCurCategory((prevState) => {
+            return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+        });
+    };
+
+     /**
+      * useFocusEffect called when spend analyzer in focus
+      * Checks if spend analyzer screen requires update
+      * Requires update when transactions are added, edited, or deleted. Also when cards are added or deleted
+      */
+     useFocusEffect(
+        useCallback(() => {
+            if (compareTimeframe.length !== 0) {
+                if (user.newOrDeletedCards) {
+                    user.newTransactions = [];
+                    user.editedTransactions = [];
+                    user.newOrDeletedCards = false;
+                    navigation.dispatch(
+                        StackActions.replace('SpendingSummary')
+                    )
+                }
+                if (user.newTransactions.length > 0 || user.editedTransactions.length > 0)
+                    setMode(modeType.SUMMARY);
+                let check = new Date();
+                while (user.newTransactions.length > 0) {
+                    let trans = user.newTransactions.pop();
+                    // If new transaction not in transaction array list then add it in
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (!(transactions.some(e => e.docId === trans.docId))) {
+                            setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, trans));
+                            processTransaction(trans);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (!(compareTransPeriod1.some(e => e.docId === trans.docId))) {
+                            setCompareTransPeriod1(oldData => [...oldData, trans]);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (!(compareTransPeriod2.some(e => e.docId === trans.docId))) {
+                            setCompareTransPeriod2(oldData => [...oldData, trans]);
+                        }
+                    }
+                }
+                while (user.editedTransactions.length > 0) {
+                    let trans = user.editedTransactions.pop();
+                    // If edited/ deleted transaction not synced
+                    if (curTimeframe === 'This month' || curTimeframe === 'Last 3 months') {
+                        if (transactions.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...transactions];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            let prevAmount = editedTrans.amountSpent;
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            let tmpValues = values;
+                            if (curCard === null || transaction["cardId"] === curCard["cardId"]) {
+                                if (trans.amountSpent !== null)
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] += 
+                                        parseFloat(editedTrans['amountSpent'])- parseFloat(prevAmount);
+                                else
+                                    tmpValues[summaryHelper.matchTransactionToCategory(editedTrans)] -= parseFloat(prevAmount);
+                                setValues(tmpValues);
+                                if (curCategory.label === "All categories")
+                                    setCurCategory((prevState) => {
+                                        return { ...prevState, value: tmpValues.reduce((a, b) => a + b, 0)};
+                                    });
+                                }
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[0].getMonth()) {
+                        if (compareTransPeriod1.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod1];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod1(tmpTransactions);
+                        }
+                    }
+                    if (check.getMonth() == compareTimeframe[1].getMonth()) {
+                        if (compareTransPeriod2.some(e => e.docId === trans.docId)) {
+                            let tmpTransactions = [...compareTransPeriod2];
+                            let idx = tmpTransactions.findIndex((element) => element.docId === trans.docId);
+                            let editedTrans = tmpTransactions[idx];
+                            if (trans.amountSpent === null) {
+                                tmpTransactions.splice(idx, 1);
+                            } else {
+                                editedTrans.amountSpent = trans.amountSpent;
+                                tmpTransactions.splice(idx, 1, editedTrans);
+                            }
+                            setTransactions(tmpTransactions);
+                            setCompareTransPeriod2(tmpTransactions);
+                        }
+                    }
+                }
+            } else {
+                user.newTransactions = [];
+                user.editedTransactions = [];
+            }
+        })
+    )
+
+    /**
+     * useEffect called on curTimeFrame state change
+     * Retrieve transactions from database based on new curTimeFrame
+     * Call to database function has a callback, processTransactions(), to add transaction data to value array
+     */
+    useEffect(() => {
+        setTransactions([]);
+        setCurCategory({
+            label: 'All categories',
+            value: 0,
+        });
+        let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame(curTimeframe);
+        user.getTimeFrameTransactions(userId, startTimeFrame, endTimeFrame, (data) => {
+            if (data !== null) {
+                setTransactions(oldData => summaryHelper.addSortedNewTransaction(oldData, data));
+                processTransaction(data);
+            }
+        });
+    }, [curTimeframe]);
+
+    /**
+     * useEffect called on mount
+     * Loads card names and id, and initialize COMPARE and BUDGET mode info
+     */
+    useEffect(() => {
+        summaryHelper.getDbCards(getCardFromDB);
+        let [startTimeFrame, endTimeFrame] = summaryHelper.getTimeFrame("Last 2 months");
+        let thisMonth = new Date(endTimeFrame.getFullYear(), endTimeFrame.getMonth());
+        setCompareTimeframe([thisMonth, startTimeFrame]);
+        getCompareTimeframeTransactions([thisMonth, startTimeFrame]);
+        storage.getCategoriesLimit((val) => {
+            if (val !== null)
+                setCategoriesLimit(val);
+        });
+    }, []);
+
+    return (
+        &lt;SafeAreaView style={mainStyles.screen}>
+            &lt;StatusBar barStyle='dark-content'/>
+            &lt;CategoryModal
+                modalType = {modalType}
+                modalVisible = {modalVisible}
+                setModalVisible = {setModalVisible}
+                curTimeframe = {curTimeframe}
+                setCurTimeframe = {setCurTimeframe}
+                setValues = {setValues}
+                curCategory = {curCategory}
+                changeCategory = {changeCategory}
+                values = {values}
+                transactions = {transactions}
+                cards = {cards}
+                curCard = {curCard}
+                setCurCardFromModal = {setCurCardFromModal}
+                modeType={modeType}
+                mode={mode}
+                setMode={setMode}
+                categoriesLimit={categoriesLimit}
+                changeCategoriesLimit={changeCategoriesLimit}
+            />
+
+            {/* Header and Tabs */}
+            &lt;HeaderAndTabContent
+                modalType={modalType}
+                curCard={curCard}
+                curTimeframe={curTimeframe}
+                mode={mode}
+                modeType={modeType}
+                curCategory={curCategory}
+                setModalVisible={setModalVisible}
+                compareTimeframe={compareTimeframe}
+                setNewPeriod={setNewPeriod}
+                whichPeriod={whichPeriod}
+                setWhichPeriod={setWhichPeriod}
+            />
+            &lt;View style={mainStyles.bodyContainer}>
+                {/* Content */}
+                &lt;View style={styles.contentContainer}>
+                    {mode === modeType.SUMMARY &amp;&amp; !(listViewEnabled) &amp;&amp;
+                        &lt;PieChartSummary
+                            style={{height:500}}
+                            values={values}
+                            keys={keys}
+                            curCategory={curCategory}
+                            setCurCategory={setCurCategory}
+                            setModalVisible={setModalVisible}
+                            colors={colors}
+                        />
+                    }
+                    {mode === modeType.SUMMARY &amp;&amp; listViewEnabled &amp;&amp;
+                        &lt;ListSummary
+                            setModalVisible={setModalVisible}
+                            changeCategory={changeCategory}
+                            values={values}
+                        />
+                        
+                    }
+                    {mode === modeType.COMPARE &amp;&amp;
+                        &lt;ChartCompare
+                            compareTransPeriod1={compareTransPeriod1}
+                            compareTransPeriod2={compareTransPeriod2}
+                            keys={keys}
+                            curCard={curCard}
+                            compareTimeframe={compareTimeframe}
+                        />
+                    }
+                    {mode === modeType.BUDGET &amp;&amp;
+                        &lt;ChartBudget
+                            compareTransPeriod1={compareTransPeriod1}
+                            categoriesLimit={categoriesLimit}
+                            keys={keys}
+                            curCard={curCard}
+                            compareTimeframe={compareTimeframe}
+                        />
+                    }
+                &lt;/View>
+                {mode === modeType.SUMMARY &amp;&amp;
+                    &lt;View style={styles.viewType}>
+                        &lt;Ionicons
+                            name="list-outline"
+                            color="blue"
+                            size={15}
+                        >&lt;/Ionicons>
+                        &lt;Text 
+                            style={{color: 'blue', marginLeft: 5}}
+                            onPress={() => {setListViewEnabled(!listViewEnabled)}}
+                        >{listViewEnabled ? "Chart View" : "List View"}&lt;/Text>
+                    &lt;/View>
+                }
+            &lt;/View>
+            {/* Footer */}
+            &lt;View style={mainStyles.footerContainer}>
+                &lt;Footer navigation={navigation} />
+            &lt;/View>
+        &lt;/SafeAreaView>
+    )
+};
+
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: 'white',
+        height: '100%',
+        paddingTop: Constants.statusBarHeight,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    contentContainer: {
+        flex: 5,
+        width: '100%',
+    },
+    viewType: {
+        flexDirection:'row',
+        alignItems: 'flex-end',
+        paddingBottom: 10,
+        width: '100%',
+        justifyContent: 'center',
+    },
+    footerContainer: { 
+        width: '100%',
+        backgroundColor: 'white',
+        bottom: 0, 
+        paddingBottom: 35,
+        marginTop: 0
+    },
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 01 2021 17:24:40 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
