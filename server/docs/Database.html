@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Database - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Auth0%2520Middleware%2520that%2520utilizes%2520auth0%2520for%2520request%2520token%2520auth.html">Auth0 Middleware that utilizes auth0 for request token auth</a></li><li><a href="module-CardSchema%2520The%2520schema%2520for%2520the%2520structure%2520of%2520the%2520Cards%2520collection.html">CardSchema The schema for the structure of the Cards collection</a></li><li><a href="module-Firebase%2520Middleware%2520that%2520utilizes%2520firebase-admin%2520for%2520request%2520token%2520auth.html">Firebase Middleware that utilizes firebase-admin for request token auth</a><ul class='methods'><li data-type='method'><a href="module-Firebase%252520Middleware%252520that%252520utilizes%252520firebase-admin%252520for%252520request%252520token%252520auth.html#~firebase">firebase</a></li></ul></li><li><a href="module-UserSchema%2520The%2520schema%2520for%2520the%2520structure%2520of%2520the%2520Users%2520collection.html">UserSchema The schema for the structure of the Users collection</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#addModel">addModel</a></li><li data-type='method'><a href="Database.html#createNewDatabase">createNewDatabase</a></li><li data-type='method'><a href="Database.html#loadData">loadData</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Database</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+
+<section>
+
+
+
+<header data-tmpl="container.tmpl">
+    
+        <h2>
+        Database
+        </h2>
+        
+            <div class="lead">Class that wraps mongoose models and HTTP requests</div>
+        
+    
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Methods</dt><dd><ul>
+            <li><a href="#addModel">addModel</a></li>
+            
+            <li><a href="#createNewDatabase">createNewDatabase</a></li>
+            
+            <li><a href="#loadData">loadData</a></li>
+            </ul></dd></dl></div>
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        <!--method.tmpl-->
+<div class="method-details">
+
+
+
+
+
+    
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line29">29</a>
+  </code>
+</div>
+
+    
+
+    <h4 class="name" id="Database">
+      <a href="#params-Database"><span class="type-signature"></span>new Database</a><span class="signature">(app, auth, name)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Database constructor that takes in the express app, middleware, and name
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-Database">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-Database" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>app</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The express app reference</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>auth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The authentication middleware for HTTP requests</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the database (default db has none)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Class that wraps mongoose models and HTTP requests\n */","meta":{"range":[1267,15118],"filename":"database.js","lineno":29,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100000508","name":"Database","type":"ClassDeclaration","paramnames":["app","auth","name"]},"shortpath":"database.js"},"name":"Database","longname":"Database","kind":"class","classdesc":"Class that wraps mongoose models and HTTP requests","scope":"global","description":"Database constructor that takes in the express app, middleware, and name","params":[{"type":{"names":["*"]},"description":"The express app reference","name":"app"},{"type":{"names":["*"]},"description":"The authentication middleware for HTTP requests","name":"auth"},{"type":{"names":["String"]},"description":"The name of the database (default db has none)","name":"name"}],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Database","signature":"<span class=\"signature\">(app, auth, name)</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line53">53</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addModel">
+      <a href="#params-addModel"><span class="type-signature"></span>addModel</a><span class="signature">(modelName, modelSchema)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Adds the mongoose model to this database for a given schema. Adds neccessary HTTP requests for CRUD
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addModel">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-addModel" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>modelName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the model</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>modelSchema</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The mongoose schema of the model</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Adds the mongoose model to this database for a given schema. Adds neccessary HTTP requests for CRUD\n     * \n     * @param {*} modelName The name of the model\n     * @param {*} modelSchema The mongoose schema of the model\n     */","meta":{"range":[2128,2882],"filename":"database.js","lineno":53,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100000561","name":"Database#addModel","type":"MethodDefinition","paramnames":["modelName","modelSchema"]},"vars":{"":null},"shortpath":"database.js"},"description":"Adds the mongoose model to this database for a given schema. Adds neccessary HTTP requests for CRUD","params":[{"type":{"names":["*"]},"description":"The name of the model","name":"modelName"},{"type":{"names":["*"]},"description":"The mongoose schema of the model","name":"modelSchema"}],"name":"addModel","longname":"Database#addModel","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000048","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addModel","signature":"<span class=\"signature\">(modelName, modelSchema)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line302">302</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="createNewDatabase">
+      <a href="#params-createNewDatabase"><span class="type-signature"></span>createNewDatabase</a><span class="signature">(dbName)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Using the given database, branch off and create a new database
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-createNewDatabase">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-createNewDatabase" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dbName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">New database name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    New database instance
+</div>
+
+
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Using the given database, branch off and create a new database\n     * \n     * @param {*} dbName New database name\n     * \n     * @returns New database instance\n     */","meta":{"range":[15035,15116],"filename":"database.js","lineno":302,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100002031","name":"Database#createNewDatabase","type":"MethodDefinition","paramnames":["dbName"]},"vars":{"":null},"shortpath":"database.js"},"description":"Using the given database, branch off and create a new database","params":[{"type":{"names":["*"]},"description":"New database name","name":"dbName"}],"returns":[{"description":"New database instance"}],"name":"createNewDatabase","longname":"Database#createNewDatabase","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000115","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"createNewDatabase","signature":"<span class=\"signature\">(dbName)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line283">283</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="loadData">
+      <a href="#params-loadData"><span class="type-signature"></span>loadData</a><span class="signature">(model, data)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    For a given model, load the given data into the database (relies on the firebase_dump structure with cards)
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-loadData">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-loadData" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>model</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Model to create documents for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Firebase_dump cards data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * For a given model, load the given data into the database (relies on the firebase_dump structure with cards)\n     * \n     * @param {*} model Model to create documents for \n     * @param {*} data Firebase_dump cards data\n     */","meta":{"range":[14353,14846],"filename":"database.js","lineno":283,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100001945","name":"Database#loadData","type":"MethodDefinition","paramnames":["model","data"]},"vars":{"":null},"shortpath":"database.js"},"description":"For a given model, load the given data into the database (relies on the firebase_dump structure with cards)","params":[{"type":{"names":["*"]},"description":"Model to create documents for","name":"model"},{"type":{"names":["*"]},"description":"Firebase_dump cards data","name":"data"}],"name":"loadData","longname":"Database#loadData","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000110","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"loadData","signature":"<span class=\"signature\">(model, data)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 01 2021 17:26:35 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
