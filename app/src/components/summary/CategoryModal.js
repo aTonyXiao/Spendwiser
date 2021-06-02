@@ -103,7 +103,7 @@ export function CategoryModal(
                     {/* Change category */}
                     {
                         modalVisible === modalType.CATEGORY &&
-                        <View style={{marginBottom: 50}}>
+                        <ScrollView style={{marginBottom: 50}}>
                             {
                                 categories.map((cat, index) => { 
                                     return (
@@ -119,7 +119,7 @@ export function CategoryModal(
                                     )
                                 })
                             }
-                        </View>
+                        </ScrollView>
                     }
                     {/* Display transactions */}
                     {
@@ -200,7 +200,7 @@ export function CategoryModal(
                      {/* View and change category limits */}
                      {
                         modalVisible === modalType.LIMITS &&
-                        <View style={{marginBottom: 50}}>
+                        <ScrollView style={{marginBottom: 50}}>
                             {tmpCatLimits.map((catLimit, index) => { 
                                 return (
                                     <TouchableOpacity 
@@ -234,7 +234,7 @@ export function CategoryModal(
                                 <Text style={{color:'green', fontSize:16, fontWeight:'bold'}}>Save</Text>
                             </TouchableOpacity>
                             }
-                        </View>
+                        </ScrollView>
                     }
                 </View>
             </View>

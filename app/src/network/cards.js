@@ -1,5 +1,8 @@
 import { appBackend } from './backend';
 
+/**
+ * A Card class that performs database operations for cards
+ */
 class Cards { 
 
     /**
@@ -49,6 +52,10 @@ class Cards {
         })
     }
 
+    /**
+     * Get a card image url based on its card id
+     * @param {*} cardId - the card id
+     */
     async getCardImageURL(cardId) {
         return new Promise((resolve, reject) => {
             appBackend.dbGet("cards." + cardId, (data) => {
@@ -57,6 +64,10 @@ class Cards {
         });
     }
 
+    /**
+     * Get a card image based on its card id
+     * @param {*} cardId - the card id
+     */
     async getCardImg(cardId) {
         return new Promise((resolve, reject) => { 
             appBackend.dbGet("cards." + cardId, (data) => {
@@ -142,6 +153,11 @@ class Cards {
         })
     }
 
+    /**
+     * Get the general card's data for a certain card id
+     * @param {*} cardId - the card id
+     * @param {*} callback - function that is invoked for the returned data (called for the card)
+     */
     getCardData(cardId, callback) {
         appBackend.dbGetSubCollectionsRemote("cards", (data) => { 
             var mapping = {};
