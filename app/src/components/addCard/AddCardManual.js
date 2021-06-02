@@ -192,21 +192,11 @@ export function AddCardManual({navigation}) {
                                 placeholderTextColor={grayRGB}
                                 value={rewardValue}
                                 keyboardType={"number-pad"}
-                                // onEndEditing={() => {
-                                //     addReward();
-                                //     setRewardValue("");
-                                // }}
+                                onEndEditing={() => {
+                                    addReward();
+                                    setRewardValue("");
+                                }}
                             />
-                            <TouchableOpacity
-                                style={{width: '10%', justifyContent: 'center'}}
-                                onPress={() => { addReward(), setRewardValue("") }}
-                            >
-                                <Ionicons
-                                    name="checkmark-outline"
-                                    color="black"
-                                    size={26}
-                                ></Ionicons>
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -312,13 +302,13 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         height: 40, 
-        width: '40%',
+        width: '45%',
         margin: 8,
         marginLeft: 15,
     }, 
     rewardInput: { 
         height: 40, 
-        width: '40%',
+        width: '45%',
         margin: 5,
         borderWidth: 1,
         borderColor: '#F0F0F0',
