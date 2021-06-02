@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import sha256 from 'crypto-js/sha256';
+
 let storage_debug = false;
 
 /**
@@ -189,7 +191,9 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
             }
 
             // Insert local_data in location
-            let id = Object.values(db[accountName][location]).length
+            //let id = Object.values(db[accountName][location]).length
+            let id = sha256(Date().toString() + JSON.stringify(data)).toString();
+
 
             if (synced == false) {
                 if ('unsynced_documents' in db[accountName]) {
@@ -259,12 +263,13 @@ export const deleteLocalDB = async (accountName, location) => {
                 console.log("Location: " + location);
                 console.log("----------------------");
             }
+            console.log("Delete location: " + location);
             let [collection, id] = parseCollectionAndDocId(location);
+            let oldId = id;
             id = checkSyncMapping(db, accountName, collection, id);
             
             console.log("deleting with document: " + collection + " id: " + id);
-            if (accountName in db && collection in db[accountName] && id in db[accountName][collection]) {
-
+            if (accountName in db && collection in db[accountName] && (id in db[accountName][collection])) {
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
                         ...db[accountName]['unsynced_documents'],
@@ -279,9 +284,11 @@ export const deleteLocalDB = async (accountName, location) => {
                 // Remove any unsynced documents that relate to the location being deleted
                 db[accountName]['unsynced_documents'] = 
                 db[accountName]['unsynced_documents'].filter((doc, index, arr) => {
-                    if (doc['location'] == collection && doc['id'] == id) {
+                    if (doc['location'] == collection && (doc['id'] == id || doc['id'] == oldId)) {
                         if (doc['type'] == 'delete') {
-                            let item = db[accountName][collection][id];
+                            let docIdToDelete = doc['id'];
+
+                            let item = db[accountName][collection][docIdToDelete];
                             console.log("Item at: " + doc['location'] + "." + doc['id'])
                             console.log(item);
 
