@@ -1,37 +1,17 @@
-## Welcome to GitHub Pages
+# Spendwiser
 
-You can use the [editor on GitHub](https://github.com/ngwx1996/Spendwiser/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+The SpendWiser application allows a user to manage a digital portfolio of all their credit cards. By specifying which credit cards are in their possession, the SpendWiser application will use  this information along with the phone’s geolocation to suggest the best credit card to be used at whatever store the user is shopping at.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Mobile App
 
-### Markdown
+Developed in React Native, the mobile application can be deployed on iOS and Android so users can manage their credit card usage with ease.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Containerized Server
 
-```markdown
-Syntax highlighted code block
+A flexible server architecture was developed so that it can be deployed on any machine that supports Docker.  Utilizing MongoDB and Express flexibility with a secondary Firebase backend was designed in mind.  Security was taken into deep consideration through the use of Javascript Web Tokens and SSL so that authenticated users can only use the database.
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ngwx1996/Spendwiser/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Credits and Contact Information
+- Nathan Ng (wxng@ucdavis.edu)
+- Nathaniel Wright (njwright@ucdavis.edu)
+- Nathaniel Kong (nskong@ucdavis.edu)
+- Troi-Ryan R. Stoeffler (trstoeffler@ucdavis.edu)

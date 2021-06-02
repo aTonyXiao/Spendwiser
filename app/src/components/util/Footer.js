@@ -2,6 +2,12 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+/**
+ * The footer of the main app that allow for tab navigation of the app
+ * @param {*} navigation - The navigation instance so that it can switch pages
+ * @param {*} storeInformation - A store information instance so that it can pass it into pages
+ * @module Footer 
+ */
 export function Footer(props) { 
     const navigation = props.navigation;
     const {index, routes} = navigation.dangerouslyGetState();
