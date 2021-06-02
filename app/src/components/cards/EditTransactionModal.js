@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { 
+    StyleSheet, 
+    View, 
+    Text, 
+    Dimensions, 
+    TouchableOpacity, 
+    TextInput
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 
-
+/**
+ * Modal for editing a transaction
+ * 
+ * @param {{Object, Boolean, Boolean}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.transaction - information about the transaction to edit
+ * @param {Boolean} obj.modalVisible - boolean from parent component to show or hide modal
+ * @param {Boolean} obj.setModalVisible - function that sets modalVisible
+ * @param {Object} obj.transactions - list of transactions of parent 
+ * @param {Object} obj.setTransactions - function to set list of transactions
+ * @module EditTransactionModal
+ */
 function EditTransactionModal({transaction, modalVisible, setModalVisible, transactions, setTransactions}) {
     const deviceHeight =
         Platform.OS === 'ios'
@@ -62,6 +79,7 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
             }, 2000)
         }
     }
+    
     return (
         <Modal
             backdropOpacity={0.3}
