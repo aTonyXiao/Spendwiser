@@ -3,7 +3,7 @@ import { Dimensions, ScrollView, SafeAreaView, StyleSheet, View } from 'react-na
 import HTML from 'react-native-render-html';
 import mainStyles from '../../styles/mainStyles';
 import { BackButtonHeader } from '../util/BackButtonHeader';
-import {privacyContent} from './privacyContent';
+import { privacyContent } from './privacyContent';
 const width = Dimensions.get('window').width;
 
 export function PrivacyPolicy(props) {
