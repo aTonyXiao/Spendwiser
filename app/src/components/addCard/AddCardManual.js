@@ -37,6 +37,7 @@ export function AddCardManual({navigation}) {
     const [rewardValue, setRewardValue] = useState("");
     const [monetaryType, setMonetaryType] = useState("dining");
 
+    // add a reward to list of rewards
     addReward = () => { 
         if (!isNaN(parseFloat(rewardValue))) { 
             let index = rewards.findIndex(e => e.type === monetaryType);
@@ -68,6 +69,7 @@ export function AddCardManual({navigation}) {
         }
     }
 
+    // validates inputs on trying to add card 
     validateInputs = (name, url) => { 
         var inputsAreValid = true;
 
@@ -92,6 +94,7 @@ export function AddCardManual({navigation}) {
         return inputsAreValid;
     }
 
+    // if inputs are valid adds card to firebase and user
     addCard = async () => { 
         var userId = user.getUserId();
 
