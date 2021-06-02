@@ -4,7 +4,8 @@ The SpendWiser application allows a user to manage a digital portfolio of all th
 
 ## Mobile App
 
-Developed in React Native, the mobile application can be deployed on iOS and Android so users can manage their credit card usage with ease.
+Developed in React Native and expo, the mobile application can be deployed on iOS and Android so users can manage their credit card usage with ease.
+For more info, please view our user guide.
 
 ## Containerized Server
 
