@@ -52,6 +52,7 @@ export function MainScreen({navigation}) {
      * Set main screen to display no internet connection
      * Use case: No internet connection, have location permissions
      * @param {Array} coords - Coordinate array with user's location to set the current region to.
+     * @function setOfflineMode
      */
     function setOfflineMode(coords) {
         // Only set storearr to show no internet connection when loading for the first time
@@ -76,6 +77,7 @@ export function MainScreen({navigation}) {
     /**
      * Set main screen to display no location permission
      * Use case: No location, with or without internet
+     * @function setLocationDisabledMode
      */
     function setLocationDisabledMode() {
         setStoreArr([{
@@ -96,6 +98,7 @@ export function MainScreen({navigation}) {
     /**
      * Prevent android users from using hardware back button on main screen
      * @returns {boolean} - Returns true on Main Screen and false on other pages
+     * @function backAction
      */
     const backAction = () => {
         if (navigation.isFocused())
@@ -107,6 +110,7 @@ export function MainScreen({navigation}) {
     /**
     * Calls storage function to check if card is disabled
     * @returns {array} - Is the card disabled or not
+    * @function getDisabledCards
     */
      async function getDisabledCards() {
         return new Promise((resolve, reject) => {
@@ -120,6 +124,7 @@ export function MainScreen({navigation}) {
     /**
      * Sets the ranked cards and checks for disabled cards
      * @param {array} myRankedCards - the array of ranked cards objects
+     * @function getRecCardFromDB
      */
     function getRecCardFromDB(myRankedCards) {
         // check for disabled cards
@@ -142,6 +147,7 @@ export function MainScreen({navigation}) {
      * @param {int} key - index of new selected store in storeArr
      * @param {string} storeType - category of new selected store
      * @param {Array} geometry - Array with longitude and latitude of new selected store
+     * @function reloadRecCard
      */
     function reloadRecCard(value, key, storeType, geometry) {
         recommendCard.getRecCards(storeType, getRecCardFromDB);
@@ -156,6 +162,7 @@ export function MainScreen({navigation}) {
      * Function to switch selected store to user's selected store on Google Maps, then reload recommended cards
      * If new selected store not in storeArr, add the new store to the array.
      * @param {Object} event - POI object given by Google Maps on POI click
+     * @function switchStoresFromPOI
      */
     function switchStoresFromPOI(event) {
         let last5placeId = event.placeId.substr(event.placeId.length - 5);
@@ -182,6 +189,7 @@ export function MainScreen({navigation}) {
     /**
      * Add the manual store to the storeArr, set it as the selected store and reload the recommended cards
      * @param {Object} manualInputObj - object containing user's manual store to add to storeArr
+     * @function addManualInput
      */
     function addManualInput(manualInputObj) {
         if (storeArr[0].value === 'Location Permission Denied' || storeArr[0].value === 'No Internet Connection') {
@@ -200,6 +208,7 @@ export function MainScreen({navigation}) {
     /**
      * Load the store array with stores found 100m around the user's location
      * @param {JSON} json - JSON document with a list of stores
+     * @function getLocationFromAPI
      */
     function getLocationFromAPI(json) {
         let fetchResult = json.results !== undefined ? json.results : [json.result];
@@ -261,6 +270,8 @@ export function MainScreen({navigation}) {
      * Check if app has location permission. If no permission, call setLocationDisabledMode()
      * Check if app has internet connection. If no internet, call setOfflineMode()
      * If have internet and location, fetch Google Places API and load stores into store array with getLocationFromAPI()
+     * @async
+     * @function tryToGetStoresFromLocation
      */
     async function tryToGetStoresFromLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -296,6 +307,7 @@ export function MainScreen({navigation}) {
      * @param {Object} event - object containing the height of the component the call came from
      * @param {int} insets - additional border height
      * @param {boolean} isFooter - if the function call came from the footer component
+     * @function onBottomSheetLayout
      */
     function onBottomSheetLayout(event, insets, isFooter) {
         let {width, height} = event.nativeEvent.layout;

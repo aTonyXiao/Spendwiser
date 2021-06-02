@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>App - Documentation</title>
+    <title>SummaryHelper - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">App</h1>
+    <h1 class="page-title">SummaryHelper</h1>
     
 
     <!--container.tmpl-->
@@ -49,38 +49,63 @@
 
 <header data-tmpl="container.tmpl">
     
-      <h2>Module: App</h2>
+        <h2>
+        SummaryHelper
+        </h2>
         
-            
+            <div class="lead">A class for spend analyzer to filter and sort transactions, and to call database functions</div>
         
     
 
     
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Methods</dt><dd><ul>
+            <li><a href="#addSortedNewTransaction">addSortedNewTransaction</a></li>
+            
+            <li><a href="#getDbCards">getDbCards</a></li>
+            
+            <li><a href="#getTimeFrame">getTimeFrame</a></li>
+            
+            <li><a href="#matchTransactionToCategory">matchTransactionToCategory</a></li>
+            </ul></dd></dl></div>
 </header>
 
 <article>
     <div class="container-overview">
     
-        
-            <div class="description">The app module utilized by React Native</div>
-        
-
-        
-            <!--method.tmpl-->
+        <!--method.tmpl-->
 <div class="method-details">
 
 
 
-  <!--source-link.tmpl-->
+
+
+    
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
 
 
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
+    <a href="src_components_summary_SummaryHelper.js.html">SummaryHelper.js</a>:<a href="src_components_summary_SummaryHelper.js.html#line9">9</a>
   </code>
 </div>
 
+    
+
+    <h4 class="name" id="SummaryHelper">
+      <a href="#params-SummaryHelper"><span class="type-signature"></span>new SummaryHelper</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
 
 
 
@@ -101,9 +126,7 @@
 
 
 
-
-
-<div class="collapse_" id="methodCollapse-App">
+<div class="collapse_" id="methodCollapse-SummaryHelper">
 
   
 
@@ -111,17 +134,6 @@
 
 <!-- details.tmpl -->
 
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
 
 
 
@@ -185,12 +197,11 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n * The app module utilized by React Native\r\n * @module App\r\n */","meta":{"filename":"App.js","lineno":42,"columnno":0,"path":"E:\\Spendwiser\\app","code":{},"shortpath":"App.js"},"description":"The app module utilized by React Native","kind":"module","name":"App","longname":"module:App","___id":"T000002R000006","___s":true,"attribs":"","id":"App","ancestors":[]}
+{"comment":"/**\r\n * A class for spend analyzer to filter and sort transactions, and to call database functions\r\n */","meta":{"range":[324,3967],"filename":"SummaryHelper.js","lineno":9,"columnno":0,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{"id":"astnode100026257","name":"SummaryHelper","type":"ClassDeclaration","paramnames":[]},"shortpath":"src/components/summary/SummaryHelper.js"},"classdesc":"A class for spend analyzer to filter and sort transactions, and to call database functions","name":"SummaryHelper","longname":"SummaryHelper","kind":"class","scope":"global","___id":"T000003R000011","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"SummaryHelper","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
 
-        
     
     </div>
 
@@ -206,6 +217,757 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SummaryHelper.js.html">SummaryHelper.js</a>:<a href="src_components_summary_SummaryHelper.js.html#line92">92</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addSortedNewTransaction">
+      <a href="#params-addSortedNewTransaction"><span class="type-signature"></span>addSortedNewTransaction</a><span class="signature">(transactions, newTrans)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Returns new transactions array with new transaction added based on its date
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addSortedNewTransaction">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-addSortedNewTransaction" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transactions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">current transactions array</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newTrans</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">new transaction to be added</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Returns new transactions array with new transaction added based on its date\r\n     * @param {array} transactions - current transactions array\r\n     * @param {object} newTrans - new transaction to be added\r\n     */","meta":{"range":[3468,3964],"filename":"SummaryHelper.js","lineno":92,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{"id":"astnode100026561","name":"SummaryHelper#addSortedNewTransaction","type":"MethodDefinition","paramnames":["transactions","newTrans"]},"vars":{"":null},"shortpath":"src/components/summary/SummaryHelper.js"},"description":"Returns new transactions array with new transaction added based on its date","params":[{"type":{"names":["array"]},"description":"current transactions array","name":"transactions"},{"type":{"names":["object"]},"description":"new transaction to be added","name":"newTrans"}],"name":"addSortedNewTransaction","longname":"SummaryHelper#addSortedNewTransaction","kind":"function","memberof":"SummaryHelper","scope":"instance","___id":"T000002R002403","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addSortedNewTransaction","signature":"<span class=\"signature\">(transactions, newTrans)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"SummaryHelper.html\">SummaryHelper</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SummaryHelper.js.html">SummaryHelper.js</a>:<a href="src_components_summary_SummaryHelper.js.html#line38">38</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getDbCards">
+      <a href="#params-getDbCards"><span class="type-signature">(async) </span>getDbCards</a><span class="signature">(callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    Gets the user's cards from database and accumulate them into an array
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getDbCards">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getDbCards" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a callback function to handle the user cards array</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Gets the user's cards from database and accumulate them into an array\r\n     * @param {function} callback - a callback function to handle the user cards array\r\n     */","meta":{"range":[1493,2048],"filename":"SummaryHelper.js","lineno":38,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{"id":"astnode100026366","name":"SummaryHelper#getDbCards","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/components/summary/SummaryHelper.js"},"description":"Gets the user's cards from database and accumulate them into an array","params":[{"type":{"names":["function"]},"description":"a callback function to handle the user cards array","name":"callback"}],"name":"getDbCards","longname":"SummaryHelper#getDbCards","kind":"function","memberof":"SummaryHelper","scope":"instance","async":true,"___id":"T000002R002378","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getDbCards","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"SummaryHelper.html\">SummaryHelper</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SummaryHelper.js.html">SummaryHelper.js</a>:<a href="src_components_summary_SummaryHelper.js.html#line60">60</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getTimeFrame">
+      <a href="#params-getTimeFrame"><span class="type-signature"></span>getTimeFrame</a><span class="signature">(curTimeframe)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Gets the start and end timeframes used to query databse for transactions
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getTimeFrame">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getTimeFrame" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>curTimeframe</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a string to denote which timeframe to be used</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Gets the start and end timeframes used to query databse for transactions\r\n     * @param {string} curTimeframe - a string to denote which timeframe to be used\r\n     */","meta":{"range":[2240,3230],"filename":"SummaryHelper.js","lineno":60,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{"id":"astnode100026446","name":"SummaryHelper#getTimeFrame","type":"MethodDefinition","paramnames":["curTimeframe"]},"vars":{"":null},"shortpath":"src/components/summary/SummaryHelper.js"},"description":"Gets the start and end timeframes used to query databse for transactions","params":[{"type":{"names":["string"]},"description":"a string to denote which timeframe to be used","name":"curTimeframe"}],"name":"getTimeFrame","longname":"SummaryHelper#getTimeFrame","kind":"function","memberof":"SummaryHelper","scope":"instance","___id":"T000002R002390","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getTimeFrame","signature":"<span class=\"signature\">(curTimeframe)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"SummaryHelper.html\">SummaryHelper</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_components_summary_SummaryHelper.js.html">SummaryHelper.js</a>:<a href="src_components_summary_SummaryHelper.js.html#line14">14</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="matchTransactionToCategory">
+      <a href="#params-matchTransactionToCategory"><span class="type-signature"></span>matchTransactionToCategory</a><span class="signature">(transaction)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Gets the category of the transaction from the store type as retrieved from database.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-matchTransactionToCategory">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-matchTransactionToCategory" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transaction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">transaction to categorize</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Gets the category of the transaction from the store type as retrieved from database.\r\n     * @param {object} transaction - transaction to categorize\r\n     */","meta":{"range":[526,1301],"filename":"SummaryHelper.js","lineno":14,"columnno":4,"path":"E:\\Spendwiser\\app\\src\\components\\summary","code":{"id":"astnode100026260","name":"SummaryHelper#matchTransactionToCategory","type":"MethodDefinition","paramnames":["transaction"]},"vars":{"":null},"shortpath":"src/components/summary/SummaryHelper.js"},"description":"Gets the category of the transaction from the store type as retrieved from database.","params":[{"type":{"names":["object"]},"description":"transaction to categorize","name":"transaction"}],"name":"matchTransactionToCategory","longname":"SummaryHelper#matchTransactionToCategory","kind":"function","memberof":"SummaryHelper","scope":"instance","___id":"T000002R002369","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"matchTransactionToCategory","signature":"<span class=\"signature\">(transaction)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"SummaryHelper.html\">SummaryHelper</a>#"]}
+</pre>
+-->
+</div>
+
+        
     
 
     

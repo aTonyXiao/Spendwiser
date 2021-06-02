@@ -3,6 +3,9 @@ import { dining, grocery, drugstore, gas, homeImprovement, travel } from '../mai
 import { user } from '../../network/user';
 import { cards } from '../../network/cards';
 
+/**
+ * A class for spend analyzer to filter and sort transactions, and to call database functions
+ */
 class SummaryHelper {
     /**
      * Gets the category of the transaction from the store type as retrieved from database.
