@@ -287,8 +287,12 @@ class userClass {
         userId = await userId;
         appBackend.dbGet("cards." + cardId, (data)=> { 
             // TODO apply diff
-            if (typeof data != 'undefined' && 'rewards' in data) {
-                callback(data.rewards);
+            if (typeof data != 'undefined' && 'rewards' in data && 'conversion' in data) {
+                let rewardsMap = data.rewards;
+                for (var key in rewardsMap) {
+                    rewardsMap[key] *= data.conversion;
+                }
+                callback(rewardsMap);
             } else {
                 callback(null);
             }
