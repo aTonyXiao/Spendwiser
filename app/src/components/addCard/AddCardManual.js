@@ -16,6 +16,13 @@ import { cards } from '../../network/cards';
 import { Ionicons } from '@expo/vector-icons';
 import { BackButtonHeader } from '../util/BackButtonHeader';
 
+/**
+ * The page for adding a card manually. Adding a card adds the card to the user and to
+ * firebase
+ * @param {{Object}} obj - The route and navigation passed through screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module AddCardManual
+ */
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
     const inputUrl = React.createRef();
@@ -26,11 +33,11 @@ export function AddCardManual({navigation}) {
     const [rewardError, setRewardError] = useState(false);
     const [invalidInputError, setInvalidInputError] = useState(false);
     const [nameError, setNameError] = useState(false);
-    const [urlError, setUrlError] = useState(false);
 
     const [rewardValue, setRewardValue] = useState("");
     const [monetaryType, setMonetaryType] = useState("dining");
 
+    // add a reward to list of rewards
     addReward = () => { 
         if (!isNaN(parseFloat(rewardValue))) { 
             let index = rewards.findIndex(e => e.type === monetaryType);
@@ -62,6 +69,14 @@ export function AddCardManual({navigation}) {
         }
     }
 
+    // deletes an user-added reward
+    deleteReward = (index) => {
+        let tempRewards = [...rewards];
+        tempRewards.splice(index, 1);
+        setRewards(tempRewards);
+    }
+
+    // validates inputs on trying to add card 
     validateInputs = (name, url) => { 
         var inputsAreValid = true;
 
@@ -75,14 +90,6 @@ export function AddCardManual({navigation}) {
             }, 2500);
         } 
 
-        // TODO: add some regex for beta version?
-        if (url == "") {
-            setUrlError(true);
-            setTimeout(function() { 
-                setUrlError(false);
-            }, 2500);
-        }
-
         if (rewards.length == 0) {
             inputsAreValid = false;
             setInvalidInputError(true);
@@ -94,6 +101,7 @@ export function AddCardManual({navigation}) {
         return inputsAreValid;
     }
 
+    // if inputs are valid adds card to firebase and user
     addCard = async () => { 
         var userId = user.getUserId();
 
@@ -152,7 +160,18 @@ export function AddCardManual({navigation}) {
                             {
                                 rewards.map((reward, i) => {
                                     let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
-                                    return <Text style={{ margin: 5 }} key={i}>{type}: {reward.value} cents</Text>
+                                    return (
+                                        <View style={styles.rewardRowSet} key={i}>
+                                            <Text style={{ margin: 5 }}>{type}: {reward.value} cents</Text>
+                                            <TouchableOpacity style={{ margin: 5 }} onPress={() => {deleteReward(i)}}>
+                                                <Ionicons
+                                                    name="trash-outline"
+                                                    color="red"
+                                                    size={18}
+                                                ></Ionicons>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
                                 })
                             }
                         </View>
@@ -191,21 +210,11 @@ export function AddCardManual({navigation}) {
                                 placeholderTextColor={grayRGB}
                                 value={rewardValue}
                                 keyboardType={"number-pad"}
-                                // onEndEditing={() => {
-                                //     addReward();
-                                //     setRewardValue("");
-                                // }}
+                                onEndEditing={() => {
+                                    addReward();
+                                    setRewardValue("");
+                                }}
                             />
-                            <TouchableOpacity
-                                style={{width: '10%', justifyContent: 'center'}}
-                                onPress={() => { addReward(), setRewardValue("") }}
-                            >
-                                <Ionicons
-                                    name="checkmark-outline"
-                                    color="black"
-                                    size={26}
-                                ></Ionicons>
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -248,6 +257,11 @@ const styles = StyleSheet.create({
     rewardRow : {
         display: 'flex',
         flexDirection: 'row'
+    },
+    rewardRowSet : {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     rewardText : { 
         margin: 15,
@@ -311,13 +325,13 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         height: 40, 
-        width: '40%',
+        width: '45%',
         margin: 8,
         marginLeft: 15,
     }, 
     rewardInput: { 
         height: 40, 
-        width: '40%',
+        width: '45%',
         margin: 5,
         borderWidth: 1,
         borderColor: '#F0F0F0',
