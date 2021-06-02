@@ -19,8 +19,13 @@ import * as storage from '../../local/storage';
 import { appBackend } from '../../network/backend';
 import { BackButtonHeader } from '../util/BackButtonHeader';
 
-
-export function AddCardDB({existingUserCards, navigation}) {
+/**
+ * The page for adding a card from the Firebase database
+ * @param {{Object}} obj - The route and navigation passed through screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module AddCardDB 
+ */
+export function AddCardDB({navigation}) {
     const userId = user.getUserId();
     const [query, setQuery] = useState("");
     const [cardMap, setCardMap] = useState(null);
@@ -52,7 +57,6 @@ export function AddCardDB({existingUserCards, navigation}) {
     constructor();
 
     addCard = () => { 
-        // console.log("Adding a card");
         if (!query) {
             setDisplayErrorText(true);
 
@@ -71,7 +75,6 @@ export function AddCardDB({existingUserCards, navigation}) {
                 cards.getCardData(cardId, async (data) => {
                     // Add the card into the user's list of cards
                     await user.saveCardToUser(userId, cardId, null, null);
-                    // console.log("Saved card to user");
 
                     // Add the actual card data as well
                     appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
@@ -83,6 +86,7 @@ export function AddCardDB({existingUserCards, navigation}) {
                         });
                     });
                 });
+            // user already has the card
             } else {
                 Alert.alert("Already have this card",
                             "You've attempted to add a card that has already been added to your account",
@@ -95,6 +99,7 @@ export function AddCardDB({existingUserCards, navigation}) {
         }
     }
 
+    // filter card names to match search bar
     filterData = () => { 
         if (query == "") { 
             setFilteredCardNames(originalCardNames);

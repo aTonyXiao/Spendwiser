@@ -16,6 +16,13 @@ import { cards } from '../../network/cards';
 import { Ionicons } from '@expo/vector-icons';
 import { BackButtonHeader } from '../util/BackButtonHeader';
 
+/**
+ * The page for adding a card manually. Adding a card adds the card to the user and to
+ * firebase
+ * @param {{Object}} obj - The route and navigation passed through screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module AddCardManual
+ */
 export function AddCardManual({navigation}) { 
     const inputName = React.createRef();
     const inputUrl = React.createRef();
@@ -26,7 +33,6 @@ export function AddCardManual({navigation}) {
     const [rewardError, setRewardError] = useState(false);
     const [invalidInputError, setInvalidInputError] = useState(false);
     const [nameError, setNameError] = useState(false);
-    const [urlError, setUrlError] = useState(false);
 
     const [rewardValue, setRewardValue] = useState("");
     const [monetaryType, setMonetaryType] = useState("dining");
@@ -74,14 +80,6 @@ export function AddCardManual({navigation}) {
                 setNameError(false);
             }, 2500);
         } 
-
-        // TODO: add some regex for beta version?
-        if (url == "") {
-            setUrlError(true);
-            setTimeout(function() { 
-                setUrlError(false);
-            }, 2500);
-        }
 
         if (rewards.length == 0) {
             inputsAreValid = false;
