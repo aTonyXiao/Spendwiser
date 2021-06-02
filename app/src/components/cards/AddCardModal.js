@@ -12,12 +12,22 @@ import { Ionicons } from '@expo/vector-icons';
 import { appBackend } from '../../network/backend'
 import NetInfo from '@react-native-community/netinfo';
 
+/**
+ * Modal for selecting which option to add a card from
+ * 
+ * @param {{Object, Boolean, Boolean}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @param {Boolean} obj.modalVisible - boolean from parent component to show or hide modal
+ * @param {Boolean} obj.setModalVisible - function that sets modalVisible
+ * @module AddCardModal
+ */
 function AddCardModal({navigation, modalVisible, setModalVisible}) {
     const deviceHeight =
         Platform.OS === 'ios'
         ? Dimensions.get('window').height
         : Dimensions.get('screen').height;
 
+    // navigates to correct page if user is using an account
     function navigateIfAuthorized(navigation, location, errmsg) {
         appBackend.userAccountType((type) => {
             switch(type) {
@@ -36,6 +46,7 @@ function AddCardModal({navigation, modalVisible, setModalVisible}) {
             }
         });
     }
+
     return (
         <Modal
             backdropOpacity={0.3}
