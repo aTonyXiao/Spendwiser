@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cards - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-BackButtonHeader.html">BackButtonHeader</a></li><li><a href="module-CameraSettingsBar.html">CameraSettingsBar</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CardImage.html">CardImage</a></li><li><a href="module-CardSelect.html">CardSelect</a></li><li><a href="module-ChooseImage.html">ChooseImage</a></li><li><a href="module-DisplayCard.html">DisplayCard</a></li><li><a href="module-DoubleTap.html">DoubleTap</a></li><li><a href="module-EditImage.html">EditImage</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-HelpModal.html">HelpModal</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MainScreen.html">MainScreen</a></li><li><a href="module-MoveableBlock.html">MoveableBlock</a></li><li><a href="module-Textbox.html">Textbox</a></li><li><a href="module-YourCards.html">YourCards</a></li></ul><h3>Classes</h3><ul><li><a href="AppleLogin.html">AppleLogin</a></li><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="Cards.html">Cards</a><ul class='methods'><li data-type='method'><a href="Cards.html#addCardToDatabase">addCardToDatabase</a></li><li data-type='method'><a href="Cards.html#addJsonToDatabase">addJsonToDatabase</a></li><li data-type='method'><a href="Cards.html#getCardData">getCardData</a></li><li data-type='method'><a href="Cards.html#getCardImageURL">getCardImageURL</a></li><li data-type='method'><a href="Cards.html#getCardImg">getCardImg</a></li><li data-type='method'><a href="Cards.html#getCardName">getCardName</a></li><li data-type='method'><a href="Cards.html#getCardNames">getCardNames</a></li><li data-type='method'><a href="Cards.html#getCardReward">getCardReward</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="ServerBackend.html">ServerBackend</a><ul class='methods'><li data-type='method'><a href="ServerBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="ServerBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="ServerBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="ServerBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="ServerBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="ServerBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="ServerBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="ServerBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="ServerBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="ServerBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="ServerBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="ServerBackend.html#getUserToken">getUserToken</a></li><li data-type='method'><a href="ServerBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="ServerBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="ServerBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="ServerBackend.html#signIn">signIn</a></li><li data-type='method'><a href="ServerBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="ServerBackend.html#signOut">signOut</a></li><li data-type='method'><a href="ServerBackend.html#signUp">signUp</a></li><li data-type='method'><a href="ServerBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="ServerBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addTransactionId">addTransactionId</a></li><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#deleteTransaction">deleteTransaction</a></li><li data-type='method'><a href="userClass.html#editTransaction">editTransaction</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCardDocId">getCardDocId</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getMainNeedsUpdate">getMainNeedsUpdate</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTimeFrameTransactions">getTimeFrameTransactions</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransaction">saveTransaction</a></li><li data-type='method'><a href="userClass.html#setMainNeedsUpdate">setMainNeedsUpdate</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Cards</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+
+<section>
+
+
+
+<header data-tmpl="container.tmpl">
+    
+        <h2>
+        Cards
+        </h2>
+        
+            <div class="lead">A Card class that performs database operations for cards</div>
+        
+    
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Methods</dt><dd><ul>
+            <li><a href="#addCardToDatabase">addCardToDatabase</a></li>
+            
+            <li><a href="#addJsonToDatabase">addJsonToDatabase</a></li>
+            
+            <li><a href="#getCardData">getCardData</a></li>
+            
+            <li><a href="#getCardImageURL">getCardImageURL</a></li>
+            
+            <li><a href="#getCardImg">getCardImg</a></li>
+            
+            <li><a href="#getCardName">getCardName</a></li>
+            
+            <li><a href="#getCardNames">getCardNames</a></li>
+            
+            <li><a href="#getCardReward">getCardReward</a></li>
+            </ul></dd></dl></div>
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        <!--method.tmpl-->
+<div class="method-details">
+
+
+
+
+
+    
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line6">6</a>
+  </code>
+</div>
+
+    
+
+    <h4 class="name" id="Cards">
+      <a href="#params-Cards"><span class="type-signature"></span>new Cards</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-Cards">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * A Card class that performs database operations for cards\n */","meta":{"range":[109,5453],"filename":"cards.js","lineno":6,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035011","name":"Cards","type":"ClassDeclaration","paramnames":[]},"shortpath":"src/network/cards.js"},"classdesc":"A Card class that performs database operations for cards","name":"Cards","longname":"Cards","kind":"class","scope":"global","___id":"T000003R000004","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Cards","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line86">86</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addCardToDatabase">
+      <a href="#params-addCardToDatabase"><span class="type-signature"></span>addCardToDatabase</a><span class="signature">(name, benefits, rewards, url)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Adds a card to the the cards database
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addCardToDatabase">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-addCardToDatabase" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">card name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>benefits</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rewards</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">card url</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Adds a card to the the cards database\n     * @param {string} name - card name\n     * @param {*} benefits \n     * @param {*} rewards \n     * @param {string} url - card url\n     */","meta":{"range":[2623,3398],"filename":"cards.js","lineno":86,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035216","name":"Cards#addCardToDatabase","type":"MethodDefinition","paramnames":["name","benefits","rewardType","rewards","url"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Adds a card to the the cards database","params":[{"type":{"names":["string"]},"description":"card name","name":"name"},{"type":{"names":["*"]},"name":"benefits"},{"type":{"names":["*"]},"name":"rewards"},{"type":{"names":["string"]},"description":"card url","name":"url"}],"name":"addCardToDatabase","longname":"Cards#addCardToDatabase","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003044","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addCardToDatabase","signature":"<span class=\"signature\">(name, benefits, rewards, url)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line115">115</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addJsonToDatabase">
+      <a href="#params-addJsonToDatabase"><span class="type-signature"></span>addJsonToDatabase</a><span class="signature">(json)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Adds JSON data with card data to the database
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addJsonToDatabase">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-addJsonToDatabase" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the JSON data with the 'cards' element</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Adds JSON data with card data to the database\n     * \n     * @param {JSON} json - the JSON data with the 'cards' element\n     */","meta":{"range":[3549,4284],"filename":"cards.js","lineno":115,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035289","name":"Cards#addJsonToDatabase","type":"MethodDefinition","paramnames":["json"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Adds JSON data with card data to the database","params":[{"type":{"names":["JSON"]},"description":"the JSON data with the 'cards' element","name":"json"}],"name":"addJsonToDatabase","longname":"Cards#addJsonToDatabase","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003055","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addJsonToDatabase","signature":"<span class=\"signature\">(json)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line161">161</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardData">
+      <a href="#params-getCardData"><span class="type-signature"></span>getCardData</a><span class="signature">(cardId, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get the general card's data for a certain card id
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardData">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardData" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the card id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function that is invoked for the returned data (called for the card)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the general card's data for a certain card id\n     * @param {*} cardId - the card id\n     * @param {*} callback - function that is invoked for the returned data (called for the card)\n     */","meta":{"range":[5098,5451],"filename":"cards.js","lineno":161,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035437","name":"Cards#getCardData","type":"MethodDefinition","paramnames":["cardId","callback"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get the general card's data for a certain card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"},{"type":{"names":["*"]},"description":"function that is invoked for the returned data (called for the card)","name":"callback"}],"name":"getCardData","longname":"Cards#getCardData","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003071","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getCardData","signature":"<span class=\"signature\">(cardId, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line59">59</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardImageURL">
+      <a href="#params-getCardImageURL"><span class="type-signature">(async) </span>getCardImageURL</a><span class="signature">(cardId)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    Get a card image url based on its card id
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardImageURL">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardImageURL" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the card id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get a card image url based on its card id\n     * @param {*} cardId - the card id\n     */","meta":{"range":[1900,2111],"filename":"cards.js","lineno":59,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035158","name":"Cards#getCardImageURL","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get a card image url based on its card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"}],"name":"getCardImageURL","longname":"Cards#getCardImageURL","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003042","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardImageURL","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line71">71</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardImg">
+      <a href="#params-getCardImg"><span class="type-signature">(async) </span>getCardImg</a><span class="signature">(cardId)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    Get a card image based on its card id
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardImg">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardImg" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the card id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get a card image based on its card id\n     * @param {*} cardId - the card id\n     */","meta":{"range":[2217,2423],"filename":"cards.js","lineno":71,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035187","name":"Cards#getCardImg","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Get a card image based on its card id","params":[{"type":{"names":["*"]},"description":"the card id","name":"cardId"}],"name":"getCardImg","longname":"Cards#getCardImg","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003043","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardImg","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line12">12</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardName">
+      <a href="#params-getCardName"><span class="type-signature">(async) </span>getCardName</a><span class="signature">(cardId)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    Gets the name of a card
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardName">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardName" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Gets the name of a card\n     * @param {string} cardId \n     */","meta":{"range":[207,581],"filename":"cards.js","lineno":12,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035014","name":"Cards#getCardName","type":"MethodDefinition","paramnames":["cardId"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets the name of a card","params":[{"type":{"names":["string"]},"name":"cardId"}],"name":"getCardName","longname":"Cards#getCardName","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003031","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardName","signature":"<span class=\"signature\">(cardId)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line143">143</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardNames">
+      <a href="#params-getCardNames"><span class="type-signature"></span>getCardNames</a><span class="signature">(callback)</span><span class="type-signature"> &rarr; {object}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Gets all the card names in the database in mapping to card id
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardNames">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardNames" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to be invoked on resulting mapping</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    - mapping of card name to card id
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Gets all the card names in the database in mapping to card id\n     * @param {function} callback - function to be invoked on resulting mapping\n     * \n     * @returns {object} - mapping of card name to card id\n     */","meta":{"range":[4522,4882],"filename":"cards.js","lineno":143,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035380","name":"Cards#getCardNames","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets all the card names in the database in mapping to card id","params":[{"type":{"names":["function"]},"description":"function to be invoked on resulting mapping","name":"callback"}],"returns":[{"type":{"names":["object"]},"description":"- mapping of card name to card id"}],"name":"getCardNames","longname":"Cards#getCardNames","kind":"function","memberof":"Cards","scope":"instance","___id":"T000002R003065","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getCardNames","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"> &rarr; {object}</span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_cards.js.html">cards.js</a>:<a href="src_network_cards.js.html#line29">29</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getCardReward">
+      <a href="#params-getCardReward"><span class="type-signature">(async) </span>getCardReward</a><span class="signature">(cardId, category)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    Gets the card reward of a card for a specific category
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getCardReward">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-getCardReward" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the cards id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the category to get a reward foe</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Gets the card reward of a card for a specific category\n     * @param {string} cardId - the cards id\n     * @param {string} category - the category to get a reward foe\n     */","meta":{"range":[777,1790],"filename":"cards.js","lineno":29,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network","code":{"id":"astnode100035059","name":"Cards#getCardReward","type":"MethodDefinition","paramnames":["cardId","category"]},"vars":{"":null},"shortpath":"src/network/cards.js"},"description":"Gets the card reward of a card for a specific category","params":[{"type":{"names":["string"]},"description":"the cards id","name":"cardId"},{"type":{"names":["string"]},"description":"the category to get a reward foe","name":"category"}],"name":"getCardReward","longname":"Cards#getCardReward","kind":"function","memberof":"Cards","scope":"instance","async":true,"___id":"T000002R003032","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"getCardReward","signature":"<span class=\"signature\">(cardId, category)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Cards.html\">Cards</a>#"]}
+</pre>
+-->
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 01 2021 17:24:40 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

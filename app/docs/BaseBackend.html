@@ -1,0 +1,5028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>BaseBackend - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-BackButtonHeader.html">BackButtonHeader</a></li><li><a href="module-CameraSettingsBar.html">CameraSettingsBar</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CardImage.html">CardImage</a></li><li><a href="module-CardSelect.html">CardSelect</a></li><li><a href="module-ChooseImage.html">ChooseImage</a></li><li><a href="module-DisplayCard.html">DisplayCard</a></li><li><a href="module-DoubleTap.html">DoubleTap</a></li><li><a href="module-EditImage.html">EditImage</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-HelpModal.html">HelpModal</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MainScreen.html">MainScreen</a></li><li><a href="module-MoveableBlock.html">MoveableBlock</a></li><li><a href="module-Textbox.html">Textbox</a></li><li><a href="module-YourCards.html">YourCards</a></li></ul><h3>Classes</h3><ul><li><a href="AppleLogin.html">AppleLogin</a></li><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="Cards.html">Cards</a><ul class='methods'><li data-type='method'><a href="Cards.html#addCardToDatabase">addCardToDatabase</a></li><li data-type='method'><a href="Cards.html#addJsonToDatabase">addJsonToDatabase</a></li><li data-type='method'><a href="Cards.html#getCardData">getCardData</a></li><li data-type='method'><a href="Cards.html#getCardImageURL">getCardImageURL</a></li><li data-type='method'><a href="Cards.html#getCardImg">getCardImg</a></li><li data-type='method'><a href="Cards.html#getCardName">getCardName</a></li><li data-type='method'><a href="Cards.html#getCardNames">getCardNames</a></li><li data-type='method'><a href="Cards.html#getCardReward">getCardReward</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="ServerBackend.html">ServerBackend</a><ul class='methods'><li data-type='method'><a href="ServerBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="ServerBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="ServerBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="ServerBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="ServerBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="ServerBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="ServerBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="ServerBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="ServerBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="ServerBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="ServerBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="ServerBackend.html#getUserToken">getUserToken</a></li><li data-type='method'><a href="ServerBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="ServerBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="ServerBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="ServerBackend.html#signIn">signIn</a></li><li data-type='method'><a href="ServerBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="ServerBackend.html#signOut">signOut</a></li><li data-type='method'><a href="ServerBackend.html#signUp">signUp</a></li><li data-type='method'><a href="ServerBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="ServerBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addTransactionId">addTransactionId</a></li><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#deleteTransaction">deleteTransaction</a></li><li data-type='method'><a href="userClass.html#editTransaction">editTransaction</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCardDocId">getCardDocId</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getMainNeedsUpdate">getMainNeedsUpdate</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTimeFrameTransactions">getTimeFrameTransactions</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransaction">saveTransaction</a></li><li data-type='method'><a href="userClass.html#setMainNeedsUpdate">setMainNeedsUpdate</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">BaseBackend</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+
+<section>
+
+
+
+<header data-tmpl="container.tmpl">
+    
+        <h2>
+        BaseBackend
+        </h2>
+        
+            <div class="lead">Base backend class for different backend types
+Database functions are designed around the Firestore Collection/Document style
+- Collections contain Documents
+- Documents contain data and sometimes Collections
+For more reference: https://firebase.google.com/docs/firestore/data-model</div>
+        
+    
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Methods</dt><dd><ul>
+            <li><a href="#dbAdd">dbAdd</a></li>
+            
+            <li><a href="#dbAddEncrypted">dbAddEncrypted</a></li>
+            
+            <li><a href="#dbDelete">dbDelete</a></li>
+            
+            <li><a href="#dbDoesDocExist">dbDoesDocExist</a></li>
+            
+            <li><a href="#dbGet">dbGet</a></li>
+            
+            <li><a href="#dbGetEncrypted">dbGetEncrypted</a></li>
+            
+            <li><a href="#dbGetSubCollections">dbGetSubCollections</a></li>
+            
+            <li><a href="#dbSet">dbSet</a></li>
+            
+            <li><a href="#dbSetEncrypted">dbSetEncrypted</a></li>
+            
+            <li><a href="#doesSupportDatabase">doesSupportDatabase</a></li>
+            
+            <li><a href="#enableDatabaseCaching">enableDatabaseCaching</a></li>
+            
+            <li><a href="#getLoginProviders">getLoginProviders</a></li>
+            
+            <li><a href="#getTimestamp">getTimestamp</a></li>
+            
+            <li><a href="#getUserID">getUserID</a></li>
+            
+            <li><a href="#getUserInfo">getUserInfo</a></li>
+            
+            <li><a href="#initializeApp">initializeApp</a></li>
+            
+            <li><a href="#onAuthStateChange">onAuthStateChange</a></li>
+            
+            <li><a href="#resetPassword">resetPassword</a></li>
+            
+            <li><a href="#setPrivateKey">setPrivateKey</a></li>
+            
+            <li><a href="#signIn">signIn</a></li>
+            
+            <li><a href="#signInOffline">signInOffline</a></li>
+            
+            <li><a href="#signOut">signOut</a></li>
+            
+            <li><a href="#signUp">signUp</a></li>
+            
+            <li><a href="#userAccountType">userAccountType</a></li>
+            
+            <li><a href="#userLoggedIn">userLoggedIn</a></li>
+            </ul></dd></dl></div>
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        <!--method.tmpl-->
+<div class="method-details">
+
+
+
+
+
+    
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line17">17</a>
+  </code>
+</div>
+
+    
+
+    <h4 class="name" id="BaseBackend">
+      <a href="#params-BaseBackend"><span class="type-signature"></span>new BaseBackend</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-BaseBackend">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n * Base backend class for different backend types\n * Database functions are designed around the Firestore Collection/Document style\n * - Collections contain Documents\n * - Documents contain data and sometimes Collections\n * For more reference: https://firebase.google.com/docs/firestore/data-model\n */","meta":{"range":[510,11186],"filename":"basebackend.js","lineno":17,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031199","name":"BaseBackend","type":"ClassDeclaration","paramnames":[]},"shortpath":"src/network/backends/basebackend.js"},"name":"BaseBackend","longname":"BaseBackend","kind":"class","classdesc":"Base backend class for different backend types\nDatabase functions are designed around the Firestore Collection/Document style\n- Collections contain Documents\n- Documents contain data and sometimes Collections\nFor more reference: https://firebase.google.com/docs/firestore/data-model","scope":"global","___id":"T000003R000003","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"BaseBackend","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line143">143</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbAdd">
+      <a href="#params-dbAdd"><span class="type-signature"></span>dbAdd</a><span class="signature">(location, data, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function adds a new 'document' to a 'collection'
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbAdd("experimental.exp2.experimental2", {
+    hello: "what"
+}, (id) => {
+    console.log(id);
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbAdd">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbAdd" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The data for the new document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function that will be invoked to give the caller the new collection ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function adds a new 'document' to a 'collection'\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the new document\n     * @param {function} callback - Function that will be invoked to give the caller the new collection ID\n     *\n     * @example\n     * appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n     *     hello: \"what\"\n     * }, (id) => {\n     *     console.log(id);\n     * });\n     */","meta":{"range":[5094,5129],"filename":"basebackend.js","lineno":143,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031299","name":"BaseBackend#dbAdd","type":"MethodDefinition","paramnames":["location","data","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function adds a new 'document' to a 'collection'","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the new document","name":"data"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the new collection ID","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n    hello: \"what\"\n}, (id) => {\n    console.log(id);\n});"}],"name":"dbAdd","longname":"BaseBackend#dbAdd","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002717","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbAdd","signature":"<span class=\"signature\">(location, data, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line203">203</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbAddEncrypted">
+      <a href="#params-dbAddEncrypted"><span class="type-signature"></span>dbAddEncrypted</a><span class="signature">(location, data, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function adds a new 'document' to a 'collection' (for encrypted data)
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbAdd("experimental.exp2.experimental2", {
+    hello: "what"
+}, (id) => {
+    console.log(id);
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbAddEncrypted">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbAddEncrypted" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The data for the new document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function that will be invoked to give the caller the new collection ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function adds a new 'document' to a 'collection' (for encrypted data)\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the new document\n     * @param {function} callback - Function that will be invoked to give the caller the new collection ID\n     *\n     * @example\n     * appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n     *     hello: \"what\"\n     * }, (id) => {\n     *     console.log(id);\n     * });\n     */","meta":{"range":[7431,7705],"filename":"basebackend.js","lineno":203,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031424","name":"BaseBackend#dbAddEncrypted","type":"MethodDefinition","paramnames":["location","data","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function adds a new 'document' to a 'collection' (for encrypted data)","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the new document","name":"data"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the new collection ID","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbAdd(\"experimental.exp2.experimental2\", {\n    hello: \"what\"\n}, (id) => {\n    console.log(id);\n});"}],"name":"dbAddEncrypted","longname":"BaseBackend#dbAddEncrypted","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002728","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbAddEncrypted","signature":"<span class=\"signature\">(location, data, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line125">125</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbDelete">
+      <a href="#params-dbDelete"><span class="type-signature"></span>dbDelete</a><span class="signature">(location)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Deletes a document at the given location
+NOTE: this won't delete subcollections
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbDelete("users." + userId + ".cards." + docId);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbDelete">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbDelete" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The document location to delete</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Deletes a document at the given location\n     * NOTE: this won't delete subcollections\n     * \n     * @param {string} location - The document location to delete\n     * \n     * @example\n     * appBackend.dbDelete(\"users.\" + userId + \".cards.\" + docId);\n     */","meta":{"range":[4499,4520],"filename":"basebackend.js","lineno":125,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031288","name":"BaseBackend#dbDelete","type":"MethodDefinition","paramnames":["location"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Deletes a document at the given location\nNOTE: this won't delete subcollections","params":[{"type":{"names":["string"]},"description":"The document location to delete","name":"location"}],"examples":[{"caption":"","code":"appBackend.dbDelete(\"users.\" + userId + \".cards.\" + docId);"}],"name":"dbDelete","longname":"BaseBackend#dbDelete","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002715","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbDelete","signature":"<span class=\"signature\">(location)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line99">99</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbDoesDocExist">
+      <a href="#params-dbDoesDocExist"><span class="type-signature"></span>dbDoesDocExist</a><span class="signature">(location, location, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Function returns checks if a document exists.
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var docExists = appBackend.dbDoesDocExist("kTNvGsDcTefsM4w88bdMQoUFsEg1", (exists) => {
+    if (exists) console.log("Doc exists!");
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbDoesDocExist">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbDoesDocExist" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form of 'COLLECTION.DOCUMENT'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Called back when check is finished, parameter is set if exists or not</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/** \n     * Function returns checks if a document exists. \n     * \n     * @param {string} location - Location in the form of 'COLLECTION.DOCUMENT'\n     * \n     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'\n     * @param {function} callback - Called back when check is finished, parameter is set if exists or not\n     * \n     * @example\n     * var docExists = appBackend.dbDoesDocExist(\"kTNvGsDcTefsM4w88bdMQoUFsEg1\", (exists) => {\n     *     if (exists) console.log(\"Doc exists!\");\n     * });\n    */","meta":{"range":[3627,3664],"filename":"basebackend.js","lineno":99,"columnno":3,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031262","name":"BaseBackend#dbDoesDocExist","type":"MethodDefinition","paramnames":["location","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Function returns checks if a document exists.","params":[{"type":{"names":["string"]},"description":"Location in the form of 'COLLECTION.DOCUMENT'","name":"location"},{"type":{"names":["string"]},"description":"Location in the form 'COLLECTION.DOCUMENT.COLLECTION'","name":"location"},{"type":{"names":["function"]},"description":"Called back when check is finished, parameter is set if exists or not","name":"callback"}],"examples":[{"caption":"","code":"var docExists = appBackend.dbDoesDocExist(\"kTNvGsDcTefsM4w88bdMQoUFsEg1\", (exists) => {\n    if (exists) console.log(\"Doc exists!\");\n});"}],"name":"dbDoesDocExist","longname":"BaseBackend#dbDoesDocExist","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002712","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbDoesDocExist","signature":"<span class=\"signature\">(location, location, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line70">70</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbGet">
+      <a href="#params-dbGet"><span class="type-signature">(async) </span>dbGet</a><span class="signature">(location, conditions, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+where the callback is called for each document in the collection
+</div>
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbGet("experimental.exp2", (data) => {
+    console.log(data);
+});</code></pre>
+
+    <pre class="prettyprint"><code>// conditions/queries can be stacked by adding more parameters after each other (before the callback)
+appBackend.dbGet("experimental", ["hello", "==", "what2"], (data) => {
+  console.log(data);
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbGet">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbGet" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>conditions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]
+                            (e.g. ["name", "==", "Something"] **see https://firebase.google.com/docs/firestore/query-data/queries)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function that will be invoked to give the caller the data in JSON</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\n     * where the callback is called for each document in the collection\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {Array} conditions - Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]\n     *                             (e.g. [\"name\", \"==\", \"Something\"] **see https://firebase.google.com/docs/firestore/query-data/queries)\n     * @param {function} callback - Function that will be invoked to give the caller the data in JSON\n     *\n     * @example\n     * appBackend.dbGet(\"experimental.exp2\", (data) => {\n     *     console.log(data);\n     * });\n     * \n     * @example\n     * // conditions/queries can be stacked by adding more parameters after each other (before the callback)\n     * appBackend.dbGet(\"experimental\", [\"hello\", \"==\", \"what2\"], (data) => {\n     *   console.log(data);\n     * });\n     */","meta":{"range":[2373,2425],"filename":"basebackend.js","lineno":70,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031236","name":"BaseBackend#dbGet","type":"MethodDefinition","paramnames":["location","conditionsWithCallback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\nwhere the callback is called for each document in the collection","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["Array"]},"description":"Conditions for what documents to select from a collection, array in the form of: [FIELD, OPERATOR, COMPARISON]\n                            (e.g. [\"name\", \"==\", \"Something\"] **see https://firebase.google.com/docs/firestore/query-data/queries)","name":"conditions"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the data in JSON","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbGet(\"experimental.exp2\", (data) => {\n    console.log(data);\n});"},{"caption":"","code":"// conditions/queries can be stacked by adding more parameters after each other (before the callback)\nappBackend.dbGet(\"experimental\", [\"hello\", \"==\", \"what2\"], (data) => {\n  console.log(data);\n});"}],"name":"dbGet","longname":"BaseBackend#dbGet","kind":"function","memberof":"BaseBackend","scope":"instance","async":true,"___id":"T000002R002708","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"dbGet","signature":"<span class=\"signature\">(location, conditions, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line158">158</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbGetEncrypted">
+      <a href="#params-dbGetEncrypted"><span class="type-signature"></span>dbGetEncrypted</a><span class="signature">(location, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection
+where the callback is called for each document in the collection (for encrypted data)
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbGetEncrypted("experimental.exp2", (data) => {
+    console.log(data);
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbGetEncrypted">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbGetEncrypted" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function that will be invoked to give the caller the data in JSON</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\n     * where the callback is called for each document in the collection (for encrypted data)\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {function} callback - Function that will be invoked to give the caller the data in JSON\n     *\n     * @example\n     * appBackend.dbGetEncrypted(\"experimental.exp2\", (data) => {\n     *     console.log(data);\n     * });\n     */","meta":{"range":[5767,6129],"filename":"basebackend.js","lineno":158,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031313","name":"BaseBackend#dbGetEncrypted","type":"MethodDefinition","paramnames":["location","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function gets the data of a database 'document' in JSON or the all of the data of the 'document' data of a collection\nwhere the callback is called for each document in the collection (for encrypted data)","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["function"]},"description":"Function that will be invoked to give the caller the data in JSON","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbGetEncrypted(\"experimental.exp2\", (data) => {\n    console.log(data);\n});"}],"name":"dbGetEncrypted","longname":"BaseBackend#dbGetEncrypted","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002719","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbGetEncrypted","signature":"<span class=\"signature\">(location, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line84">84</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbGetSubCollections">
+      <a href="#params-dbGetSubCollections"><span class="type-signature"></span>dbGetSubCollections</a><span class="signature">(location, callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function gets data for each document in a subcollection of a 'document'. 
+Needed because for a subcollection there is no '.data()'
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbGetSubCollections("users.test.cards",(data) => { 
+ console.log(data.data());
+})</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbGetSubCollections">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbGetSubCollections" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Location in the form 'COLLECTION.DOCUMENT.COLLECTION'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Function to be invoked on each document of a subcollection</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function gets data for each document in a subcollection of a 'document'. \n     * Needed because for a subcollection there is no '.data()'\n     * \n     * @param {string} location - Location in the form 'COLLECTION.DOCUMENT.COLLECTION'\n     * @param {function} callback - Function to be invoked on each document of a subcollection\n     * \n     * @example\n     * appBackend.dbGetSubCollections(\"users.test.cards\",(data) => { \n     *  console.log(data.data());\n     * })\n     */","meta":{"range":[2987,3029],"filename":"basebackend.js","lineno":84,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031250","name":"BaseBackend#dbGetSubCollections","type":"MethodDefinition","paramnames":["location","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function gets data for each document in a subcollection of a 'document'. \nNeeded because for a subcollection there is no '.data()'","params":[{"type":{"names":["string"]},"description":"Location in the form 'COLLECTION.DOCUMENT.COLLECTION'","name":"location"},{"type":{"names":["function"]},"description":"Function to be invoked on each document of a subcollection","name":"callback"}],"examples":[{"caption":"","code":"appBackend.dbGetSubCollections(\"users.test.cards\",(data) => { \n console.log(data.data());\n})"}],"name":"dbGetSubCollections","longname":"BaseBackend#dbGetSubCollections","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002710","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbGetSubCollections","signature":"<span class=\"signature\">(location, callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line113">113</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbSet">
+      <a href="#params-dbSet"><span class="type-signature"></span>dbSet</a><span class="signature">(location, data, merge)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function sets the data of a 'document'
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbSet("experimental.exp2", {
+    hello: "what"
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbSet">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbSet" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The data for the document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merge</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Whether to merge the new data with the current document's data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function sets the data of a 'document'\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the document\n     * @param {boolean} merge - Whether to merge the new data with the current document's data\n     *\n     * @example\n     * appBackend.dbSet(\"experimental.exp2\", {\n     *     hello: \"what\"\n     * });\n     */","meta":{"range":[4107,4157],"filename":"basebackend.js","lineno":113,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031268","name":"BaseBackend#dbSet","type":"MethodDefinition","paramnames":["location","data","merge","callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function sets the data of a 'document'","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the document","name":"data"},{"type":{"names":["boolean"]},"description":"Whether to merge the new data with the current document's data","name":"merge","defaultvalue":false}],"examples":[{"caption":"","code":"appBackend.dbSet(\"experimental.exp2\", {\n    hello: \"what\"\n});"}],"name":"dbSet","longname":"BaseBackend#dbSet","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002713","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbSet","signature":"<span class=\"signature\">(location, data, merge)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line181">181</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="dbSetEncrypted">
+      <a href="#params-dbSetEncrypted"><span class="type-signature"></span>dbSetEncrypted</a><span class="signature">(location, data, merge)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function sets the data of a 'document' (for encrypted data)
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>appBackend.dbSet("experimental.exp2", {
+    hello: "what"
+});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-dbSetEncrypted">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-dbSetEncrypted" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The data for the document</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merge</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Whether to merge the new data with the current document's data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function sets the data of a 'document' (for encrypted data)\n     *\n     * @param {string} location - Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'\n     * @param {JSON} data - The data for the document\n     * @param {boolean} merge - Whether to merge the new data with the current document's data\n     *\n     * @example\n     * appBackend.dbSet(\"experimental.exp2\", {\n     *     hello: \"what\"\n     * });\n     */","meta":{"range":[6593,6879],"filename":"basebackend.js","lineno":181,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031371","name":"BaseBackend#dbSetEncrypted","type":"MethodDefinition","paramnames":["location","data","merge"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function sets the data of a 'document' (for encrypted data)","params":[{"type":{"names":["string"]},"description":"Location in the database in the form: 'COLLECTION.DOCUMENT.COLLECTION...'","name":"location"},{"type":{"names":["JSON"]},"description":"The data for the document","name":"data"},{"type":{"names":["boolean"]},"description":"Whether to merge the new data with the current document's data","name":"merge","defaultvalue":false}],"examples":[{"caption":"","code":"appBackend.dbSet(\"experimental.exp2\", {\n    hello: \"what\"\n});"}],"name":"dbSetEncrypted","longname":"BaseBackend#dbSetEncrypted","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002724","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"dbSetEncrypted","signature":"<span class=\"signature\">(location, data, merge)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line40">40</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="doesSupportDatabase">
+      <a href="#params-doesSupportDatabase"><span class="type-signature"></span>doesSupportDatabase</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function returns whether this Backend supports databases or not
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-doesSupportDatabase">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function returns whether this Backend supports databases or not\n     */","meta":{"range":[973,998],"filename":"basebackend.js","lineno":40,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031227","name":"BaseBackend#doesSupportDatabase","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function returns whether this Backend supports databases or not","name":"doesSupportDatabase","longname":"BaseBackend#doesSupportDatabase","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002706","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"doesSupportDatabase","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line48">48</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="enableDatabaseCaching">
+      <a href="#params-enableDatabaseCaching"><span class="type-signature"></span>enableDatabaseCaching</a><span class="signature">(cacheSize)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function allows the backend to keep a local copy of the database data it actively uses
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-enableDatabaseCaching">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-enableDatabaseCaching" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cacheSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The size of the local copy of the cache in MB (leave blank for unlimited)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function allows the backend to keep a local copy of the database data it actively uses\n     * \n     * @param {int} cacheSize - The size of the local copy of the cache in MB (leave blank for unlimited)\n     * \n     */","meta":{"range":[1241,1277],"filename":"basebackend.js","lineno":48,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031231","name":"BaseBackend#enableDatabaseCaching","type":"MethodDefinition","paramnames":["cacheSize"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function allows the backend to keep a local copy of the database data it actively uses","params":[{"type":{"names":["int"]},"description":"The size of the local copy of the cache in MB (leave blank for unlimited)","name":"cacheSize"}],"name":"enableDatabaseCaching","longname":"BaseBackend#enableDatabaseCaching","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002707","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"enableDatabaseCaching","signature":"<span class=\"signature\">(cacheSize)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line255">255</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getLoginProviders">
+      <a href="#params-getLoginProviders"><span class="type-signature"></span>getLoginProviders</a><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#LoginProviders">LoginProviders</a>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get the login providers that are implemented
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getLoginProviders">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    - object containing the backend's supported login providers
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#LoginProviders">LoginProviders</a></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the login providers that are implemented\n     * \n     * @returns {LoginProviders} - object containing the backend's supported login providers\n     */","meta":{"range":[9246,9268],"filename":"basebackend.js","lineno":255,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031495","name":"BaseBackend#getLoginProviders","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Get the login providers that are implemented","returns":[{"type":{"names":["LoginProviders"]},"description":"- object containing the backend's supported login providers"}],"name":"getLoginProviders","longname":"BaseBackend#getLoginProviders","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002737","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getLoginProviders","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {<a href=\"global.html#LoginProviders\">LoginProviders</a>}</span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line313">313</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getTimestamp">
+      <a href="#params-getTimestamp"><span class="type-signature"></span>getTimestamp</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get the current Timestamp
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getTimestamp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the current Timestamp\n     */","meta":{"range":[11111,11184],"filename":"basebackend.js","lineno":313,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031529","name":"BaseBackend#getTimestamp","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Get the current Timestamp","name":"getTimestamp","longname":"BaseBackend#getTimestamp","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002745","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getTimestamp","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line293">293</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getUserID">
+      <a href="#params-getUserID"><span class="type-signature"></span>getUserID</a><span class="signature">()</span><span class="type-signature"> &rarr; {string}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Gets a user id associated with the logged in user
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getUserID">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    - string containing the user id of the logged in user
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Gets a user id associated with the logged in user\n     * \n     * @returns {string} - string containing the user id of the logged in user\n     */","meta":{"range":[10452,10474],"filename":"basebackend.js","lineno":293,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031520","name":"BaseBackend#getUserID","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Gets a user id associated with the logged in user","returns":[{"type":{"names":["string"]},"description":"- string containing the user id of the logged in user"}],"name":"getUserID","longname":"BaseBackend#getUserID","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002742","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getUserID","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {string}</span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line309">309</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="getUserInfo">
+      <a href="#params-getUserInfo"><span class="type-signature"></span>getUserInfo</a><span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#UserInfo">UserInfo</a>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Gets all useful information about a signed in user.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-getUserInfo">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    userInfo
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#UserInfo">UserInfo</a></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Gets all useful information about a signed in user.\n     * \n     * @return {UserInfo} userInfo \n     */","meta":{"range":[11041,11057],"filename":"basebackend.js","lineno":309,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031525","name":"BaseBackend#getUserInfo","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Gets all useful information about a signed in user.","returns":[{"type":{"names":["UserInfo"]},"description":"userInfo"}],"name":"getUserInfo","longname":"BaseBackend#getUserInfo","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002744","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getUserInfo","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {<a href=\"global.html#UserInfo\">UserInfo</a>}</span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line26">26</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="initializeApp">
+      <a href="#params-initializeApp"><span class="type-signature"></span>initializeApp</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function initializes the Backend
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-initializeApp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function initializes the Backend\n     */","meta":{"range":[661,680],"filename":"basebackend.js","lineno":26,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031212","name":"BaseBackend#initializeApp","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function initializes the Backend","name":"initializeApp","longname":"BaseBackend#initializeApp","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002703","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"initializeApp","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line286">286</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="onAuthStateChange">
+      <a href="#params-onAuthStateChange"><span class="type-signature"></span>onAuthStateChange</a><span class="signature">(callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Calls the supplied function if there is a change in the user's login status.
+I.E. if a user logs in or logs out the function will be called
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-onAuthStateChange">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-onAuthStateChange" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">requestCallback</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The function to callback when a user's
+state changes</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Calls the supplied function if there is a change in the user's login status.\n     * I.E. if a user logs in or logs out the function will be called\n     * \n     * @param {requestCallback} callback - The function to callback when a user's\n     * state changes\n     */","meta":{"range":[10256,10286],"filename":"basebackend.js","lineno":286,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031515","name":"BaseBackend#onAuthStateChange","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Calls the supplied function if there is a change in the user's login status.\nI.E. if a user logs in or logs out the function will be called","params":[{"type":{"names":["requestCallback"]},"description":"The function to callback when a user's\nstate changes","name":"callback"}],"name":"onAuthStateChange","longname":"BaseBackend#onAuthStateChange","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002741","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"onAuthStateChange","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line263">263</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="resetPassword">
+      <a href="#params-resetPassword"><span class="type-signature"></span>resetPassword</a><span class="signature">(email, error_func)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Resets the user's password.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-resetPassword">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-resetPassword" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the email of the account to reset password</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">called when there is an error duing password reset</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n      * Resets the user's password.\n      * \n      * @param {string} email - the email of the account to reset password\n      * @param {function} error_func - called when there is an error duing password reset\n      */","meta":{"range":[9505,9541],"filename":"basebackend.js","lineno":263,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031499","name":"BaseBackend#resetPassword","type":"MethodDefinition","paramnames":["email","return_func"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Resets the user's password.","params":[{"type":{"names":["string"]},"description":"the email of the account to reset password","name":"email"},{"type":{"names":["function"]},"description":"called when there is an error duing password reset","name":"error_func"}],"name":"resetPassword","longname":"BaseBackend#resetPassword","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002738","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resetPassword","signature":"<span class=\"signature\">(email, error_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line33">33</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="setPrivateKey">
+      <a href="#params-setPrivateKey"><span class="type-signature"></span>setPrivateKey</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    This function sets the private key for the backend
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-setPrivateKey">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-setPrivateKey" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new private key</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * This function sets the private key for the backend\n     * \n     * @param {string} key - The new private key\n     */","meta":{"range":[817,875],"filename":"basebackend.js","lineno":33,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031216","name":"BaseBackend#setPrivateKey","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"This function sets the private key for the backend","params":[{"type":{"names":["string"]},"description":"The new private key","name":"key"}],"name":"setPrivateKey","longname":"BaseBackend#setPrivateKey","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002704","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"setPrivateKey","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line228">228</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="signIn">
+      <a href="#params-signIn"><span class="type-signature"></span>signIn</a><span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Sign in to an existing user account
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signIn">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-signIn" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the email of the user account</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the password of the user account</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">called when there is an error during sign in</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Sign in to an existing user account\n     * \n     * @param {string} email - the email of the user account\n     * @param {string} password - the password of the user account\n     * @param {function} error_func - called when there is an error during sign in\n     */","meta":{"range":[8380,8418],"filename":"basebackend.js","lineno":228,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031480","name":"BaseBackend#signIn","type":"MethodDefinition","paramnames":["email","password","error_func"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Sign in to an existing user account","params":[{"type":{"names":["string"]},"description":"the email of the user account","name":"email"},{"type":{"names":["string"]},"description":"the password of the user account","name":"password"},{"type":{"names":["function"]},"description":"called when there is an error during sign in","name":"error_func"}],"name":"signIn","longname":"BaseBackend#signIn","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002733","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signIn","signature":"<span class=\"signature\">(email, password, error_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line237">237</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="signInOffline">
+      <a href="#params-signInOffline"><span class="type-signature"></span>signInOffline</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Sign in with an offline user account. The user will not be able to access the
+credit card database and will only be given manual card-add functionality.
+
+The onAuthStateChange function which can be supplied in @onAuthStateChange will
+be called upon changing this login state.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signInOffline">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Sign in with an offline user account. The user will not be able to access the\n     * credit card database and will only be given manual card-add functionality.\n     * \n     * The onAuthStateChange function which can be supplied in @onAuthStateChange will\n     * be called upon changing this login state.\n     */","meta":{"range":[8759,8777],"filename":"basebackend.js","lineno":237,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031487","name":"BaseBackend#signInOffline","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Sign in with an offline user account. The user will not be able to access the\ncredit card database and will only be given manual card-add functionality.\n\nThe onAuthStateChange function which can be supplied in @onAuthStateChange will\nbe called upon changing this login state.","name":"signInOffline","longname":"BaseBackend#signInOffline","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002734","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signInOffline","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line242">242</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="signOut">
+      <a href="#params-signOut"><span class="type-signature"></span>signOut</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Sign out the currently logged in user
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signOut">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Sign out the currently logged in user\n     */","meta":{"range":[8844,8856],"filename":"basebackend.js","lineno":242,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031491","name":"BaseBackend#signOut","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Sign out the currently logged in user","name":"signOut","longname":"BaseBackend#signOut","kind":"function","memberof":"BaseBackend","scope":"instance","params":[],"___id":"T000002R002735","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signOut","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line219">219</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="signUp">
+      <a href="#params-signUp"><span class="type-signature"></span>signUp</a><span class="signature">(email, password, error_func)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    User sign up for an account using email and password
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-signUp">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-signUp" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">email of a propsective user</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a password</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">called when there is an error during sign up 
+(e.g. email is incorrect or password is not complicated enough)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * User sign up for an account using email and password\n     * \n     * @param {string} email - email of a propsective user\n     * @param {string} password - a password \n     * @param {function} error_func - called when there is an error during sign up \n     * (e.g. email is incorrect or password is not complicated enough)\n     */","meta":{"range":[8055,8096],"filename":"basebackend.js","lineno":219,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031473","name":"BaseBackend#signUp","type":"MethodDefinition","paramnames":["username","password","error_func"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"User sign up for an account using email and password","params":[{"type":{"names":["string"]},"description":"email of a propsective user","name":"email"},{"type":{"names":["string"]},"description":"a password","name":"password"},{"type":{"names":["function"]},"description":"called when there is an error during sign up \n(e.g. email is incorrect or password is not complicated enough)","name":"error_func"}],"name":"signUp","longname":"BaseBackend#signUp","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002732","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"signUp","signature":"<span class=\"signature\">(email, password, error_func)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line277">277</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="userAccountType">
+      <a href="#params-userAccountType"><span class="type-signature"></span>userAccountType</a><span class="signature">(callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get the user's account type
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-userAccountType">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-userAccountType" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function with one argument in which a string containing the account type will be given.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the user's account type\n     * @param {function} callback function with one argument in which a string containing the account type will be given.\n     */","meta":{"range":[9941,9969],"filename":"basebackend.js","lineno":277,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031510","name":"BaseBackend#userAccountType","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Get the user's account type","params":[{"type":{"names":["function"]},"description":"function with one argument in which a string containing the account type will be given.","name":"callback"}],"name":"userAccountType","longname":"BaseBackend#userAccountType","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002740","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"userAccountType","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="src_network_backends_basebackend.js.html">basebackend.js</a>:<a href="src_network_backends_basebackend.js.html#line271">271</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="userLoggedIn">
+      <a href="#params-userLoggedIn"><span class="type-signature"></span>userLoggedIn</a><span class="signature">(callback)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Get the user's log in status
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-userLoggedIn">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-userLoggedIn" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">callback</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback function that will be called on login info retreival containing one boolean argument.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Get the user's log in status\n     * \n     * @param {callback} - callback function that will be called on login info retreival containing one boolean argument.\n     * \n     */","meta":{"range":[9737,9762],"filename":"basebackend.js","lineno":271,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/network/backends","code":{"id":"astnode100031505","name":"BaseBackend#userLoggedIn","type":"MethodDefinition","paramnames":["callback"]},"vars":{"":null},"shortpath":"src/network/backends/basebackend.js"},"description":"Get the user's log in status","params":[{"type":{"names":["callback"]},"description":"callback function that will be called on login info retreival containing one boolean argument.","name":"callback"}],"name":"userLoggedIn","longname":"BaseBackend#userLoggedIn","kind":"function","memberof":"BaseBackend","scope":"instance","___id":"T000002R002739","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"userLoggedIn","signature":"<span class=\"signature\">(callback)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"BaseBackend.html\">BaseBackend</a>#"]}
+</pre>
+-->
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 01 2021 17:24:40 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
