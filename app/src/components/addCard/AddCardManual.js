@@ -69,6 +69,13 @@ export function AddCardManual({navigation}) {
         }
     }
 
+    // deletes an user-added reward
+    deleteReward = (index) => {
+        let tempRewards = [...rewards];
+        tempRewards.splice(index, 1);
+        setRewards(tempRewards);
+    }
+
     // validates inputs on trying to add card 
     validateInputs = (name, url) => { 
         var inputsAreValid = true;
@@ -153,7 +160,18 @@ export function AddCardManual({navigation}) {
                             {
                                 rewards.map((reward, i) => {
                                     let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
-                                    return <Text style={{ margin: 5 }} key={i}>{type}: {reward.value} cents</Text>
+                                    return (
+                                        <View style={styles.rewardRowSet} key={i}>
+                                            <Text style={{ margin: 5 }}>{type}: {reward.value} cents</Text>
+                                            <TouchableOpacity style={{ margin: 5 }} onPress={() => {deleteReward(i)}}>
+                                                <Ionicons
+                                                    name="trash-outline"
+                                                    color="red"
+                                                    size={18}
+                                                ></Ionicons>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
                                 })
                             }
                         </View>
@@ -239,6 +257,11 @@ const styles = StyleSheet.create({
     rewardRow : {
         display: 'flex',
         flexDirection: 'row'
+    },
+    rewardRowSet : {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     rewardText : { 
         margin: 15,
