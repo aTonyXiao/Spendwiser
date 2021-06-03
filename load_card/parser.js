@@ -8,9 +8,7 @@ const readline = require('readline');
 const readJson = (path) => {
     let rawdata = fs.readFileSync(path);
     let cards = JSON.parse(rawdata);
-    console.log(cards);
-
-    return data;
+    return cards['cards'];
 }
 
 /**
@@ -32,7 +30,7 @@ exports.readFile = (path) => {
     }
 
     // separate string
-    let extension = path.split(".")[2];
+    let extension = path.split(".")[1];
     let data = null;
     switch (extension) {
         case ("txt"):
