@@ -11,8 +11,6 @@ import AppleLogin from './firebase/apple_login';
 
 // This will be set through the onAuthStateChange function
 let onAuthStateChangeCallback = null;
-let syncing_items = []
-
 
 /**
  * Extract the database location from the string
@@ -91,13 +89,18 @@ class FirebaseBackend extends BaseBackend {
         });
 
 
+        // Wait 15 seconds after app launch to sync remote database to
+        // local storage. Note: This will only happen once on app startup
         let hasSyncedRemote = false;
-        if (!hasSyncedRemote) {
-            syncRemoteDatabase();
-            hasSyncedRemote = true;
-        }
+        setInterval(async () => {
+            if (!hasSyncedRemote) {
+                syncRemoteDatabase();
+                hasSyncedRemote = true;
+            }
+        }, 15000);
+        
 
-        // Sync the local database every 30 seconds
+        // Sync the local database every 30 seconds with the remote dataabase
         setInterval(async () => {
             await syncLocalDatabase();
             // only sync remote once
@@ -127,8 +130,7 @@ class FirebaseBackend extends BaseBackend {
         }
     }
 
-    // NOTE (Nathan W): This is the jankiest way to convert Firebase Timestamps
-    // to Date objects
+    // NOTE (Nathan W): This takes a while, but is a robust way of making sure all Timestamps are converted to dates
     /**
      * 
      * @param {Object} data any kind of object that could have firebase timestamp objects
