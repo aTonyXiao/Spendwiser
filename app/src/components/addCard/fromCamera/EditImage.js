@@ -10,8 +10,6 @@ import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
 import { MoveableBlock } from './MoveableBlock';
 
-// TODO: add a "loading" or "getting results"
-
 /**
  * Page for allowing user to edit their image before they send it to Google Cloud API
  * 
@@ -81,10 +79,17 @@ export function EditImage({route, navigation}) {
         }
     };
 
+    // parses the response from google cloud to a readable list
     const formatApiResponse = (responseJson) => {
+        let textAnnotationFormatted = [];
+
+        // google cloud didn't detect any text
+        if (Object.keys(responseJson.responses[0]).length === 0) { 
+            return textAnnotationFormatted;
+        }
+
         // response structure:
         // fullTextAnnotation -> pages -> blocks -> paragraphs -> words -> symbols
-        let textAnnotationFormatted = [];
         let pages = responseJson.responses[0].fullTextAnnotation.pages;
         pages.forEach(page => {
             let blocks = page.blocks;
