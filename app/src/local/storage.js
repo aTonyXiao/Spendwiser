@@ -211,6 +211,7 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
         });
     } catch (e) {
         console.log(e);
+        callback(-1);
     }
 }
 
@@ -226,17 +227,21 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
  */
 const checkSyncMapping = (db, accountName, collection, id) => {
     if ('sync_mappings' in db[accountName]) {
-        console.log("Checking sync mappings for document: " + collection + " id: " + id);
         sync_mappings = db[accountName]['sync_mappings'];
+
+        // Look through the array of mappings to find one that could match the passed in id
         for (let i = 0; i < sync_mappings.length; i++) {
             let mapping = sync_mappings[i];
             if (mapping['location'] == collection && mapping['oldId'] == id) {
-                console.log("Found " + mapping['newId']);
+                // The id has in fact been updated in our database, so we should use the new ID
                 return mapping['newId'];
             }
         }
+
+        // There has been no update to this id, we can return the id that was passed in
         return id;
     } else {
+        // Sync mappings does not exist yet, we can just return the current id
         return id;
     }
 }
@@ -250,23 +255,12 @@ const checkSyncMapping = (db, accountName, collection, id) => {
 export const deleteLocalDB = async (accountName, location) => {
     try {
         getDB(async (db) => {
-            console.log("Delete location: " + location);
             let [collection, id] = parseCollectionAndDocId(location);
             let oldId = id;
             id = checkSyncMapping(db, accountName, collection, id);
             
-            console.log("deleting with document: " + collection + " id: " + id);
             if (accountName in db && collection in db[accountName] && (id in db[accountName][collection])) {
-                if ('unsynced_documents' in db[accountName]) {
-                    db[accountName]['unsynced_documents'] = [
-                        ...db[accountName]['unsynced_documents'],
-                        {'location': collection, 'id': id, 'type': 'delete'},
-                    ];
-                } else {
-                    db[accountName]['unsynced_documents'] = [
-                        {'location': location, 'id': id, 'type': 'delete'}
-                    ]
-                }
+                addToUnsyncedDocuments(db, accountName, collection, id, location);
 
                 // Remove any unsynced documents that relate to the location being deleted
                 db[accountName]['unsynced_documents'] = 
@@ -346,17 +340,9 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                 } else {
                     db[accountName][collection][id] = local_data;
                 }
-
-                if ('unsynced_documents' in db[accountName]) {
-                    db[accountName]['unsynced_documents'] = [
-                        ...db[accountName]['unsynced_documents'],
-                        {'location': collection, 'id': id, 'type': 'set', 'merge': merge},
-                    ];
-                } else {
-                    db[accountName]['unsynced_documents'] = [
-                        {'location': location, 'id': id, 'type': 'set', 'merge': merge}
-                    ]
-                }
+                
+                addToUnsyncedDocuments(db, accountName, collection, id, location);
+               
 
                 setDB(db, () => {
                     callback();
@@ -629,7 +615,6 @@ export const removeDocumentFromUnsyncedList = (accountName, location, id, callba
     try {
         getDB((db) => {
             console.log("got the db");
-
             if (accountName in db && 'unsynced_documents' in db[accountName]) {
                 console.log("accountName and unsynced_documents are in the db");
                 let unsynced_documents = db[accountName]['unsynced_documents'];
@@ -771,5 +756,18 @@ export const getDisabledCards = async (callback) => {
     } catch (e) {
         console.log(e);
         return null;
+    }
+}
+
+function addToUnsyncedDocuments(db, accountName, collection, id, location) {
+    if ('unsynced_documents' in db[accountName]) {
+        db[accountName]['unsynced_documents'] = [
+            ...db[accountName]['unsynced_documents'],
+            { 'location': collection, 'id': id, 'type': 'delete' },
+        ];
+    } else {
+        db[accountName]['unsynced_documents'] = [
+            { 'location': location, 'id': id, 'type': 'delete' }
+        ];
     }
 }
