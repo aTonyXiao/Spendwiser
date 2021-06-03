@@ -40,7 +40,7 @@ If additional or custom cards are desired, create a JSON file using the followin
             "rewardType": "RewardType",
             "benefits": [
                 "Benefit1",
-                "Benefit2"ß
+                "Benefit2"
             ]
         }
     ]
