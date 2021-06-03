@@ -64,7 +64,6 @@ export function AddCardDB({navigation}) {
                 setDisplayErrorText(false);
             }, 2000);
         } else { 
-            // TODO: this should be navigate to add card confirm
             var cardId = cardMap[query];
             var currentCardIds = [];
             for (var card in currentUserCards) {

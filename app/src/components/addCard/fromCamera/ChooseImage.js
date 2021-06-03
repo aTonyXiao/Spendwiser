@@ -11,8 +11,6 @@ import * as ImagePicker from 'expo-image-picker';
 import mainStyles from '../../../styles/mainStyles';
 import { BackButtonHeader } from '../../util/BackButtonHeader';
 
-// TODO: need to add permission to settings page
-
 /**
  * Page for choosing an image. Utilizes Expo ImagePicker to allow user to pick from
  * camera roll or take picture

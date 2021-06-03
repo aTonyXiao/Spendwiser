@@ -16,8 +16,6 @@ import { appBackend } from '../../../network/backend';
 import * as storage from '../../../local/storage';
 import mainStyles from '../../../styles/mainStyles';
 
-// TODO: handle no text
-
 /**
  * Page that allows user to select an image after taking a picture of their card
  * 

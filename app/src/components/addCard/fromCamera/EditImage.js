@@ -10,8 +10,6 @@ import { captureScreen } from 'react-native-view-shot';
 import { CameraSettingsBar } from './CameraSettingsBar';
 import { MoveableBlock } from './MoveableBlock';
 
-// TODO: add a "loading" or "getting results"
-
 /**
  * Page for allowing user to edit their image before they send it to Google Cloud API
  * 

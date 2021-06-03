@@ -5,6 +5,20 @@ import { Ionicons } from '@expo/vector-icons';
 import { user } from '../../network/user';
 import { DismissKeyboard } from '../util/DismissKeyboard';
 
+/**
+ * A modal for adding a transaction at current location
+ * 
+ * @param {{Object, boolean, Function, Function, String}} obj - The parameters object
+ * @param {Object} obj.storeInformation - store information of transaction to add at
+ * @param {boolean} obj.showTransactionModal - boolean value to show or hide transaction
+ * modal 
+ * @param {Function} obj.setShowTransactionModal - React function to set 
+ * showTransactionModal
+ * @param {Function} obj.setHasConstructed - React function to set rerender of parent 
+ * function
+ * @param {String} obj.cardId - id of current card
+ * @module TransactionModal
+ */
 function TransactionModal({
         storeInformation, 
         showTransactionModal, 
@@ -31,7 +45,6 @@ function TransactionModal({
         }
     }
 
-    // TODO: this should also probably account for whitespace, etc.
     isInputValid = (input) => { 
         // don't allow $0 transactions
         if (isNaN(parseFloat(input))) { 
