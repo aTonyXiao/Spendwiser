@@ -115,4 +115,3 @@ const styles = StyleSheet.create({
         marginBottom: 8 
     },
 });
-const grayRGB = 'rgb(192, 192, 192)';
