@@ -188,7 +188,7 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
             // we need to note that in our array of unsynced documents which
             // will later be used to push this information up to the remote db
             if (synced == false) {
-                addToUnsyncedDocuments(db, 'add', accountName, collection, id, location);
+                addToUnsyncedDocuments(db, 'add', accountName, location, id, location);
             }
 
             // Copy the supplied data into our database
