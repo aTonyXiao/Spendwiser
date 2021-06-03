@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AddCardManual - Documentation</title>
+    <title>TransactionModal - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">AddCardManual</h1>
+    <h1 class="page-title">TransactionModal</h1>
     
 
     <!--container.tmpl-->
@@ -49,7 +49,7 @@
 
 <header data-tmpl="container.tmpl">
     
-      <h2>Module: AddCardManual</h2>
+      <h2>Module: TransactionModal</h2>
         
             
         
@@ -62,8 +62,7 @@
     <div class="container-overview">
     
         
-            <div class="description">The page for adding a card manually. Adding a card adds the card to the user and to
-firebase</div>
+            <div class="description">A modal for adding a transaction at current location</div>
         
 
         
@@ -78,7 +77,7 @@ firebase</div>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="src_components_addCard_AddCardManual.js.html">AddCardManual.js</a>:<a href="src_components_addCard_AddCardManual.js.html#line19">19</a>
+    <a href="src_components_cards_TransactionModal.js.html">TransactionModal.js</a>:<a href="src_components_cards_TransactionModal.js.html#line8">8</a>
   </code>
 </div>
 
@@ -104,7 +103,7 @@ firebase</div>
 
 
 
-<div class="collapse_" id="methodCollapse-AddCardManual">
+<div class="collapse_" id="methodCollapse-TransactionModal">
 
   
 
@@ -120,7 +119,7 @@ firebase</div>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="src_components_addCard_AddCardManual.js.html">AddCardManual.js</a>:<a href="src_components_addCard_AddCardManual.js.html#line19">19</a>
+    <a href="src_components_cards_TransactionModal.js.html">TransactionModal.js</a>:<a href="src_components_cards_TransactionModal.js.html#line8">8</a>
   </code>
 </div>
 
@@ -164,7 +163,7 @@ firebase</div>
 
 
 
-  <div id="params-AddCardManual" class="bs-callout bs-callout-primary">
+  <div id="params-TransactionModal" class="bs-callout bs-callout-primary">
     <h5>Parameters</h5>
     <!--params.tmpl-->
 
@@ -207,7 +206,7 @@ firebase</div>
 
             
 
-            <td class="description last">The route and navigation passed through screen
+            <td class="description last">The parameters object
                 <h6>Properties</h6>
                 <!--params.tmpl-->
 
@@ -234,7 +233,7 @@ firebase</div>
 
         <tr>
             
-                <td class="name"><code>navigation</code></td>
+                <td class="name"><code>storeInformation</code></td>
             
 
             <td class="type">
@@ -250,7 +249,102 @@ firebase</div>
 
             
 
-            <td class="description last">navigation object used to move between different pages</td>
+            <td class="description last">store information of transaction to add at</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>showTransactionModal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">boolean value to show or hide transaction
+modal</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setShowTransactionModal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">React function to set 
+showTransactionModal</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setHasConstructed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">React function to set rerender of parent 
+function</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of current card</td>
         </tr>
 
     
@@ -288,7 +382,7 @@ firebase</div>
 
 <!--
 <pre>
-{"comment":"/**\n * The page for adding a card manually. Adding a card adds the card to the user and to\n * firebase\n * @param {{Object}} obj - The route and navigation passed through screen\n * @param {Object} obj.navigation - navigation object used to move between different pages\n * @module AddCardManual\n */","meta":{"filename":"AddCardManual.js","lineno":19,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/components/addCard","code":{},"shortpath":"src/components/addCard/AddCardManual.js"},"description":"The page for adding a card manually. Adding a card adds the card to the user and to\nfirebase","params":[{"type":{"names":["Object"]},"description":"The route and navigation passed through screen","name":"obj","subparams":[{"type":{"names":["Object"]},"description":"navigation object used to move between different pages","name":"navigation"}]},null],"kind":"module","name":"AddCardManual","longname":"module:AddCardManual","___id":"T000002R000077","___s":true,"attribs":"","id":"AddCardManual","ancestors":[]}
+{"comment":"/**\n * A modal for adding a transaction at current location\n * \n * @param {{Object, boolean, Function, Function, String}} obj - The parameters object\n * @param {Object} obj.storeInformation - store information of transaction to add at\n * @param {boolean} obj.showTransactionModal - boolean value to show or hide transaction\n * modal \n * @param {Function} obj.setShowTransactionModal - React function to set \n * showTransactionModal\n * @param {Function} obj.setHasConstructed - React function to set rerender of parent \n * function\n * @param {String} obj.cardId - id of current card\n * @module TransactionModal\n */","meta":{"filename":"TransactionModal.js","lineno":8,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/components/cards","code":{},"shortpath":"src/components/cards/TransactionModal.js"},"description":"A modal for adding a transaction at current location","params":[{"type":{"names":["Object"]},"description":"The parameters object","name":"obj","subparams":[{"type":{"names":["Object"]},"description":"store information of transaction to add at","name":"storeInformation"},{"type":{"names":["boolean"]},"description":"boolean value to show or hide transaction\nmodal","name":"showTransactionModal"},{"type":{"names":["function"]},"description":"React function to set \nshowTransactionModal","name":"setShowTransactionModal"},{"type":{"names":["function"]},"description":"React function to set rerender of parent \nfunction","name":"setHasConstructed"},{"type":{"names":["String"]},"description":"id of current card","name":"cardId"}]},null,null,null,null,null],"kind":"module","name":"TransactionModal","longname":"module:TransactionModal","___id":"T000002R000821","___s":true,"attribs":"","id":"TransactionModal","ancestors":[]}
 </pre>
 -->
 </div>
