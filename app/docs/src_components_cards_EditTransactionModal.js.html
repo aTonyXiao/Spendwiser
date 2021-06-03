@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>App - Documentation</title>
+    <title>src/components/cards/EditTransactionModal.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">App</h1>
+    <h1 class="page-title">src/components/cards/EditTransactionModal.js</h1>
     
 
     <!--container.tmpl-->
@@ -42,178 +42,195 @@
 
 
 
+    <!--source.tmpl-->
 
-<section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { 
+    StyleSheet, 
+    View, 
+    Text, 
+    Dimensions, 
+    TouchableOpacity, 
+    TextInput
+} from 'react-native';
+import Modal from 'react-native-modal';
+import { Ionicons } from '@expo/vector-icons';
+import { user } from '../../network/user';
 
+/**
+ * Modal for editing a transaction
+ * 
+ * @param {{Object, Boolean, Boolean}} obj - The route and navigation passed directly to display card
+ * @param {Object} obj.transaction - information about the transaction to edit
+ * @param {Boolean} obj.modalVisible - boolean from parent component to show or hide modal
+ * @param {Boolean} obj.setModalVisible - function that sets modalVisible
+ * @param {Object} obj.transactions - list of transactions of parent 
+ * @param {Object} obj.setTransactions - function to set list of transactions
+ * @module EditTransactionModal
+ */
+function EditTransactionModal({transaction, modalVisible, setModalVisible, transactions, setTransactions}) {
+    const deviceHeight =
+        Platform.OS === 'ios'
+        ? Dimensions.get('window').height
+        : Dimensions.get('screen').height;
+    const [transactionInput, setTransactionInput] = useState("");
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
+    const userId = user.getUserId();
+    // handle no currently selected document
+    var docId;
+    if (transaction) { 
+        docId = transaction.docId;
+    }
 
+    // Check if text input is a valid number and have a max of 2 decimals
+    const updateTextInput = (text) => {
+        let dotIdx = text.indexOf(".");
+        if (dotIdx === 0 || text.split('.').length > 2) {
+            return;
+        }
+        if (text.length === 0 || dotIdx === -1 || (dotIdx === text.length - 1) || (text.length - dotIdx - 1 &lt;= 2)) {
+            return setTransactionInput(text);
+        }
+    }
 
-<header data-tmpl="container.tmpl">
+    // TODO: this should also probably account for whitespace, etc.
+    const isInputValid = (input) => { 
+        if (isNaN(parseFloat(input))) { 
+            return false;
+        }
+        return !isNaN(input); 
+    }
+
+    const editTransaction = () => {
+        const inputIsValid = isInputValid(transactionInput);
+        if (inputIsValid) {
+            let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
+            user.editTransaction(
+                userId,
+                docId,
+                {
+                    amountSpent: transactionFiltered
+                }
+            )
+            setModalVisible(false);
+            let newTransactions = [...transactions];
+            let pos = transactions.map(function(e) { return e.docId; }).indexOf(transaction.docId);
+            newTransactions[pos].amountSpent = transactionFiltered;
+            setTransactions(newTransactions);
+        } else {
+            setDisplayErrorText(true);
+
+            setTimeout(function () {
+                setDisplayErrorText(false);
+            }, 2000)
+        }
+    }
     
-      <h2>Module: App</h2>
-        
-            
-        
-    
+    return (
+        &lt;Modal
+            backdropOpacity={0.3}
+            isVisible={modalVisible}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
+            style={{
+                margin: 0,
+                marginHorizontal: 0,
+                justifyContent: 'center',
+            }}
+            onBackdropPress={()=> {setTransactionInput(""), setModalVisible(false)}}
+            avoidKeyboard={true}
+        >
+            { transaction !== null &amp;&amp;
+            &lt;View style={modalStyles.modalCenteredView}>
+                &lt;View style={modalStyles.modalView}>
+                    &lt;View style={modalStyles.modalHeader}>
+                        &lt;TouchableOpacity onPress={() => {setTransactionInput(""), setModalVisible(false)}}>
+                            &lt;Ionicons
+                                name="close-circle-outline"
+                                color="black"
+                                size={26}
+                            >&lt;/Ionicons>
+                        &lt;/TouchableOpacity>
+                    &lt;/View>
+
+                    &lt;View style={modalStyles.modalBody}>
+                        &lt;Text style={{fontWeight: 'bold', fontSize: 16}}>{transaction.storeInfo.storeName}&lt;/Text>
+                        &lt;Text>{transaction.dateAdded.toString().substring(0,24)}&lt;/Text>
+                        &lt;Text>${transaction.amountSpent + "\n"}&lt;/Text>
+                        &lt;Text>Amount wrong? Input a new amount&lt;/Text>
+                        {
+                            displayErrorText &amp;&amp;
+                            &lt;Text style={modalStyles.errorText}>Please input a valid number&lt;/Text>
+                        }
+                        &lt;View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            &lt;TextInput
+                                style={modalStyles.manualTextInput}
+                                onChangeText={(text) => updateTextInput(text)}
+                                value={transactionInput}
+                                placeholder={"amount in dollars"}
+                                keyboardType={"numeric"}
+                            />
+                            &lt;TouchableOpacity onPress={() => { editTransaction(transactionInput), setTransactionInput("") }}>
+                                &lt;Ionicons
+                                    name="checkmark-outline"
+                                    color="black"
+                                    size={26}
+                                >&lt;/Ionicons>
+                            &lt;/TouchableOpacity>
+                        &lt;/View>
+                    &lt;/View>
+                &lt;/View>
+            &lt;/View>
+            }
+        &lt;/Modal>
+    )
+}
+
+const modalStyles = StyleSheet.create({
+    modalCenteredView: {
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        margin: 22,
+        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+    },
+    modalView: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    modalHeader: { 
+        margin: 8
+    },
+    modalBody: { 
+        alignItems: 'center',
+        marginTop: -16
+    },
+    manualTextInput: {
+        height: 40,
+        borderWidth: 1,
+        marginRight: 15,
+        marginTop: 7,
+        marginBottom: 7,
+        width: '80%',
+        borderColor: '#F0F0F0',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        paddingHorizontal: 10,
+    },
+    errorText: { 
+        color: 'red', 
+        textAlign: 'center'
+    }
+});
+
+export { EditTransactionModal };</code></pre>
+        </article>
+    </section>
 
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">The app module utilized by React Native</div>
-        
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-App">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\n * The app module utilized by React Native\n * @module App\n */","meta":{"filename":"App.js","lineno":42,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app","code":{},"shortpath":"App.js"},"description":"The app module utilized by React Native","kind":"module","name":"App","longname":"module:App","___id":"T000002R000006","___s":true,"attribs":"","id":"App","ancestors":[]}
-</pre>
--->
-</div>
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 
@@ -223,7 +240,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:09 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:08 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

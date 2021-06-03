@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>App - Documentation</title>
+    <title>src/components/addCard/AddCardDB.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">App</h1>
+    <h1 class="page-title">src/components/addCard/AddCardDB.js</h1>
     
 
     <!--container.tmpl-->
@@ -42,178 +42,207 @@
 
 
 
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import {
+    SafeAreaView, 
+    Alert, 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Dimensions 
+} from 'react-native';
+import { useState } from 'react';
+import { user } from '../../network/user';
+import { cards } from '../../network/cards';
+import Autocomplete from 'react-native-autocomplete-input';
+import { Ionicons } from '@expo/vector-icons';
+import mainStyles from '../../styles/mainStyles';
+import { DismissKeyboard } from '../util/DismissKeyboard';
+import * as storage from '../../local/storage';
+import { appBackend } from '../../network/backend';
+import { BackButtonHeader } from '../util/BackButtonHeader';
+
+/**
+ * The page for adding a card from the Firebase database
+ * @param {{Object}} obj - The route and navigation passed through screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module AddCardDB 
+ */
+export function AddCardDB({navigation}) {
+    const userId = user.getUserId();
+    const [query, setQuery] = useState("");
+    const [cardMap, setCardMap] = useState(null);
+    const [hasConstructed, setHasConstructed] = useState(false);
+    const [originalCardNames, setOriginalCardNames] = useState([]);
+    const [filteredCardNames, setFilteredCardNames] = useState([]);
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
+    const [hideResults, setHideResults] = React.useState(true);
+    const [currentUserCards, setCurrentUserCards] = React.useState([]);
+
+    // simulate constructor for functional components
+    const constructor = () => { 
+        if (hasConstructed) { 
+            return;
+        } else { 
+            user.getCards(userId).then((cards) => {
+                setCurrentUserCards(cards);
+            })
+            cards.getCardNames((mapping) => {
+                setCardMap(mapping);
+                if (cardMap != null) { 
+                    setOriginalCardNames(Object.keys(cardMap));
+                    setFilteredCardNames(Object.keys(cardMap));
+                }
+                setHasConstructed(true);
+            });
+        }
+    }
+    constructor();
+
+    addCard = () => { 
+        if (!query) {
+            setDisplayErrorText(true);
+
+            setTimeout(function() { 
+                setDisplayErrorText(false);
+            }, 2000);
+        } else { 
+            // TODO: this should be navigate to add card confirm
+            var cardId = cardMap[query];
+            var currentCardIds = [];
+            for (var card in currentUserCards) {
+                currentCardIds.push(currentUserCards[card].cardId);
+            }
+
+            if (!currentCardIds.includes(cardId)) {
+                cards.getCardData(cardId, async (data) => {
+                    // Add the card into the user's list of cards
+                    await user.saveCardToUser(userId, cardId, null, null);
+
+                    // Add the actual card data as well
+                    appBackend.remoteDBGet("cards", ['cardId', '==', cardId], async (cardData) => {
+                        let actualUserId = await userId;
+                        storage.addLocalDB(actualUserId, "cards", cardData, true, (dbId) => {
+                            storage.modifyDBEntryMetainfo(actualUserId, "cards", true, dbId, cardId, () => {
+                                navigation.navigate('YourCards', { forceLoad: true });
+                            });
+                        });
+                    });
+                });
+            // user already has the card
+            } else {
+                Alert.alert("Already have this card",
+                            "You've attempted to add a card that has already been added to your account",
+                            [
+                                {text: "Ok"}
+                            ],
+                            { cancelable: false });
+                navigation.navigate('YourCards')
+            }
+        }
+    }
+
+    // filter card names to match search bar
+    filterData = () => { 
+        if (query == "") { 
+            setFilteredCardNames(originalCardNames);
+        }
+
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        setFilteredCardNames(originalCardNames.filter(cardName => cardName.search(regex) >= 0));
+    }
+
+    return (
+        &lt;DismissKeyboard>
+            &lt;SafeAreaView style={mainStyles.screen}>
+                &lt;BackButtonHeader navigation={navigation} title={"Search for a Card"} titleStyle={mainStyles.titleAligned} />
+                &lt;View style={mainStyles.bodyContainer}>
+
+                {
+                    displayErrorText &amp;&amp;
+                    &lt;Text style={styles.errorText}>Please input a query into the search bar&lt;/Text>
+                }
+                &lt;View style={styles.autocompleteContainer}>
+                    &lt;Autocomplete
+                        inputContainerStyle={styles.autocompleteTextInput}
+                        listStyle={styles.autocompleteList}
+                        data={filteredCardNames}
+                        hideResults={hideResults}
+                        defaultValue={query}
+                        onChangeText={text => {
+                            if (text) {
+                                setHideResults(false);
+                            } else {
+                                setHideResults(true);
+                            }
+                            setQuery(text);
+                            filterData();
+                        }}
+                        renderItem={({ item, i }) => (
+                            &lt;TouchableOpacity onPress={() => setQuery(item)}>
+                                &lt;Text style={styles.autocompleteListText}>{item}&lt;/Text>
+                            &lt;/TouchableOpacity>
+                        )}
+                        keyExtractor={(item, index) => {
+                            return index.toString();
+                        }}
+                    />
+                &lt;/View>
+                &lt;View style={styles.enterIcon}>
+                    &lt;TouchableOpacity onPress={addCard}>
+                        &lt;Ionicons
+                            name="enter"
+                            color="#28b573"
+                            size={32}
+                        >&lt;/Ionicons>
+                    &lt;/TouchableOpacity>
+                &lt;/View>
+            &lt;/View>
+            &lt;/SafeAreaView>
+        &lt;/DismissKeyboard>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    autocompleteContainer : {
+        flex: 1,
+        left: 30,
+        position: 'absolute',
+        right: 70,
+        zIndex: 1
+    },
+    enterIcon : { 
+        position: 'absolute',
+        right: 20,
+    },
+    errorText : { 
+        color:'red',
+        textAlign: 'center'
+    }, 
+    autocompleteTextInput : {
+        borderColor: 'white',
+        borderBottomColor: '#28b573'
+    }, 
+    autocompleteList : { 
+        borderColor: 'white',
+        maxHeight: Dimensions.get('window').height - 200,
+    },
+    autocompleteListText : {
+        margin: 5
+    }
+})</code></pre>
+        </article>
+    </section>
 
-<section>
-
-
-
-<header data-tmpl="container.tmpl">
-    
-      <h2>Module: App</h2>
-        
-            
-        
-    
-
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">The app module utilized by React Native</div>
-        
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-App">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\n * The app module utilized by React Native\n * @module App\n */","meta":{"filename":"App.js","lineno":42,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app","code":{},"shortpath":"App.js"},"description":"The app module utilized by React Native","kind":"module","name":"App","longname":"module:App","___id":"T000002R000006","___s":true,"attribs":"","id":"App","ancestors":[]}
-</pre>
--->
-</div>
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 
@@ -223,7 +252,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:09 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:08 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

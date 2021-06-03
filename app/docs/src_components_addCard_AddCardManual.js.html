@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>App - Documentation</title>
+    <title>src/components/addCard/AddCardManual.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">App</h1>
+    <h1 class="page-title">src/components/addCard/AddCardManual.js</h1>
     
 
     <!--container.tmpl-->
@@ -42,178 +42,358 @@
 
 
 
+    <!--source.tmpl-->
 
-<section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity,
+    TextInput,
+    SafeAreaView
+} from 'react-native';
+import { TextBox } from '../util/TextBox';
+import { user } from '../../network/user';
+import mainStyles from '../../styles/mainStyles';
+import { DismissKeyboard } from '../util/DismissKeyboard';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { cards } from '../../network/cards';
+import { Ionicons } from '@expo/vector-icons';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
+/**
+ * The page for adding a card manually. Adding a card adds the card to the user and to
+ * firebase
+ * @param {{Object}} obj - The route and navigation passed through screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
+ * @module AddCardManual
+ */
+export function AddCardManual({navigation}) { 
+    const inputName = React.createRef();
+    const inputUrl = React.createRef();
+    const [rewards, setRewards] = useState([]);
+    const [displayRewards, setDisplayRewards] = useState(false);
+    const [rewardType, setRewardType] = useState("Cashback");
 
+    const [rewardError, setRewardError] = useState(false);
+    const [invalidInputError, setInvalidInputError] = useState(false);
+    const [nameError, setNameError] = useState(false);
 
-<header data-tmpl="container.tmpl">
-    
-      <h2>Module: App</h2>
-        
-            
-        
-    
+    const [rewardValue, setRewardValue] = useState("");
+    const [monetaryType, setMonetaryType] = useState("dining");
 
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">The app module utilized by React Native</div>
-        
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-App">
-
+    // add a reward to list of rewards
+    addReward = () => { 
+        if (!isNaN(parseFloat(rewardValue))) { 
+            let index = rewards.findIndex(e => e.type === monetaryType);
+            if (index !== -1) {
+                let tempRewards = [...rewards];
+                tempRewards.splice(index, 1,
+                {
+                    type : monetaryType,
+                    value : rewardValue,
+                });
+                setRewards(tempRewards);
+            } else {
+                setRewards([
+                    ...rewards,
+                    {
+                        type : monetaryType,
+                        value : rewardValue,
+                    }
+                ])
+            }
   
+            setDisplayRewards(true);
+        } else { 
+            setRewardError(true);
 
-  
+            setTimeout(function() { 
+                setRewardError(false);
+            }, 2000);
+        }
+    }
 
-<!-- details.tmpl -->
+    // deletes an user-added reward
+    deleteReward = (index) => {
+        let tempRewards = [...rewards];
+        tempRewards.splice(index, 1);
+        setRewards(tempRewards);
+    }
 
+    // validates inputs on trying to add card 
+    validateInputs = (name, url) => { 
+        var inputsAreValid = true;
 
+        if (name == "") { 
+            inputsAreValid = false;
+            setInvalidInputError(true);
+            setNameError(true);
+            setTimeout(function() { 
+                setInvalidInputError(false);
+                setNameError(false);
+            }, 2500);
+        } 
 
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="App.js.html">App.js</a>:<a href="App.js.html#line42">42</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\n * The app module utilized by React Native\n * @module App\n */","meta":{"filename":"App.js","lineno":42,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app","code":{},"shortpath":"App.js"},"description":"The app module utilized by React Native","kind":"module","name":"App","longname":"module:App","___id":"T000002R000006","___s":true,"attribs":"","id":"App","ancestors":[]}
-</pre>
--->
-</div>
-
+        if (rewards.length == 0) {
+            inputsAreValid = false;
+            setInvalidInputError(true);
+            setTimeout(function() { 
+                setInvalidInputError(false);
+            }, 2500);
+        }
         
-    
-    </div>
+        return inputsAreValid;
+    }
 
-    
+    // if inputs are valid adds card to firebase and user
+    addCard = async () => { 
+        var userId = user.getUserId();
 
-    
+        var name = inputName.current.state.text;
+        var url = inputUrl.current.state.text;
+        var inputsAreValid = validateInputs(name, url);
+        if (inputsAreValid) { 
+            // Convert reward array to map to store in firebase
+            var rewardsMap = {};
+            rewards.map(item => {rewardsMap[item.type] = parseFloat(item.value)})
+            if (rewardsMap["others"] === undefined) {
+                rewardsMap["others"] = 0;
+            }
+            cards.addCardToDatabase(name, [], rewardType, rewardsMap, url).then(async (cardId) => {
+                await user.saveCardToUser(userId, cardId, null, null);
+                navigation.navigate('YourCards', { forceLoad: true });
+            });
+        } 
+    } 
 
-    
+    return (
+        &lt;DismissKeyboard>
+            &lt;SafeAreaView style={mainStyles.screen}>
+                &lt;BackButtonHeader navigation={navigation} title={"Add a Card Manually"} titleStyle={mainStyles.titleAligned} />
+                &lt;View style={mainStyles.bodyContainer}>
 
-     
+                &lt;Text style={styles.inputTitle}>Credit Card Name&lt;/Text>
+                &lt;TextBox
+                    style={!nameError ? styles.inputBox : styles.inputBoxError}
+                    ref={inputName}
+                    placeholder={'Your credit card title here '}
+                />
 
-    
+                &lt;Text style={styles.inputTitle}>Card Type&lt;/Text>
+                &lt;DropDownPicker
+                    items={[
+                        { label: 'Cashback', value: 'Cashback' },
+                        { label: 'Points', value: 'Points' },
+                        { label: 'Miles', value: 'Miles' },
+                        { label: 'Unknown', value: 'Unknown' },
+                    ]}
+                    defaultValue={"Cashback"}
+                    onChangeItem={item => setRewardType(item.value)}
+                    containerStyle={{ height: 40, width: '40%', margin: 8, marginLeft: 15 }}
+                    style={{ backgroundColor: '#fafafa' }}
+                    itemStyle={{ justifyContent: 'flex-start' }}
+                    dropDownStyle={{ backgroundColor: '#fafafa' }}
+                />
 
-    
+                &lt;Text style={styles.inputTitle}>Rewards&lt;/Text>
+                &lt;View style={styles.rewardContainer}>
+                    {/* Already added rewards */}
+                    {
+                        displayRewards &amp;&amp;
+                        &lt;View style={styles.rewardText}>
+                            {
+                                rewards.map((reward, i) => {
+                                    let type = reward.type.charAt(0).toUpperCase() + reward.type.slice(1);
+                                    return (
+                                        &lt;View style={styles.rewardRowSet} key={i}>
+                                            &lt;Text style={{ margin: 5 }}>{type}: {reward.value} cents&lt;/Text>
+                                            &lt;TouchableOpacity style={{ margin: 5 }} onPress={() => {deleteReward(i)}}>
+                                                &lt;Ionicons
+                                                    name="trash-outline"
+                                                    color="red"
+                                                    size={18}
+                                                >&lt;/Ionicons>
+                                            &lt;/TouchableOpacity>
+                                        &lt;/View>
+                                    )
+                                })
+                            }
+                        &lt;/View>
+                    }
 
-    
+                    {/* reward error */}
+                    {
+                        rewardError &amp;&amp;
+                        &lt;Text style={{ color: 'red', marginHorizontal: 15 }}>Please input a number&lt;/Text>
+                    }
 
-    
+                    {/* options to add reward */}
+                    &lt;View style={styles.rewardRow}>
+                        &lt;View style={styles.rewardRowContainer}>
+                            &lt;DropDownPicker
+                                items={[
+                                    { label: 'Dining', value: 'dining', selected: true },
+                                    { label: 'Grocery', value: 'grocery' },
+                                    { label: 'Drugstore', value: 'drugstore' },
+                                    { label: 'Gas', value: 'gas' },
+                                    { label: 'Home Improvement', value: 'homeImprovement' },
+                                    { label: 'Travel', value: 'travel' },
+                                    { label: 'Others or All', value: 'others' },
+                                ]}
+                                placeholder={"Select an item"}
+                                onChangeItem={item => setMonetaryType(item.value)}
+                                containerStyle={styles.dropdown}
+                                style={{ backgroundColor: '#fafafa' }}
+                                itemStyle={{ justifyContent: 'flex-start' }}
+                                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                            />
+                            &lt;TextInput
+                                style={styles.rewardInput}
+                                onChangeText={(text) => setRewardValue(text)}
+                                placeholder={'value in cents'}
+                                placeholderTextColor={grayRGB}
+                                value={rewardValue}
+                                keyboardType={"number-pad"}
+                                onEndEditing={() => {
+                                    addReward();
+                                    setRewardValue("");
+                                }}
+                            />
+                        &lt;/View>
+                    &lt;/View>
+                &lt;/View>
 
-    
-</article>
+                {/* Note: this needs zIndex to a negative value so dropdown will appear over it */}
+                &lt;View style={styles.bottomContainer}>
+                    &lt;Text style={styles.inputTitle}>URL&lt;/Text>
+                    &lt;TextBox style={styles.inputBox} ref={inputUrl} placeholder={'url'} />
 
-</section>
+                    &lt;View style={styles.addCardContainer}>
+                        {
+                            (invalidInputError) &amp;&amp;
+                            &lt;Text style={{ color: 'red' }}>Please add a name and reward&lt;/Text>
+                        }
+                        &lt;TouchableOpacity style={styles.addCardButton} onPress={addCard}>
+                            &lt;Text style={styles.addCardText}>Add this card&lt;/Text>
+                        &lt;/TouchableOpacity>
+                    &lt;/View>
+                &lt;/View>
+                &lt;/View>
+            &lt;/SafeAreaView>
+        &lt;/DismissKeyboard>
+    );
+}
+
+const styles = StyleSheet.create({
+    container : {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    rewardContainer: { 
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    rewardRowContainer: { 
+        display: 'flex',
+        flexDirection: 'row', 
+        minHeight: 10
+    },
+    rewardRow : {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    rewardRowSet : {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    rewardText : { 
+        margin: 15,
+        width: '90%',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8, 
+        justifyContent: 'center'
+    },
+    inputBox : {
+        margin: 15,
+        height: 40,
+        width: '90%',
+        borderColor: '#F0F0F0',
+        borderWidth: 1,
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8,
+        padding: 10
+    },
+    inputBoxError : {
+        margin: 15,
+        height: 40,
+        width: '90%',
+        borderColor: 'red',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8,
+        padding: 10
+    },
+    inputTitle : { 
+        margin: 15,
+        marginBottom: 5,
+        fontSize: 18
+    },
+    plusIcon : {
+        margin: 9,
+        right: 32
+    }, 
+    addCardButton : {
+        textAlign: 'center',
+        backgroundColor: '#87CEFA',
+        margin: 15,
+        height: 40, 
+        borderRadius: 5,
+        width: '40%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    bottomContainer : {
+        zIndex: -1,
+    },
+    addCardContainer: {
+        alignItems: 'center',
+    }, 
+    addCardText : { 
+        color: 'white'
+    },
+    dropdown: {
+        height: 40, 
+        width: '45%',
+        margin: 8,
+        marginLeft: 15,
+    }, 
+    rewardInput: { 
+        height: 40, 
+        width: '45%',
+        margin: 5,
+        borderWidth: 1,
+        borderColor: '#F0F0F0',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        marginTop: 8,
+        marginBottom: 8,
+        padding: 10
+    },
+});
+const grayRGB = 'rgb(211, 211, 211)';</code></pre>
+        </article>
+    </section>
+
 
 
 
@@ -223,7 +403,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:09 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:50:08 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>
