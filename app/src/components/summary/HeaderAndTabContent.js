@@ -12,6 +12,23 @@ const months = [
     "November", "December"
 ];
 
+/**
+ * Display modal for Spend Analyzer.
+ * @param {Object} obj - Object from SpendingSummary to be passed here
+ * @param {enum} obj.modalType - Enum of modalVisible
+ * @param {Object} obj.curCard -  Currently selected card for Spend Analyzer
+ * @param {string} obj.curTimeframe - String state of the current time frame for SUMMARY mode
+ * @param {string} obj.mode - Current mode of Spend Analyzer (SUMMARY, COMPARE, BUDGET)
+ * @param {enum} obj.modeType - Enum of mode
+ * @param {Object} obj.curCategory - Object state of the current selected category and it's corresponding value for SUMMARY mode
+ * @param {function} obj.setModalVisible - Function to set the state of modalVisible
+ * @param {array} obj.compareTimeframe - Array of time frames for 1st and 2nd period needed for COMPARE and BUDGET mode
+ * @param {function} obj.setNewPeriod - Function to set new 1st or 2nd period needed for COMPARE and BUDGET mode
+ * @param {function} obj.setWhichPeriod - Function to change which period (1st or 2nd) to be edited in setNewPeriod function
+ * @module HeaderAndTabContent
+ * @see SpendingSummary
+ * @see CategoryModal
+ */
 export function HeaderAndTabContent(
     {
         modalType,
@@ -23,7 +40,6 @@ export function HeaderAndTabContent(
         setModalVisible,
         compareTimeframe,
         setNewPeriod,
-        whichPeriod,
         setWhichPeriod,
     }) {
     const [pickerVisible, setPickerVisible] = useState(false);

@@ -14,7 +14,6 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CardImage from '../cards/CardImage';
 import { Wave } from 'react-native-animated-spinkit';
-import { refreshAsync } from 'expo-apple-authentication';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -23,6 +22,17 @@ const slideHeight = Math.round(height * 0.3);
 const itemHorizontalMargin = Math.round(width / 50);
 const entryBorderRadius = 8;
 
+
+/**
+ * Card Carousel displayed on Main Screen's bottom panel which displays the recommended cards
+ * @param {Object} obj - Object from Main Screen to be passed here
+ * @param {array} obj.recCards - Array of user's cards
+ * @param {Object} obj.navigation - Navigation prop to redirect users to other pages
+ * @param {array} obj.storeArr - Array of user surrounding stores
+ * @param {int} obj.curStoreKey - Current selected store key in the store array
+ * @module CardCarousel
+ * @see MainScreen
+ */
 export function CardCarousel(
     {
         recCards,

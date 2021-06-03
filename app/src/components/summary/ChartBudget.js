@@ -6,6 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { summaryHelper } from './SummaryHelper';
 import { Text as SvgText } from 'react-native-svg';
 
+
+/**
+ * BUDGET mode contents for Spend Analyzer
+ * @param {Object} obj - Object from SpendingSummary to be passed to Main Modals
+ * @param {array} obj.compareTransPeriod1 - array of transactions filtered by the selected month to be compared to categories limit
+ * @param {array} obj.categoriesLimit - Array of category values to be displayed
+ * @param {array} obj.keys - Array of categories (keys) to be displayed
+ * @param {Object} obj.curCard - Current card to filter transactions with
+ * @module ChartBudget
+ * @see SpendingSummary
+ */
 export function ChartBudget(
     {
         compareTransPeriod1,
@@ -27,6 +38,12 @@ export function ChartBudget(
             data: categoriesLimit.map((value) => ({ value })),
         },
     ]);
+
+    /**
+     * Component to show chart labels
+     * @param {Object} obj - Object given by BarChart
+     * @function Labels
+     */
     const Labels = ({  x, y, bandwidth, data }) => {
         return (
             data[0]["data"].map((valueObj, index) => {

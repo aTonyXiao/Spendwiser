@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/components/main/CardCarousel.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Account.html">Account</a></li></ul><h3>Modules</h3><ul><li><a href="module-AddCardDB.html">AddCardDB</a></li><li><a href="module-AddCardManual.html">AddCardManual</a></li><li><a href="module-AddCardModal.html">AddCardModal</a></li><li><a href="module-App.html">App</a></li><li><a href="module-BackButtonHeader.html">BackButtonHeader</a></li><li><a href="module-CameraSettingsBar.html">CameraSettingsBar</a></li><li><a href="module-Card.html">Card</a></li><li><a href="module-CardCarousel.html">CardCarousel</a></li><li><a href="module-CardImage.html">CardImage</a></li><li><a href="module-CardSelect.html">CardSelect</a></li><li><a href="module-CategoryModal.html">CategoryModal</a></li><li><a href="module-ChartBudget.html">ChartBudget</a><ul class='methods'><li data-type='method'><a href="module-ChartBudget.html#~Labels">Labels</a></li></ul></li><li><a href="module-ChartCompare.html">ChartCompare</a><ul class='methods'><li data-type='method'><a href="module-ChartCompare.html#~Labels">Labels</a></li></ul></li><li><a href="module-ChooseImage.html">ChooseImage</a></li><li><a href="module-DisplayCard.html">DisplayCard</a></li><li><a href="module-DoubleTap.html">DoubleTap</a></li><li><a href="module-EditImage.html">EditImage</a></li><li><a href="module-EditTransactionModal.html">EditTransactionModal</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-HeaderAndTabContent.html">HeaderAndTabContent</a></li><li><a href="module-HelpModal.html">HelpModal</a></li><li><a href="module-ListSummary.html">ListSummary</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MainButtons.html">MainButtons</a></li><li><a href="module-MainHelp.html">MainHelp</a></li><li><a href="module-MainModals.html">MainModals</a></li><li><a href="module-MainScreen.html">MainScreen</a><ul class='methods'><li data-type='method'><a href="module-MainScreen.html#~addManualInput">addManualInput</a></li><li data-type='method'><a href="module-MainScreen.html#~backAction">backAction</a></li><li data-type='method'><a href="module-MainScreen.html#~getDisabledCards">getDisabledCards</a></li><li data-type='method'><a href="module-MainScreen.html#~getLocationFromAPI">getLocationFromAPI</a></li><li data-type='method'><a href="module-MainScreen.html#~onBottomSheetLayout">onBottomSheetLayout</a></li><li data-type='method'><a href="module-MainScreen.html#~reloadRecCard">reloadRecCard</a></li><li data-type='method'><a href="module-MainScreen.html#~setLocationDisabledMode">setLocationDisabledMode</a></li><li data-type='method'><a href="module-MainScreen.html#~setOfflineMode">setOfflineMode</a></li><li data-type='method'><a href="module-MainScreen.html#~switchStoresFromPOI">switchStoresFromPOI</a></li><li data-type='method'><a href="module-MainScreen.html#~tryToGetStoresFromLocation">tryToGetStoresFromLocation</a></li></ul></li><li><a href="module-ModalSlot.html">ModalSlot</a></li><li><a href="module-MoveableBlock.html">MoveableBlock</a></li><li><a href="module-PieChartSummary.html">PieChartSummary</a></li><li><a href="module-SpendingSummary.html">SpendingSummary</a><ul class='methods'><li data-type='method'><a href="module-SpendingSummary.html#~changeCategoriesLimit">changeCategoriesLimit</a></li><li data-type='method'><a href="module-SpendingSummary.html#~changeCategory">changeCategory</a></li><li data-type='method'><a href="module-SpendingSummary.html#~getCardFromDB">getCardFromDB</a></li><li data-type='method'><a href="module-SpendingSummary.html#~getCompareTimeFrameTransactions">getCompareTimeFrameTransactions</a></li><li data-type='method'><a href="module-SpendingSummary.html#~processTransaction">processTransaction</a></li><li data-type='method'><a href="module-SpendingSummary.html#~setCurCardFromModal">setCurCardFromModal</a></li><li data-type='method'><a href="module-SpendingSummary.html#~setNewPeriod">setNewPeriod</a></li></ul></li><li><a href="module-Textbox.html">Textbox</a></li><li><a href="module-YourCards.html">YourCards</a></li></ul><h3>Classes</h3><ul><li><a href="AppleLogin.html">AppleLogin</a></li><li><a href="BaseBackend.html">BaseBackend</a><ul class='methods'><li data-type='method'><a href="BaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="BaseBackend.html#dbAddEncrypted">dbAddEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="BaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="BaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="BaseBackend.html#dbGetEncrypted">dbGetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="BaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="BaseBackend.html#dbSetEncrypted">dbSetEncrypted</a></li><li data-type='method'><a href="BaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="BaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="BaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="BaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="BaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="BaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="BaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="BaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="BaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="BaseBackend.html#setPrivateKey">setPrivateKey</a></li><li data-type='method'><a href="BaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="BaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="BaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="BaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="BaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="BaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="Cards.html">Cards</a><ul class='methods'><li data-type='method'><a href="Cards.html#addCardToDatabase">addCardToDatabase</a></li><li data-type='method'><a href="Cards.html#addJsonToDatabase">addJsonToDatabase</a></li><li data-type='method'><a href="Cards.html#getCardData">getCardData</a></li><li data-type='method'><a href="Cards.html#getCardImageURL">getCardImageURL</a></li><li data-type='method'><a href="Cards.html#getCardImg">getCardImg</a></li><li data-type='method'><a href="Cards.html#getCardName">getCardName</a></li><li data-type='method'><a href="Cards.html#getCardNames">getCardNames</a></li><li data-type='method'><a href="Cards.html#getCardReward">getCardReward</a></li></ul></li><li><a href="FacebookLogin.html">FacebookLogin</a></li><li><a href="FirebaseBackend.html">FirebaseBackend</a><ul class='methods'><li data-type='method'><a href="FirebaseBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="FirebaseBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="FirebaseBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="FirebaseBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="FirebaseBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="FirebaseBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="FirebaseBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="FirebaseBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="FirebaseBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="FirebaseBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="FirebaseBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="FirebaseBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="FirebaseBackend.html#signIn">signIn</a></li><li data-type='method'><a href="FirebaseBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="FirebaseBackend.html#signOut">signOut</a></li><li data-type='method'><a href="FirebaseBackend.html#signUp">signUp</a></li><li data-type='method'><a href="FirebaseBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="FirebaseBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="GoogleLogin.html">GoogleLogin</a></li><li><a href="LoginAuthorizer.html">LoginAuthorizer</a><ul class='methods'><li data-type='method'><a href="LoginAuthorizer.html#login">login</a></li></ul></li><li><a href="RecommendCard.html">RecommendCard</a><ul class='methods'><li data-type='method'><a href="RecommendCard.html#getCategory">getCategory</a></li><li data-type='method'><a href="RecommendCard.html#getRecCards">getRecCards</a></li></ul></li><li><a href="ServerBackend.html">ServerBackend</a><ul class='methods'><li data-type='method'><a href="ServerBackend.html#dbAdd">dbAdd</a></li><li data-type='method'><a href="ServerBackend.html#dbDelete">dbDelete</a></li><li data-type='method'><a href="ServerBackend.html#dbDoesDocExist">dbDoesDocExist</a></li><li data-type='method'><a href="ServerBackend.html#dbGet">dbGet</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollections">dbGetSubCollections</a></li><li data-type='method'><a href="ServerBackend.html#dbGetSubCollectionsRemote">dbGetSubCollectionsRemote</a></li><li data-type='method'><a href="ServerBackend.html#dbSet">dbSet</a></li><li data-type='method'><a href="ServerBackend.html#doesSupportDatabase">doesSupportDatabase</a></li><li data-type='method'><a href="ServerBackend.html#enableDatabaseCaching">enableDatabaseCaching</a></li><li data-type='method'><a href="ServerBackend.html#getLoginProviders">getLoginProviders</a></li><li data-type='method'><a href="ServerBackend.html#getTimestamp">getTimestamp</a></li><li data-type='method'><a href="ServerBackend.html#getUserID">getUserID</a></li><li data-type='method'><a href="ServerBackend.html#getUserInfo">getUserInfo</a></li><li data-type='method'><a href="ServerBackend.html#getUserToken">getUserToken</a></li><li data-type='method'><a href="ServerBackend.html#initializeApp">initializeApp</a></li><li data-type='method'><a href="ServerBackend.html#onAuthStateChange">onAuthStateChange</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBAdd">remoteDBAdd</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBDelete">remoteDBDelete</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBGet">remoteDBGet</a></li><li data-type='method'><a href="ServerBackend.html#remoteDBSet">remoteDBSet</a></li><li data-type='method'><a href="ServerBackend.html#resetPassword">resetPassword</a></li><li data-type='method'><a href="ServerBackend.html#signIn">signIn</a></li><li data-type='method'><a href="ServerBackend.html#signInOffline">signInOffline</a></li><li data-type='method'><a href="ServerBackend.html#signOut">signOut</a></li><li data-type='method'><a href="ServerBackend.html#signUp">signUp</a></li><li data-type='method'><a href="ServerBackend.html#userAccountType">userAccountType</a></li><li data-type='method'><a href="ServerBackend.html#userLoggedIn">userLoggedIn</a></li></ul></li><li><a href="SummaryHelper.html">SummaryHelper</a><ul class='methods'><li data-type='method'><a href="SummaryHelper.html#addSortedNewTransaction">addSortedNewTransaction</a></li><li data-type='method'><a href="SummaryHelper.html#getDbCards">getDbCards</a></li><li data-type='method'><a href="SummaryHelper.html#getTimeFrame">getTimeFrame</a></li><li data-type='method'><a href="SummaryHelper.html#matchTransactionToCategory">matchTransactionToCategory</a></li></ul></li><li><a href="userClass.html">userClass</a><ul class='methods'><li data-type='method'><a href="userClass.html#addTransactionId">addTransactionId</a></li><li data-type='method'><a href="userClass.html#addUser">addUser</a></li><li data-type='method'><a href="userClass.html#deleteCard">deleteCard</a></li><li data-type='method'><a href="userClass.html#deleteTransaction">deleteTransaction</a></li><li data-type='method'><a href="userClass.html#editTransaction">editTransaction</a></li><li data-type='method'><a href="userClass.html#getAllTransactions">getAllTransactions</a></li><li data-type='method'><a href="userClass.html#getCardDocId">getCardDocId</a></li><li data-type='method'><a href="userClass.html#getCards">getCards</a></li><li data-type='method'><a href="userClass.html#getMainNeedsUpdate">getMainNeedsUpdate</a></li><li data-type='method'><a href="userClass.html#getRewards">getRewards</a></li><li data-type='method'><a href="userClass.html#getTimeFrameTransactions">getTimeFrameTransactions</a></li><li data-type='method'><a href="userClass.html#getTransactionsForCard">getTransactionsForCard</a></li><li data-type='method'><a href="userClass.html#getUserId">getUserId</a></li><li data-type='method'><a href="userClass.html#saveCardToUser">saveCardToUser</a></li><li data-type='method'><a href="userClass.html#saveTransaction">saveTransaction</a></li><li data-type='method'><a href="userClass.html#setMainNeedsUpdate">setMainNeedsUpdate</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/components/main/CardCarousel.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { 
+    useState, 
+    useEffect,
+    useRef, 
+    useCallback
+} from 'react';
+import { 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Dimensions 
+} from 'react-native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import CardImage from '../cards/CardImage';
+import { Wave } from 'react-native-animated-spinkit';
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+const itemWidth = Math.round(width * 0.7);
+const slideHeight = Math.round(height * 0.3);
+const itemHorizontalMargin = Math.round(width / 50);
+const entryBorderRadius = 8;
+
+
+/**
+ * Card Carousel displayed on Main Screen's bottom panel which displays the recommended cards
+ * @param {Object} obj - Object from Main Screen to be passed here
+ * @param {array} obj.recCards - Array of user's cards
+ * @param {Object} obj.navigation - Navigation prop to redirect users to other pages
+ * @param {array} obj.storeArr - Array of user surrounding stores
+ * @param {int} obj.curStoreKey - Current selected store key in the store array
+ * @module CardCarousel
+ * @see MainScreen
+ */
+export function CardCarousel(
+    {
+        recCards,
+        navigation,
+        storeArr,
+        curStoreKey,
+    }) {
+    const [recIdx, setRecIdx] = useState(0);
+    const ref = useRef(null);
+    const [cardToEnableDisable, setCardToEnableDisable] = useState(null);
+    
+    useEffect(() => {
+        setRecIdx(0);
+        if (ref.current !== null)
+            ref.current.snapToItem(0);
+    }, [recCards]);
+
+    recommendedCardPressed = (item) => {
+        if (item !== null) {
+            navigation.navigate('CardInfo', {
+                cardId: item.cardId,
+                docId: item.docId,
+                storeInformation: storeArr[curStoreKey],
+                img: { uri: item.cardImg },
+                origin: "main"
+            })
+        }
+    };
+    
+    const renderItem = useCallback(({ item, index }) => (
+        &lt;TouchableOpacity
+                activeOpacity={1}
+                style={{justifyContent: 'center', alignItems: 'center'}}
+                onPress={() => { recommendedCardPressed(item) }}
+                >
+            &lt;View style={carouselStyles.imageContainer}>
+                &lt;CardImage
+                    style = {{ 
+                        width: width * .8,  //its same to '20%' of device width
+                        aspectRatio: 1.5, // &lt;-- this
+                        resizeMode: 'contain', //optional
+                    }}
+                    source={item.cardImg}
+                    overlay={item.cardName}
+                    defaultImg={item.cardImg.length == 0}
+                    cardId={item.cardId}
+                    cardToEnableDisable={null}
+                    setCardToEnableDisable={null}
+                />
+            &lt;/View>
+        &lt;/TouchableOpacity>
+    ), []);
+
+
+    return (
+        &lt;View style={carouselStyles.cardContainer}>
+            {recCards === null ?
+                &lt;Wave size={128} color="#088F8F" />
+                :
+                recCards.length === 0 ?
+                &lt;TouchableOpacity 
+                    onPress={()=>  navigation.navigate('YourCards', { 
+                        storeInformation: storeArr[curStoreKey]
+                    })}
+                    style={{paddingVertical: 20, paddingHorizontal: 30, backgroundColor: '#5F9EA0', borderRadius: 3, marginTop: 10}}>
+                    &lt;Text style={{textAlign: 'center'}}>You have no enabled cards. {"\n"} Click here to get started!&lt;/Text>
+                &lt;/TouchableOpacity>
+                :
+                &lt;View>
+                    &lt;Text style={carouselStyles.recommendedCardText}>Your Recommended Cards&lt;/Text>
+                    &lt;Carousel
+                        layout={"default"}
+                        ref={ref}
+                        data={recCards}
+                        sliderWidth={width}
+                        itemWidth={itemWidth}
+                        renderItem={renderItem}
+                        inactiveSlideScale={0.7}
+                        inactiveSlideOpacity={0.7}
+                        containerCustomStyle={carouselStyles.slider}
+                        contentContainerCustomStyle={carouselStyles.sliderContentContainer}
+                        onSnapToItem={(index) => setRecIdx(index)}
+                    />
+                    &lt;Pagination
+                        dotsLength={recCards.length}
+                        activeDotIndex={recIdx}
+                        dotColor={"green"}
+                        containerStyle={{paddingVertical:0}}
+                        dotContainerStyle={{marginHorizontal:3}}
+                        dotStyle={carouselStyles.paginationDot}
+                        inactiveDotColor={"black"}
+                        inactiveDotOpacity={0.4}
+                        inactiveDotScale={0.7}
+                    />
+                &lt;/View>
+            }
+        &lt;/View>
+    )
+}
+
+
+const carouselStyles = StyleSheet.create({
+    cardContainer: {
+        flex: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    slider: {
+        marginVertical: 5,
+        flexGrow: 0,
+        overflow: 'visible', // for custom animations
+    },
+    sliderContentContainer: {
+        paddingVertical: 0, // for custom animation
+    },
+    paginationDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginHorizontal: 1
+    },
+    slideInnerContainer: {
+        width: itemWidth,
+        height: slideHeight,
+        alignItems: 'center',
+        paddingHorizontal: itemHorizontalMargin,
+        // paddingBottom: 18 // needed for shadow
+    },
+    imageContainer: {
+        flex: 1,
+        backgroundColor: 'white',
+        borderTopLeftRadius: entryBorderRadius,
+        borderTopRightRadius: entryBorderRadius,
+    },
+    noCardsText: { 
+        fontStyle: 'italic',
+        margin: 5
+    },
+    recommendedCardText: {
+        fontSize: 17, 
+        alignSelf: 'center'
+    }
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 15:36:45 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

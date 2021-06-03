@@ -5,6 +5,31 @@ import { Ionicons } from '@expo/vector-icons';
 import { ModalSlot } from './ModalSlot';
 import { summaryHelper } from './SummaryHelper';
 
+/**
+ * Display modal for Spend Analyzer.
+ * @param {Object} obj - Object from SpendingSummary to be passed to Main Modals
+ * @param {enum} obj.modalType - Enum of modalVisible
+ * @param {string} obj.modalVisible - State to determine if app should show modal and which type of modal to display
+ * @param {function} obj.setModalVisible - Function to set the state of modalVisible
+ * @param {string} obj.curTimeframe - String state of the current time frame for SUMMARY mode
+ * @param {function} obj.setCurTimeframe - Function to update the string state of the current time frame for SUMMARY mode
+ * @param {function} obj.setValues - Function to set the value array for SUMAMRY mode
+ * @param {Object} obj.curCategory - Object state of the current selected category and it's corresponding value for SUMMARY mode
+ * @param {function} obj.changeCategory - Function to change string state of the current selected category for SUMMARY mode
+ * @param {array} obj.values - value array that shows overall spendings in each category for SUMMARY mode
+ * @param {array} obj.transactions - List of transactions for SUMMARY mode
+ * @param {array} obj.cards - List of cards in user's profile
+ * @param {Object} obj.curCard -  Currently selected card for Spend Analyzer
+ * @param {function} obj.setCurCardFromModal - Update currently selected card for Spend Analyzer
+ * @param {enum} obj.modeType - Enum of mode
+ * @param {string} obj.mode - Current mode of Spend Analyzer (SUMMARY, COMPARE, BUDGET)
+ * @param {function} obj.setMode - Function to set current mode of Spend Analyzer
+ * @param {array} obj.categoriesLimit - Array of user defined categories limit
+ * @param {function} obj.changeCategoriesLimit - Function in main screen to update categories limit in local storage
+ * @module CategoryModal
+ * @see SpendingSummary
+ * @see HeaderAndTabContent
+ */
 export function CategoryModal(
     {
         modalType,
