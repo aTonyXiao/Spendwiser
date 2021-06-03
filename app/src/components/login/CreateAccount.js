@@ -5,15 +5,14 @@ import {
     Alert, 
     TouchableOpacity, 
     Text,
-    TextInput,
     Image,
     Dimensions
 } from 'react-native';
-import mainStyles from '../../styles/mainStyles';
 import { UsernameInput, PasswordInput } from './LoginInput';
 import { appBackend } from '../../network/backend'
 import { DismissKeyboard } from '../util/DismissKeyboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackButtonHeader } from '../util/BackButtonHeader';
 
 export const CreateAccount = props => {
     const [username, setUsername] = useState('');
@@ -44,6 +43,7 @@ export const CreateAccount = props => {
     return (
         <DismissKeyboard>
             <SafeAreaView style={styles.screen}>
+                <BackButtonHeader navigation={props.navigation}/>
                 <View style={{marginTop: "25%"}}>
                     <Image source = {require("../../../assets/spendwiser_logo.png")}
                         style = {{ 
