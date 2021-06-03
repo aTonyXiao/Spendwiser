@@ -1,4 +1,5 @@
-/** @module Firebase Middleware that utilizes firebase-admin for request token auth */
+/** Middleware that utilizes firebase-admin for request token auth
+ * @module Firebase */
 
 import fs from "fs";
 import admin from "firebase-admin";

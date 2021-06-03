@@ -1,4 +1,5 @@
-/** @module CardSchema The schema for the structure of the Cards collection */
+/** The schema for the structure of the Cards collection
+ * @module CardSchema */
 
 import mongoose from "mongoose";
 
