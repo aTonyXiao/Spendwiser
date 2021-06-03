@@ -1,10 +1,6 @@
 {
   "dependencies": {
-<<<<<<< HEAD
-    "firebase": "^8.6.3",
-=======
     "firebase-admin": "^9.9.0",
->>>>>>> 293554de04cda37fb86f05f84af7e80d4936558e
     "fs": "*",
     "is-valid-path": "^0.1.1"
   }
