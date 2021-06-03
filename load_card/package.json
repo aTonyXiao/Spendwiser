@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "firebase-admin": "^9.9.0",
     "fs": "*",
     "is-valid-path": "^0.1.1"
   }
