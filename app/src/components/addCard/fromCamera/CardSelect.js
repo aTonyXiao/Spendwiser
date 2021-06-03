@@ -123,7 +123,7 @@ export function CardSelect({route, navigation}) {
                         <View>
                             <Text style={styles.noCards}>We couldn't find any cards from your image</Text>
 
-                            <Button
+                            {/* <Button
                                 title="Try another image"
                                 onPress={() => {navigation.navigate('ChooseImage')}}
                             >
@@ -133,7 +133,7 @@ export function CardSelect({route, navigation}) {
                                 title="Go back to your cards"
                                 onPress={() => {navigation.navigate('YourCards', { forceLoad: true })}}
                             >
-                            </Button>
+                            </Button> */}
                         </View>
                     }
 
@@ -155,6 +155,18 @@ export function CardSelect({route, navigation}) {
                             }
                         </View>
                     }
+
+                    <Button
+                        title="Try another image"
+                        onPress={() => { navigation.navigate('ChooseImage') }}
+                    >
+                    </Button>
+
+                    <Button
+                        title="Go back to your cards"
+                        onPress={() => { navigation.navigate('YourCards', { forceLoad: true }) }}
+                    >
+                    </Button>
                 </ScrollView>
             </View>
         </SafeAreaView>
