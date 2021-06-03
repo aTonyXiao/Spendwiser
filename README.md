@@ -16,7 +16,7 @@ Mobile App: <https://spendwiser.app/app/docs/>
 
 Server: <https://spendwiser.app/server/docs/>
 
-### Credits and Contact Information
+## Credits and Contact Information
 - Nathan Ng (wxng@ucdavis.edu)
 - Nathaniel Wright (njwright@ucdavis.edu)
 - Nathaniel Kong (nskong@ucdavis.edu)
