@@ -4,7 +4,7 @@ This folder is a dedicated script for loading cards into the Firebase database
 
 ## Preqrequisites
 
-Make sure that you have a 'Firebase Admin Private Key' generated.  See the 'Firebase Admin Private Key' section under 'Database Server Setup' for more details.  In this same directory, make sure that key is named `firebase_admin.json` so that it can be properly utilized for database access.
+Make sure that you have a 'Firebase Admin Private Key' generated.  See the 'Firebase Admin Private Key' section under 'Database Server Setup' for more details.  In this same directory, make sure that key copied over and is named `firebase_admin.json` so that it can be properly utilized for database access.
 
 Before use, run the following to make sure all modules are installed:
 
