@@ -129,7 +129,7 @@ function DisplayCard({route, navigation}) {
 
     return (
         <SafeAreaView style={mainStyles.screen}>
-            <BackButtonHeader navigation={navigation} title={cardName} titleStyle={styles.cardTitle} />
+            <BackButtonHeader navigation={navigation}/>
             <View style={mainStyles.bodyContainer}>
                 <EditTransactionModal
                     transaction={currentTransaction}
@@ -148,6 +148,7 @@ function DisplayCard({route, navigation}) {
                 ></TransactionModal>
 
                 <View style={{ justifyContent: 'flex-start' }}>
+                    <Text style={styles.cardTitle}>{cardName}</Text>
                     <CardImage
                         style={[styles.card]}
                         source={cardImage.uri}
@@ -312,7 +313,8 @@ const styles = StyleSheet.create({
     cardTitle: { 
         textAlign: 'center',
         // marginTop: 25,
-        fontSize: 24
+        fontSize: 24,
+        paddingHorizontal: 10
     },
     card: {
         width: Dimensions.get('window').width * .9,  //its same to '20%' of device width

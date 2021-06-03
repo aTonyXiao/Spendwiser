@@ -18,13 +18,12 @@ export function About(props) {
                 </View>
                 <View style={styles.descContainer}>
                     <Text>
-                        The usage of Credit cards are very common nowadays.
-                        There are variety of credit cards with different benefits including cash back, 
-                        lower interest rate, travel rewards, etc. Some Credit cards has better benefits at 
-                        certain than others, e.g. Discover Card has 5% Cash Back Calendar, Chase Sapphire 
-                        Card can waive the insurance cost when you rent a car, etc. Therefore, it is 
-                        very confusing and inconvenient for users to choose the right credit card 
-                        during purchase to maximize the benefit.
+                        The usage of credit cards has increased over the years
+                        and more businesses are accepting them. However, with the large range of credit cards
+                        , each with their own set of rewards and benefits, cardholders who own multiple of 
+                        them might be confused as to which credit card he/she should use in a given store. 
+                        Moreover, cardholders who possess multiple credit cards might wish to have an 
+                        application that can keep track of his/her overall spendings.
                     </Text>
                 </View>
             </View>
