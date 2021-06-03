@@ -124,7 +124,7 @@ export function MainScreen({navigation}) {
     /**
      * Sets the ranked cards and checks for disabled cards
      * @param {array} myRankedCards - the array of ranked cards objects
-     * @function getRecCardFromDB
+     * @callback getRecCardFromDB
      */
     function getRecCardFromDB(myRankedCards) {
         // check for disabled cards

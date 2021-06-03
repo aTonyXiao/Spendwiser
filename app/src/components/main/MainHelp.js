@@ -10,8 +10,14 @@ const height = Dimensions.get('window').height;
 const itemWidth = Math.round(width * 0.8);
 const slideHeight = Math.round(height * 0.7);
 const itemHorizontalMargin = Math.round(width / 50);
-const entryBorderRadius = 8;
 
+/**
+ * Help page for Main Screen. Describes functionalities and their restrictions
+ * @param {Object} obj - Object from Main Screen to be passed here
+ * @param {Object} obj.navigation - Navigation prop to redirect users to other pages
+ * @module MainHelp
+ * @see MainScreen
+ */
 export function MainHelp({navigation}) {
     const [idx, setIdx] = useState(0);
     const ref = useRef(null);
