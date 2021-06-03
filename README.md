@@ -13,6 +13,7 @@ A flexible server architecture was developed so that it can be deployed on any m
 
 ## Documentation
 Mobile App: <https://spendwiser.app/app/docs/>
+
 Server: <https://spendwiser.app/server/docs/>
 
 ### Credits and Contact Information
