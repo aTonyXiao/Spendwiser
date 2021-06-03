@@ -25,7 +25,8 @@ const googlePlaceDetailsFields = "&fields=geometry,name,types,formatted_address,
 /**
  * Display main screen with Google maps, nearby stores, and recommended cards based on selected stores
  * 
- * @param {Object} navigation - navigation object used to move between different pages
+ * @param {Object} obj - Object passed to Main Screen
+ * @param {Object} obj.navigation - navigation object used to move between different pages
  * @module MainScreen
  */
 export function MainScreen({navigation}) {
