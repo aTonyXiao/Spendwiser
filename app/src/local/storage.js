@@ -179,11 +179,14 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
                 db[accountName][location] = {};
             }
 
-            // Insert local_data in location
-            //let id = Object.values(db[accountName][location]).length
+            // Create a unique id for this document based on the current date
+            // and the data supplied
             let id = sha256(Date().toString() + JSON.stringify(data)).toString();
 
 
+            // If this document has not been synced with a remote database,
+            // we need to note that in our array of unsynced documents which
+            // will later be used to push this information up to the remote db
             if (synced == false) {
                 if ('unsynced_documents' in db[accountName]) {
                     db[accountName]['unsynced_documents'] = [
@@ -197,9 +200,11 @@ export const addLocalDB = async (accountName, location, data, synced, callback) 
                 }
             }
 
+            // Copy the supplied data into our database
             local_data['meta_id'] = id;
             db[accountName][location][id.toString()] = local_data;
 
+            // Write the database to disk
             setDB(db, () => {
                 callback(id.toString());
             });
