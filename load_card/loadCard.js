@@ -1,5 +1,5 @@
-const fs = require('fs');
-const readline = require('readline');
+var firebase = require("firebase/app");
+require("firebase/firestore");
 
 const setupFirebase = () => {
     const firebaseConfig = {

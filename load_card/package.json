@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "firebase": "^8.6.3",
     "fs": "*",
     "is-valid-path": "^0.1.1"
   }
