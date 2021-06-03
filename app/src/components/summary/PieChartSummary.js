@@ -4,6 +4,18 @@ import { Text, View, Dimensions, FlatList, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { Ionicons } from '@expo/vector-icons';
 
+/**
+ * COMPARE mode pie chart contents for Spend Analyzer
+ * @param {Object} obj - Object from SpendingSummary to be passed here
+ * @param {Object} obj.curCategory - Object state of the current selected category and it's corresponding value for SUMMARY mode
+ * @param {function} obj.setCurCategory - Function to update current selected category
+ * @param {array} obj.keys - Array of categories (keys) to be displayed
+ * @param {array} obj.values - Array of category values to be displayed
+ * @param {function} obj.setModalVisible - Function to set the state of modalVisible
+ * @param {array} obj.colors - Array of colors corresponding to categories
+ * @module PieChartSummary
+ * @see SpendingSummary
+ */
 export function PieChartSummary({
   curCategory,
   setCurCategory,

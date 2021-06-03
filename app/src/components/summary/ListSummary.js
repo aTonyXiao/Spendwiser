@@ -3,6 +3,15 @@ import { StyleSheet } from 'react-native';
 import { View, Text, SafeAreaView } from 'react-native';
 import { ModalSlot } from './ModalSlot';
 
+/**
+ * COMPARE mode list contents for Spend Analyzer
+ * @param {Object} obj - Object from SpendingSummary to be passed to Main Modals
+ * @param {function} obj.setModalVisible - Function to set the state of modalVisible
+ * @param {function} obj.changeCategory - Function to change string state of the current selected category for SUMMARY mode
+ * @param {array} obj.values - Array of category values to be displayed
+ * @module ListSummary
+ * @see SpendingSummary
+ */
 export function ListSummary(
     {
         setModalVisible,

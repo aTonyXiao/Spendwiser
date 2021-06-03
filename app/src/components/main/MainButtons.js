@@ -4,6 +4,20 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 
+/**
+ * Display buttons for main screen, including buttons for help, re-center, and store list.
+ * @param {Object} obj - Object from Main Screen to be passed to Main Modals
+ * @param {Object} obj.navigation - Navigation prop to redirect users to other pages
+ * @param {function} obj.setUserLocation - Function in main screen to update the user's location
+ * @param {Object} obj.region - Current region that the main screen's Google Map is set to
+ * @param {function} obj.setRegion - Function to update the region state in main screen
+ * @param {array} obj.storeArr - Function to update if the MainModals should be visible
+ * @param {boolean} obj.internetState - State of the app's internet connection
+ * @param {function} obj.tryToGetStoresFromLocation - Function in main screen to be called when re-centering the user's location
+ * @module MainButtons
+ * @see MainScreen
+ * @see MainModals
+ */
 export function MainButtons(
     {
         navigation,

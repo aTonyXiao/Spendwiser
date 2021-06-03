@@ -5,6 +5,19 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 
+/**
+ * Modal for main screen, which displays store list and provides functionality to manually input a store
+ * @param {Object} obj - Object from Main Screen to be passed to Main Modals
+ * @param {boolean} obj.modalVisible - State of whether modal should be visible
+ * @param {function} obj.setModalVisible - Function to change state of modalVisible
+ * @param {function} obj.reloadRecCard - Function from Main Screen to be invoked on store change
+ * @param {function} obj.addManualInput - Function from Main Screen to be invoked when user adds new manual store
+ * @param {array} obj.storeArr - Current list of stores
+ * @param {string} obj.curStore - Current selected store
+ * @param {Object} obj.userLocation - Object which contains user's current longitude and latitude
+ * @module MainModals
+ * @see MainScreen
+ */
 export function MainModals(
     {
         modalVisible,
