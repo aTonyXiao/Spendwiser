@@ -70,7 +70,9 @@ class Database {
         this.models.push(newModel);
     }
 
-    // add the requests for a given model
+    /**
+     * (private): Adds all of the HTTP requests for a certain model
+     */
     addModelRequests (prefix, modelName, model) {
         // the uri for this model
         let uri = prefix + modelName;
@@ -157,7 +159,9 @@ class Database {
         });
     }
 
-    // add the requests for subdocuments with query support
+    /**
+     * (private): Adds all of the Subdocument HTTP requests for a certain model
+     */
     addSubdocRequests (uri, model, subdoc) {
         // get all subdocs
         this.app.get(uri + "/:id/" + subdoc, this.auth, (req, res) => {
