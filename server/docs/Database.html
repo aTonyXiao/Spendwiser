@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Auth0%2520Middleware%2520that%2520utilizes%2520auth0%2520for%2520request%2520token%2520auth.html">Auth0 Middleware that utilizes auth0 for request token auth</a></li><li><a href="module-CardSchema%2520The%2520schema%2520for%2520the%2520structure%2520of%2520the%2520Cards%2520collection.html">CardSchema The schema for the structure of the Cards collection</a></li><li><a href="module-Firebase%2520Middleware%2520that%2520utilizes%2520firebase-admin%2520for%2520request%2520token%2520auth.html">Firebase Middleware that utilizes firebase-admin for request token auth</a><ul class='methods'><li data-type='method'><a href="module-Firebase%252520Middleware%252520that%252520utilizes%252520firebase-admin%252520for%252520request%252520token%252520auth.html#~firebase">firebase</a></li></ul></li><li><a href="module-UserSchema%2520The%2520schema%2520for%2520the%2520structure%2520of%2520the%2520Users%2520collection.html">UserSchema The schema for the structure of the Users collection</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#addModel">addModel</a></li><li data-type='method'><a href="Database.html#createNewDatabase">createNewDatabase</a></li><li data-type='method'><a href="Database.html#loadData">loadData</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Auth0.html">Auth0</a></li><li><a href="module-CardSchema.html">CardSchema</a></li><li><a href="module-Firebase.html">Firebase</a><ul class='methods'><li data-type='method'><a href="module-Firebase.html#~firebase">firebase</a></li></ul></li><li><a href="module-UserSchema.html">UserSchema</a></li></ul><h3>Classes</h3><ul><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#addModel">addModel</a></li><li data-type='method'><a href="Database.html#addModelRequests">addModelRequests</a></li><li data-type='method'><a href="Database.html#addSubdocRequests">addSubdocRequests</a></li><li data-type='method'><a href="Database.html#createNewDatabase">createNewDatabase</a></li><li data-type='method'><a href="Database.html#loadData">loadData</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -64,6 +64,10 @@
         <dl class="dl-horizontal methods-members">
         <dt>Methods</dt><dd><ul>
             <li><a href="#addModel">addModel</a></li>
+            
+            <li><a href="#addModelRequests">addModelRequests</a></li>
+            
+            <li><a href="#addSubdocRequests">addSubdocRequests</a></li>
             
             <li><a href="#createNewDatabase">createNewDatabase</a></li>
             
@@ -297,7 +301,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Class that wraps mongoose models and HTTP requests\n */","meta":{"range":[1267,15118],"filename":"database.js","lineno":29,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100000508","name":"Database","type":"ClassDeclaration","paramnames":["app","auth","name"]},"shortpath":"database.js"},"name":"Database","longname":"Database","kind":"class","classdesc":"Class that wraps mongoose models and HTTP requests","scope":"global","description":"Database constructor that takes in the express app, middleware, and name","params":[{"type":{"names":["*"]},"description":"The express app reference","name":"app"},{"type":{"names":["*"]},"description":"The authentication middleware for HTTP requests","name":"auth"},{"type":{"names":["String"]},"description":"The name of the database (default db has none)","name":"name"}],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Database","signature":"<span class=\"signature\">(app, auth, name)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Class that wraps mongoose models and HTTP requests\n */","meta":{"range":[1267,15196],"filename":"database.js","lineno":29,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100000508","name":"Database","type":"ClassDeclaration","paramnames":["app","auth","name"]},"shortpath":"database.js"},"name":"Database","longname":"Database","kind":"class","classdesc":"Class that wraps mongoose models and HTTP requests","scope":"global","description":"Database constructor that takes in the express app, middleware, and name","params":[{"type":{"names":["*"]},"description":"The express app reference","name":"app"},{"type":{"names":["*"]},"description":"The authentication middleware for HTTP requests","name":"auth"},{"type":{"names":["String"]},"description":"The name of the database (default db has none)","name":"name"}],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Database","signature":"<span class=\"signature\">(app, auth, name)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -536,7 +540,265 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="database.js.html">database.js</a>:<a href="database.js.html#line302">302</a>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line76">76</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addModelRequests">
+      <a href="#params-addModelRequests"><span class="type-signature"></span>addModelRequests</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    (private): Adds all of the HTTP requests for a certain model
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addModelRequests">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * (private): Adds all of the HTTP requests for a certain model\n     */","meta":{"range":[2972,7284],"filename":"database.js","lineno":76,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100000643","name":"Database#addModelRequests","type":"MethodDefinition","paramnames":["prefix","modelName","model"]},"vars":{"":null},"shortpath":"database.js"},"description":"(private): Adds all of the HTTP requests for a certain model","name":"addModelRequests","longname":"Database#addModelRequests","kind":"function","memberof":"Database","scope":"instance","params":[],"___id":"T000002R000051","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addModelRequests","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line165">165</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="addSubdocRequests">
+      <a href="#params-addSubdocRequests"><span class="type-signature"></span>addSubdocRequests</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    (private): Adds all of the Subdocument HTTP requests for a certain model
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-addSubdocRequests">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * (private): Adds all of the Subdocument HTTP requests for a certain model\n     */","meta":{"range":[7386,14183],"filename":"database.js","lineno":165,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100001146","name":"Database#addSubdocRequests","type":"MethodDefinition","paramnames":["uri","model","subdoc"]},"vars":{"":null},"shortpath":"database.js"},"description":"(private): Adds all of the Subdocument HTTP requests for a certain model","name":"addSubdocRequests","longname":"Database#addSubdocRequests","kind":"function","memberof":"Database","scope":"instance","params":[],"___id":"T000002R000069","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addSubdocRequests","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line306">306</a>
   </code>
 </div>
 
@@ -713,7 +975,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Using the given database, branch off and create a new database\n     * \n     * @param {*} dbName New database name\n     * \n     * @returns New database instance\n     */","meta":{"range":[15035,15116],"filename":"database.js","lineno":302,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100002031","name":"Database#createNewDatabase","type":"MethodDefinition","paramnames":["dbName"]},"vars":{"":null},"shortpath":"database.js"},"description":"Using the given database, branch off and create a new database","params":[{"type":{"names":["*"]},"description":"New database name","name":"dbName"}],"returns":[{"description":"New database instance"}],"name":"createNewDatabase","longname":"Database#createNewDatabase","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000115","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"createNewDatabase","signature":"<span class=\"signature\">(dbName)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+{"comment":"/**\n     * Using the given database, branch off and create a new database\n     * \n     * @param {*} dbName New database name\n     * \n     * @returns New database instance\n     */","meta":{"range":[15113,15194],"filename":"database.js","lineno":306,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100002031","name":"Database#createNewDatabase","type":"MethodDefinition","paramnames":["dbName"]},"vars":{"":null},"shortpath":"database.js"},"description":"Using the given database, branch off and create a new database","params":[{"type":{"names":["*"]},"description":"New database name","name":"dbName"}],"returns":[{"description":"New database instance"}],"name":"createNewDatabase","longname":"Database#createNewDatabase","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000115","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"createNewDatabase","signature":"<span class=\"signature\">(dbName)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
 </pre>
 -->
 </div>
@@ -730,7 +992,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="database.js.html">database.js</a>:<a href="database.js.html#line283">283</a>
+    <a href="database.js.html">database.js</a>:<a href="database.js.html#line287">287</a>
   </code>
 </div>
 
@@ -917,7 +1179,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * For a given model, load the given data into the database (relies on the firebase_dump structure with cards)\n     * \n     * @param {*} model Model to create documents for \n     * @param {*} data Firebase_dump cards data\n     */","meta":{"range":[14353,14846],"filename":"database.js","lineno":283,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100001945","name":"Database#loadData","type":"MethodDefinition","paramnames":["model","data"]},"vars":{"":null},"shortpath":"database.js"},"description":"For a given model, load the given data into the database (relies on the firebase_dump structure with cards)","params":[{"type":{"names":["*"]},"description":"Model to create documents for","name":"model"},{"type":{"names":["*"]},"description":"Firebase_dump cards data","name":"data"}],"name":"loadData","longname":"Database#loadData","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000110","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"loadData","signature":"<span class=\"signature\">(model, data)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+{"comment":"/**\n     * For a given model, load the given data into the database (relies on the firebase_dump structure with cards)\n     * \n     * @param {*} model Model to create documents for \n     * @param {*} data Firebase_dump cards data\n     */","meta":{"range":[14431,14924],"filename":"database.js","lineno":287,"columnno":4,"path":"/Users/trstoeffler/Projects/Spendwiser/server/src","code":{"id":"astnode100001945","name":"Database#loadData","type":"MethodDefinition","paramnames":["model","data"]},"vars":{"":null},"shortpath":"database.js"},"description":"For a given model, load the given data into the database (relies on the firebase_dump structure with cards)","params":[{"type":{"names":["*"]},"description":"Model to create documents for","name":"model"},{"type":{"names":["*"]},"description":"Firebase_dump cards data","name":"data"}],"name":"loadData","longname":"Database#loadData","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000110","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"loadData","signature":"<span class=\"signature\">(model, data)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
 </pre>
 -->
 </div>
@@ -940,7 +1202,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Jun 01 2021 17:26:35 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Jun 03 2021 12:49:27 GMT-0700 (Pacific Daylight Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

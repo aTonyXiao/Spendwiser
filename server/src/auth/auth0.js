@@ -1,4 +1,5 @@
-/** @module Auth0 Middleware that utilizes auth0 for request token auth */
+/** Middleware that utilizes auth0 for request token auth
+ * @module Auth0 */
 
 import jwt from "express-jwt";
 import jwksRsa from "jwks-rsa";

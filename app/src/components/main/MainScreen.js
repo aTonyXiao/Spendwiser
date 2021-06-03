@@ -298,6 +298,7 @@ export function MainScreen({navigation}) {
                     }
                     });
             } catch(e) {
+                setLocationDisabledMode();
                 console.log("Error in getting location or stores");
             }
         } 

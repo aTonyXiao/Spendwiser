@@ -1,4 +1,5 @@
-/** @module UserSchema The schema for the structure of the Users collection */
+/** The schema for the structure of the Users collection
+ * @module UserSchema */
 
 import mongoose from "mongoose";
 

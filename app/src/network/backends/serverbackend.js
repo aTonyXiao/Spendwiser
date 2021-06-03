@@ -55,13 +55,18 @@ class ServerBackend extends BaseBackend {
             }
         });
 
+        // Wait 15 seconds after app launch to sync remote database to
+        // local storage. Note: This will only happen once on app startup
         let hasSyncedRemote = false;
-        if (!hasSyncedRemote) {
-            syncRemoteDatabase();
-            hasSyncedRemote = true;
-        }
+        setInterval(async () => {
+            if (!hasSyncedRemote) {
+                syncRemoteDatabase();
+                hasSyncedRemote = true;
+            }
+        }, 15000);
+        
 
-        // Sync the local database every 30 seconds
+        // Sync the local database every 30 seconds with the remote dataabase
         setInterval(async () => {
             await syncLocalDatabase();
             // only sync remote once
@@ -85,7 +90,10 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * Get the data from the remote database
+     * Like normal @ref dbGet, but does the operation on the remote db
+     * 
+     * @param {string} location the period delimited path to a document or collection
+     * @param  {...any} conditionsWithCallback any filters (optional) followed by a callback function
      */
     remoteDBGet(location, ...conditionsWithCallback) {
         let uri = location.replaceAll(".", "/");
@@ -182,6 +190,8 @@ class ServerBackend extends BaseBackend {
 
     /**
      * Get sub collections (remote)
+     * @param {string} location period delimited path to a collection
+     * @param {function} callback called back with an array of itmes within the collection
      */
     dbGetSubCollectionsRemote(location, callback) {
         let uri = location.replaceAll(".", "/");
@@ -264,7 +274,12 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * DB set (remote)
+     * Sets the data of a document
+     * 
+     * @param {string} location the period delimited path to a document
+     * @param {Object} data any object data that should be assigned to the  {@link location}
+     * @param {*} merge if false all data will be replaced with new {@link data} passed in
+     * @param {*} callback  called when set operation is done
      */
     remoteDBSet(location, data, merge = false, callback) {
         let uri = location.replaceAll(".", "/");
@@ -313,7 +328,11 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * DB add (remote)
+     * Adds a document to a collection in the remote db
+     * 
+     * @param {string} location the period delimited path to a collection
+     * @param {Object} data the data of a item that should be added to the {@link location}
+     * @param {function} callback called with a string containing the id of the newly added document
      */
     remoteDBAdd(location, data, callback) {
         let uri = location.replaceAll(".", "/");
@@ -352,7 +371,9 @@ class ServerBackend extends BaseBackend {
     }
 
     /**
-     * Remote document delete function
+     * Deletes a document from the remote db
+     * 
+     * @param {string} location the period delimited path to a document
      */
     remoteDBDelete(location) {
         let uri = location.replaceAll(".", "/");
@@ -437,6 +458,8 @@ class ServerBackend extends BaseBackend {
 
     /**
      * Sign out the currently logged in user
+     * 
+     * @param {function} callback called when sign out is complete
      */
     signOut(callback) {
         storage.getLoginState((state) => {
