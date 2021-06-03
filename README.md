@@ -11,6 +11,11 @@ For more info, please view our user guide.
 
 A flexible server architecture was developed so that it can be deployed on any machine that supports Docker.  Utilizing MongoDB and Express flexibility with a secondary Firebase backend was designed in mind.  Security was taken into deep consideration through the use of Javascript Web Tokens and SSL so that authenticated users can only use the database.
 
+## Documentation
+Mobile App: <https://spendwiser.app/app/docs/>
+
+Server: <https://spendwiser.app/server/docs/>
+
 ### Credits and Contact Information
 - Nathan Ng (wxng@ucdavis.edu)
 - Nathaniel Wright (njwright@ucdavis.edu)
