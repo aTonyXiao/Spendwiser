@@ -260,7 +260,7 @@ export const deleteLocalDB = async (accountName, location) => {
             id = checkSyncMapping(db, accountName, collection, id);
             
             if (accountName in db && collection in db[accountName] && (id in db[accountName][collection])) {
-                addToUnsyncedDocuments(db, accountName, collection, id, location);
+                addToUnsyncedDocuments(db, 'delete', accountName, collection, id, location);
 
                 // Remove any unsynced documents that relate to the location being deleted
                 db[accountName]['unsynced_documents'] = 
@@ -341,7 +341,7 @@ export const setLocalDB = async (accountName, location, local_data, merge = fals
                     db[accountName][collection][id] = local_data;
                 }
                 
-                addToUnsyncedDocuments(db, accountName, collection, id, location);
+                addToUnsyncedDocuments(db, 'set', accountName, collection, id, location);
                
 
                 setDB(db, () => {
@@ -759,15 +759,24 @@ export const getDisabledCards = async (callback) => {
     }
 }
 
-function addToUnsyncedDocuments(db, accountName, collection, id, location) {
-    if ('unsynced_documents' in db[accountName]) {
+/**
+ *
+ * 
+ * @param {Object} db the database read from the phone's storage
+ * @param {string} accountName the user id associated with a logged in account
+ * @param {string} collection the period delimited path to a collection
+ * @param {string} id the id of a document
+ * @param {string} location the period delimited path to a document
+ */
+function addToUnsyncedDocuments(db, type, accountName, collection, id, location) {
+    if ('unsynced_documents' in db[accountName]) { // unsynced document's already exist
         db[accountName]['unsynced_documents'] = [
             ...db[accountName]['unsynced_documents'],
-            { 'location': collection, 'id': id, 'type': 'delete' },
+            { 'location': collection, 'id': id, 'type': type },
         ];
-    } else {
+    } else { // unsynced documents don't exist yet
         db[accountName]['unsynced_documents'] = [
-            { 'location': location, 'id': id, 'type': 'delete' }
+            { 'location': location, 'id': id, 'type': type }
         ];
     }
 }
