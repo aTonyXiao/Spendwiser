@@ -52,6 +52,12 @@ function EditTransactionModal({transaction, modalVisible, setModalVisible, trans
         if (isNaN(parseFloat(input))) { 
             return false;
         }
+
+        if (parseFloat(input) == 0) { 
+            toggleErrorText();
+            return false;
+        }
+        
         return !isNaN(input); 
     }
 
