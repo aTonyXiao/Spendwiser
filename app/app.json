@@ -22,7 +22,7 @@
       "buildNumber": "2.0.7",
       "usesAppleSignIn": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyDxpHVPHcVd57QgNkjweuoH-14-zJ4lTYQ"
+        "googleMapsApiKey": ""
       },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This application uses your location to detect which kind of store you're in and provide the best credit card based on that store.",

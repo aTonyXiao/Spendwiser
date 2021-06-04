@@ -7,7 +7,7 @@ import LoginAuthorizer from '../login_authorizer';
  */
 class FacebookLogin extends LoginAuthorizer {
     async login() {
-        await Facebook.initializeAsync({appId: '460373351715327', });
+        await Facebook.initializeAsync({ appId: '' });
 
         const { type, token } = await Facebook.logInWithReadPermissionsAsync({
             permissions: ['public_profile'],
