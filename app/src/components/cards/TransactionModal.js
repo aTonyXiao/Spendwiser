@@ -70,11 +70,15 @@ function TransactionModal({
     addTransaction = () => {
         const inputIsValid = isInputValid(transactionInput);
         if (inputIsValid) { 
-            if (!storeInformation) {
+            if (!storeInformation || storeInformation.value === "Location Permission Denied"
+                || storeInformation.value === "No Internet Connection") {
                 Alert.alert("Store location not found!",
-                            "Please wait until we can find your location before you add a transaction",
+                            "Please wait until you have a selected store before you add a transaction",
                             [
-                                {text: "Ok"}
+                                {
+                                    text: "Ok",
+                                    onPress: () => setShowTransactionModal(false)
+                                }
                             ],
                             { cancelable: false });
             } else {
@@ -93,8 +97,8 @@ function TransactionModal({
                         setHasConstructed(false);
                     }
                 );
+                setShowTransactionModal(false);
             }
-            setShowTransactionModal(false);
         } else {
             toggleErrorText();
         }
@@ -118,7 +122,7 @@ function TransactionModal({
                 <View style={modalStyles.modalCenteredView}>
                     <View style={modalStyles.modalView}>
                         <View style={modalStyles.modalHeader}>
-                            <TouchableOpacity onPress={() => {setTransactionInput(""), setShowTransactionModal(false)}}>
+                            <TouchableOpacity onPress={() => {setTransactionInput("")}}>
                                 <Ionicons
                                     name="close-circle-outline"
                                     color="black"
