@@ -27,7 +27,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const Stack = createStackNavigator();
 
 Sentry.init({
-  dsn: "https://1efe58005d664f3abfdae0e7a655de80@o584902.ingest.sentry.io/5737353",
+  dsn: "",
   enableInExpoDevelopment: true,
   debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 });
