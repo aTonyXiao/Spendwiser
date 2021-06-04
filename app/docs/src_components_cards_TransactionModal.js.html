@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AddCardManual - Documentation</title>
+    <title>src/components/cards/TransactionModal.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">AddCardManual</h1>
+    <h1 class="page-title">src/components/cards/TransactionModal.js</h1>
     
 
     <!--container.tmpl-->
@@ -42,281 +42,222 @@
 
 
 
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
+import Modal from 'react-native-modal';
+import { Ionicons } from '@expo/vector-icons';
+import { user } from '../../network/user';
+import { DismissKeyboard } from '../util/DismissKeyboard';
+
+/**
+ * A modal for adding a transaction at current location
+ * 
+ * @param {{Object, boolean, Function, Function, String}} obj - The parameters object
+ * @param {Object} obj.storeInformation - store information of transaction to add at
+ * @param {boolean} obj.showTransactionModal - boolean value to show or hide transaction
+ * modal 
+ * @param {Function} obj.setShowTransactionModal - React function to set 
+ * showTransactionModal
+ * @param {Function} obj.setHasConstructed - React function to set rerender of parent 
+ * function
+ * @param {String} obj.cardId - id of current card
+ * @module TransactionModal
+ */
+function TransactionModal({
+        storeInformation, 
+        showTransactionModal, 
+        setShowTransactionModal, 
+        setHasConstructed,
+        cardId,
+    }) {
+    const deviceHeight =
+    Platform.OS === 'ios'
+    ? Dimensions.get('window').height
+    : Dimensions.get('screen').height;
+    const [transactionInput, setTransactionInput] = useState("");
+    const userId = user.getUserId();
+    const [displayErrorText, setDisplayErrorText] = React.useState(false);
+
+    // Check if text input is a valid number and have a max of 2 decimals
+    updateTextInput = (text) => {
+        let dotIdx = text.indexOf(".");
+        if (dotIdx === 0 || text.split('.').length > 2) {
+            return;
+        }
+        if (text.length === 0 || dotIdx === -1 || (dotIdx === text.length - 1) || (text.length - dotIdx - 1 &lt;= 2)) {
+            return setTransactionInput(text);
+        }
+    }
+
+    isInputValid = (input) => { 
+        // don't allow $0 transactions
+        if (isNaN(parseFloat(input))) { 
+            return false;
+        }
+
+        if (parseFloat(input) == 0) { 
+            toggleErrorText();
+            return false;
+        }
+
+        return !isNaN(input); 
+    }
+
+    toggleErrorText = () => {
+        setDisplayErrorText(true);
+
+        setTimeout(function () {
+            setDisplayErrorText(false);
+        }, 2500)
+    }
+
+    addTransaction = () => {
+        const inputIsValid = isInputValid(transactionInput);
+        if (inputIsValid) { 
+            if (!storeInformation) {
+                Alert.alert("Store location not found!",
+                            "Please wait until we can find your location before you add a transaction",
+                            [
+                                {text: "Ok"}
+                            ],
+                            { cancelable: false });
+            } else {
+                let transactionFiltered = parseFloat(transactionInput).toFixed(2).toString();
+                user.saveTransaction(
+                    userId, 
+                    cardId, 
+                    {
+                        storeName: storeInformation["label"],
+                        address: storeInformation["vicinity"],
+                        storeType: storeInformation["storeType"]
+                    },
+                    transactionFiltered, 
+                    (docId) => { 
+                        user.addTransactionId(userId, docId);
+                        setHasConstructed(false);
+                    }
+                );
+            }
+            setShowTransactionModal(false);
+        } else {
+            toggleErrorText();
+        }
+    }
+
+    return (
+        &lt;DismissKeyboard>
+            &lt;Modal
+                backdropOpacity={0.3}
+                isVisible={showTransactionModal}
+                statusBarTranslucent={true}
+                deviceHeight={deviceHeight}
+                style={{
+                    margin: 0,
+                    marginHorizontal: 0,
+                    justifyContent: 'center',
+                }}
+                avoidKeyboard={true}
+                onBackdropPress={() => { setTransactionInput(""), setShowTransactionModal(false) }}
+            >
+                &lt;View style={modalStyles.modalCenteredView}>
+                    &lt;View style={modalStyles.modalView}>
+                        &lt;View style={modalStyles.modalHeader}>
+                            &lt;TouchableOpacity onPress={() => {setTransactionInput(""), setShowTransactionModal(false)}}>
+                                &lt;Ionicons
+                                    name="close-circle-outline"
+                                    color="black"
+                                    size={26}
+                                >&lt;/Ionicons>
+                            &lt;/TouchableOpacity>
+                        &lt;/View>
+                        &lt;Text style={modalStyles.modalText}>Adding a transaction at&lt;/Text>
+                        &lt;Text style={modalStyles.storeText}>{storeInformation ? storeInformation.value : ""}&lt;/Text>
+                        &lt;Text style={modalStyles.modalText}>How much did you spend?&lt;/Text>
+
+                        {
+                            displayErrorText &amp;&amp;
+                            &lt;Text style={modalStyles.errorText}>Please input a valid number&lt;/Text>
+                        }
+                        &lt;View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            &lt;TextInput
+                                style={modalStyles.manualTextInput}
+                                onChangeText={(text) => updateTextInput(text)}
+                                value={transactionInput}
+                                placeholder={"amount in dollars"}
+                                // onSubmitEditing={addTransaction}
+                                keyboardType={"numeric"}
+                            />
+                            &lt;TouchableOpacity onPress={() => { addTransaction(transactionInput), setTransactionInput("") }}>
+                                &lt;Ionicons
+                                    name="checkmark-outline"
+                                    color="black"
+                                    size={26}
+                                >&lt;/Ionicons>
+                            &lt;/TouchableOpacity>
+                        &lt;/View>
+                    &lt;/View>
+                &lt;/View>
+            &lt;/Modal>
+        &lt;/DismissKeyboard>
+    )
+}
+
+const modalStyles = StyleSheet.create({
+    modalCenteredView: {
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        margin: 22,
+        backgroundColor: 'rgba(128, 128, 128, 0.5)'
+    },
+    modalView: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    modalHeader: { 
+        position: 'absolute',
+        top: 8, 
+        left: 8
+    },
+    modalText: {
+        marginTop: 10,
+        alignSelf: 'center',
+        fontSize: 16
+    },
+    storeText: {
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginBottom: 10
+    },
+    manualTextInput: {
+        height: 40,
+        borderWidth: 1,
+        margin: 15,
+        marginTop: 7,
+        marginBottom: 7,
+        width: '80%',
+        borderColor: '#F0F0F0',
+        backgroundColor: '#F0F0F0',
+        borderRadius: 5,
+        paddingHorizontal: 10,
+    },
+    errorText: { 
+        color: 'red', 
+        textAlign: 'center'
+    }
+});
+
+export { TransactionModal }</code></pre>
+        </article>
+    </section>
 
-<section>
-
-
-
-<header data-tmpl="container.tmpl">
-    
-      <h2>Module: AddCardManual</h2>
-        
-            
-        
-    
-
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">The page for adding a card manually. Adding a card adds the card to the user and to
-firebase</div>
-        
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_components_addCard_AddCardManual.js.html">AddCardManual.js</a>:<a href="src_components_addCard_AddCardManual.js.html#line19">19</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-AddCardManual">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="src_components_addCard_AddCardManual.js.html">AddCardManual.js</a>:<a href="src_components_addCard_AddCardManual.js.html#line19">19</a>
-  </code>
-</div>
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-AddCardManual" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The route and navigation passed through screen
-                <h6>Properties</h6>
-                <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>navigation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">navigation object used to move between different pages</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\n * The page for adding a card manually. Adding a card adds the card to the user and to\n * firebase\n * @param {{Object}} obj - The route and navigation passed through screen\n * @param {Object} obj.navigation - navigation object used to move between different pages\n * @module AddCardManual\n */","meta":{"filename":"AddCardManual.js","lineno":19,"columnno":0,"path":"/Users/trstoeffler/Projects/Spendwiser/app/src/components/addCard","code":{},"shortpath":"src/components/addCard/AddCardManual.js"},"description":"The page for adding a card manually. Adding a card adds the card to the user and to\nfirebase","params":[{"type":{"names":["Object"]},"description":"The route and navigation passed through screen","name":"obj","subparams":[{"type":{"names":["Object"]},"description":"navigation object used to move between different pages","name":"navigation"}]},null],"kind":"module","name":"AddCardManual","longname":"module:AddCardManual","___id":"T000002R000077","___s":true,"attribs":"","id":"AddCardManual","ancestors":[]}
-</pre>
--->
-</div>
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

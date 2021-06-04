@@ -8,7 +8,7 @@ export let gas = ['Gas station', 'Gas'];
 export let homeImprovement = ['Furniture store', 'Home goods store', 'Electrician', 
     'Hardware store', 'Plumber', 'Roofing contractor', 'Home Improvement'];
 export let travel = ['Airport', 'Amusement park', 'Aquarium', 'Art gallery', 'Car rental', 'Light rail station', 'Parking',
-    'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo', 'Travel'];
+    'Tourist attraction', 'Transit station', 'Travel agency', 'Zoo', 'Travel', 'Lodging'];
 
 /**
  * A class for main screen to peforms user database options
